@@ -1,0 +1,9 @@
+City list (assets/cities/cities.tsv)
+
+Source: GeoNames (https://www.geonames.org), the cities15000 dump, as packaged in geonamescache 3.0.2
+(https://github.com/yaph/geonamescache).
+Licence: Creative Commons Attribution 4.0 International (CC BY 4.0),
+https://creativecommons.org/licenses/by/4.0/
+
+Changes made: only the fields Awan TV uses are kept (name, Arabic name, coordinates, country, population and the
+alternate names as search keys), by tools/AwanTV-build-cities.py.

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Quran Radio: the stream, keeping the CPU and Wi-Fi awake under the screensaver, its level bars
+         (RECORD_AUDIO, granted with pm grant at install) and the TV's sleep timer (WRITE_SECURE_SETTINGS, also
+         pm grant), which is off only while the radio plays. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Home's network button shows whether the TV is connected (Wi-Fi, cable, or not). -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Settings > Awan TV > Remove opens Android's own uninstall, after putting the old screensaver back. -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Saved recitations download quietly through Android's download manager (Library). -->
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- Reading the Wi-Fi network name needs location on Android 9+. Granted with pm grant at install,
+         never requested at runtime. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
+    <!-- Saved recitations live in Music/Awan TV (Library), so they outlast the app. After a reinstall they belong to the
+         old install: reading them needs these, granted over adb by the install tools (never asked). Writing needs
+         WRITE on Android 10 and older; Android 11+ lets an app add audio to Music without it. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+
+    <!-- Android 11+ package visibility, so the app tiles can resolve the apps they launch. -->
+    <queries>
+        <!-- Whether the TV has a browser for About's links (SettingsActivity.canBrowse); most TVs have none. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <!-- CVTE firmwares answer the remote's buttons in this service; FirmwareKeys then leaves keys alone. -->
+        <intent>
+            <action android:name="android.intent.action.HOTKEYSERVICE" />
+        </intent>
+        <!-- CVTE's source menu, which Home opens for the Source button (FirmwareKeys.sourceMenu). -->
+        <package android:name="com.cvte.tv.globalui" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+        <!-- Which app is the TV's own home screen (HomeGuard). -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <!-- The TV's screensavers, to check the one Awan TV puts back is installed (Saver). -->
+        <intent>
+            <action android:name="android.service.dreams.DreamService" />
+        </intent>
+        <!-- TCL's Audio Only panel service (ScreenOffActivity), in com.android.tv.settings or com.tcl.settings. -->
+        <intent>
+            <action android:name="com.tcl.settings.SHOW_WINDOW" />
+        </intent>
+    </queries>
+
+    <!-- requestLegacyExternalStorage: Android 10 reads and writes Music/Awan TV as files only so (11+ ignores it). -->
+    <application
+        android:requestLegacyExternalStorage="true"
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_arch"
+        android:banner="@drawable/banner"
+        android:theme="@style/Theme.Awan"
+        android:supportsRtl="true"
+        android:networkSecurityConfig="@xml/network_security"
+        android:allowBackup="false">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:excludeFromRecents="true"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AllAppsActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".PrayerDayActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- Also the remote's Settings button, from any app: its own task, so Back returns to what was playing. -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="app.awanpro.tv.settings"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- The call to prayer, opened by the remote buttons service. Its own task, so closing it returns to
+             whatever app was playing rather than to Home. -->
+        <activity
+            android:name=".NowActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:taskAffinity="app.awanpro.tv.call"
+            android:theme="@style/Theme.Awan.Call"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- The screensaver's screen as an app: at once (Home's button, Settings > Awan TV), or after some
+             minutes on Home where the TV's own screensaver is not Awan TV's (Google TV without adb). -->
+        <activity
+            android:name=".SaverActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Theme.Awan.Saver"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- A place by its coordinates (Settings > Prayer times > Location > Another place). -->
+        <activity
+            android:name=".PlaceActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- Recitations saved on the TV (Settings > Radio > Saved recitations). -->
+        <activity
+            android:name=".LibraryActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- Each finished download of a saved recitation; starts the next (Library). Exported: the
+             download manager runs in another app. It only acts on the download it is waiting for. -->
+        <receiver
+            android:name=".Library$Done"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- After an update of the app, the remote service bound again if the system left it unbound
+             (ServiceCheck). Only the app's own update reaches it. -->
+        <receiver
+            android:name=".ServiceCheck$Updated"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Settings from one TV to another (tools/AwanTV-settings.ps1). android.permission.DUMP:
+             adb's shell holds it, apps do not, so only adb reaches this. -->
+        <receiver
+            android:name=".SettingsTransfer"
+            android:exported="true"
+            android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="app.awanpro.tv.EXPORT" />
+                <action android:name="app.awanpro.tv.IMPORT" />
+                <action android:name="app.awanpro.tv.IDENTIFY" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Listening to the radio with the screen off. -->
+        <activity
+            android:name=".ScreenOffActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- The screensaver. Made the TV's own with:
+             settings put secure screensaver_components app.awanpro.tv/app.awanpro.tv.AwanDream -->
+        <service
+            android:name=".AwanDream"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- Remote buttons. Turned on with:
+             settings put secure enabled_accessibility_services app.awanpro.tv/app.awanpro.tv.RemoteKeys -->
+        <service
+            android:name=".RemoteKeys"
+            android:label="@string/remote_keys"
+            android:exported="false"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/remote_keys" />
+        </service>
+    </application>
+</manifest>

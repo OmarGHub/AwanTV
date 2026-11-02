@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Arabic, for phones set to Arabic. English, the fallback, is in values/strings.xml; keep the two in step. -->
+<resources>
+    <string name="lang" translatable="false">ar</string>
+    <string name="app_name">مثبّت Awan TV</string>
+
+    <string name="stage_prepare">التجهيز</string>
+    <string name="stage_connect">الاتصال</string>
+    <string name="stage_install">التثبيت</string>
+
+    <string name="guide_title">Awan TV على تلفازك</string>
+    <string name="guide_lead">ثبّت Awan TV من هذا الهاتف في دقائق، دون حاسوب. أولًا أربع خطوات على التلفاز بجهاز التحكم. وإن كانت خيارات المطوّرين مفعّلة عندك فانتقل إلى الخطوة ٣.</string>
+    <string name="guide_both">قوائم التلفاز معروضة بالعربية والإنجليزية، وقد تختلف تسميتها قليلًا من جهاز لآخر</string>
+    <string name="g1_title">افتح «حول»</string>
+    <string name="g1_body">في أجهزة Android TV الأقدم: الإعدادات › إعدادات الجهاز › حول، ثم «الإصدار».</string>
+    <string name="g2_title">فعّل خيارات المطوّرين</string>
+    <string name="g2_body">اضغط عليه OK سبع مرات متتالية بسرعة، حتى تظهر رسالة أنك أصبحت مطوّرًا. هو آخر بند، وتحته حروف وأرقام طويلة؛ لا البند الذي تحته رقم قصير مثل 14.</string>
+    <string name="g3_title">فعّل التصحيح</string>
+    <string name="g3_body">فعّل هذا الخيار (يعمل عبر الشبكة رغم اسمه):</string>
+    <string name="g3_wireless">وإن وجدت هذا أيضًا (في الأجهزة الأحدث) ففعّله:</string>
+    <string name="g4_title">الشبكة نفسها</string>
+    <string name="g4_body">اجعل التلفاز وهذا الهاتف على شبكة الواي فاي نفسها.</string>
+    <string name="guide_ready">ابحث عن تلفازي</string>
+
+    <string name="find_title">البحث عن تلفازك</string>
+    <string name="find_lead">جارٍ البحث في شبكتك. اضغط على تلفازك حين يظهر.</string>
+    <string name="found_heading">على شبكتك</string>
+    <string name="tv_found">تلفاز أندرويد</string>
+    <string name="badge_wireless">تصحيح لاسلكي</string>
+    <string name="badge_network">تصحيح USB (عبر الشبكة)</string>
+    <string name="badge_pair">جاهز للإقران</string>
+    <string name="help_title">لا يظهر تلفازك؟</string>
+    <string name="help_body">• تأكّد أن التصحيح مفعّل (الخطوة ٣).\n• تأكّد أن الجهازين على شبكة الواي فاي نفسها.\n• بعض أجهزة الراوتر تُخفي الأجهزة عن بعضها: اكتب عنوان التلفاز بدلًا من ذلك.</string>
+    <string name="manual_title">أو اكتب عنوانه</string>
+    <string name="manual_body">على التلفاز: الإعدادات › الشبكة › شبكتك. وللتصحيح اللاسلكي أضف المنفذ الظاهر هناك، مثل 192.168.1.20:41234.</string>
+    <string name="manual_hint">192.168.1.20</string>
+    <string name="connect">اتصال</string>
+    <string name="not_wifi_title">اتصل بشبكة التلفاز</string>
+    <string name="not_wifi">هذا الهاتف غير متصل بالواي فاي. اتصل بشبكة التلفاز نفسها ثم أعد المحاولة.</string>
+
+    <string name="connecting_title">جارٍ الاتصال</string>
+    <string name="connecting">جارٍ الوصول إلى %1$s…</string>
+    <string name="scanning_title">فحص التلفاز</string>
+    <string name="scanning">جارٍ البحث عن منفذ تصحيح مفتوح على %1$s. يستغرق ذلك نحو ١٥ ثانية.</string>
+    <string name="allow_title">اسمح على التلفاز</string>
+    <string name="allow_lead">تظهر رسالة على التلفاز:</string>
+    <string name="allow_1">ضع علامة على</string>
+    <string name="allow_2">ثم اختر بجهاز التحكم</string>
+    <string name="waiting">بانتظار التلفاز…</string>
+
+    <string name="pair_title">الإقران بالتلفاز</string>
+    <string name="pair_lead">يحتاج التصحيح اللاسلكي إلى رمز من التلفاز مرة واحدة.</string>
+    <string name="pair_1">على التلفاز افتح</string>
+    <string name="pair_2">اختر</string>
+    <string name="pair_3">اكتب الرمز المكوّن من ستة أرقام</string>
+    <string name="pair_port_found">منفذ الإقران %1$s</string>
+    <string name="pair_port_waiting">بانتظار نافذة الإقران على التلفاز…</string>
+    <string name="pair_port_hint">منفذ الإقران (الرقم بعد النقطتين على التلفاز)</string>
+    <string name="pair_button">إقران</string>
+    <string name="pairing">جارٍ الإقران…</string>
+
+    <string name="confirm_title">التثبيت على هذا التلفاز؟</string>
+    <string name="confirm_lead">تأكّد أنه التلفاز الذي تريده قبل أن تبدأ.</string>
+    <string name="confirm_install">ثبّت Awan TV</string>
+
+    <string name="install_title">تثبيت Awan TV</string>
+    <string name="install_lead_version">Awan TV %1$s · أبقِ هذه الشاشة مفتوحة. يستغرق ذلك دقيقة أو اثنتين.</string>
+    <string name="install_lead">أبقِ هذه الشاشة مفتوحة. يستغرق ذلك دقيقة أو اثنتين.</string>
+    <string name="t_send">إرسال Awan TV إلى التلفاز</string>
+    <string name="mb_of">%1$s من %2$s ميغابايت</string>
+    <string name="old_signature_title">على التلفاز نسخة أخرى من Awan TV</string>
+    <string name="old_signature_body">وُقّعت بمفتاح مختلف (نسخة بنيتها بنفسك أو نسخة قديمة)، فلا يمكن تحديثها مباشرة. حذفها يحذف إعداداتها وتلاواتها المحفوظة أيضًا. ولحفظ الإعدادات ألغِ وصدّرها أولًا بأدوات الحاسوب (AwanTV-settings). أتحذفها وتثبّت هذه؟</string>
+    <string name="remove_and_install">احذف وثبّت</string>
+    <string name="cancel">إلغاء</string>
+    <string name="newer_on_tv">على التلفاز نسخة من Awan TV أحدث مما يحمله هذا المثبّت. نزّل أحدث مثبّت من صفحة الإصدارات: github.com/OmarGHub/AwanTV/releases</string>
+
+    <string name="done_title">Awan TV على تلفازك</string>
+    <string name="done_lead">ثُبّت Awan TV %1$s على «%2$s» وأُعدّ.</string>
+    <string name="done_lead_plain">ثُبّت Awan TV على «%1$s» وأُعدّ.</string>
+    <string name="done_partly_title">ثُبّت مع مشكلة</string>
+    <string name="done_partly_lead">Awan TV على التلفاز، لكن خطوة باللون الأحمر لم تكتمل. شغّل المثبّت مرة أخرى لإعادتها.</string>
+    <string name="next_home">اضغط زر Home في جهاز التحكم: يظهر Awan TV فوق الشاشة الرئيسية للتلفاز.</string>
+    <string name="next_city">في أول تشغيل يطلب منك اختيار مدينتك، وعليها تُحسب المواقيت والأذان وشاشة الاستراحة.</string>
+    <string name="tip_title">أمر أخير</string>
+    <string name="tip_body">يمكنك الآن إيقاف «تصحيح أخطاء USB» و«تصحيح الأخطاء اللاسلكي» على التلفاز. وللتحديث لاحقًا فعّل التصحيح من جديد وافتح المثبّت الجديد، من github.com/OmarGHub/AwanTV/releases</string>
+    <string name="site_line">موقعنا: awanpro.app</string>
+    <string name="finish">تم</string>
+
+    <string name="problem_title">لم ينجح ذلك</string>
+    <string name="error_connect">تعذّر الوصول إلى التلفاز (%1$s).</string>
+    <string name="not_accepted">لم يسمح التلفاز لهذا الهاتف. أعد المحاولة واختر «سماح» على التلفاز.</string>
+    <string name="scan_none">لا يوجد منفذ تصحيح مفتوح على %1$s.</string>
+    <string name="pair_failed">لم ينجح الإقران (%1$s). افتح نافذة الإقران على التلفاز من جديد؛ فهي تعرض رمزًا جديدًا كل مرة.</string>
+    <string name="install_failed">رفض التلفاز التثبيت: %1$s</string>
+    <string name="error_install">حدث خطأ: %1$s</string>
+    <string name="tv_too_old">يحتاج Awan TV إلى أندرويد ٨ فما بعده على التلفاز.</string>
+    <string name="check_title">تحقّق من</string>
+    <string name="check_body">• التلفاز يعمل وغير نائم.\n• التصحيح مفعّل في خيارات المطوّرين.\n• التلفاز وهذا الهاتف على شبكة الواي فاي نفسها.</string>
+    <string name="try_again">أعد المحاولة</string>
+    <string name="continue_">متابعة</string>
+    <string name="steps_failed_lead">Awan TV على التلفاز، لكن خطوة باللون الأحمر لم تكتمل. أعد المحاولة، أو تابِع وارجع إليها لاحقًا.</string>
+    <string name="back">رجوع</string>
+
+    <!-- Three states: not set, set, checked on the TV -->
+    <string name="state_init">غير مضبوط</string>
+    <string name="state_done">مضبوط</string>
+    <string name="state_checked">مُتحقَّق منه على التلفاز</string>
+    <string name="state_was_set">مضبوط على التلفاز من قبل</string>
+    <string name="state_not_here">غير متاح في هذا التلفاز</string>
+    <string name="state_failed">ضُبط، لكن التلفاز لا يُظهره</string>
+</resources>

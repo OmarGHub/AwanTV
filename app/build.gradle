@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'app.awanpro.tv'
+    compileSdk 34
+
+    defaultConfig {
+        // Its own application id, so Awan TV installs beside Afnon.
+        applicationId 'app.awanpro.tv'
+        minSdk 26
+        targetSdk 34
+        // Both from awanVersion in gradle.properties: change the version there only.
+        versionName awanVersion
+        versionCode rootProject.ext.awanVersionCode.call(awanVersion)
+    }
+
+    // No encrypted dependency list in the APK: only Google Play reads it, and F-Droid and IzzyOnDroid flag it.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // The release file keeps one name across versions (the version is on the release page and in the app), so the
+    // guide's .../releases/latest/download/AwanTV.apk link never changes. Debug builds keep their default name.
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.outputs.all { outputFileName = 'AwanTV.apk' }
+        }
+    }
+}
+
+dependencies {
+    // Offline prayer-time calculation (no network, no transitive dependencies).
+    implementation 'com.batoulapps.adhan:adhan:1.2.1'
+}

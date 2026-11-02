@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">يُظهر Awan TV كلما ظهرت الشاشة الرئيسية الأصلية للتلفاز، ويرفع الأذان في وقته فوق أي شيء تشاهده. لا يُعطَّل أي شيء في التلفاز: أوقف هذه الخدمة لتعود الشاشة الرئيسية الأصلية.</string>
+</resources>

@@ -1,0 +1,28 @@
+# TCL BeyondTV, Android TV 11 (Realtek, stock launcher com.google.android.tvlauncher): what AwanTV-clean.ps1 disables.
+# From CleanYourTV (github.com/Gathin23/cleanyourtv, MIT): examples/tcl-beyondtv2-android-11, a BeyondTV Android 11
+# set with the same preloads and the same factory-disabled apps (Stan, Rakuten, Smart Connect, TCL gallery, Alexa and
+# the uk.co.freeview catch-up apps), checked on a real unit through reboots; its voice, casting and screensaver
+# choices are left to extra-tcl-beyondtv-android11.txt. Two more lines most TCL lists share: Play Games, calendar sync.
+# Not here on purpose: com.tcl.partnercustomizer (on this firmware it handles remote keys) and com.tcl.usercenter
+# (setup and account screens), both turned off on newer TCL sets; com.google.android.backdrop (the screensaver Awan
+# TV puts back). One package a line; "#" starts a comment. Disabled for the user (pm disable-user), never uninstalled.
+
+# TCL turns some promo apps back on at every boot (and after any install) through this service: off first.
+com.tcl.overseasappshow                 # factory promo / app-show service, re-enables partner packages
+
+# TCL analytics, ads and promos
+com.tcl.bi                              # TCL analytics / telemetry
+com.tcl.tv.tclhome_passive              # pushes TCL content onto the home screen at boot
+com.tcl.waterfall.overseas              # TCL recommendation feed
+com.tcl.guard                           # TGuard: usage tracking, "health info", memory cleaner
+com.tcl.messagebox                      # pushed messages and promos
+com.tcl.esticker                        # retail-demo energy-label sticker
+com.tcl.tv.tclhome_master               # TCL's alternate promo home
+com.tcl.notereminder                    # notes and reminders widget
+
+# Google attribution and preloads
+com.google.android.feedback
+com.google.android.partnersetup         # partner-app attribution / installs
+android.autoinstalls.config.tcl.device  # Play Auto Installs stub (installs partner apps unasked)
+com.google.android.play.games
+com.google.android.syncadapters.calendar   # Google Calendar sync; no calendar on a TV

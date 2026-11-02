@@ -1,0 +1,35 @@
+# Your own list for AwanTV-clean.ps1 on the TCL BeyondTV (Android TV 11): the apps you may or may not use, every one
+# commented out. Remove the "#" at the start of a line to turn that app off, then run:
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <TV address> -List extra-tcl-beyondtv-android11.txt -DryRun
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <TV address> -List extra-tcl-beyondtv-android11.txt
+# Put a "#" back and run AwanTV-clean-undo.ps1 -Package <name> to turn one on again (the "#" alone changes nothing on
+# the TV). Apps not on a TV are skipped; what the TV or Awan TV needs is refused whatever this file says.
+# Lines that go together say so: turn them off together, or neither.
+
+# --- Voice: the remote's mic button goes dead. All four together (CleanYourTV's BeyondTV2 Android 11).
+# com.google.android.katniss               # Google Assistant / voice search
+# com.google.android.tv.assistant          # Assistant LED service
+# com.tcl.assistant                        # TCL voice service
+# com.tcl.micmanager                       # TCL microphone manager
+
+# --- Casting and mirroring from a phone
+# com.google.android.apps.mediashell       # Chromecast built-in (cast from YouTube, Netflix and other phone apps)
+# com.tcl.miracast                         # Miracast screen mirroring
+# com.tcl.MultiScreenInteraction_TV        # TCL MagiConnect phone app
+
+# --- Stock launcher extras
+# com.google.android.tvrecommendations     # recommendation rows on the Android TV home (not tested by CleanYourTV)
+
+# --- Streaming, preloaded
+# com.netflix.ninja                        # Netflix
+# com.amazon.amazonvideo.livingroom        # Prime Video
+# com.google.android.youtube.tv            # YouTube
+# com.google.android.youtube.tvmusic       # YouTube Music
+# com.google.android.videos                # Google Play Movies / Google TV
+# uk.co.freeview.bbc_sounds                # BBC Sounds (UK)
+
+# --- Tools and extras
+# com.tcl.ui_mediaCenter                   # USB media player (films, music and photos from a USB stick)
+# com.android.printspooler                 # printing (no printer on a TV)
+# com.android.dreams.basic                 # stock "Colors" screensaver (Awan TV and Backdrop do not use it)
+# com.android.wallpaper.livepicker         # live wallpaper picker

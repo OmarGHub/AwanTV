@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · Inputs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div dir="{{dir}}" lang="{{lang}}" style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif">
+  <div aria-hidden="true" style="position: absolute; inset: 0">
+    <dc-import name="Home" locale="{{locale}}" focus="none" mode="normal" hint-size="1920px,1080px"></dc-import>
+  </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(6,13,26,.72)"></div>
+
+  <div role="dialog" aria-label="{{t.title}}" style="position: absolute; inset-inline-end: 0; top: 0; width: 600px; height: 1080px; box-sizing: border-box; background: #12264A; box-shadow: 0 0 0 2px rgba(216,180,106,.5); padding: 56px 56px 56px 48px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 18px">
+      <svg width="44" height="56" viewBox="0 0 56 72" aria-hidden="true"><path d="M4 70V30C4 16 14 9 28 2c14 7 24 14 24 28v40z" fill="none" stroke="#D8B46A" stroke-width="3"></path></svg>
+      <h1 style="margin: 0; font-family: {{fd}}; font-weight: {{fw}}; font-size: 56px; line-height: 1.1">{{t.title}}</h1>
+    </div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+      <a href="#" style="height: 104px; box-sizing: border-box; border-radius: 16px; padding-inline: 24px; display: flex; align-items: center; gap: 20px; text-decoration: none; {{r.style}}">
+        <span aria-hidden="true" style="width: 60px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; {{r.badge}}">{{r.short}}</span>
+        <span style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 30px; font-weight: 500">{{r.name}}</span>
+          <span style="font-size: 20px; opacity: .8">{{r.status}}</span>
+        </span>
+        <span aria-hidden="true" style="width: 14px; height: 14px; border-radius: 7px; {{r.dot}}"></span>
+      </a>
+    </sc-for>
+    <div style="margin-top: auto; display: flex; gap: 32px; font-size: 22px; color: #9FB0CC">
+      <sc-for list="{{t.hints}}" as="h" hint-placeholder-count="2"><span>{{h}}</span></sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"locale":{"editor":"enum","options":["ar","en"],"default":"ar"},"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+  var locale = this.props.locale ?? 'ar';
+  var ar = locale === 'ar';
+  var t = ar ? {
+    title: 'مصادر الإدخال', on: 'متصل', off: 'غير متصل', current: 'المصدر الحالي',
+    hints: ['OK  تبديل', 'رجوع  إغلاق'],
+    names: ['التطبيقات (أفنان)', 'HDMI 1', 'HDMI 2', 'HDMI 3 · eARC', 'AV', 'USB']
+  } : {
+    title: 'Inputs', on: 'Connected', off: 'Not connected', current: 'Current source',
+    hints: ['OK  Switch', 'Back  Close'],
+    names: ['Apps (Afnon)', 'HDMI 1', 'HDMI 2', 'HDMI 3 · eARC', 'AV', 'USB']
+  };
+  var shorts = ['TV', 'H1', 'H2', 'H3', 'AV', 'USB'];
+  var connected = [true, true, false, true, false, false];
+  var rows = t.names.map(function (n, i) {
+    var focus = i === 1;
+    var current = i === 0;
+    return {
+      name: n, short: shorts[i],
+      status: current ? t.current : (connected[i] ? t.on : t.off),
+      style: focus ? 'background: #D8B46A; color: #0C1B33; transform: scale(1.04); outline: 4px solid #EFE7D6; outline-offset: 6px;' : (current ? 'background: #1A3360; color: #EFE7D6; box-shadow: inset 0 0 0 2px #D8B46A;' : 'background: transparent; color: ' + (connected[i] ? '#EFE7D6' : '#9FB0CC') + ';'),
+      badge: focus ? 'background: #0C1B33; color: #D8B46A;' : 'background: #0C1B33; color: #EFE7D6; box-shadow: inset 0 0 0 1px rgba(239,231,214,.3);',
+      dot: connected[i] ? (focus ? 'background: #0C1B33;' : 'background: #D8B46A;') : 'box-shadow: inset 0 0 0 2px rgba(159,176,204,.6);'
+    };
+  });
+  return {
+    dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en', locale: locale, t: t, rows: rows,
+    fd: ar ? "'Amiri', serif" : "'Marcellus', serif", fw: ar ? 700 : 400
+  };
+}
+}
+</script>
+</body>
+</html>

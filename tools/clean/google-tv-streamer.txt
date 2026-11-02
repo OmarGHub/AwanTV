@@ -1,0 +1,19 @@
+# Google TV Streamer (2024, kirkwood, Android 14 Google TV): what AwanTV-clean.ps1 disables.
+# From CleanYourTV (github.com/Gathin23/cleanyourtv, MIT): examples/google-tv-streamer-4k-kirkwood, checked on a real
+# unit, and the two lines most of its other lists share (partner attribution in 76 lists, calendar sync in 63).
+# A Google device has no maker's ads or tracking, so the list is short.
+# Unlike CleanYourTV, Awan TV keeps the stock launcher (launcherx), the screensaver (dreamx) and setup (setupwraith):
+# on this device setupwraith also holds the Cast credentials and owns the saved Wi-Fi network, and disabling it
+# broke casting and can drop Wi-Fi. The Privacy Sandbox modules are in extra-google-tv-streamer.txt.
+# One package a line; "#" starts a comment. Disabled for the user (pm disable-user), never uninstalled.
+
+# Telemetry and feedback
+com.google.android.feedback
+com.android.tv.feedbackconsent
+com.google.android.tv.remotecontrol.logging     # remote usage logging
+
+# Preloads and partner set-up
+com.google.android.play.games
+com.google.android.partnersetup                 # partner-app attribution
+com.google.android.syncadapters.calendar        # Google Calendar sync; no calendar on a TV
+android.autoinstalls.config.google.sabrina      # Play Auto Installs stub (installs partner apps unasked)

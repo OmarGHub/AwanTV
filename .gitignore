@@ -1,0 +1,28 @@
+.gradle/
+build/
+app/build/
+local.properties
+*.apk
+.idea/
+*.iml
+# Downloaded by tools/AwanTV-fetch-adhans (no licence stated, so not in the source; see README)
+app/src/main/assets/adhan/*.mp3
+# Recorded locally by tools/fetch-announce.sh with a Microsoft neural voice (not ours to redistribute)
+app/src/main/assets/announce/*.mp3
+# Per-TV state: disabled.log, screenshots, backups
+state/
+# Local files, never published
+CLAUDE.md
+CLAUDE.local.md
+tools/AwanTV-snapshot.py
+tools/AwanTV-snapshot.cmd
+# Python caches (tools/AwanTV-build-cities.py)
+__pycache__/
+# Android Studio's Generate Signed APK output (the APK and output-metadata.json)
+app/release/
+installer/release/
+# tools/AwanTV-release's output: the files of a GitHub release
+/release/
+# Signing keys never belong in the repository
+*.jks
+*.keystore

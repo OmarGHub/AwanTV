@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · Design tokens</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1400px; box-sizing: border-box; padding: 80px 96px; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif; display: flex; flex-direction: column; gap: 56px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end">
+    <h1 style="margin: 0; font-family: 'Marcellus', serif; font-weight: 400; font-size: 72px">Design tokens</h1>
+    <div style="font-size: 22px; color: #9FB0CC">All values in px at 1920×1080 · viewed at ~3 m · safe area 96 inline / 56 block</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 20px">
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #0C1B33; box-shadow: inset 0 0 0 2px rgba(239,231,214,.25)"></div><b style="font-size: 22px; font-weight: 500">lapis-900</b><span style="font-size: 20px; color: #9FB0CC">#0C1B33 · ground</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #12264A"></div><b style="font-size: 22px; font-weight: 500">lapis-800</b><span style="font-size: 20px; color: #9FB0CC">#12264A · surface, arch</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #1A3360"></div><b style="font-size: 22px; font-weight: 500">lapis-700</b><span style="font-size: 20px; color: #9FB0CC">#1A3360 · raised, badges</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #D8B46A"></div><b style="font-size: 22px; font-weight: 500">gold-400</b><span style="font-size: 20px; color: #9FB0CC">#D8B46A · accent, focus fill · 8.9:1 on ground</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #F0D79C"></div><b style="font-size: 22px; font-weight: 500">gold-200</b><span style="font-size: 20px; color: #9FB0CC">#F0D79C · approaching glow</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #EFE7D6"></div><b style="font-size: 22px; font-weight: 500">plaster-100</b><span style="font-size: 20px; color: #9FB0CC">#EFE7D6 · text, focus ring, "now" · 13.9:1</span></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="height: 120px; border-radius: 14px; background: #9FB0CC"></div><b style="font-size: 22px; font-weight: 500">mist-400</b><span style="font-size: 20px; color: #9FB0CC">#9FB0CC · secondary text · 7.7:1</span></div>
+  </div>
+  <div style="font-size: 20px; color: #9FB0CC; margin-top: -36px">Screensaver only: ink #000000, text #A69F90, dim text #7D7769, arch line gold-400 at 35%. Pattern: gold-400 lines at 7% — one static SVG tile, drawn once.</div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px">
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <h2 style="margin: 0; font-size: 22px; letter-spacing: .2em; color: #9FB0CC; font-weight: 400">TYPE</h2>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">display-xl 150/1</span><span style="font-family: 'Marcellus', serif; font-size: 96px; line-height: 1">27:14</span><span style="font-family: 'Amiri', serif; font-size: 96px; line-height: 1">٢٧:١٤</span></div>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">display-l 96 · 88</span><span style="font-family: 'Marcellus', serif; font-size: 72px">Asr</span><span style="font-family: 'Amiri', serif; font-weight: 700; font-size: 72px">العصر</span></div>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">title 52–64</span><span style="font-family: 'Marcellus', serif; font-size: 52px">All apps</span><span style="font-family: 'Amiri', serif; font-weight: 700; font-size: 52px">كل التطبيقات</span></div>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">body-l 30 · body 26</span><span style="font-size: 30px">Shahid · شاهد</span></div>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">label 22 · caption 20</span><span style="font-size: 22px; letter-spacing: .2em">NEXT PRAYER</span><span style="font-size: 22px">الصلاة القادمة</span></div>
+      <div style="display: flex; align-items: baseline; gap: 24px"><span style="width: 220px; font-size: 20px; color: #9FB0CC">sacred 32/1.55</span><span dir="rtl" style="font-family: 'Amiri', serif; font-size: 32px; color: #D8B46A">كِتَابًا مَّوْقُوتًا</span></div>
+      <div style="font-size: 20px; color: #9FB0CC; line-height: 1.5">Display: Marcellus (EN) / Amiri 700 (AR). UI: Alexandria 300–600 (both scripts, Eastern digits). Sacred text: Amiri 400 in gold, never bold, never letter-spaced. Minimum size on screen: 20 px. Caps tracking .2em in English only — Arabic is never letter-spaced.</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 32px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 22px; letter-spacing: .2em; color: #9FB0CC; font-weight: 400">SPACING · 4-PX BASE</h2>
+        <div style="display: flex; align-items: flex-end; gap: 22px">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 8px; height: 8px; background: #D8B46A"></div><span style="font-size: 20px">8</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 12px; height: 12px; background: #D8B46A"></div><span style="font-size: 20px">12</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 16px; height: 16px; background: #D8B46A"></div><span style="font-size: 20px">16</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 24px; height: 24px; background: #D8B46A"></div><span style="font-size: 20px">24</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 32px; height: 32px; background: #D8B46A"></div><span style="font-size: 20px">32</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 48px; height: 48px; background: #D8B46A"></div><span style="font-size: 20px">48</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 64px; height: 64px; background: #D8B46A"></div><span style="font-size: 20px">64</span></div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px"><div style="width: 96px; height: 96px; background: #D8B46A"></div><span style="font-size: 20px">96</span></div>
+        </div>
+        <div style="font-size: 20px; color: #9FB0CC">Arch: 600×900 at start 96, top 120. Courtyard column: start 760, width 1064. Tile gaps 24 (favourites), 20 (more), 12 (prayer cells).</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 22px; letter-spacing: .2em; color: #9FB0CC; font-weight: 400">RADII</h2>
+        <div style="display: flex; gap: 24px; align-items: center; font-size: 20px">
+          <div style="width: 96px; height: 72px; border-radius: 8px; background: #12264A; display: flex; align-items: center; justify-content: center">8</div>
+          <div style="width: 96px; height: 72px; border-radius: 14px; background: #12264A; display: flex; align-items: center; justify-content: center">14</div>
+          <div style="width: 96px; height: 72px; border-radius: 18px; background: #12264A; display: flex; align-items: center; justify-content: center">18</div>
+          <div style="width: 96px; height: 72px; border-radius: 24px; background: #12264A; display: flex; align-items: center; justify-content: center">24</div>
+          <div style="width: 140px; height: 72px; border-radius: 36px; background: #12264A; display: flex; align-items: center; justify-content: center">pill</div>
+          <span style="color: #9FB0CC">badge · cell · tile · panel · button</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 22px; letter-spacing: .2em; color: #9FB0CC; font-weight: 400">FOCUS</h2>
+        <div style="display: flex; gap: 40px; align-items: center">
+          <div style="width: 220px; height: 120px; border-radius: 18px; background: #D8B46A; color: #0C1B33; display: flex; align-items: flex-end; padding: 18px; box-sizing: border-box; font-size: 26px; font-weight: 500; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px">On dark</div>
+          <div style="width: 220px; height: 120px; border-radius: 18px; background: #EFE7D6; display: flex; align-items: center; justify-content: center"><div style="height: 60px; padding: 0 24px; border-radius: 30px; background: #0C1B33; color: #EFE7D6; display: flex; align-items: center; font-size: 22px; outline: 4px solid #D8B46A; outline-offset: 4px">On light</div></div>
+        </div>
+        <div style="font-size: 20px; color: #9FB0CC; line-height: 1.5">Focus = fill gold-400 + 4 px plaster ring, 6 px gap + scale 1.06 (rows 1.04). On light surfaces: lapis fill + gold ring, 4 px gap. Never colour alone: fill, ring and scale all change together.</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 22px; letter-spacing: .2em; color: #9FB0CC; font-weight: 400">MOTION · TRANSFORM + OPACITY ONLY</h2>
+        <div style="font-size: 22px; line-height: 1.6">Focus move 120 ms cubic-bezier(.2,.8,.2,1) · Panel slide 240 ms same curve · Overlay fade 200 ms linear · Countdown digits: no animation, swap each second · Screensaver drift: 1 step per 60 s, 160 ms fade · Arch glow (approaching): 2 static states, no pulse loop · No blur, no shadows bigger than a 6 px solid ring.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1400}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

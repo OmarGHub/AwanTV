@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · RTL mirroring notes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1080px; box-sizing: border-box; padding: 64px 96px; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif; display: flex; flex-direction: column; gap: 36px">
+  <div style="display: flex; justify-content: space-between; align-items: baseline">
+    <h1 style="margin: 0; font-family: 'Marcellus', serif; font-weight: 400; font-size: 64px">RTL mirroring notes</h1>
+    <span dir="rtl" style="font-family: 'Amiri', serif; font-weight: 700; font-size: 48px; color: #D8B46A">العربية أولًا</span>
+  </div>
+  <div style="font-size: 24px; color: #9FB0CC; max-width: 1500px; line-height: 1.5">Each screen is one layout with a locale switch. The switch flips <b style="font-weight: 500; color: #EFE7D6">dir</b> and nothing else: every position is a logical property (inset-inline-start, padding-inline, text-align: start), so Arabic is the same design mirrored, not a second design.</div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px">
+    <div style="border-radius: 20px; background: #12264A; padding: 32px 36px; display: flex; flex-direction: column; gap: 14px">
+      <span style="font-size: 22px; letter-spacing: .2em; color: #D8B46A">MIRRORS</span>
+      <ul style="margin: 0; padding-inline-start: 26px; font-size: 23px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px">
+        <li>The arch sits on the start side: right in Arabic, left in English. The courtyard takes the other side.</li>
+        <li>Prayer cells run Fajr → Isha from the start edge; favourites start with YouTube at the start edge.</li>
+        <li>D-pad: in Arabic ◀ means next and ▶ means previous along a row. The focus map swaps every Left/Right.</li>
+        <li>Back chevrons, "more" chevrons and the "All apps ←" arrow flip.</li>
+        <li>Reminder toast and the Inputs panel come from the end side (left in Arabic). The over-video banner sits top-end.</li>
+        <li>Segmented controls list options from the start; a toggle's "on" knob sits at the end side.</li>
+        <li>The banner timer line drains toward the start side.</li>
+      </ul>
+    </div>
+    <div style="border-radius: 20px; background: #12264A; padding: 32px 36px; display: flex; flex-direction: column; gap: 14px">
+      <span style="font-size: 22px; letter-spacing: .2em; color: #D8B46A">NEVER MIRRORS</span>
+      <ul style="margin: 0; padding-inline-start: 26px; font-size: 23px; line-height: 1.5; display: flex; flex-direction: column; gap: 6px">
+        <li>Times and countdowns: hours:minutes keep their order (١٤:٢١, never ٢١:١٤). Wrap them in a Unicode isolate and use tabular figures so the countdown doesn't jitter.</li>
+        <li>The Qibla compass and its 136° bearing are geography; north stays up.</li>
+        <li>Media glyphs (play, volume) and the video progress bar of other apps.</li>
+        <li>Latin names inside Arabic — Claude Code TV, BrowseHere, Home-WiFi, HDMI — are isolated as LTR runs.</li>
+        <li>The arch shape and the star lattice are symmetric, so they need no flipped asset.</li>
+        <li>Sacred text is always Arabic, RTL and in the arch's crown, in both languages; in English it gets a reference line, not a translation inside the crown.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; font-size: 22px; line-height: 1.5">
+    <div><b style="font-weight: 500; color: #D8B46A">Digits are their own setting</b><br>Eastern Arabic (٠١٢٣) is the default in Arabic, but it is a separate switch: Arabic with Western digits and English with Eastern digits both work.</div>
+    <div><b style="font-weight: 500; color: #D8B46A">Arabic type</b><br>Never letter-spaced and never set in caps-style tracking. Line height 1.5 or more where diacritics appear. Amiri 700 for display, Alexandria for UI.</div>
+    <div><b style="font-weight: 500; color: #D8B46A">Same focus, both ways</b><br>On Home the default focus is the arch in both languages; the focus ring, scale and fill do not change with direction.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

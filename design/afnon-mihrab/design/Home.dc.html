@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div dir="{{dir}}" lang="{{lang}}" style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif">
+
+  <svg aria-hidden="true" width="1920" height="1080" style="position: absolute; inset: 0; opacity: .07">
+    <defs>
+      <pattern id="star8h" width="96" height="96" patternUnits="userSpaceOnUse">
+        <rect x="28" y="28" width="40" height="40" fill="none" stroke="#D8B46A" stroke-width="1.5"></rect>
+        <rect x="28" y="28" width="40" height="40" fill="none" stroke="#D8B46A" stroke-width="1.5" transform="rotate(45 48 48)"></rect>
+        <path d="M0 48h20M76 48h20M48 0v20M48 76v20" stroke="#D8B46A" stroke-width="1.5"></path>
+      </pattern>
+    </defs>
+    <rect width="1920" height="1080" fill="url(#star8h)"></rect>
+  </svg>
+
+  <svg aria-hidden="true" width="600" height="900" viewBox="0 0 600 900" style="position: absolute; inset-inline-start: 96px; top: 120px">
+    <path d="M0 900 L0 330 C0 170 140 70 300 0 C460 70 600 170 600 330 L600 900 Z" fill="#12264A" stroke="{{archStroke}}" stroke-width="{{archW}}"></path>
+    <path d="M18 900 L18 334 C18 184 150 92 300 22 C450 92 582 184 582 334 L582 900" fill="none" stroke="rgba(216,180,106,.45)" stroke-width="1.5"></path>
+  </svg>
+
+  <div dir="rtl" lang="ar" style="position: absolute; inset-inline-start: 156px; top: 250px; width: 480px; text-align: center">
+    <p style="margin: 0; font-family: 'Amiri', serif; font-size: 32px; line-height: 1.55; color: #D8B46A">إِنَّ الصَّلَاةَ كَانَتْ<br>عَلَى الْمُؤْمِنِينَ<br>كِتَابًا مَّوْقُوتًا</p>
+  </div>
+  <div style="position: absolute; inset-inline-start: 156px; top: 410px; width: 480px; text-align: center; font-size: 20px; color: #9FB0CC">{{t.ref}}</div>
+  <div aria-hidden="true" style="position: absolute; inset-inline-start: 336px; top: 460px; width: 120px; height: 2px; background: #D8B46A; opacity: .6"></div>
+
+  <div style="position: absolute; inset-inline-start: 136px; top: 488px; width: 520px; display: flex; flex-direction: column; align-items: center; text-align: center">
+    <div style="font-size: 22px; letter-spacing: {{ls}}; color: #9FB0CC">{{arch.label}}</div>
+    <div style="font-family: {{fd}}; font-weight: {{fw}}; font-size: 88px; line-height: 1.15; color: #D8B46A">{{arch.name}}</div>
+    <div style="font-family: {{fd}}; font-size: {{arch.size}}; line-height: 1">{{arch.count}}</div>
+    <div style="font-size: 26px; color: #9FB0CC; margin-top: 12px">{{arch.sub}}</div>
+    <div style="font-size: 24px; color: #F0D79C; margin-top: 8px">{{arch.sub2}}</div>
+  </div>
+
+  <a href="PrayerDay.dc.html" style="position: absolute; inset-inline-start: 176px; top: 904px; width: 440px; height: 72px; box-sizing: border-box; border-radius: 36px; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 26px; text-decoration: none; {{btnStyle}}">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 12l3.5-6.5M12 12l-3.5 6.5"></path></svg>
+    {{t.today}}
+  </a>
+
+  <div style="position: absolute; inset-inline-start: 760px; top: 56px; width: 1064px; display: flex; justify-content: space-between; align-items: flex-start">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <div style="font-family: {{fd}}; font-size: 96px; line-height: 1">{{clock}}</div>
+      <div style="font-size: 26px">{{gdate}}</div>
+      <div style="font-size: 24px; color: #9FB0CC">{{hdate}} · {{t.city}}</div>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: center">
+      <button style="height: 72px; padding: 0 28px; border-radius: 36px; border: 2px solid rgba(239,231,214,.25); background: #12264A; color: #EFE7D6; display: flex; align-items: center; gap: 14px; font-family: inherit; font-size: 24px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"></path><circle cx="12" cy="19" r="1.2" fill="currentColor"></circle></svg>
+        <span dir="ltr">Home-WiFi</span>
+      </button>
+      <a href="Settings.dc.html" aria-label="{{t.settings}}" style="width: 72px; height: 72px; box-sizing: border-box; border-radius: 36px; border: 2px solid rgba(239,231,214,.25); background: #12264A; color: #EFE7D6; display: flex; align-items: center; justify-content: center">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"></circle><circle cx="12" cy="12" r="7.5"></circle><path d="M12 1.8v2.7M12 19.5v2.7M1.8 12h2.7M19.5 12h2.7M4.8 4.8l1.9 1.9M17.3 17.3l1.9 1.9M4.8 19.2l1.9-1.9M17.3 6.7l1.9-1.9"></path></svg>
+      </a>
+    </div>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 760px; top: 290px; width: 1064px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+    <sc-for list="{{prayers}}" as="p" hint-placeholder-count="6">
+      <div style="height: 146px; box-sizing: border-box; border-radius: 14px; padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between; background: {{p.bg}}; color: {{p.fg}}; box-shadow: {{p.ring}}">
+        <span style="font-size: 20px; min-height: 24px; letter-spacing: {{ls}}">{{p.tag}}</span>
+        <span style="font-size: 26px; font-weight: {{p.fw}}">{{p.name}}</span>
+        <span style="font-size: 34px; font-weight: {{p.fw}}">{{p.time}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 760px; top: 478px; font-size: 22px; letter-spacing: {{ls}}; color: #9FB0CC">{{t.fav}}</div>
+  <div style="position: absolute; inset-inline-start: 760px; top: 520px; width: 1064px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+    <a href="#" style="height: 150px; box-sizing: border-box; border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; {{f0}}">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"></rect><path d="M10 9.2v5.6l4.8-2.8z" fill="currentColor"></path></svg>
+      <span style="font-size: 30px; font-weight: 500">{{t.yt}}</span>
+    </a>
+    <a href="#" style="height: 150px; box-sizing: border-box; border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; {{f1}}">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"></path></svg>
+      <span style="font-size: 30px; font-weight: 500">{{t.shahid}}</span>
+    </a>
+    <a href="#" style="height: 150px; box-sizing: border-box; border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; {{f2}}">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="16" rx="2.5"></rect><path d="M7 9.5l3 2.5-3 2.5M12.5 15h4.5"></path></svg>
+      <span dir="ltr" style="font-size: 28px; font-weight: 500; text-align: start">Claude Code TV</span>
+    </a>
+    <a href="#" style="height: 150px; box-sizing: border-box; border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; {{f3}}">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg>
+      <span dir="ltr" style="font-size: 28px; font-weight: 500">BrowseHere</span>
+    </a>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 760px; top: 722px; font-size: 22px; letter-spacing: {{ls}}; color: #9FB0CC">{{t.more}}</div>
+  <div style="position: absolute; inset-inline-start: 760px; top: 764px; width: 1064px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px">
+    <sc-for list="{{more}}" as="m" hint-placeholder-count="5">
+      <a href="#" style="height: 112px; box-sizing: border-box; border-radius: 14px; background: #12264A; color: #EFE7D6; padding: 18px; display: flex; align-items: flex-end; font-size: 22px; text-decoration: none">{{m}}</a>
+    </sc-for>
+    <a href="AllApps.dc.html" style="height: 112px; box-sizing: border-box; border-radius: 14px; border: 2px dashed rgba(239,231,214,.3); color: #EFE7D6; padding: 18px; display: flex; align-items: flex-end; font-size: 22px; text-decoration: none">{{t.all}}</a>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 760px; top: 962px; display: flex; gap: 40px; font-size: 22px; color: #9FB0CC">
+    <sc-for list="{{hints}}" as="h" hint-placeholder-count="2"><span>{{h}}</span></sc-for>
+  </div>
+
+  <sc-if value="{{isApproach}}" hint-placeholder-val="{{ false }}">
+    <div role="alertdialog" aria-label="{{t.apLabel}}" style="position: absolute; inset-inline-end: 96px; bottom: 56px; width: 680px; box-sizing: border-box; padding: 32px 36px; border-radius: 24px; background: #EFE7D6; color: #0C1B33; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 0 0 6px rgba(12,27,51,.6)">
+      <div style="display: flex; align-items: center; gap: 12px; font-size: 20px; letter-spacing: {{ls}}; color: #5A4A22">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M9 2h6"></path></svg>
+        {{t.apLabel}}
+      </div>
+      <div style="font-family: {{fd}}; font-weight: {{fw}}; font-size: 52px; line-height: 1.15">{{t.apTitle}}</div>
+      <div style="font-size: 24px; color: #3D4A63">{{t.apSub}}</div>
+      <div style="display: flex; gap: 16px; margin-top: 14px">
+        <button style="height: 68px; padding: 0 32px; border-radius: 34px; border: 0; background: #0C1B33; color: #EFE7D6; font-family: inherit; font-size: 24px; outline: 4px solid #D8B46A; outline-offset: 4px">{{t.apOk}}</button>
+        <a href="PrayerDay.dc.html" style="height: 68px; padding: 0 32px; box-sizing: border-box; border-radius: 34px; border: 2px solid rgba(12,27,51,.35); color: #0C1B33; display: flex; align-items: center; font-size: 24px; text-decoration: none">{{t.apDay}}</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isNow}}" hint-placeholder-val="{{ false }}">
+    <div role="alertdialog" aria-label="{{t.nowLabel}}" style="position: absolute; inset: 0; background: rgba(8,18,36,.94)">
+      <svg aria-hidden="true" width="720" height="900" viewBox="0 0 720 900" style="position: absolute; left: 600px; top: 110px">
+        <path d="M0 900 L0 360 C0 190 170 80 360 0 C550 80 720 190 720 360 L720 900 Z" fill="#12264A" stroke="#F0D79C" stroke-width="5"></path>
+        <path d="M20 900 L20 364 C20 204 182 96 360 24 C538 96 700 204 700 364 L700 900" fill="none" stroke="rgba(216,180,106,.5)" stroke-width="1.5"></path>
+      </svg>
+      <div style="position: absolute; left: 640px; top: 260px; width: 640px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px">
+        <div dir="rtl" lang="ar" style="font-family: 'Amiri', serif; font-size: 54px; color: #D8B46A; line-height: 1.4">حَيَّ عَلَى الصَّلَاةِ</div>
+        <div style="font-size: 22px; letter-spacing: {{ls}}; color: #9FB0CC; margin-top: 24px">{{t.nowLabel}}</div>
+        <div style="font-family: {{fd}}; font-weight: {{fw}}; font-size: 128px; line-height: 1.1">{{t.asr}}</div>
+        <div style="font-family: {{fd}}; font-size: 64px; color: #D8B46A">{{nowTime}}</div>
+        <div style="display: flex; flex-direction: column; gap: 18px; width: 420px; margin-top: 36px">
+          <button style="height: 76px; border-radius: 38px; border: 0; background: #D8B46A; color: #0C1B33; font-family: inherit; font-size: 28px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 14px; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path></svg>
+            {{t.play}}
+          </button>
+          <button style="height: 76px; border-radius: 38px; border: 2px solid rgba(239,231,214,.35); background: transparent; color: #EFE7D6; font-family: inherit; font-size: 28px">{{t.dismiss}}</button>
+        </div>
+        <div style="font-size: 22px; color: #9FB0CC; margin-top: 20px">{{t.nowHint}}</div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"locale":{"editor":"enum","options":["ar","en"],"default":"ar"},"focus":{"editor":"enum","options":["panel","app"],"default":"panel"},"mode":{"editor":"enum","options":["normal","approach","now","friday","ramadan"],"default":"normal"},"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+  var ar = (this.props.locale ?? 'ar') === 'ar';
+  var mode = this.props.mode ?? 'normal';
+  var focus = this.props.focus ?? 'panel';
+  if (mode === 'approach' || mode === 'now') focus = 'none';
+  var d = function (s) { return ar ? String(s).replace(/[0-9]/g, function (c) { return '٠١٢٣٤٥٦٧٨٩'[+c]; }) : String(s); };
+  var t = ar ? {
+    ref: 'النساء ١٠٣', next: 'الصلاة القادمة', today: 'مواقيت اليوم والقبلة', settings: 'الإعدادات', city: 'القاهرة',
+    fav: 'المفضلة', more: 'المزيد', all: 'كل التطبيقات · ١٣', yt: 'يوتيوب', shahid: 'شاهد',
+    adhanAt: 'الأذان', now: 'الآن', nextTag: 'التالية', asr: 'العصر',
+    apLabel: 'اقتربت الصلاة', apTitle: 'العصر بعد ١٣ دقيقة', apSub: 'الأذان ١٤:٤٨ · رجوع للإغلاق', apOk: 'حسنًا', apDay: 'مواقيت اليوم',
+    nowLabel: 'حان الآن وقت صلاة', play: 'تشغيل الأذان', dismiss: 'إغلاق', nowHint: 'رجوع للإغلاق · يُغلق تلقائيًا بعد ١٠ دقائق',
+    hPanel: ['OK  مواقيت اليوم والقبلة', '◀  التطبيقات'], hApp: ['OK  فتح شاهد', 'اضغط مطولًا  للترتيب', '▼  المزيد']
+  } : {
+    ref: 'An-Nisa 4:103', next: 'NEXT PRAYER', today: 'Today & Qibla', settings: 'Settings', city: 'Cairo',
+    fav: 'FAVOURITES', more: 'MORE', all: 'All apps · 13', yt: 'YouTube', shahid: 'Shahid',
+    adhanAt: 'Adhan at', now: 'NOW', nextTag: 'NEXT', asr: 'Asr',
+    apLabel: 'PRAYER APPROACHING', apTitle: 'Asr in 13 minutes', apSub: 'Adhan at 14:48 · Back to dismiss', apOk: 'Got it', apDay: "Today's prayers",
+    nowLabel: "IT'S TIME FOR", play: 'Play adhan', dismiss: 'Dismiss', nowHint: 'Back to dismiss · closes by itself after 10 min',
+    hPanel: ['OK  Today & Qibla', '▶  Apps'], hApp: ['OK  Open Shahid', 'Hold OK  Reorder', '▼  More']
+  };
+  var names = ar ? ['الفجر', 'الشروق', 'الظهر', 'العصر', 'المغرب', 'العشاء'] : ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+  var times = ['04:38', '06:03', '11:38', '14:48', '17:13', '18:31'];
+  var dateN = ar ? ['الثلاثاء 20 أكتوبر 2026', '9 جمادى الأولى 1448 هـ'] : ['Tuesday 20 October 2026', '9 Jumada al-Ula 1448 AH'];
+  var c = {
+    normal:   { clock: '14:21', nowI: 2, nextI: 3, date: dateN, label: t.next, name: names[3], count: '27:14', size: '150px', sub: t.adhanAt + ' 14:48 · ' + t.city, sub2: '' },
+    approach: { clock: '14:35', nowI: 2, nextI: 3, date: dateN, label: t.next, name: names[3], count: '13:00', size: '150px', sub: t.adhanAt + ' 14:48 · ' + t.city, sub2: '' },
+    now:      { clock: '14:48', nowI: 3, nextI: 4, date: dateN, label: t.next, name: names[4], count: '2:25:00', size: '120px', sub: t.adhanAt + ' 17:13 · ' + t.city, sub2: '' },
+    friday:   { clock: '10:40', nowI: -1, nextI: 2, date: ar ? ['الجمعة 23 أكتوبر 2026', '12 جمادى الأولى 1448 هـ'] : ['Friday 23 October 2026', '12 Jumada al-Ula 1448 AH'],
+                label: ar ? 'صلاة الجمعة' : "JUMU'AH", name: ar ? 'الجمعة' : "Jumu'ah", count: '58:00', size: '150px', sub: t.adhanAt + ' 11:38 · ' + t.city, sub2: ar ? 'سورة الكهف اليوم' : 'Surat Al-Kahf today' },
+    ramadan:  { clock: '14:21', nowI: 2, nextI: 3, date: ar ? ['الاثنين 22 فبراير 2027', '15 رمضان 1448 هـ'] : ['Monday 22 February 2027', '15 Ramadan 1448 AH'],
+                label: ar ? 'الإفطار بعد' : 'IFTAR IN', name: ar ? 'الإفطار' : 'Iftar', count: '2:52:14', size: '120px', sub: (ar ? 'المغرب' : 'Maghrib') + ' 17:13 · ' + t.city, sub2: ar ? 'السحور حتى 04:38 · بعد 14:17' : 'Suhoor ends 04:38 · in 14:17' }
+  }[mode] || null;
+  if (!c) c = { clock: '14:21', nowI: 2, nextI: 3, date: dateN, label: t.next, name: names[3], count: '27:14', size: '150px', sub: '', sub2: '' };
+  var prayers = names.map(function (n, i) {
+    var st = i === c.nowI ? 'now' : (i === c.nextI ? 'next' : (i < c.nextI ? 'past' : 'up'));
+    var tag = st === 'now' ? t.now : (st === 'next' ? t.nextTag : '');
+    var name = n;
+    if (mode === 'friday' && i === 2) name = ar ? 'الجمعة' : "Jumu'ah";
+    if (mode === 'ramadan' && i === 4) tag = ar ? 'الإفطار' : 'IFTAR';
+    if (mode === 'ramadan' && i === 0) tag = ar ? 'الإمساك' : 'SUHOOR';
+    var s = {
+      now:  { bg: '#EFE7D6', fg: '#0C1B33', ring: 'none', fw: 600 },
+      next: { bg: 'transparent', fg: '#D8B46A', ring: 'inset 0 0 0 3px #D8B46A', fw: 600 },
+      past: { bg: 'rgba(18,38,74,.6)', fg: '#9FB0CC', ring: 'none', fw: 400 },
+      up:   { bg: '#12264A', fg: '#EFE7D6', ring: 'none', fw: 400 }
+    }[st];
+    return { name: name, time: d(times[i]), tag: tag, bg: s.bg, fg: s.fg, ring: s.ring, fw: s.fw };
+  });
+  var tileBase = 'background: #12264A; color: #EFE7D6;';
+  var tileFocus = 'background: #D8B46A; color: #0C1B33; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px;';
+  var panel = focus === 'panel';
+  return {
+    dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en', t: t,
+    fd: ar ? "'Amiri', serif" : "'Marcellus', serif", fw: ar ? 700 : 400, ls: ar ? '0' : '.2em',
+    clock: d(c.clock), gdate: d(c.date[0]), hdate: d(c.date[1]),
+    arch: { label: c.label, name: c.name, count: d(c.count), size: c.size, sub: d(c.sub), sub2: d(c.sub2) },
+    archStroke: mode === 'approach' ? '#F0D79C' : (panel ? '#EFE7D6' : '#D8B46A'),
+    archW: mode === 'approach' ? 6 : (panel ? 5 : 3),
+    btnStyle: panel ? 'background: #D8B46A; color: #0C1B33; outline: 4px solid #EFE7D6; outline-offset: 6px; transform: scale(1.06);' : 'border: 2px solid rgba(216,180,106,.6); color: #EFE7D6;',
+    prayers: prayers,
+    f0: tileBase, f1: focus === 'app' ? tileFocus : tileBase, f2: tileBase, f3: tileBase,
+    more: ar ? ['يوتيوب ميوزك', 'متجر Play', 'مشغل الوسائط', 'File Manager +', 'صلاتي'] : ['YouTube Music', 'Play Store', 'Media Player', 'File Manager +', 'Salaty'],
+    hints: focus === 'app' ? t.hApp : (focus === 'panel' ? t.hPanel : []),
+    isApproach: mode === 'approach', isNow: mode === 'now', nowTime: d('14:48')
+  };
+}
+}
+</script>
+</body>
+</html>

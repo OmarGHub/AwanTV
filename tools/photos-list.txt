@@ -1,0 +1,31 @@
+# AwanTV-build-photos.py: the background photos (Home and the screensaver), all from Unsplash (Unsplash License: free
+# to use, no permission or credit needed; the photographers are credited anyway in THIRD_PARTY.md and photos.json).
+# One photo a line: "original file name|kind|where". kind: makkah, madinah, aqsa, mosque, night, nature, quran.
+# where: "all" (Home and the screensaver) or "saver" (the screensaver only: calligraphy of the Name of Allah or the
+# Quran, never under Home's tiles and text). Dark photos (light <= 60) are the ones shown after Isha.
+a-miah-hJXiPheKFus-unsplash.jpg|madinah|all
+aaron-burden-tb4wis6XoQk-unsplash.jpg|nature|all
+ali-arif-soydas-uwzPks8CE3k-unsplash.jpg|mosque|all
+ali-rizvi-RCjKsxFb6N4-unsplash.jpg|night|all
+alkhatab-al-saqri-LM9UihLpexM-unsplash.jpg|mosque|all
+djonk-creative-AdZ68iA9X08-unsplash.jpg|madinah|all
+ekrem-osmanoglu-R_t4oOh-Lvg-unsplash.jpg|makkah|all
+haidan-8Kg-2kK97Xc-unsplash.jpg|makkah|all
+hakam-magdea-fardana-ansie-aslLzS2xQyM-unsplash.jpg|madinah|all
+hongbin-dJj0rVFT1Mc-unsplash.jpg|mosque|all
+ian-taylor-rOfNQ60d6Tg-unsplash.jpg|mosque|all
+jan-corba-Ueis6yE3zUI-unsplash.jpg|night|all
+jessica-favaro-tZbULR3VWhQ-unsplash.jpg|nature|all
+jordan-whitt-keSFbPQAJRE-unsplash.jpg|nature|all
+katerina-kerdi-TAfqq1B3-2s-unsplash.jpg|night|all
+mohammad-dadkhah-n2o0uwXF_3c-unsplash.jpg|nature|all
+niilo-isotalo--BZc9Ee1qo0-unsplash.jpg|nature|all
+sam-riz-ceNCWYqL8DY-unsplash.jpg|makkah|all
+sebastian-unrau-sp-p7uuT0tw-unsplash.jpg|nature|all
+sergey-shmidt-koy6FlCCy5s-unsplash.jpg|nature|all
+simon-infanger-ECctP9oPtio-unsplash.jpg|mosque|all
+stacey-franco-ex9KQrN1mj0-unsplash.jpg|aqsa|all
+tolga-deniz-aran-X_tQbB9HXCA-unsplash.jpg|night|all
+husien-bisky-apKcKjbtpM8-unsplash.jpg|mosque|saver
+salah-regouane-kbI_b46bvwo-unsplash.jpg|quran|saver
+yuval-zukerman-L6eC5CMAj-k-unsplash.jpg|aqsa|all

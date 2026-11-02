@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.ttf binary
+*.jar binary
+*.mp3 binary
+*.cmd text eol=crlf
+# Opened in Notepad from the Windows package
+tools/AwanTV-Windows-README.txt text eol=crlf

@@ -1,0 +1,33 @@
+# Your own list for AwanTV-clean.ps1: the apps you may or may not use, every one commented out.
+# Remove the "#" at the start of a line to turn that app off, then run:
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <serial or part of it> -List extra.txt -DryRun
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <serial or part of it> -List extra.txt
+# Put a "#" back and run AwanTV-clean-undo.ps1 -Package <name> to turn one on again (the "#" alone changes nothing on
+# the TV). Apps not on a TV are skipped; what the TV or Awan TV needs is refused whatever this file says.
+# Lines that go together say so: turn them off together, or neither.
+# Taken from the TCL "Smart TV Pro" (Android 14 Google TV) and the apps preloaded on it; add your own the same way.
+
+# --- Streaming, preloaded with the TV (the remote's app buttons stop working when their app is off)
+# com.netflix.ninja                    # Netflix, together with the next line
+# com.netflix.tokenmanager             # Netflix sign-in service
+# com.amazon.amazonvideo.livingroom    # Prime Video
+# com.google.android.youtube.tv        # YouTube
+# com.google.android.youtube.tvmusic   # YouTube Music
+# com.google.android.videos            # Google TV (films and shows to buy or rent)
+
+# --- Tools and browsers
+# com.tcl.browser                      # TCL browser
+
+# --- Casting and mirroring from a phone
+# com.google.android.apps.mediashell   # Chromecast built-in (cast from YouTube, Netflix and other phone apps)
+# com.tcl.airplay2                     # AirPlay from Apple devices, together with the next two lines
+# com.mediatek.AirplayAPK
+# com.mediatek.airplaydaemon
+# com.tcl.miracast                     # Miracast screen mirroring from Android phones and Windows
+# com.tcl.magiconnectfree              # TCL T-Cast / Magiconnect phone app
+
+# --- TV extras
+# com.tcl.gamebar                      # game bar (game mode / VRR overlay for consoles)
+# com.tcl.ui_mediaCenter               # USB media player (films and music from a USB stick), together with the next line
+# com.tcl.gallery                      # USB photo gallery
+# com.tcl.UpdatePeripheral             # firmware updates for TCL soundbars and other TCL add-ons

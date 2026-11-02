@@ -1,0 +1,22 @@
+# Your own list for AwanTV-clean.ps1 on the Google TV Streamer: the apps you may or may not use, every one
+# commented out. Remove the "#" at the start of a line to turn that app off, then run:
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <serial or part of it> -List extra-google-tv-streamer.txt -DryRun
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-clean.ps1 -Device <serial or part of it> -List extra-google-tv-streamer.txt
+# Put a "#" back and run AwanTV-clean-undo.ps1 -Package <name> to turn one on again (the "#" alone changes nothing on
+# the device). Apps not on a device are skipped; what the device or Awan TV needs is refused whatever this file says.
+# Lines that go together say so: turn them off together, or neither.
+
+# --- Privacy Sandbox and on-device ad personalisation (Android modules). Off on CleanYourTV's Streamer without
+# trouble; turn them back on if the Play Store or the Assistant misbehave. Together, all four.
+# com.google.android.adservices.api
+# com.google.android.ext.adservices.api
+# com.google.android.federatedcompute
+# com.google.android.ondevicepersonalization.services
+
+# --- Google apps
+# com.google.android.videos                       # Google TV (films and shows to buy or rent)
+# com.google.android.youtube.tv                   # YouTube (the remote's YouTube button stops working)
+# com.google.android.apps.mediashell              # Chromecast built-in (cast from phone apps)
+# com.netflix.tokenmanager                        # Netflix sign-in service
+# com.android.gallery3d                           # legacy photo viewer
+# com.android.dreams.basic                        # stock "Colors" screensaver (Awan TV and Ambient mode do not use it)

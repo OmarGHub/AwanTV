@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English, the fallback for every other language. Arabic is in values-ar/strings.xml; keep the two in step.
+     (Arabic is not the unqualified default: Android would then pick values-en for an Arabic phone with English
+     as a second language, since an exact match on a later language beats the default.) -->
+<resources>
+    <string name="lang" translatable="false">en</string>
+    <string name="app_name">Awan TV Installer</string>
+
+    <string name="stage_prepare">Prepare</string>
+    <string name="stage_connect">Connect</string>
+    <string name="stage_install">Install</string>
+
+    <string name="guide_title">Awan TV on your TV</string>
+    <string name="guide_lead">Install Awan TV from this phone in a few minutes, no computer needed. First, four steps on the TV with its remote. If Developer options are already on, go to step 3.</string>
+    <string name="guide_both">TV menus are shown in Arabic and English; some TVs word them a little differently</string>
+    <string name="g1_title">Open About</string>
+    <string name="g1_body">On older Android TVs: Settings › Device Preferences › About, then Build.</string>
+    <string name="g2_title">Turn on Developer options</string>
+    <string name="g2_body">Press OK on it 7 times quickly, until the TV says you are now a developer. It is the last item, with a long code under it; not the item with a short number such as 14 under it.</string>
+    <string name="g3_title">Turn on debugging</string>
+    <string name="g3_body">Turn this on (it works over the network, despite its name):</string>
+    <string name="g3_wireless">If you also see this (newer TVs), turn it on too:</string>
+    <string name="g4_title">Same Wi-Fi</string>
+    <string name="g4_body">Keep the TV and this phone on the same Wi-Fi network.</string>
+    <string name="guide_ready">Find my TV</string>
+
+    <string name="find_title">Looking for your TV</string>
+    <string name="find_lead">Searching your Wi-Fi. Tap your TV when it appears.</string>
+    <string name="found_heading">On your Wi-Fi</string>
+    <string name="tv_found">Android TV</string>
+    <string name="badge_wireless">Wireless debugging</string>
+    <string name="badge_network">USB (network) debugging</string>
+    <string name="badge_pair">Ready to pair</string>
+    <string name="help_title">Not seeing your TV?</string>
+    <string name="help_body">• Check that debugging is on (step 3).\n• Make sure both are on the same Wi-Fi.\n• Some routers hide devices from each other: type the TV’s address instead.</string>
+    <string name="manual_title">Or type its address</string>
+    <string name="manual_body">On the TV: Settings › Network › your Wi-Fi. For Wireless debugging, add the port it shows, like 192.168.1.20:41234.</string>
+    <string name="manual_hint">192.168.1.20</string>
+    <string name="connect">Connect</string>
+    <string name="not_wifi_title">Join the TV’s Wi-Fi</string>
+    <string name="not_wifi">This phone isn’t on Wi-Fi. Connect to the same network as the TV, then try again.</string>
+
+    <string name="connecting_title">Connecting</string>
+    <string name="connecting">Reaching %1$s…</string>
+    <string name="scanning_title">Checking the TV</string>
+    <string name="scanning">Looking for an open debugging port on %1$s. This takes about 15 seconds.</string>
+    <string name="allow_title">Allow on the TV</string>
+    <string name="allow_lead">A message appears on the TV:</string>
+    <string name="allow_1">Tick</string>
+    <string name="allow_2">Then choose, with the remote</string>
+    <string name="waiting">Waiting for the TV…</string>
+
+    <string name="pair_title">Pair with the TV</string>
+    <string name="pair_lead">Wireless debugging needs a one-time code from the TV.</string>
+    <string name="pair_1">On the TV, open</string>
+    <string name="pair_2">Choose</string>
+    <string name="pair_3">Type the six-digit code it shows</string>
+    <string name="pair_port_found">Pairing port %1$s</string>
+    <string name="pair_port_waiting">Waiting for the pairing dialog on the TV…</string>
+    <string name="pair_port_hint">Pairing port (after the colon on the TV)</string>
+    <string name="pair_button">Pair</string>
+    <string name="pairing">Pairing…</string>
+
+    <string name="confirm_title">Install on this TV?</string>
+    <string name="confirm_lead">Make sure it is the TV you mean before you start.</string>
+    <string name="confirm_install">Install Awan TV</string>
+
+    <string name="install_title">Installing Awan TV</string>
+    <string name="install_lead_version">Awan TV %1$s · keep this screen open. It takes a minute or two.</string>
+    <string name="install_lead">Keep this screen open. It takes a minute or two.</string>
+    <string name="t_send">Awan TV sent to the TV</string>
+    <string name="mb_of">%1$s of %2$s MB</string>
+    <string name="old_signature_title">Another copy of Awan TV is on the TV</string>
+    <string name="old_signature_body">It was signed with a different key (a self-built or older copy), so it can’t be updated in place. Removing it also removes its settings and saved recitations. To keep the settings, cancel and export them first with the computer tools (AwanTV-settings). Remove it and install this one?</string>
+    <string name="remove_and_install">Remove and install</string>
+    <string name="cancel">Cancel</string>
+    <string name="newer_on_tv">The TV has a newer Awan TV than this installer carries. Get the latest installer from the releases page: github.com/OmarGHub/AwanTV/releases</string>
+
+    <string name="done_title">Awan TV is on your TV</string>
+    <string name="done_lead">Awan TV %1$s is installed and set up on “%2$s”.</string>
+    <string name="done_lead_plain">Awan TV is installed and set up on “%1$s”.</string>
+    <string name="done_partly_title">Installed, with a problem</string>
+    <string name="done_partly_lead">Awan TV is on the TV, but a step marked in red didn’t finish. Run the installer again to retry it.</string>
+    <string name="next_home">Press Home on the remote: Awan TV opens over the TV’s home screen.</string>
+    <string name="next_city">On its first start it asks for your city; the times, the adhan and the screensaver follow it.</string>
+    <string name="tip_title">One more thing</string>
+    <string name="tip_body">You can turn off USB debugging and Wireless debugging on the TV now. To update Awan TV later, turn debugging back on and open the new installer, from github.com/OmarGHub/AwanTV/releases</string>
+    <string name="site_line">Our website: awanpro.app</string>
+    <string name="finish">Done</string>
+
+    <string name="problem_title">That didn’t work</string>
+    <string name="error_connect">Couldn’t reach the TV (%1$s).</string>
+    <string name="not_accepted">The TV didn’t allow this phone. Try again and choose Allow on the TV.</string>
+    <string name="scan_none">No debugging port is open on %1$s.</string>
+    <string name="pair_failed">Pairing didn’t work (%1$s). Open the pairing dialog on the TV again; it shows a new code each time.</string>
+    <string name="install_failed">The TV refused the install: %1$s</string>
+    <string name="error_install">Something went wrong: %1$s</string>
+    <string name="tv_too_old">Awan TV needs Android 8 or later on the TV.</string>
+    <string name="check_title">Things to check</string>
+    <string name="check_body">• The TV is on and awake.\n• Debugging is on in Developer options.\n• The TV and this phone are on the same Wi-Fi.</string>
+    <string name="try_again">Try again</string>
+    <string name="continue_">Continue</string>
+    <string name="steps_failed_lead">Awan TV is on the TV, but a step marked in red didn’t finish. Try it again, or continue and come back to it later.</string>
+    <string name="back">Back</string>
+
+    <!-- Three states: not set, set, checked on the TV -->
+    <string name="state_init">Not set</string>
+    <string name="state_done">Set</string>
+    <string name="state_checked">Checked on the TV</string>
+    <string name="state_was_set">Already in place on the TV</string>
+    <string name="state_not_here">Not on this TV</string>
+    <string name="state_failed">Set, but the TV doesn’t show it</string>
+</resources>

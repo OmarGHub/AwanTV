@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Awan TV's lapis and gold (Afnon's Mihrab tokens), on the platform's dark Material theme. -->
+    <style name="Theme.Installer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/lapis</item>
+        <item name="android:colorPrimary">@color/lapis</item>
+        <item name="android:colorPrimaryDark">@color/lapis</item>
+        <item name="android:colorAccent">@color/gold</item>
+    </style>
+    <color name="lapis">#0C1B33</color>
+    <color name="gold">#D8B46A</color>
+</resources>

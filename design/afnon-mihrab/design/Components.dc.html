@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · Components and states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div style="width: 1920px; height: 1500px; box-sizing: border-box; padding: 80px 96px; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif; display: flex; flex-direction: column; gap: 36px">
+  <h1 style="margin: 0; font-family: 'Marcellus', serif; font-weight: 400; font-size: 72px">Components &amp; states</h1>
+
+  <div style="display: grid; grid-template-columns: 260px repeat(5, minmax(0, 1fr)); column-gap: 32px; row-gap: 44px; align-items: center">
+    <span></span>
+    <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">DEFAULT</span>
+    <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">FOCUSED</span>
+    <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">PRESSED (OK)</span>
+    <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">SELECTED / SPECIAL</span>
+    <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">DISABLED</span>
+
+    <span style="font-size: 26px">App tile<br><span style="font-size: 20px; color: #9FB0CC">248×150 · r18</span></span>
+    <div style="height: 130px; border-radius: 18px; background: #12264A; padding: 20px; box-sizing: border-box; display: flex; align-items: flex-end; font-size: 26px">Shahid</div>
+    <div style="height: 130px; border-radius: 18px; background: #D8B46A; color: #0C1B33; padding: 20px; box-sizing: border-box; display: flex; align-items: flex-end; font-size: 26px; font-weight: 500; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px">Shahid</div>
+    <div style="height: 130px; border-radius: 18px; background: #F0D79C; color: #0C1B33; padding: 20px; box-sizing: border-box; display: flex; align-items: flex-end; font-size: 26px; font-weight: 500; transform: scale(1.02); outline: 4px solid #EFE7D6; outline-offset: 4px">Shahid</div>
+    <div style="height: 130px; border-radius: 18px; background: #12264A; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; font-size: 26px; box-shadow: inset 0 0 0 3px #D8B46A"><span style="font-size: 20px; color: #D8B46A">MOVING ◀ ▶</span>Shahid</div>
+    <div style="height: 130px; border-radius: 18px; background: rgba(18,38,74,.5); color: #6F7F9C; padding: 20px; box-sizing: border-box; display: flex; align-items: flex-end; font-size: 26px">Shahid</div>
+
+    <span style="font-size: 26px">Prayer cell<br><span style="font-size: 20px; color: #9FB0CC">167×146 · r14 · not focusable</span></span>
+    <div style="height: 130px; border-radius: 14px; background: #12264A; padding: 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px"><span style="font-size: 24px">Maghrib</span><span style="font-size: 32px">17:13</span></div>
+    <div style="height: 130px; border-radius: 14px; background: rgba(18,38,74,.6); color: #9FB0CC; padding: 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px"><span style="font-size: 20px">past</span><span style="font-size: 24px">Fajr</span><span style="font-size: 32px">04:38</span></div>
+    <div style="height: 130px; border-radius: 14px; background: #EFE7D6; color: #0C1B33; padding: 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px"><span style="font-size: 20px">NOW</span><span style="font-size: 24px; font-weight: 600">Dhuhr</span><span style="font-size: 32px; font-weight: 600">11:38</span></div>
+    <div style="height: 130px; border-radius: 14px; box-shadow: inset 0 0 0 3px #D8B46A; color: #D8B46A; padding: 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px"><span style="font-size: 20px">NEXT</span><span style="font-size: 24px; font-weight: 600">Asr</span><span style="font-size: 32px; font-weight: 600">14:48</span></div>
+    <div style="height: 130px; border-radius: 14px; background: #12264A; padding: 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px"><span style="font-size: 20px; color: #D8B46A">IFTAR</span><span style="font-size: 24px">Maghrib</span><span style="font-size: 32px">17:13</span></div>
+
+    <span style="font-size: 26px">Pill button<br><span style="font-size: 20px; color: #9FB0CC">h72 · r36</span></span>
+    <div style="height: 72px; border-radius: 36px; border: 2px solid rgba(216,180,106,.6); display: flex; align-items: center; justify-content: center; font-size: 24px">Today &amp; Qibla</div>
+    <div style="height: 72px; border-radius: 36px; background: #D8B46A; color: #0C1B33; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 500; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px">Today &amp; Qibla</div>
+    <div style="height: 72px; border-radius: 36px; background: #F0D79C; color: #0C1B33; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 500; transform: scale(1.02); outline: 4px solid #EFE7D6; outline-offset: 4px">Today &amp; Qibla</div>
+    <div style="height: 72px; border-radius: 36px; background: #0C1B33; color: #EFE7D6; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 0 2px #EFE7D6">On light: Got it</div>
+    <div style="height: 72px; border-radius: 36px; border: 2px dashed rgba(159,176,204,.35); color: #6F7F9C; display: flex; align-items: center; justify-content: center; font-size: 24px">Today &amp; Qibla</div>
+
+    <span style="font-size: 26px">Segmented<br><span style="font-size: 20px; color: #9FB0CC">◀ ▶ changes value</span></span>
+    <div style="display: flex; gap: 6px; padding: 6px; border-radius: 30px; background: #12264A; width: fit-content"><span style="height: 52px; padding: 0 22px; border-radius: 26px; background: #EFE7D6; color: #0C1B33; display: flex; align-items: center; font-size: 22px">24 h</span><span style="height: 52px; padding: 0 22px; display: flex; align-items: center; font-size: 22px; color: #9FB0CC">12 h</span></div>
+    <div style="display: flex; gap: 6px; padding: 6px; border-radius: 30px; background: #D8B46A; width: fit-content; outline: 4px solid #EFE7D6; outline-offset: 6px"><span style="height: 52px; padding: 0 22px; border-radius: 26px; background: #0C1B33; color: #EFE7D6; display: flex; align-items: center; font-size: 22px; box-shadow: 0 0 0 3px #EFE7D6">24 h</span><span style="height: 52px; padding: 0 22px; display: flex; align-items: center; font-size: 22px; color: #0C1B33">12 h</span></div>
+    <div style="display: flex; gap: 6px; padding: 6px; border-radius: 30px; background: #D8B46A; width: fit-content; outline: 4px solid #EFE7D6; outline-offset: 6px"><span style="height: 52px; padding: 0 22px; display: flex; align-items: center; font-size: 22px; color: #0C1B33">24 h</span><span style="height: 52px; padding: 0 22px; border-radius: 26px; background: #0C1B33; color: #EFE7D6; display: flex; align-items: center; font-size: 22px; box-shadow: 0 0 0 3px #EFE7D6">12 h ◀</span></div>
+    <div style="display: flex; gap: 6px; padding: 6px; border-radius: 30px; background: #12264A; width: fit-content"><span style="height: 52px; padding: 0 22px; border-radius: 26px; background: #EFE7D6; color: #0C1B33; display: flex; align-items: center; font-size: 22px">٠١٢٣</span><span style="height: 52px; padding: 0 22px; display: flex; align-items: center; font-size: 22px; color: #9FB0CC">0123</span></div>
+    <div style="display: flex; gap: 6px; padding: 6px; border-radius: 30px; background: rgba(18,38,74,.5); width: fit-content"><span style="height: 52px; padding: 0 22px; border-radius: 26px; background: #6F7F9C; color: #0C1B33; display: flex; align-items: center; font-size: 22px">Hanafi</span><span style="height: 52px; padding: 0 22px; display: flex; align-items: center; font-size: 22px; color: #6F7F9C">Std</span></div>
+
+    <span style="font-size: 26px">Toggle<br><span style="font-size: 20px; color: #9FB0CC">88×48 · OK flips</span></span>
+    <span style="width: 88px; height: 48px; border-radius: 24px; background: #D8B46A; position: relative; display: block"><span style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 18px; background: #0C1B33"></span></span>
+    <span style="width: 88px; height: 48px; border-radius: 24px; background: #D8B46A; position: relative; display: block; outline: 4px solid #EFE7D6; outline-offset: 6px; transform: scale(1.06)"><span style="position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; border-radius: 18px; background: #0C1B33"></span></span>
+    <span style="width: 88px; height: 48px; border-radius: 24px; background: #1A3360; position: relative; display: block; outline: 4px solid #EFE7D6; outline-offset: 6px"><span style="position: absolute; top: 6px; left: 6px; width: 36px; height: 36px; border-radius: 18px; background: #9FB0CC"></span></span>
+    <span style="font-size: 22px; color: #9FB0CC">Off: lapis-700 track, mist knob at start</span>
+    <span style="width: 88px; height: 48px; border-radius: 24px; background: rgba(26,51,96,.5); position: relative; display: block"><span style="position: absolute; top: 6px; left: 6px; width: 36px; height: 36px; border-radius: 18px; background: #4A5A78"></span></span>
+
+    <span style="font-size: 26px">Day row<br><span style="font-size: 20px; color: #9FB0CC">620×104 · r16</span></span>
+    <div style="height: 96px; border-radius: 16px; background: #12264A; padding: 0 22px; display: flex; align-items: center; gap: 12px; font-size: 26px"><span style="flex: 1">Isha</span><span style="font-family: 'Marcellus', serif; font-size: 32px">18:31</span></div>
+    <div style="height: 96px; border-radius: 16px; background: #D8B46A; color: #0C1B33; padding: 0 22px; display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 600; transform: scale(1.04); outline: 4px solid #EFE7D6; outline-offset: 6px"><span style="flex: 1">Asr</span><span style="font-family: 'Marcellus', serif; font-size: 32px">14:48</span></div>
+    <div style="height: 96px; border-radius: 16px; background: #F0D79C; color: #0C1B33; padding: 0 22px; display: flex; align-items: center; gap: 12px; font-size: 22px; outline: 4px solid #EFE7D6; outline-offset: 4px"><span style="flex: 1">Adhan off for Asr</span></div>
+    <div style="height: 96px; border-radius: 16px; background: #EFE7D6; color: #0C1B33; padding: 0 22px; display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 600"><span style="flex: 1">Dhuhr · now</span><span style="font-family: 'Marcellus', serif; font-size: 32px">11:38</span></div>
+    <div style="height: 96px; border-radius: 16px; background: rgba(18,38,74,.6); color: #9FB0CC; padding: 0 22px; display: flex; align-items: center; gap: 12px; font-size: 26px"><span style="flex: 1">Fajr · passed</span><span style="font-family: 'Marcellus', serif; font-size: 32px">04:38</span></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 12px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">ARCH PANEL</span>
+      <span style="font-size: 22px; line-height: 1.55">600×900, start side. States: <b style="font-weight: 500">rest</b> gold 3 px line · <b style="font-weight: 500">focused</b> plaster 5 px line + its button filled · <b style="font-weight: 500">approaching</b> gold-200 6 px line. Crown (top 380 px) holds sacred text only and is never a focus target.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">REMINDER TOAST (HOME)</span>
+      <span style="font-size: 22px; line-height: 1.55">680 wide, plaster on lapis, end-bottom corner. Takes focus (first button). Back or OK dismisses; auto-hides at prayer time and becomes the full call screen.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span style="font-size: 22px; letter-spacing: .2em; color: #9FB0CC">BANNER (OVER OTHER APPS)</span>
+      <span style="font-size: 22px; line-height: 1.55">640 wide, top end corner, away from subtitles. Never takes focus from the playing app; a timer line shows its 12 s life. Hold Home opens Afnon.</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1500}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+// Awan TV Installer: a phone app that installs Awan TV on a TV over ADB, with no computer and no adb binary.
+// Separate from :app, which keeps its one-dependency rule; this one needs an ADB client and a TLS provider for
+// Wireless debugging. Started from Afnon's installer (github.com/egyjs/afnon-android-tv-launcher, MIT).
+//
+// It carries the Awan TV release it installs: build that first (Build > Generate Signed App Bundle or APK > APK >
+// app > release, giving app/release/AwanTV.apk), then this module the same way (module: installer), giving
+// installer/release/AwanTVInstaller.apk.
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'app.awanpro.tv.installer'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'app.awanpro.tv.installer'
+        minSdk 26
+        targetSdk 34
+        // Both from awanVersion in gradle.properties: change the version there only.
+        versionName awanVersion
+        versionCode rootProject.ext.awanVersionCode.call(awanVersion)
+    }
+
+    // No encrypted dependency list in the APK: only Google Play reads it, and F-Droid and IzzyOnDroid flag it.
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packaging {
+        resources {
+            excludes += ['META-INF/versions/9/OSGI-INF/MANIFEST.MF']
+        }
+    }
+
+    // One name across versions, like :app's AwanTV.apk, for the guide's .../releases/latest/download/ link.
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.outputs.all { outputFileName = 'AwanTVInstaller.apk' }
+        }
+    }
+
+    // The Awan TV APK, copied in as an asset at build time (never kept in the source).
+    sourceSets {
+        main.assets.srcDirs += layout.buildDirectory.dir('generated/awantv')
+    }
+}
+
+def awanApk = rootProject.file('app/release/AwanTV.apk')
+
+tasks.register('bundleAwanTv', Copy) {
+    doFirst {
+        if (!awanApk.exists()) {
+            throw new GradleException("No Awan TV release to carry: build it first (Build > Generate Signed App Bundle or APK > APK > app > release), which writes " + awanApk)
+        }
+    }
+    from(awanApk) { rename { 'AwanTV.apk' } }
+    into layout.buildDirectory.dir('generated/awantv')
+}
+preBuild.dependsOn 'bundleAwanTv'
+
+dependencies {
+    // ADB client: classic network debugging, Wireless debugging (TLS) and pairing codes. Apache-2.0 (dual licensed
+    // with GPL-3.0); it brings spake2-java (LGPL-3.0) and Bouncy Castle (MIT-style).
+    implementation 'com.github.MuntashirAkon:libadb-android:3.1.1'
+    // TLS 1.3 for Wireless debugging to another device; the library finds it on its own. Apache-2.0.
+    implementation 'org.conscrypt:conscrypt-android:2.5.3'
+}

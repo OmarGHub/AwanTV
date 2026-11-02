@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What the TV itself shows, in both of its likely languages. Before the phone connects it can't know the TV's
+     language, so screens that send the user into the TV's menus show both (Ui.tvText). Not translated: each
+     pair is already both languages. Wording follows Android TV / Google TV; some brands word it a little
+     differently. Arabic paths use "›" like English: it is a mirrored character, so right-to-left text draws it
+     pointing left, the way Arabic reads. Typing "‹" there would draw it pointing right. -->
+<resources>
+    <string name="tv_about_en" translatable="false">Settings › System › About</string>
+    <string name="tv_about_ar" translatable="false">الإعدادات › النظام › حول (أو لمحة)</string>
+    <string name="tv_build_en" translatable="false">Android TV OS build</string>
+    <string name="tv_build_ar" translatable="false">إصدار نظام تشغيل Android TV</string>
+    <string name="tv_dev_en" translatable="false">Settings › System › Developer options</string>
+    <string name="tv_dev_ar" translatable="false">الإعدادات › النظام › خيارات المطوّرين (أو خيارات مطور البرامج)</string>
+    <string name="tv_usb_en" translatable="false">USB debugging</string>
+    <string name="tv_usb_ar" translatable="false">تصحيح أخطاء USB</string>
+    <string name="tv_wireless_en" translatable="false">Wireless debugging</string>
+    <string name="tv_wireless_ar" translatable="false">تصحيح الأخطاء اللاسلكي</string>
+    <string name="tv_wireless_path_en" translatable="false">Developer options › Wireless debugging</string>
+    <string name="tv_wireless_path_ar" translatable="false">خيارات المطوّرين › تصحيح الأخطاء اللاسلكي</string>
+    <string name="tv_pair_en" translatable="false">Pair device with pairing code</string>
+    <string name="tv_pair_ar" translatable="false">إقران الجهاز باستخدام رمز الإقران</string>
+    <string name="tv_allow_q_en" translatable="false">Allow USB debugging?</string>
+    <string name="tv_allow_q_ar" translatable="false">هل تريد السماح بتصحيح أخطاء USB؟</string>
+    <string name="tv_always_en" translatable="false">Always allow from this computer</string>
+    <string name="tv_always_ar" translatable="false">السماح دائمًا من هذا الكمبيوتر</string>
+    <string name="tv_allow_en" translatable="false">Allow</string>
+    <string name="tv_allow_ar" translatable="false">سماح</string>
+</resources>

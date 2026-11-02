@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">Shows Awan TV whenever the TV\'s own home screen comes up, and calls the adhan at prayer time over whatever is playing. Nothing on the TV is disabled: turn this off to get the TV\'s home screen back.</string>
+</resources>

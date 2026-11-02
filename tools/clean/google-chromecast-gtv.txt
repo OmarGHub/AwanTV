@@ -1,0 +1,22 @@
+# Chromecast with Google TV (4K 2020 "sabrina", HD 2022 "boreal"; Google TV 14): what AwanTV-clean.ps1 disables.
+# From CleanYourTV (github.com/Gathin23/cleanyourtv, MIT): examples/google-chromecast-gtv-4k/debloat-keep-cast.txt
+# ("lived with" on a real unit: stock home, phone casting, Play Store and Assistant all worked) and
+# examples/google-chromecast-gtv-hd (its auto-install stub), plus the two lines most of its other lists share (partner attribution, calendar sync).
+# Awan TV keeps the stock launcher (launcherx), the screensaver (dreamx, backdrop) and setup (setupwraith): on this
+# device setupwraith holds the Cast receiver's credentials and can own the saved Wi-Fi network, so disabling it breaks
+# casting and can drop Wi-Fi. The Privacy Sandbox modules and the optional apps are in extra-google-chromecast-gtv.txt.
+# Packages a unit does not ship (netoscope on the HD; the auto-install stub was listed on the HD only) are skipped.
+# One package a line; "#" starts a comment. Disabled for the user (pm disable-user), never uninstalled.
+
+# Telemetry and feedback
+com.google.android.feedback
+com.android.tv.feedbackconsent
+com.google.android.tv.remotecontrol.logging     # remote usage logging
+com.google.android.apps.tv.netoscope            # network diagnostics reporting (4K only)
+
+# Preloads and partner set-up
+com.google.android.play.games
+com.android.printspooler                        # printing; no printer on a TV
+com.google.android.partnersetup                 # partner-app attribution
+com.google.android.syncadapters.calendar        # Google Calendar sync; no calendar on a TV
+android.autoinstalls.config.google.gtvpai       # Play Auto Installs stub (installs partner apps unasked; on the HD)

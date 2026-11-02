@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>Afnon Mihrab · All apps</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600&amp;family=Amiri:wght@400;700&amp;family=Marcellus&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#D8B46A}a:hover{color:#F0D79C}
+</style>
+</helmet>
+<div dir="{{dir}}" lang="{{lang}}" style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0C1B33; color: #EFE7D6; font-family: 'Alexandria', sans-serif">
+
+  <div style="position: absolute; inset-inline-start: 96px; top: 56px; width: 1728px; display: flex; justify-content: space-between; align-items: center">
+    <div style="display: flex; align-items: center; gap: 28px">
+      <a href="Home.dc.html" aria-label="{{t.back}}" style="width: 72px; height: 72px; box-sizing: border-box; border-radius: 36px; border: 2px solid rgba(239,231,214,.25); background: #12264A; color: #EFE7D6; display: flex; align-items: center; justify-content: center">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: {{flip}}"><path d="M15 5l-7 7 7 7"></path></svg>
+      </a>
+      <h1 style="margin: 0; font-family: {{fd}}; font-weight: {{fw}}; font-size: 64px; line-height: 1">{{t.title}}</h1>
+      <span style="font-size: 26px; color: #9FB0CC">{{count}}</span>
+    </div>
+    <a href="PrayerDay.dc.html" style="height: 72px; padding: 0 28px; box-sizing: border-box; border-radius: 36px; box-shadow: inset 0 0 0 2px #D8B46A; color: #D8B46A; display: flex; align-items: center; gap: 16px; font-size: 26px; text-decoration: none">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 21V10c0-3 3-5 7-8 4 3 7 5 7 8v11z"></path></svg>
+      <span>{{t.chip}}</span>
+      <span style="font-family: {{fd}}; font-size: 32px; color: #EFE7D6">{{chipTime}}</span>
+    </a>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 96px; top: 200px; width: 1728px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 32px">
+    <sc-for list="{{apps}}" as="a" hint-placeholder-count="13">
+      <a href="#" style="height: 168px; box-sizing: border-box; border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; {{a.style}}">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start">
+          <span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600; {{a.mono}}">{{a.letter}}</span>
+          <sc-if value="{{a.fav}}" hint-placeholder-val="{{ false }}">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-label="{{a.favLabel}}" role="img"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg>
+          </sc-if>
+        </div>
+        <span style="font-size: 26px; font-weight: 500">{{a.name}}</span>
+      </a>
+    </sc-for>
+  </div>
+
+  <div style="position: absolute; inset-inline-start: 96px; top: 830px; width: 1728px; box-sizing: border-box; padding: 24px 32px; border-radius: 18px; background: #12264A; display: flex; justify-content: space-between; align-items: center">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <span dir="ltr" style="font-size: 30px; font-weight: 500; text-align: start">Claude Code TV</span>
+      <span style="font-size: 22px; color: #9FB0CC">{{t.favNote}}</span>
+    </div>
+    <div style="display: flex; gap: 36px; font-size: 22px; color: #9FB0CC">
+      <sc-for list="{{t.hints}}" as="h" hint-placeholder-count="3"><span>{{h}}</span></sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"locale":{"editor":"enum","options":["ar","en"],"default":"ar"},"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+  var ar = (this.props.locale ?? 'ar') === 'ar';
+  var d = function (s) { return ar ? String(s).replace(/[0-9]/g, function (c) { return '٠١٢٣٤٥٦٧٨٩'[+c]; }) : String(s); };
+  var t = ar ? {
+    back: 'رجوع', title: 'كل التطبيقات', chip: 'العصر بعد', favNote: 'في المفضلة · الثالث',
+    hints: ['OK  فتح', 'اضغط مطولًا  نقل أو إزالة من المفضلة', 'رجوع  الرئيسية'], fav: 'مفضل'
+  } : {
+    back: 'Back', title: 'All apps', chip: 'Asr in', favNote: 'In favourites · position 3',
+    hints: ['OK  Open', 'Hold OK  Move or unfavourite', 'Back  Home'], fav: 'Favourite'
+  };
+  var names = ar
+    ? ['يوتيوب', 'شاهد', 'Claude Code TV', 'BrowseHere', 'Beach Buggy Racing', 'File Manager +', 'ألعاب Google Play', 'متجر Google Play', 'MagiConnect', 'مشغل الوسائط', 'صلاتي', 'الإعدادات', 'يوتيوب ميوزك']
+    : ['YouTube', 'Shahid', 'Claude Code TV', 'BrowseHere', 'Beach Buggy Racing', 'File Manager +', 'Google Play Games', 'Google Play Store', 'MagiConnect', 'Media Player', 'Salaty', 'Settings', 'YouTube Music'];
+  var focusI = 2;
+  var apps = names.map(function (n, i) {
+    var f = i === focusI;
+    return {
+      name: n, letter: n.charAt(0), fav: i < 4, favLabel: t.fav,
+      style: f ? 'background: #D8B46A; color: #0C1B33; transform: scale(1.06); outline: 4px solid #EFE7D6; outline-offset: 6px;' : 'background: #12264A; color: #EFE7D6;',
+      mono: f ? 'background: #0C1B33; color: #D8B46A;' : 'background: #1A3360; color: #EFE7D6;'
+    };
+  });
+  return {
+    dir: ar ? 'rtl' : 'ltr', lang: ar ? 'ar' : 'en', t: t, apps: apps,
+    fd: ar ? "'Amiri', serif" : "'Marcellus', serif", fw: ar ? 700 : 400,
+    flip: ar ? 'scaleX(-1)' : 'none', count: d(13), chipTime: d('27:14')
+  };
+}
+}
+</script>
+</body>
+</html>
