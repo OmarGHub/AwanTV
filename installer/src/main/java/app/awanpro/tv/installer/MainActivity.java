@@ -592,6 +592,10 @@ public final class MainActivity extends Activity {
     /** The carried Awan TV's version ("1.0.0"), and whether every required step went through. */
     String version = "";
     boolean installedOk;
+    /** The run only sets up an Awan TV already on the TV (the same version as carried): nothing is sent. */
+    private boolean setUpOnly;
+    /** What the confirmation's main button does once the TV's version is known: install, or set up only. */
+    private Runnable confirmGo;
     /** The address of the TV this run is working on, remembered for next time. */
     private String host;
 
@@ -621,20 +625,41 @@ public final class MainActivity extends Activity {
         model.setVisibility(View.GONE);
         TextView where = Ui.small(this, "\u2066" + host + "\u2069");
         where.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        // Awan TV on the TV, read with the rest: none, older, the same, or newer than the one carried.
+        TextView state = Ui.chip(this, getString(R.string.confirm_reading), false);
+        LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        slp.topMargin = dp(8);
         words.addView(name);
         words.addView(model, Ui.wide(this, 3));
         words.addView(where, Ui.wide(this, 2));
+        words.addView(state, slp);
         card.addView(words, Ui.fill(this));
         add(card, 18);
-        foot(Ui.primary(this, getString(R.string.confirm_install), v -> go(this::install)));
-        foot(Ui.secondary(this, getString(R.string.cancel), v -> go(this::showFind)));
+        confirmGo = this::install;
+        TextView main = Ui.primary(this, getString(R.string.confirm_install), v -> go(confirmGo));
+        TextView other = Ui.secondary(this, getString(R.string.cancel), v -> go(this::showFind));
+        // Nothing to press until the version is known (a second or two): an install must not race the answer.
+        Ui.enabled(main, false);
+        foot(main);
+        foot(other);
         back = () -> go(this::showFind);
         int g = gen;
         work.execute(() -> {
+            String carried = "";
+            String onTv = null;
+            try {
+                carried = Setup.version(this, Setup.bundled(this));
+            } catch (Exception e) {
+                // Read again at the install, which says what went wrong.
+            }
             try {
                 String[] lines = adb().shell("settings get global device_name; echo; getprop ro.product.model; echo; "
-                        + "getprop ro.build.version.release").out.split("\n", -1);
+                        + "getprop ro.build.version.release; echo; dumpsys package " + Setup.PACKAGE
+                        + " | grep -m1 versionName").out.split("\n", -1);
                 String device = clean(lines, 0), made = clean(lines, 2), android = clean(lines, 4);
+                java.util.regex.Matcher m = java.util.regex.Pattern.compile("versionName=(\\S+)").matcher(clean(lines, 6));
+                onTv = m.find() ? m.group(1) : "";
                 post(g, () -> {
                     if (!device.isEmpty()) tvName = device;
                     else if (!made.isEmpty()) tvName = made;
@@ -645,9 +670,53 @@ public final class MainActivity extends Activity {
                     model.setVisibility(about.isEmpty() ? View.GONE : View.VISIBLE);
                 });
             } catch (Exception e) {
-                // The address alone still says which TV it is.
+                // The address alone still says which TV it is; the install itself finds out the rest.
             }
+            String have = onTv, ours = carried;
+            post(g, () -> showVersions(have, ours, state, main, other));
         });
+    }
+
+    /**
+     * The confirmation once the TV answered: no Awan TV (install), an older one (update), the same (set up only: the
+     * service, permissions and screensaver put right, nothing sent) or a newer one (nothing to do here but get a newer
+     * installer). Unknown, it offers the install as before and the install handles what it finds.
+     */
+    private void showVersions(String onTv, String carried, TextView state, TextView main, TextView other) {
+        Ui.enabled(main, true);
+        if (onTv == null || carried.isEmpty()) {
+            state.setVisibility(View.GONE);
+            return;
+        }
+        if (onTv.isEmpty()) {
+            state.setText(getString(R.string.confirm_none));
+            return;
+        }
+        int c = Setup.compare(onTv, carried);
+        String tv = "\u2066" + onTv + "\u2069", ours = "\u2066" + carried + "\u2069";
+        if (c < 0) {
+            titleView.setText(R.string.update_title);
+            leadView.setText(getString(R.string.update_lead, tv, ours));
+            state.setText(getString(R.string.update_chip, tv, ours));
+            state.setTextColor(Ui.GOLD_400);
+            state.setBackground(Ui.round(Ui.GOLD_SOFT, 99, this));
+            main.setText(R.string.update_button);
+        } else if (c == 0) {
+            titleView.setText(R.string.same_title);
+            leadView.setText(getString(R.string.same_lead, tv));
+            state.setText(getString(R.string.same_chip, tv));
+            main.setText(R.string.setup_button);
+            confirmGo = this::setUpOnly;
+        } else {
+            titleView.setText(R.string.newer_title);
+            leadView.setText(getString(R.string.newer_lead, tv, ours));
+            Ui.links(leadView);
+            state.setText(getString(R.string.newer_chip, tv));
+            state.setTextColor(Ui.CORAL);
+            state.setBackground(Ui.round(Ui.CORAL_SOFT, 99, this));
+            main.setVisibility(View.GONE);
+            other.setText(R.string.back);
+        }
     }
 
     private static String clean(String[] lines, int i) {
@@ -656,6 +725,7 @@ public final class MainActivity extends Activity {
     }
 
     private void install() {
+        setUpOnly = false;
         stopFinders();
         if (host != null) getPreferences(MODE_PRIVATE).edit().putString("last_tv", host).apply();
         frame(INSTALL, Hero.Mode.PROGRESS, getString(R.string.install_title), getString(R.string.install_lead));
@@ -679,8 +749,31 @@ public final class MainActivity extends Activity {
                     add(timeline, 20);
                     add(Timeline.legend(this), 12);
                 });
-                // Sent every time, even over the same version: builds before a release share one version.
+                // Sent every time the install is chosen; the same version is set up only (setUpOnly) from the
+                // confirmation, where its version was read.
                 send(g, a, apk, false);
+            } catch (Exception e) {
+                fail(g, getString(R.string.error_install, message(e)));
+            }
+        });
+    }
+
+    /** The same version is on the TV: its setup steps only, as after an install, with nothing sent. */
+    private void setUpOnly() {
+        setUpOnly = true;
+        stopFinders();
+        if (host != null) getPreferences(MODE_PRIVATE).edit().putString("last_tv", host).apply();
+        frame(INSTALL, Hero.Mode.PROGRESS, getString(R.string.setup_title), getString(R.string.setup_lead));
+        back = null;
+        timeline = timeline();
+        add(timeline, 20);
+        add(Timeline.legend(this), 12);
+        timeline.set(0, Timeline.State.CHECKED);
+        timeline.note(0, getString(R.string.state_on_tv));
+        int g = gen;
+        work.execute(() -> {
+            try {
+                runSteps(g, adb());
             } catch (Exception e) {
                 fail(g, getString(R.string.error_install, message(e)));
             }
@@ -777,7 +870,7 @@ public final class MainActivity extends Activity {
                 hero.set(Hero.Mode.PROBLEM);
                 titleView.setText(R.string.done_partly_title);
                 leadView.setText(R.string.steps_failed_lead);
-                foot(Ui.primary(this, getString(R.string.try_again), v -> go(this::install)));
+                foot(Ui.primary(this, getString(R.string.try_again), v -> go(setUpOnly ? this::setUpOnly : this::install)));
                 foot(Ui.secondary(this, getString(R.string.continue_), v -> go(this::showDone)));
             });
             return;
@@ -810,6 +903,7 @@ public final class MainActivity extends Activity {
         boolean ok = installedOk;
         String on = tvName != null ? tvName : host != null ? host : "";
         String lead = !ok ? getString(R.string.done_partly_lead)
+                : setUpOnly && !version.isEmpty() ? getString(R.string.done_lead_setup, version, on)
                 : version.isEmpty() ? getString(R.string.done_lead_plain, on) : getString(R.string.done_lead, version, on);
         frame(DONE, ok ? Hero.Mode.DONE : Hero.Mode.PROBLEM,
                 getString(ok ? R.string.done_title : R.string.done_partly_title), lead);

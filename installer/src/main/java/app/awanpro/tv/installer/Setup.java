@@ -116,6 +116,26 @@ final class Setup {
         return apk;
     }
 
+    /** Versions by their numbers ("1.10.0" after "1.9.2"), as the app's Updates.compare. */
+    static int compare(String a, String b) {
+        String[] x = a.split("\\."), y = b.split("\\.");
+        for (int i = 0; i < Math.max(x.length, y.length); i++) {
+            int d = Integer.compare(number(x, i), number(y, i));
+            if (d != 0) return d;
+        }
+        return 0;
+    }
+
+    private static int number(String[] parts, int i) {
+        if (i >= parts.length) return 0;
+        String digits = parts[i].replaceFirst("^(\\d*).*$", "$1");
+        try {
+            return digits.isEmpty() ? 0 : Integer.parseInt(digits);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     /** The carried Awan TV's version name ("1.0.0"), or "" if it can't be read. */
     static String version(Context c, File apk) {
         PackageInfo info = c.getPackageManager().getPackageArchiveInfo(apk.getPath(), 0);

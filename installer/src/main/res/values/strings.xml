@@ -64,6 +64,23 @@
     <string name="confirm_title">Install on this TV?</string>
     <string name="confirm_lead">Make sure it is the TV you mean before you start.</string>
     <string name="confirm_install">Install Awan TV</string>
+    <string name="confirm_reading">Reading its Awan TV version…</string>
+    <string name="confirm_none">No Awan TV on it</string>
+    <string name="update_title">Update Awan TV?</string>
+    <string name="update_lead">It has version %1$s, which becomes %2$s. Its settings and saved recitations stay.</string>
+    <string name="update_chip">Awan TV %1$s → %2$s</string>
+    <string name="update_button">Update Awan TV</string>
+    <string name="same_title">Awan TV is up to date on it</string>
+    <string name="same_lead">It has %1$s, the version this installer carries. Set up again puts the service, permissions and screensaver right in seconds, without installing again.</string>
+    <string name="same_chip">Awan TV %1$s · the same version</string>
+    <string name="setup_button">Set up again</string>
+    <string name="newer_title">It has a newer version</string>
+    <string name="newer_lead">It has %1$s, newer than the %2$s this installer carries. Get the latest installer from github.com/OmarGHub/AwanTV/releases</string>
+    <string name="newer_chip">Awan TV %1$s · newer than this installer</string>
+    <string name="setup_title">Setting up Awan TV</string>
+    <string name="setup_lead">Keep this screen open. It takes a few seconds.</string>
+    <string name="state_on_tv">Already on the TV</string>
+    <string name="done_lead_setup">Awan TV %1$s on “%2$s” is set up again.</string>
 
     <string name="install_title">Installing Awan TV</string>
     <string name="install_lead_version">Awan TV %1$s · keep this screen open. It takes a minute or two.</string>

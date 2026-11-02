@@ -1,4 +1,4 @@
-# AwanTV-install.ps1 - Version 1.0.0
+# AwanTV-install.ps1 - Version 1.0.1
 # Installs Awan TV on an Android TV / Google TV over adb and turns it on:
 #   1. the app (the APK you built in Android Studio)
 #   2. its permissions (radio level bars, sleep timer while the radio plays, Wi-Fi name)
@@ -18,7 +18,7 @@
 param([string]$Apk = "", [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.0.1"
 $Pkg = "app.awanpro.tv"
 $Dream = "$Pkg/app.awanpro.tv.AwanDream"
 $Service = "$Pkg/app.awanpro.tv.RemoteKeys"
@@ -190,22 +190,40 @@ if (-not $have -and $current -and $current -ne "null" -and $current -notlike "$P
     Write-Host "[2/7] No earlier screensaver to save (now: $current)"
 }
 
-# --- install
-Write-Host "[3/7] Installing $Apk  (built $((Get-Item $Apk).LastWriteTime.ToString('yyyy-MM-dd HH:mm')))"
-$out = (Adb install -r $Apk | Out-String).Trim()
-if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") {
-    # The TV has Awan TV signed with another key (a debug build, or someone else's): Android takes no update over it.
-    Write-Host "      The TV has Awan TV signed with another key, so it cannot be updated in place. Once:"
-    Write-Host "      1. tools\AwanTV-settings.ps1 -Export -Device <TV>     (keep the settings)"
-    Write-Host "      2. tools\AwanTV-restore.ps1 -Uninstall -Device <TV>   (remove the old one)"
-    Write-Host "      3. tools\AwanTV-install.ps1 -Device <TV>              (this again)"
-    Write-Host "      4. tools\AwanTV-settings.ps1 -Import -File <the file from step 1> -Device <TV>"
-    throw "Install failed: signed with another key. Nothing else was changed."
+# --- install: skipped when the TV has this very APK already (its setup still runs below, putting things right)
+$onTv = [regex]::Match((Shell "dumpsys package $Pkg | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+$same = $false
+if ($onTv) {
+    $path = ((Shell "pm path $Pkg") -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -like "package:*" } |
+        Select-Object -First 1) -replace "^package:", ""
+    if ($path) {
+        $tvHash = ((Shell "sha256sum $path") -split "\s+")[0]
+        $same = $tvHash -and ($tvHash -eq (Get-FileHash $Apk -Algorithm SHA256).Hash.ToLower())
+    }
 }
-if ($out -notmatch "Success") { throw "Install failed: $out" }
-# An update force-stops the app, and Android may handle that a moment after the install answers, taking the service
-# out of the list (seen on a Google TV Streamer): its setup waits until that is over.
-Start-Sleep -Seconds 5
+if ($same) {
+    Write-Host "[3/7] Awan TV $onTv is already on the TV (this very APK): setting it up again, nothing installed"
+} else {
+    $was = if ($onTv) { "the TV has $onTv" } else { "not on the TV yet" }
+    Write-Host "[3/7] Installing $Apk  (built $((Get-Item $Apk).LastWriteTime.ToString('yyyy-MM-dd HH:mm')); $was)"
+    $out = (Adb install -r $Apk | Out-String).Trim()
+    if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") {
+        # The TV has Awan TV signed with another key (a debug build, or someone else's): Android takes no update over it.
+        Write-Host "      The TV has Awan TV signed with another key, so it cannot be updated in place. Once:"
+        Write-Host "      1. tools\AwanTV-settings.ps1 -Export -Device <TV>     (keep the settings)"
+        Write-Host "      2. tools\AwanTV-restore.ps1 -Uninstall -Device <TV>   (remove the old one)"
+        Write-Host "      3. tools\AwanTV-install.ps1 -Device <TV>              (this again)"
+        Write-Host "      4. tools\AwanTV-settings.ps1 -Import -File <the file from step 1> -Device <TV>"
+        throw "Install failed: signed with another key. Nothing else was changed."
+    }
+    if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") {
+        throw "The TV has Awan TV $onTv, newer than this APK. Get the latest from https://github.com/OmarGHub/AwanTV/releases (nothing was changed)."
+    }
+    if ($out -notmatch "Success") { throw "Install failed: $out" }
+    # An update force-stops the app, and Android may handle that a moment after the install answers, taking the service
+    # out of the list (seen on a Google TV Streamer): its setup waits until that is over.
+    Start-Sleep -Seconds 5
+}
 
 # --- permissions (granted over adb; the app never asks for them)
 Write-Host "[4/7] Permissions"

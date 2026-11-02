@@ -873,7 +873,8 @@ public class SettingsActivity extends Screen {
                         String page = Updates.shown(Updates.PAGE);
                         return newer == null ? page : t.newVersion(newer) + t.sep() + page;
                     }
-                    void open() { startSafely(link(Updates.PAGE)); }
+                    // A newer version out: straight to its release page and files; else the repository.
+                    void open() { startSafely(link(Updates.newer(c, versionName()) != null ? Updates.RELEASE : Updates.PAGE)); }
                 },
                 // Updates beside where they show: a daily question to GitHub (off, no connection for it), and the
                 // same question at once, on or off, its answer beside it while Settings is open.

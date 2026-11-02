@@ -62,6 +62,23 @@
     <string name="confirm_title">التثبيت على هذا التلفاز؟</string>
     <string name="confirm_lead">تأكّد أنه التلفاز الذي تريده قبل أن تبدأ.</string>
     <string name="confirm_install">ثبّت Awan TV</string>
+    <string name="confirm_reading">جارٍ قراءة إصدار Awan TV عليه…</string>
+    <string name="confirm_none">Awan TV غير مثبّت عليه</string>
+    <string name="update_title">تحديث Awan TV؟</string>
+    <string name="update_lead">عليه الإصدار %1$s، ويُحدَّث إلى %2$s. تبقى إعداداته وتلاواته المحفوظة.</string>
+    <string name="update_chip">Awan TV %1$s ← %2$s</string>
+    <string name="update_button">حدّث Awan TV</string>
+    <string name="same_title">Awan TV محدّث عليه</string>
+    <string name="same_lead">عليه %1$s، الإصدار نفسه الذي يحمله المثبّت. «أعد الإعداد» يصلح الخدمة والصلاحيات وشاشة الاستراحة في ثوانٍ، دون إعادة التثبيت.</string>
+    <string name="same_chip">Awan TV %1$s · الإصدار نفسه</string>
+    <string name="setup_button">أعد الإعداد</string>
+    <string name="newer_title">عليه إصدار أحدث</string>
+    <string name="newer_lead">عليه %1$s، وهو أحدث من %2$s الذي يحمله هذا المثبّت. نزّل أحدث مثبّت من github.com/OmarGHub/AwanTV/releases</string>
+    <string name="newer_chip">Awan TV %1$s · أحدث من المثبّت</string>
+    <string name="setup_title">إعداد Awan TV</string>
+    <string name="setup_lead">أبقِ هذه الشاشة مفتوحة. يستغرق ذلك ثوانيَ.</string>
+    <string name="state_on_tv">موجود على التلفاز</string>
+    <string name="done_lead_setup">أُعدّ Awan TV %1$s على «%2$s» من جديد.</string>
 
     <string name="install_title">تثبيت Awan TV</string>
     <string name="install_lead_version">Awan TV %1$s · أبقِ هذه الشاشة مفتوحة. يستغرق ذلك دقيقة أو اثنتين.</string>

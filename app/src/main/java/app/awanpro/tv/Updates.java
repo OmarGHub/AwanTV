@@ -29,6 +29,8 @@ final class Updates {
     /** Shown in Settings > About, and in its QR codes (tools/AwanTV-build-qr.py: change both together). */
     static final String SITE = "https://awanpro.app";
     static final String PAGE = "https://github.com/OmarGHub/AwanTV";
+    /** The newest release's page, with its files: where Source and updates goes when a newer version is out. */
+    static final String RELEASE = PAGE + "/releases/latest";
     private static final String LATEST = "https://api.github.com/repos/OmarGHub/AwanTV/releases/latest";
 
     private static final long EVERY_MS = 24 * 3600_000L, RETRY_MS = 3 * 3600_000L;

@@ -61,13 +61,18 @@ final class Ui {
         t.setIncludeFontPadding(false);
         // A line that starts with Latin ("Awan TV ...") still reads from the language's own side.
         t.setTextDirection(arabic(c) ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
-        // Our addresses open in the phone's browser.
+        links(t);
+        return t;
+    }
+
+    /** Our addresses (github.com/..., awanpro.app) open in the phone's browser; again after a setText. */
+    static void links(TextView t) {
+        CharSequence s = t.getText();
         String plain = s == null ? "" : s.toString();
         if (plain.contains("github.com/") || plain.contains("awanpro.app")) {
             Linkify.addLinks(t, Patterns.WEB_URL, "https://");
             t.setLinkTextColor(GOLD_200);
         }
-        return t;
     }
 
     static TextView title(Context c, CharSequence s) {

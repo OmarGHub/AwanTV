@@ -11,6 +11,18 @@ history is in its repository.
 ### The app
 - Check for updates now and New versions are in Settings > About, under Source and updates where a new version shows
   (they were in Settings > Network). The settings file and the editor have New versions under About too.
+- Source and updates opens the newest release's page, with its files, when a newer version is out.
+
+### The installer (phone)
+- It reads the TV's Awan TV before anything is sent, and the confirmation says what it will do: install (none on the
+  TV), update (an older one, its settings and recitations kept), set up again (the same version: the service,
+  permissions and screensaver put right in seconds, nothing sent), or nothing (a newer one: get the latest installer).
+- Its icon shows what it does, a TV with the arch inside the gold arch, as an adaptive icon that no phone's mask cuts,
+  with a monochrome layer for themed icons.
+
+### The tools (Windows)
+- `AwanTV-install` sets up again without installing when the TV has this very APK, and stops with a clear message
+  when the TV has a newer Awan TV.
 
 ## [1.0.1]
 

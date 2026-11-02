@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Inside the 66-unit safe zone of the 108 canvas: the gold arch, the TV in plaster, the small arch in gold. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:pathData="M28,90 V50 C28,37 38,28 54,21 C70,28 80,37 80,50 V90"
+        android:fillColor="#1A3360" android:strokeColor="#D8B46A" android:strokeWidth="3.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+    <path android:pathData="M38.3,48 H69.7 A2.8,2.8 0 0,1 72.5,50.8 V69.2 A2.8,2.8 0 0,1 69.7,72 H38.3 A2.8,2.8 0 0,1 35.5,69.2 V50.8 A2.8,2.8 0 0,1 38.3,48 Z"
+        android:strokeColor="#EFE7D6" android:strokeWidth="3" android:strokeLineJoin="round" />
+    <path android:pathData="M54,72 V78.5 M46,79 H62"
+        android:strokeColor="#EFE7D6" android:strokeWidth="3" android:strokeLineCap="round" />
+    <path android:pathData="M50.4,67 V58 C50.4,55.2 51.9,53.7 54,53 C56.1,53.7 57.6,55.2 57.6,58 V67"
+        android:strokeColor="#D8B46A" android:strokeWidth="2.4" android:strokeLineCap="round" android:strokeLineJoin="round" />
+</vector>
