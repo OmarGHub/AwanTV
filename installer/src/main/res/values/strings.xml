@@ -99,7 +99,7 @@
     <string name="done_partly_title">Installed, with a problem</string>
     <string name="done_partly_lead">Awan TV is on the TV, but a step marked in red didn’t finish. Run the installer again to retry it.</string>
     <string name="next_home">Press Home on the remote: Awan TV opens over the TV’s home screen.</string>
-    <string name="next_city">On its first start it asks for your city; the times, the adhan and the screensaver follow it.</string>
+    <string name="next_city">On its first start it suggests the TV’s location: confirm it or choose another, and the times, the adhan and the screensaver follow it.</string>
     <string name="tip_title">One more thing</string>
     <string name="tip_body">You can turn off USB debugging and Wireless debugging on the TV now. To update Awan TV later, turn debugging back on and open the new installer, from github.com/OmarGHub/AwanTV/releases</string>
     <string name="site_line">Our website: awanpro.app</string>

@@ -97,7 +97,7 @@
     <string name="done_partly_title">ثُبّت مع مشكلة</string>
     <string name="done_partly_lead">Awan TV على التلفاز، لكن خطوة باللون الأحمر لم تكتمل. شغّل المثبّت مرة أخرى لإعادتها.</string>
     <string name="next_home">اضغط زر Home في جهاز التحكم: يظهر Awan TV فوق الشاشة الرئيسية للتلفاز.</string>
-    <string name="next_city">في أول تشغيل يطلب منك اختيار مدينتك، وعليها تُحسب المواقيت والأذان وشاشة الاستراحة.</string>
+    <string name="next_city">في أول تشغيل يقترح موقع التلفاز، فتؤكده أو تختار موقعًا آخر، وعليه تُحسب المواقيت والأذان وشاشة الاستراحة.</string>
     <string name="tip_title">أمر أخير</string>
     <string name="tip_body">يمكنك الآن إيقاف «تصحيح أخطاء USB» و«تصحيح الأخطاء اللاسلكي» على التلفاز. وللتحديث لاحقًا فعّل التصحيح من جديد وافتح المثبّت الجديد، من github.com/OmarGHub/AwanTV/releases</string>
     <string name="site_line">موقعنا: awanpro.app</string>

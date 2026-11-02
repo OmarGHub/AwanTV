@@ -908,14 +908,17 @@ public final class MainActivity extends Activity {
         frame(DONE, ok ? Hero.Mode.DONE : Hero.Mode.PROBLEM,
                 getString(ok ? R.string.done_title : R.string.done_partly_title), lead);
         if (!ok && steps != null) add(steps, 20);
-        LinearLayout next = Ui.card(this);
-        next.addView(numbered(1, getString(R.string.next_home), null));
-        next.addView(numbered(2, getString(R.string.next_city), null), Ui.wide(this, 14));
-        add(next, 20);
+        // What to do next on the TV: for a first install or an update; after setting up again it is already done.
+        if (!setUpOnly) {
+            LinearLayout next = Ui.card(this);
+            next.addView(numbered(1, getString(R.string.next_home), null));
+            next.addView(numbered(2, getString(R.string.next_city), null), Ui.wide(this, 14));
+            add(next, 20);
+        }
         LinearLayout tip = Ui.card(this);
         tip.addView(Ui.label(this, getString(R.string.tip_title)));
         tip.addView(Ui.small(this, getString(R.string.tip_body)), Ui.wide(this, 8));
-        add(tip, 12);
+        add(tip, setUpOnly ? 20 : 12);
         TextView site = Ui.small(this, getString(R.string.site_line));
         site.setGravity(Gravity.CENTER);
         add(site, 16);
