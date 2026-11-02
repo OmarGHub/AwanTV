@@ -191,7 +191,8 @@ if (-not $have -and $current -and $current -ne "null" -and $current -notlike "$P
 }
 
 # --- install: skipped when the TV has this very APK already (its setup still runs below, putting things right)
-$onTv = [regex]::Match((Shell "dumpsys package $Pkg | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+# dumpsys complains on stderr when grep stops reading after the first line: quieted.
+$onTv = [regex]::Match((Shell "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
 $same = $false
 if ($onTv) {
     $path = ((Shell "pm path $Pkg") -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -like "package:*" } |
@@ -290,5 +291,5 @@ if ($before -and $before -ne "null" -and $before -notlike "$Pkg/*") {
 
 Write-Host ""
 Write-Host "Done. Press Home on the remote: Awan TV opens over the TV's home screen."
-Write-Host "On the first start it asks for your city (Settings > Prayer times > Location)."
+Write-Host "On the first start it suggests the TV's location: confirm it or choose another (Settings > Prayer times > Location)."
 Write-Host "Diagnostics: adb logcat -s AwanGuard"

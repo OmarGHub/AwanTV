@@ -656,7 +656,7 @@ public final class MainActivity extends Activity {
             try {
                 String[] lines = adb().shell("settings get global device_name; echo; getprop ro.product.model; echo; "
                         + "getprop ro.build.version.release; echo; dumpsys package " + Setup.PACKAGE
-                        + " | grep -m1 versionName").out.split("\n", -1);
+                        + " 2>/dev/null | grep -m1 versionName").out.split("\n", -1);
                 String device = clean(lines, 0), made = clean(lines, 2), android = clean(lines, 4);
                 java.util.regex.Matcher m = java.util.regex.Pattern.compile("versionName=(\\S+)").matcher(clean(lines, 6));
                 onTv = m.find() ? m.group(1) : "";
@@ -822,7 +822,7 @@ public final class MainActivity extends Activity {
     /** Awan TV's version name on the TV, or null. */
     private static String versionOnTv(Adb a) throws IOException, InterruptedException {
         java.util.regex.Matcher m = java.util.regex.Pattern.compile("versionName=(\\S+)")
-                .matcher(a.shell("dumpsys package " + Setup.PACKAGE + " | grep -m1 versionName").out);
+                .matcher(a.shell("dumpsys package " + Setup.PACKAGE + " 2>/dev/null | grep -m1 versionName").out);
         return m.find() ? m.group(1) : null;
     }
 
