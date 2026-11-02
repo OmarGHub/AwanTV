@@ -403,6 +403,61 @@ final class Text {
         return ar ? "فعّله إن صمت مكبّر الصوت بعد Home · الضغط المطوّل: واجهة الجهاز"
                   : "On if the soundbar goes silent after Home · hold it: the box's own home";
     }
+    /** Settings > Device settings > Remote buttons (Buttons). */
+    String buttonsRow() { return ar ? "أزرار الريموت" : "Remote buttons"; }
+    String buttonsHelp(int n) {
+        if (n == 0) return ar ? "اجعل زرًا في أي ريموت يفتح ما تختار" : "Make a button on any remote open what you choose";
+        if (!ar) return d(n == 1 ? "1 button customised" : n + " buttons customised");
+        if (n == 1) return "زر واحد مخصص";
+        if (n == 2) return "زران مخصصان";
+        return d(n <= 10 ? n + " أزرار مخصصة" : n + " زرًا مخصصًا");
+    }
+    String buttonsSection() { return ar ? "إعدادات الجهاز › أزرار الريموت" : "Device settings › Remote buttons"; }
+    String hintBackDevice() { return ar ? "رجوع  إعدادات الجهاز" : "Back  Device settings"; }
+    String buttonFrom(String remote) {
+        if (remote == null || remote.isEmpty()) return "";
+        return ar ? "من «" + remote + "»" : "From \u201C" + remote + "\u201D";
+    }
+    String addButtonRow() { return ar ? "إضافة زر" : "Add a button"; }
+    String addButtonHelp() { return ar ? "اضغط بعدها أي زر في أي ريموت متصل بالشاشة" : "Then press any button on any remote connected to the TV"; }
+    String buttonsInfoRow() { return ar ? "عن تخصيص الأزرار" : "About custom buttons"; }
+    String buttonsInfoHelp() {
+        return ar ? "ما دام زر واحد مخصصًا تمر ضغطات الريموت كلها عبر Awan TV، فالضغط المطوّل على الصوت يرفعه درجة واحدة. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."
+                  : "While one button is customised every remote press passes through Awan TV, so holding Volume moves it one step. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power.";
+    }
+    String buttonsServiceOff() { return ar ? "خدمة Awan TV متوقفة: لا تعمل الأزرار المخصصة حتى تشغّلها" : "The Awan TV service is off: custom buttons work once it is on"; }
+    String buttonOpens(String name) { return ar ? name + " يفتح" : name + " opens"; }
+    String buttonOriginal() { return ar ? "عمله الأصلي (بلا تخصيص)" : "What it always did (not customised)"; }
+    String buttonNone() { return ar ? "لا شيء (يعطّل الزر)" : "Nothing (turns the button off)"; }
+    String buttonOff() { return ar ? "لا شيء (معطّل)" : "Nothing (off)"; }
+    String buttonAwan(String screen) { return "Awan TV · " + screen; }
+    String buttonRadio() { return ar ? "الإذاعة (تشغيل وإيقاف)" : "Radio (play and stop)"; }
+    String pressTitle() { return ar ? "اضغط الزر الذي تريد تخصيصه" : "Press the button to customise"; }
+    String pressHelp() { return ar ? "في الريموت الأصلي أو أي ريموت بلوتوث متصل بالشاشة." : "On the TV's own remote or any Bluetooth remote connected to it."; }
+    String pressWaiting(int seconds) {
+        if (!ar) return d("Waiting " + seconds + (seconds == 1 ? " second" : " seconds"));
+        if (seconds == 1) return "ينتظر ثانية واحدة";
+        if (seconds == 2) return "ينتظر ثانيتين";
+        return d("ينتظر " + seconds + " ثوانٍ");
+    }
+    String noneTitle() { return ar ? "لم يصل أي زر" : "No button came through"; }
+    String noneBody() { return d(ar ? "مرّت 10 ثوانٍ دون أن يصل شيء إلى Awan TV." : "10 seconds went by and nothing reached Awan TV."); }
+    String noneWhy() {
+        return ar ? "بعض الأزرار يأخذها التلفاز قبل أي تطبيق، فلا يمكن تخصيصها هنا. جرّب زرًا آخر."
+                  : "The TV takes some buttons before any app sees them, so they cannot be customised here. Try another one.";
+    }
+    String tryAgain() { return ar ? "حاول مرة أخرى" : "Try again"; }
+    String close() { return ar ? "إغلاق" : "Close"; }
+    String warnTitle() { return ar ? "قبل أول تخصيص" : "Before the first button"; }
+    String warnBody() {
+        return ar ? "لكي يعرف Awan TV الزر الذي ضغطته، تمر ضغطات الريموت كلها عبره ما دام زر واحد مخصصًا."
+                  : "So that Awan TV knows which button you pressed, every remote press passes through it while one button is customised.";
+    }
+    String warnVolume() {
+        return ar ? "على أغلب الشاشات لا تشعر بفرق. لكن الضغط المطوّل على زر الصوت يرفعه درجة واحدة فقط، فاضغطه مرات متتالية."
+                  : "On most TVs you feel no difference. But holding Volume moves it only one step, so press it several times instead.";
+    }
+    String warnUndo() { return ar ? "إن حذفت كل الأزرار المخصصة عاد الريموت كما كان." : "Remove every custom button and the remote is as it was."; }
     String hintMove() { return ar ? "▲▼  تنقل" : "▲▼  Move"; }
     String hintChange() { return ar ? "◀▶  تغيير القيمة" : "◀▶  Change value"; }
     String hintChoose() { return ar ? "OK  اختيار" : "OK  Choose"; }
@@ -897,9 +952,9 @@ final class Text {
     String resetGoesHead() { return ar ? "يعود إلى ما كان عليه عند التثبيت:" : "Back to a new install's:"; }
     String[] resetGoes() {
         return ar ? new String[] {"الموقع وطريقة الحساب والإقامة والجمعة", "التنبيهات وأصوات الأذان ومستوى الفجر",
-                                  "الألوان والصور واللغة والطقس", "التطبيقات المفضلة وصف «المزيد»"}
+                                  "الألوان والصور واللغة والطقس", "التطبيقات المفضلة وصف «المزيد»", "أزرار الريموت المخصصة"}
                   : new String[] {"The location, the method, the iqamah and Friday", "Reminders, adhan voices and Fajr's level",
-                                  "Colours, photos, language and weather", "Favourite apps and the More row"};
+                                  "Colours, photos, language and weather", "Favourite apps and the More row", "Custom remote buttons"};
     }
     String resetStaysHead() { return ar ? "يبقى كما هو:" : "Stays as it is:"; }
     String[] resetStays() {

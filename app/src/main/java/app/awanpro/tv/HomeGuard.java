@@ -109,7 +109,7 @@ final class HomeGuard {
         stockPackage = stockHome(service, homeClasses);
         Log.i(TAG, "stock home: " + stockPackage + " " + homeClasses + " active=" + active());
         // Home's button follows (the run mode changed, or a new default Home).
-        if (service instanceof RemoteKeys && RemoteKeys.guard == this) ((RemoteKeys) service).homeKeysChanged();
+        if (service instanceof RemoteKeys && RemoteKeys.guard == this) ((RemoteKeys) service).keysChanged();
     }
 
     void onEvent(AccessibilityEvent e) {

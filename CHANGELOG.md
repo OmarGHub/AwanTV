@@ -6,6 +6,14 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Settings > Device settings > Remote buttons: a button on any remote (the TV's own or a Bluetooth one), pressed
+  once, opens an app, the screensaver, Today & Qibla or the radio, or does nothing. Add a button waits ten seconds
+  for it; a button the TV keeps for itself says so. Off until the first button, which first says what it costs:
+  while one is set every press passes through Awan TV, so holding Volume moves it one step. The arrows, OK, Back,
+  Home, Volume and Power are never taken. Reset settings clears them; the settings file leaves them out (remotes
+  differ between TVs).
+
 ## [1.0.2]
 
 ### The app

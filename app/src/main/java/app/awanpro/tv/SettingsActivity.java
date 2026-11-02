@@ -127,6 +127,13 @@ public class SettingsActivity extends Screen {
     /** About shows App status's rows instead of its own (Back returns to About). */
     private boolean statusOpen;
 
+    /** Device settings shows the remote buttons instead of its own rows (Back returns to Device settings). */
+    private boolean buttonsOpen;
+    /** The note under the remote buttons (what customising costs, the service off); null elsewhere. */
+    private TextView buttonsNote;
+    /** At most this many custom buttons: the rows, Add a button and the note fit above the hints. */
+    private static final int MAX_BUTTONS = 6;
+
     /** The Iqamah rows edit Ramadan's own minutes (true) or the other days (false); not saved. */
     private boolean iqamaRamadan;
 
@@ -322,8 +329,9 @@ public class SettingsActivity extends Screen {
         chooser = null;
         chooserBack = null;
         editing = null;
-        // An open reset dialog goes with the old root too.
+        // An open reset dialog goes with the old root too (and a wait for a button with it).
         stopHold();
+        stopPress();
         resetView = null;
         resetRing = null;
         resetStage = 0;
@@ -456,11 +464,15 @@ public class SettingsActivity extends Screen {
         if (section == NETWORK) sectionLabel.setText(t.sectionNetwork(null));
         if (section != ABOUT) statusOpen = false;
         if (statusOpen) sectionLabel.setText(t.statusSection());
+        if (section != DEVICE) buttonsOpen = false;
+        if (buttonsOpen) sectionLabel.setText(t.buttonsSection());
         for (int i = 0; i < SECTIONS; i++) styleNav(i);
         rows.addAll(rowsFor(section));
         for (int i = 0; i < rows.size(); i++) addRow(rows.get(i), i);
         if (qrPanel != null) root.removeView(qrPanel);
         qrPanel = qrShown() ? qrPanel() : null;
+        if (buttonsNote != null) root.removeView(buttonsNote);
+        buttonsNote = buttonsOpen ? buttonsNote() : null;
         refresh();
     }
 
@@ -925,6 +937,7 @@ public class SettingsActivity extends Screen {
                 return about;
             }
             default: {
+                if (buttonsOpen) return buttonsRows();
                 List<Row> device = new ArrayList<>();
                 device.add(new Row(VALUE) {
                     String label() { return t.deviceRow(); }
@@ -943,6 +956,16 @@ public class SettingsActivity extends Screen {
                         }
                     });
                 }
+                // The viewer's own buttons (Buttons), on every TV.
+                device.add(new Row(VALUE) {
+                    String label() { return t.buttonsRow(); }
+                    String help() { return t.buttonsHelp(Buttons.all(c).size()); }
+                    void open() {
+                        buttonsOpen = true;
+                        showSection();
+                        focusRow(0);
+                    }
+                });
                 return device;
             }
         }
@@ -1402,6 +1425,8 @@ public class SettingsActivity extends Screen {
     @Override
     protected void onPause() {
         stopPreview();
+        // Never leave the remote waiting for a button (and keys filtered for it) behind another screen.
+        if (resetStage == PRESS) closePress();
         super.onPause();
     }
 
@@ -1590,7 +1615,7 @@ public class SettingsActivity extends Screen {
         List<String> h = new ArrayList<>();
         h.add(t.hintMove());
         if (r.kind != INFO) h.add(r.kind == VALUE ? t.hintChoose() : r.kind == TOGGLE ? t.hintSwitch() : t.hintEdit());
-        h.add(statusOpen ? t.hintBackAbout() : t.hintBackMenu());
+        h.add(statusOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice() : t.hintBackMenu());
         setHints(hints, h);
         styleNav(section);
     }
@@ -1667,6 +1692,12 @@ public class SettingsActivity extends Screen {
                     statusOpen = false;
                     showSection();
                     focusRow(0);
+                }
+                else if (buttonsOpen) {
+                    // The remote buttons back to Device settings, on their row (the last).
+                    buttonsOpen = false;
+                    showSection();
+                    focusRow(rows.size() - 1);
                 }
                 else focusNav();
             }
@@ -1927,6 +1958,259 @@ public class SettingsActivity extends Screen {
         for (Row r : rows) r.tile.setFocusable(on);
     }
 
+    // ---------------------------------------------------------------- remote buttons
+
+    /** Device settings > Remote buttons: one row per custom button, then Add a button (until MAX_BUTTONS). */
+    private List<Row> buttonsRows() {
+        Context c = this;
+        List<Row> out = new ArrayList<>();
+        for (Buttons.Entry b : Buttons.all(c)) {
+            out.add(new Row(VALUE) {
+                String label() { return b.name; }
+                String help() {
+                    String from = t.buttonFrom(b.from);
+                    if (!Buttons.SHOW_CODES) return from;
+                    String id = b.id.startsWith("s") ? "scan " + b.id.substring(1) : android.view.KeyEvent.keyCodeToString(Integer.parseInt(b.id));
+                    return from.isEmpty() ? id : from + t.sep() + id;
+                }
+                String value() { return Buttons.label(c, t, b.action); }
+                void open() { openButtonChooser(b, null); }
+            });
+        }
+        if (out.size() < MAX_BUTTONS) {
+            out.add(new Row(VALUE) {
+                String label() { return t.addButtonRow(); }
+                String help() { return t.addButtonHelp(); }
+                void open() {
+                    // The first time only: what customising costs, before anything is taken.
+                    if (Prefs.of(c).getBoolean(Buttons.WARNED, false)) openPress();
+                    else openAsk(t.warnTitle(), new String[] {t.warnBody(), t.warnVolume(), t.warnUndo()},
+                        t.resetContinue(), t.cancel(), () -> {
+                            Prefs.of(c).edit().putBoolean(Buttons.WARNED, true).apply();
+                            openPress();
+                        });
+                }
+            });
+        }
+        return out;
+    }
+
+    /** Under the rows: what customising costs and which keys never are; the service's state when it is off. */
+    private TextView buttonsNote() {
+        TextView v = text(ui400, 20, Tokens.MIST_400);
+        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+        android.text.SpannableStringBuilder s = new android.text.SpannableStringBuilder();
+        if (RemoteKeys.guard == null) {
+            s.append(t.buttonsServiceOff());
+            s.setSpan(new android.text.style.ForegroundColorSpan(Tokens.STATUS_BAD), 0, s.length(),
+                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            s.append("\n");
+        }
+        int head = s.length();
+        s.append(t.buttonsInfoRow());
+        s.setSpan(new android.text.style.ForegroundColorSpan(Tokens.PLASTER_100), head, s.length(),
+            android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.append("\n").append(t.buttonsInfoHelp());
+        v.setText(s);
+        v.setLineSpacing(0, 1.3f);
+        // Under the rows, lined up with their words.
+        place(v, 640 + 28, ROWS_TOP + rows.size() * (ROW_H + ROW_GAP) + 14, Tokens.LAYOUT_SETTINGS_ROW_WIDTH - 56,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+        return v;
+    }
+
+    /**
+     * What a button does: what it always did (no longer customised), nothing, one of Awan TV's screens, or an app
+     * (Home's order). heard is the press that brought it here (test builds show its codes), null from the list.
+     */
+    private void openButtonChooser(Buttons.Entry b, android.view.KeyEvent heard) {
+        Context c = this;
+        List<String> actions = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        actions.add(null);
+        names.add(t.buttonOriginal());
+        actions.add(Buttons.NONE);
+        names.add(t.buttonNone());
+        for (String a : new String[] {Buttons.SAVER, Buttons.TODAY, Buttons.RADIO}) {
+            actions.add(a);
+            names.add(Buttons.label(c, t, a));
+        }
+        for (String pkg : Apps.sorted(c, t)) {
+            actions.add(Buttons.app(pkg));
+            names.add(Apps.name(c, t, pkg));
+        }
+        // A new button starts on the first of Awan TV's screens; one already set, on its choice.
+        int sel = b.action == null ? -1 : actions.indexOf(b.action);
+        String sub = t.buttonFrom(b.from);
+        if (Buttons.SHOW_CODES && heard != null) {
+            String codes = Buttons.codes(heard.getKeyCode(), heard.getScanCode());
+            sub = sub.isEmpty() ? codes : sub + t.sep() + codes;
+        }
+        openChooser(t.buttonOpens(b.name), sub.isEmpty() ? null : sub, names.toArray(new String[0]), sel, i -> {
+            String action = actions.get(i);
+            if (action == null && b.action == null) return;   // a new button left as it was: nothing to save
+            Buttons.save(c, b, action);
+            RemoteKeys.buttonsChanged();
+            showSaved();
+            root.post(() -> {
+                showSection();
+                int at = 0;
+                List<Buttons.Entry> now = Buttons.all(c);
+                for (int k = 0; k < now.size(); k++) if (now.get(k).id.equals(b.id)) at = k;
+                if (action == null) at = Math.max(0, rows.size() - 1);
+                focusRow(Math.min(at, rows.size() - 1));
+            });
+        }, null);
+        // A new button's list opens on Awan TV's first screen, not on "what it always did".
+        if (sel < 0) focusChooserItem(2);
+    }
+
+    /** Focus on one item of the open chooser (its list is the card's last child, in a ScrollView). */
+    private void focusChooserItem(int index) {
+        if (chooser == null) return;
+        LinearLayout card = (LinearLayout) chooser.getChildAt(0);
+        ScrollView scroll = (ScrollView) card.getChildAt(card.getChildCount() - 1);
+        LinearLayout list = (LinearLayout) scroll.getChildAt(0);
+        if (index < list.getChildCount()) {
+            View item = list.getChildAt(index);
+            root.post(item::requestFocus);
+        }
+    }
+
+    // A wait for a button (PRESS) and a two-button question (ASK) share the reset dialog's frame.
+    private static final int PRESS = 4, ASK = 5;
+    private static final int PRESS_SECONDS = 10;
+    private Ring pressRing;
+    private TextView pressWaiting;
+    private android.animation.ValueAnimator pressTimer;
+    private FocusTile askFirst, askSecond;
+    private Runnable askOnFirst;
+
+    /**
+     * "Press the button": the next key that can be customised, from the service (which filters keys meanwhile)
+     * or, with the service off, from what reaches this screen. Ten seconds, then "No button came through".
+     */
+    private void openPress() {
+        LinearLayout card = resetCard(900);
+        card.addView(resetTitle(t.pressTitle(), Gravity.START));
+        TextView help = resetLine(t.pressHelp(), Tokens.PLASTER_100, 24, null);
+        card.addView(help);
+        LinearLayout wait = new LinearLayout(this);
+        wait.setGravity(Gravity.CENTER_VERTICAL);
+        pressRing = new Ring(this, ui500);
+        pressRing.textScale = 0.42f;
+        wait.addView(pressRing, new LinearLayout.LayoutParams(Ui.ipx(96), Ui.ipx(96)));
+        pressWaiting = text(ui400, 24, Tokens.MIST_400);
+        LinearLayout.LayoutParams wlp = new LinearLayout.LayoutParams(-2, -2);
+        wlp.setMarginStart(Ui.ipx(24));
+        wait.addView(pressWaiting, wlp);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = Ui.ipx(28);
+        card.addView(wait, lp);
+        showReset(card, 900, PRESS);
+        showSecondsLeft(1f);
+        pressTimer = android.animation.ValueAnimator.ofFloat(1f, 0f).setDuration(PRESS_SECONDS * 1000L);
+        pressTimer.setInterpolator(null);
+        pressTimer.addUpdateListener(a -> showSecondsLeft((Float) a.getAnimatedValue()));
+        pressTimer.addListener(new android.animation.AnimatorListenerAdapter() {
+            private boolean cancelled;
+
+            @Override
+            public void onAnimationCancel(android.animation.Animator a) { cancelled = true; }
+
+            @Override
+            public void onAnimationEnd(android.animation.Animator a) {
+                if (cancelled) return;
+                closePress();
+                openAsk(t.noneTitle(), new String[] {t.noneBody(), t.noneWhy()}, t.tryAgain(), t.close(),
+                    SettingsActivity.this::openPress);
+            }
+        });
+        pressTimer.start();
+        RemoteKeys.startCapture(this::heardButton);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintBackCancel());
+        setHints(hints, h);
+    }
+
+    private void showSecondsLeft(float left) {
+        if (pressRing == null) return;
+        int seconds = Math.max(1, (int) Math.ceil(left * PRESS_SECONDS - 0.001));
+        pressRing.label = t.d(String.valueOf(seconds));
+        pressRing.set(left);
+        pressWaiting.setText(t.pressWaiting(seconds));
+    }
+
+    /** Keys while waiting: Back cancels; a key that can be customised and reached this screen is the button. */
+    private boolean pressKey(android.view.KeyEvent e) {
+        int k = e.getKeyCode();
+        boolean down = e.getAction() == android.view.KeyEvent.ACTION_DOWN;
+        if (k == android.view.KeyEvent.KEYCODE_BACK) {
+            if (!down) closePress();
+            return true;
+        }
+        if (down && e.getRepeatCount() == 0 && !Buttons.excluded(k) && Buttons.id(e) != null) heardButton(e);
+        return true;
+    }
+
+    /** The button pressed: its list, as saved if it is customised already. */
+    private void heardButton(android.view.KeyEvent e) {
+        if (resetStage != PRESS || isFinishing()) return;
+        closePress();
+        String id = Buttons.id(e);
+        Buttons.Entry b = Buttons.find(this, id);
+        if (b == null) b = new Buttons.Entry(id, Buttons.name(t, e.getKeyCode(), e.getScanCode()), Buttons.remote(e), null);
+        openButtonChooser(b, e);
+    }
+
+    private void stopPress() {
+        if (pressTimer != null) pressTimer.cancel();
+        pressTimer = null;
+        pressRing = null;
+        RemoteKeys.stopCapture();
+    }
+
+    private void closePress() {
+        stopPress();
+        closeReset();
+    }
+
+    /** A question with two buttons, the first focused: OK on it closes the question and runs onFirst; the second or Back only closes. */
+    private void openAsk(String title, String[] lines, String first, String second, Runnable onFirst) {
+        LinearLayout card = resetCard(900);
+        card.addView(resetTitle(title, Gravity.START));
+        for (int i = 0; i < lines.length; i++) {
+            TextView v = resetLine(lines[i], i == 0 ? Tokens.PLASTER_100 : Tokens.MIST_400, 24, null);
+            v.setLineSpacing(0, 1.3f);
+            if (i > 0) ((LinearLayout.LayoutParams) v.getLayoutParams()).topMargin = Ui.ipx(10);
+            card.addView(v);
+        }
+        LinearLayout buttons = new LinearLayout(this);
+        float r = FocusTile.REACH;
+        askFirst = resetButton(first);
+        askSecond = resetButton(second);
+        askOnFirst = onFirst;
+        LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+        LinearLayout.LayoutParams b = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+        b.setMarginStart(Ui.ipx(24));
+        buttons.addView(askFirst, a);
+        buttons.addView(askSecond, b);
+        LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, -2);
+        blp.topMargin = Ui.ipx(30 - r);
+        blp.setMarginStart(-Ui.ipx(r));
+        blp.setMarginEnd(-Ui.ipx(r));
+        buttons.setClipChildren(false);
+        buttons.setClipToPadding(false);
+        card.setClipToPadding(false);
+        card.addView(buttons, blp);
+        showReset(card, 900, ASK);
+        root.post(askFirst::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintChoose());
+        h.add(t.hintBackCancel());
+        setHints(hints, h);
+    }
+
     // ---------------------------------------------------------------- reset
 
     /** 0: no reset dialog; 1: the first confirmation; 2: hold OK. */
@@ -2041,6 +2325,22 @@ public class SettingsActivity extends Screen {
         int k = e.getKeyCode();
         boolean down = e.getAction() == KeyEvent.ACTION_DOWN;
         boolean ok = k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_NUMPAD_ENTER;
+        if (resetStage == PRESS) return pressKey(e);
+        if (resetStage == ASK) {
+            if (k == KeyEvent.KEYCODE_BACK) {
+                if (!down) closeReset();
+            } else if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                if (down) (askFirst.isFocused() ? askSecond : askFirst).requestFocus();
+            } else if (ok) {
+                if (down && e.getRepeatCount() == 0) resetPressed = true;
+                else if (!down && resetPressed && !e.isCanceled()) {
+                    Runnable then = askFirst.isFocused() ? askOnFirst : null;
+                    closeReset();
+                    if (then != null) then.run();
+                }
+            }
+            return true;
+        }
         if (resetStage == 3) {
             // The first run's location question: Back, like Set location, goes back to choosing.
             if (k == KeyEvent.KEYCODE_BACK) {
@@ -2124,6 +2424,7 @@ public class SettingsActivity extends Screen {
         ed.commit();
         Saver.apply(this);
         if (RemoteKeys.guard != null) RemoteKeys.guard.refresh();
+        RemoteKeys.buttonsChanged();
         if (RemoteKeys.watch != null) RemoteKeys.watch.refreshCounter();
         startSafely(new Intent(this, MainActivity.class)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -2186,6 +2487,9 @@ public class SettingsActivity extends Screen {
         private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final android.graphics.Typeface face;
         private float done;
+        /** What it says in the middle, and how large for its width: OK on the reset's, the seconds left on a countdown. */
+        String label = "OK";
+        float textScale = 52f / 220;
 
         Ring(Context c, android.graphics.Typeface face) {
             super(c);
@@ -2210,9 +2514,9 @@ public class SettingsActivity extends Screen {
             p.setStyle(Paint.Style.FILL);
             p.setColor(Tokens.PLASTER_100);
             p.setTypeface(face);
-            p.setTextSize(w * 52 / 220);
+            p.setTextSize(w * textScale);
             p.setTextAlign(Paint.Align.CENTER);
-            c.drawText("OK", w / 2, w / 2 - (p.ascent() + p.descent()) / 2, p);
+            c.drawText(label, w / 2, w / 2 - (p.ascent() + p.descent()) / 2, p);
         }
     }
 
