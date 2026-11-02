@@ -707,7 +707,7 @@ final class Prefs {
         of(c).edit().putString("weather", v).apply();
     }
 
-    /** Settings > Network > New versions: Home asks GitHub once a day (Updates). On by default. */
+    /** Settings > About > New versions: Home asks GitHub once a day (Updates). On by default. */
     static boolean updateCheck(Context c) {
         return of(c).getBoolean("update_check", true);
     }

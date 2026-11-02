@@ -70,7 +70,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 التصحيح من خيارات المطوّر، وتشغّله مرة أخرى عند التحديث.
 
 **التحديث:** الطريقة نفسها بالإصدار الجديد، وتبقى الإعدادات والتلاوات المحفوظة. ويخبرك التطبيق بالإصدار الجديد في
-الإعدادات ← حول التطبيق (يُوقف من الإعدادات ← الشبكة)، أو ابحث بنفسك متى شئت: الإعدادات ← الشبكة ← ابحث عن تحديث الآن.
+الإعدادات ← حول التطبيق (ويُوقف من هناك)، أو ابحث بنفسك متى شئت: الإعدادات ← حول التطبيق ← ابحث عن تحديث الآن.
 
 **الإزالة:** الإعدادات ← تشغيل Awan TV ← **إزالة Awan TV**: يعيد شاشة الاستراحة السابقة، ويسألك إن كانت عندك تلاوات
 محفوظة: تبقى أم تُحذف، ثم يفتح حذف التطبيق. أو من الحاسب: `AwanTV-restore.cmd`. ولو حُذف التطبيق من إعدادات التلفاز مباشرة
@@ -218,7 +218,7 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-restore.ps1 -Uninstall
    المكبّر والشاشة معًا، فيطلب المكبّر وصلة الصوت (ARC) والشاشة لم تجهز بعد. لتجنّبه: شغّل الشاشة أولًا بريموتها، ثم أيقظ
    الجهاز فيشغّل المكبّر بعد أن تجهز الشاشة (الشاشة ثم المكبّر، عكس توصية TCL العامة). وإن صمت: غيّر مدخل الشاشة إلى
    مدخل آخر ثم أعده (أو أطفئ المكبّر وشغّله)، ولا يستطيع تطبيق فعل ذلك عنك.
-8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد (لا يُرسل شيء عن الشاشة). إيقاف الطقس (الإعدادات ← العرض واللغة) أو الإصدارات الجديدة (الإعدادات ← الشبكة) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
+8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد (لا يُرسل شيء عن الشاشة). إيقاف الطقس (الإعدادات ← العرض واللغة) أو الإصدارات الجديدة (الإعدادات ← حول التطبيق) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
 
 ## الشكر والترخيص
 
@@ -309,7 +309,7 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
 choose another. You may switch debugging off in Developer options, and on again to update.
 
 **Updating:** the same way with the new release; the settings and saved recitations stay. The app tells you about a
-new release in Settings > About (off in Settings > Network), or ask any time: Settings > Network > Check for updates now.
+new release in Settings > About (and is turned off there), or ask any time: Settings > About > Check for updates now.
 
 **Removing:** Settings > Awan TV > **Remove Awan TV** puts back the earlier screensaver, asks whether any saved
 recitations stay or go, then opens the uninstall. Or from a computer: `AwanTV-restore.cmd`. If the app is removed from
@@ -448,7 +448,7 @@ the newest and saves every copy in `state\settings` for `-Import -File`.
 8. Privacy: the app connects only to the radio station you play and, for the weather, to Open-Meteo (the chosen
    place's coordinates, every 30 minutes while Home or the screensaver is on screen), to mp3quran.net when you
    use Saved recitations or open Settings > Radio, and to GitHub once a day to see whether a new release is out (nothing about the TV is
-   sent). Turning the weather (Settings > Display & language) or new versions (Settings > Network) off stops its connection. The TV's location is read
+   sent). Turning the weather (Settings > Display & language) or new versions (Settings > About) off stops its connection. The TV's location is read
    on the first start only, to suggest yours, and is sent nowhere. The record-audio permission (from Afnon) is for the
    radio's level bars only: it reads the app's own sound while the radio plays, not the room, and nothing is kept or sent.
 

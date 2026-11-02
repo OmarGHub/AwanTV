@@ -105,7 +105,7 @@ public class SettingsActivity extends Screen {
         int dot() { return 0; }
     }
 
-    /** Network > Check for updates now: what the last check said ("" before one), and whether one is running. */
+    /** About > Check for updates now: what the last check said ("" before one), and whether one is running. */
     private String checkNowAnswer = "";
     private boolean checkingNow;
 
@@ -851,20 +851,6 @@ public class SettingsActivity extends Screen {
                     String help() { return t.networkHelp(); }
                     String value() { String s = ssid(); return s == null ? "" : s; }
                     void open() { startSafely(new Intent(Settings.ACTION_WIFI_SETTINGS)); }
-                },
-                // Updates: a daily question to GitHub, shown in About; off, no connection for it.
-                new Row(TOGGLE) {
-                    String label() { return t.updateCheckRow(); }
-                    String help() { return t.updateCheckHelp(Prefs.updateCheck(c)); }
-                    boolean on() { return Prefs.updateCheck(c); }
-                    void set(boolean on) { Prefs.setUpdateCheck(c, on); }
-                },
-                // The same question at once, on or off; the answer stays beside it while Settings is open.
-                new Row(VALUE) {
-                    String label() { return t.checkNowRow(); }
-                    String help() { return t.checkNowHelp(); }
-                    String value() { return checkNowAnswer; }
-                    void open() { checkNow(this); }
                 });
             case ABOUT: {
                 if (statusOpen) return statusRows();
@@ -888,6 +874,20 @@ public class SettingsActivity extends Screen {
                         return newer == null ? page : t.newVersion(newer) + t.sep() + page;
                     }
                     void open() { startSafely(link(Updates.PAGE)); }
+                },
+                // Updates beside where they show: a daily question to GitHub (off, no connection for it), and the
+                // same question at once, on or off, its answer beside it while Settings is open.
+                new Row(VALUE) {
+                    String label() { return t.checkNowRow(); }
+                    String help() { return t.checkNowHelp(); }
+                    String value() { return checkNowAnswer; }
+                    void open() { checkNow(this); }
+                },
+                new Row(TOGGLE) {
+                    String label() { return t.updateCheckRow(); }
+                    String help() { return t.updateCheckHelp(Prefs.updateCheck(c)); }
+                    boolean on() { return Prefs.updateCheck(c); }
+                    void set(boolean on) { Prefs.setUpdateCheck(c, on); }
                 },
                 new Row(canBrowse(Updates.SITE) ? VALUE : INFO) {
                     String label() { return t.byAwan(); }

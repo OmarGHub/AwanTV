@@ -701,8 +701,8 @@ final class Text {
     String upToDate() { return ar ? "لديك أحدث إصدار" : "You have the latest version"; }
     String checkFailed() { return ar ? "تعذّر الوصول إلى GitHub" : "Couldn't reach GitHub"; }
     String updateCheckHelp(boolean on) {
-        return on ? (ar ? "يسأل GitHub مرة في اليوم، ويظهر الجديد في حول التطبيق"
-                        : "Asks GitHub once a day; a new one shows in About")
+        return on ? (ar ? "يسأل GitHub مرة في اليوم، ويظهر الجديد في «المصدر والتحديثات»"
+                        : "Asks GitHub once a day; a new one shows in Source and updates")
                   : (ar ? "لا يتصل التطبيق لأجل الإصدارات" : "No connection for new versions");
     }
     String updateCheckFileHelp() {

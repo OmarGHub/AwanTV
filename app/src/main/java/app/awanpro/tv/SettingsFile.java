@@ -204,12 +204,11 @@ final class SettingsFile {
         out.add(new Item("saver_after_prayer", BOOL, t.afterPrayerLabel()).def(true).combo("middle").when("run", Prefs.RUN_ALL, Prefs.RUN_SAVER));
         out.add(new Item("saver_night_dim", BOOL, t.nightDimRow()).help(t.nightDimHelp()).def(true).when("run", Prefs.RUN_ALL, Prefs.RUN_SAVER));
 
-        // Network (its other row opens the TV's own Wi-Fi settings)
-        out.add(new Item("update_check", BOOL, t.updateCheckRow()).help(t.updateCheckFileHelp()).def(true)
-            .section("network", t.sectionNetwork(null)));
-
-        // Device settings, then Home's apps (arranged on Home itself on the TV)
+        // Device settings, About, then Home's apps (arranged on Home itself on the TV)
         out.add(new Item("home_button", BOOL, t.homeButtonRow()).help(t.homeButtonFileHelp()).def(false).section("device", t.sectionDevice()));
+        // About: new versions (its other rows are information, App status and Reset)
+        out.add(new Item("update_check", BOOL, t.updateCheckRow()).help(t.updateCheckFileHelp()).def(true)
+            .section("about", t.sectionAbout()));
         Item favs = new Item("favourites", LIST, t.favouritesFile()).help(t.packagesHelp())
             .reader(x -> Apps.favourites(x)).section("home", t.homeSectionFile()).note(t.homeAppsNoteFile());
         out.add(favs);

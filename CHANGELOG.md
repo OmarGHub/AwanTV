@@ -6,6 +6,12 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.0.2]
+
+### The app
+- Check for updates now and New versions are in Settings > About, under Source and updates where a new version shows
+  (they were in Settings > Network). The settings file and the editor have New versions under About too.
+
 ## [1.0.1]
 
 ### The app

@@ -16,11 +16,11 @@ import java.net.URL;
 /**
  * Where Awan TV lives, and whether a newer version is out.
  *
- * <p>Settings > Network > New versions (on by default) lets Home ask GitHub for the latest release at most once a
+ * <p>Settings > About > New versions (on by default) lets Home ask GitHub for the latest release at most once a
  * day, on Home's minute tick (no timer or service of its own): one small request, nothing about the TV sent. A newer
  * version shows in Settings > About under Source and updates. Nothing is downloaded or installed: updating stays with
  * the installer, which carries the release. Off, nothing is asked. With no releases yet (or the repository still
- * private) GitHub answers 404 and nothing shows. Settings > Network > Check for updates now asks at once
+ * private) GitHub answers 404 and nothing shows. Settings > About > Check for updates now asks at once
  * ({@link #checkNow}), on or off.
  */
 final class Updates {
