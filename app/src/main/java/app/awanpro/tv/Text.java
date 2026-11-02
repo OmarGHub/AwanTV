@@ -693,6 +693,13 @@ final class Text {
     String qrHint() { return ar ? "امسح الرمز بكاميرا هاتفك" : "Scan a code with your phone's camera"; }
     String siteTitle() { return "AwanPro"; }
     String updateCheckRow() { return ar ? "الإصدارات الجديدة" : "New versions"; }
+    String checkNowRow() { return ar ? "ابحث عن تحديث الآن" : "Check for updates now"; }
+    String checkNowHelp() {
+        return ar ? "يسأل GitHub الآن، حتى لو كانت الإصدارات الجديدة مطفأة" : "Asks GitHub now, even with New versions off";
+    }
+    String checking() { return ar ? "جارٍ البحث…" : "Checking…"; }
+    String upToDate() { return ar ? "لديك أحدث إصدار" : "You have the latest version"; }
+    String checkFailed() { return ar ? "تعذّر الوصول إلى GitHub" : "Couldn't reach GitHub"; }
     String updateCheckHelp(boolean on) {
         return on ? (ar ? "يسأل GitHub مرة في اليوم، ويظهر الجديد في حول التطبيق"
                         : "Asks GitHub once a day; a new one shows in About")

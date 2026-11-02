@@ -6,6 +6,16 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.0.1]
+
+### The app
+- Settings > Network > Check for updates now: asks GitHub at once, even with New versions off, and says beside it
+  whether a newer version is out, this is the latest, or GitHub could not be reached.
+
+### The tools (Windows)
+- `AwanTV-release` refuses an AwanTV.apk that carries the spoken reminders: their Microsoft voice is for one's own
+  build, never a release.
+
 ## [1.0.0]
 
 The first public release.

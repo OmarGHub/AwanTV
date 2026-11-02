@@ -105,6 +105,25 @@ public class SettingsActivity extends Screen {
         int dot() { return 0; }
     }
 
+    /** Network > Check for updates now: what the last check said ("" before one), and whether one is running. */
+    private String checkNowAnswer = "";
+    private boolean checkingNow;
+
+    private void checkNow(Row r) {
+        if (checkingNow) return;
+        checkingNow = true;
+        checkNowAnswer = t.checking();
+        render(r, r.tile.isFocused());
+        Updates.checkNow(this, latest -> {
+            checkingNow = false;
+            if (isFinishing() || isDestroyed()) return;
+            checkNowAnswer = latest == null ? t.checkFailed()
+                : !latest.isEmpty() && Updates.compare(latest, versionName()) > 0 ? t.newVersion(latest) : t.upToDate();
+            // The row is redrawn only while it is still on screen (the section may have changed meanwhile).
+            if (rows.contains(r)) render(r, r.tile.isFocused());
+        });
+    }
+
     /** About shows App status's rows instead of its own (Back returns to About). */
     private boolean statusOpen;
 
@@ -839,6 +858,13 @@ public class SettingsActivity extends Screen {
                     String help() { return t.updateCheckHelp(Prefs.updateCheck(c)); }
                     boolean on() { return Prefs.updateCheck(c); }
                     void set(boolean on) { Prefs.setUpdateCheck(c, on); }
+                },
+                // The same question at once, on or off; the answer stays beside it while Settings is open.
+                new Row(VALUE) {
+                    String label() { return t.checkNowRow(); }
+                    String help() { return t.checkNowHelp(); }
+                    String value() { return checkNowAnswer; }
+                    void open() { checkNow(this); }
                 });
             case ABOUT: {
                 if (statusOpen) return statusRows();

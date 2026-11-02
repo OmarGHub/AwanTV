@@ -70,7 +70,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 التصحيح من خيارات المطوّر، وتشغّله مرة أخرى عند التحديث.
 
 **التحديث:** الطريقة نفسها بالإصدار الجديد، وتبقى الإعدادات والتلاوات المحفوظة. ويخبرك التطبيق بالإصدار الجديد في
-الإعدادات ← حول التطبيق (يُوقف من الإعدادات ← الشبكة).
+الإعدادات ← حول التطبيق (يُوقف من الإعدادات ← الشبكة)، أو ابحث بنفسك متى شئت: الإعدادات ← الشبكة ← ابحث عن تحديث الآن.
 
 **الإزالة:** الإعدادات ← تشغيل Awan TV ← **إزالة Awan TV**: يعيد شاشة الاستراحة السابقة، ويسألك إن كانت عندك تلاوات
 محفوظة: تبقى أم تُحذف، ثم يفتح حذف التطبيق. أو من الحاسب: `AwanTV-restore.cmd`. ولو حُذف التطبيق من إعدادات التلفاز مباشرة
@@ -309,7 +309,7 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
 choose another. You may switch debugging off in Developer options, and on again to update.
 
 **Updating:** the same way with the new release; the settings and saved recitations stay. The app tells you about a
-new release in Settings > About (off in Settings > Network).
+new release in Settings > About (off in Settings > Network), or ask any time: Settings > Network > Check for updates now.
 
 **Removing:** Settings > Awan TV > **Remove Awan TV** puts back the earlier screensaver, asks whether any saved
 recitations stay or go, then opens the uninstall. Or from a computer: `AwanTV-restore.cmd`. If the app is removed from

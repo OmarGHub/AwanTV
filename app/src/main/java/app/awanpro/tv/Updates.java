@@ -2,6 +2,8 @@ package app.awanpro.tv;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -18,7 +20,8 @@ import java.net.URL;
  * day, on Home's minute tick (no timer or service of its own): one small request, nothing about the TV sent. A newer
  * version shows in Settings > About under Source and updates. Nothing is downloaded or installed: updating stays with
  * the installer, which carries the release. Off, nothing is asked. With no releases yet (or the repository still
- * private) GitHub answers 404 and nothing shows.
+ * private) GitHub answers 404 and nothing shows. Settings > Network > Check for updates now asks at once
+ * ({@link #checkNow}), on or off.
  */
 final class Updates {
     private Updates() {}
@@ -68,7 +71,30 @@ final class Updates {
         }, "awan-updates").start();
     }
 
-    private static void read(Context c) throws Exception {
+    /** The answer to {@link #checkNow}: the latest version out ("1.0.1", "" when there is none), or null if unreachable. */
+    interface Checked {
+        void done(String latest);
+    }
+
+    /** Asks GitHub now, whatever the daily setting and timer say; the answer comes on the main thread. */
+    static void checkNow(Context c, Checked done) {
+        Context app = c.getApplicationContext();
+        Handler main = new Handler(Looper.getMainLooper());
+        new Thread(() -> {
+            String latest;
+            try {
+                latest = read(app);
+            } catch (Exception e) {
+                Log.i(HomeGuard.TAG, "check for updates: " + e);
+                latest = null;
+            }
+            String answer = latest;
+            main.post(() -> done.done(answer));
+        }, "awan-updates-now").start();
+    }
+
+    /** One question to GitHub; the answer kept for {@link #newer}. Returns the latest tag ("" when none). */
+    private static String read(Context c) throws Exception {
         HttpURLConnection http = (HttpURLConnection) new URL(LATEST).openConnection();
         http.setConnectTimeout(TIMEOUT_MS);
         http.setReadTimeout(TIMEOUT_MS);
@@ -90,6 +116,7 @@ final class Updates {
                 throw new java.io.IOException("HTTP " + code);
             }
             Prefs.of(c).edit().putString("upd_latest", tag).putLong("upd_at", System.currentTimeMillis()).apply();
+            return tag;
         } finally {
             http.disconnect();
         }
