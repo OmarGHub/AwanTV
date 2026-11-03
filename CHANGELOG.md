@@ -6,6 +6,12 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Tools
+- `AwanTV-release` 1.1.0 guards Update now on the TVs already out: it refuses an APK signed with another key than the
+  release key, an AwanTV.apk whose versionName or versionCode is not awanVersion's (an older build left in
+  app\release), and a version older than the one published on GitHub; it then prints the tag and the file names that
+  Update now downloads.
+
 ## [1.7.1]
 
 ### The app
