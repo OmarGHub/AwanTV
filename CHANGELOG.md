@@ -11,7 +11,10 @@ history is in its repository.
   GitHub when pressed and installs it on the TV itself (SelfUpdate, after Afnon's feat/in-app-updates): a progress bar
   (the window may be left; the download carries on, and Home shows it again), Cancel, then Android's install (on
   Android 12+ perhaps with no dialog; otherwise its own "Install?", one OK). Android refuses anything not signed with
-  Awan TV's key, cut short or older. A failure offers Try again. Nothing is downloaded unless pressed.
+  Awan TV's key, cut short or older. A failure offers Try again. Nothing is downloaded unless pressed. Seen on a
+  Google TV Streamer (Android 14): Android asks "Update this app?" even so (the app was installed over adb, so it isn't
+  its own installer), its focus on Cancel: the window says to move to Update. Back while downloading leaves the window
+  closed until Home comes back.
 - Without the install permission (installed by hand), no Update now: the window says to install with the phone
   installer or from Windows (ways 1 and 2) to get every feature.
 - What's new lists 1.7.0.

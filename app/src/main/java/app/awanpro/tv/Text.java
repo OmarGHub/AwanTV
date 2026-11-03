@@ -459,13 +459,13 @@ final class Text {
     }
     String updateLeave() { return ar ? "يمكنك ترك هذه النافذة، ويكمل التنزيل." : "You can leave this window; the download carries on."; }
     String updateThen() {
-        return ar ? "بعده يثبّت Android التحديث، وتعود الشاشة الرئيسية الجديدة خلال ثوانٍ."
-                  : "Then Android installs the update, and the new Home comes back within seconds.";
+        return ar ? "بعده يسألك Android «هل تريد تحديث هذا التطبيق؟»: انتقل إلى «تحديث» واضغط OK، وتعود الشاشة الرئيسية الجديدة خلال ثوانٍ."
+                  : "Then Android asks whether to update this app: move to Update and press OK, and the new Home comes back within seconds.";
     }
     String updateInstalling() { return ar ? "جارٍ التثبيت…" : "Installing…"; }
     String updateConfirm() {
-        return ar ? "إن سألك Android «تثبيت؟» فاختر «تثبيت». ثم تعود الشاشة الرئيسية الجديدة."
-                  : "If Android asks \u201cInstall?\u201d, choose Install. The new Home then comes back.";
+        return ar ? "إن سألك Android «هل تريد تحديث هذا التطبيق؟»، فانتقل إلى «تحديث» واضغط OK. ثم تعود الشاشة الرئيسية الجديدة."
+                  : "If Android asks whether to update this app, move to Update and press OK. The new Home then comes back.";
     }
     String updateFailed() {
         return ar ? "تعذّر التحديث. تأكد من اتصال الشاشة بالإنترنت ثم حاول مرة أخرى، أو امسح الرمز وحدّث من صفحة التحميل."

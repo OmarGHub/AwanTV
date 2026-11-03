@@ -225,6 +225,7 @@ public class MainActivity extends Screen {
         lastKey = System.currentTimeMillis();
         ownSaverAt = -1;
         SelfUpdate.listen(this::selfUpdateChanged);
+        updateLeft = false;
         if (!askedCity && !Prefs.citySet(this)) {
             askedCity = true;
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
@@ -303,10 +304,13 @@ public class MainActivity extends Screen {
         layerHints();
     }
 
+    /** Closed while the download went on: not shown again until Home comes back (onResume). */
+    private boolean updateLeft;
+
     /** SelfUpdate moved on: the window again in its new state, or only its line and bar while downloading. */
     private void selfUpdateChanged() {
         if (update == null) {
-            if (shown && SelfUpdate.busy()) showUpdate();
+            if (shown && SelfUpdate.busy() && !updateLeft) showUpdate();
             return;
         }
         if (UpdateNotice.mode(update.version) == update.mode) {
@@ -329,6 +333,7 @@ public class MainActivity extends Screen {
     /** OK or Back: again in a week; mute: not for this version. */
     private void closeUpdate(boolean mute) {
         if (update == null) return;
+        updateLeft = SelfUpdate.busy();
         SelfUpdate.reset();
         UpdateNotice.closed(this, update.version, mute);
         dropUpdate();
