@@ -6,6 +6,21 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Update now: the new version's window (over Home, and Settings > About's) downloads the release's AwanTV.apk from
+  GitHub when pressed and installs it on the TV itself (SelfUpdate, after Afnon's feat/in-app-updates): a progress bar
+  (the window may be left; the download carries on, and Home shows it again), Cancel, then Android's install (on
+  Android 12+ perhaps with no dialog; otherwise its own "Install?", one OK). Android refuses anything not signed with
+  Awan TV's key, cut short or older. A failure offers Try again. Nothing is downloaded unless pressed.
+- Without the install permission (installed by hand), no Update now: the window says to install with the phone
+  installer or from Windows (ways 1 and 2) to get every feature.
+- What's new lists 1.7.0.
+- Test builds only: `TEST_UPDATE --es download 1.6.0` makes Update now download that real release instead.
+
+### The installers
+- The phone installer and AwanTV-install 1.1.0 grant the install permission (`REQUEST_INSTALL_PACKAGES` app op), a
+  new step "Updates with one press on the TV".
+
 ## [1.6.0]
 
 ### The app

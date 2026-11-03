@@ -1,4 +1,4 @@
-# AwanTV-install.ps1 - Version 1.0.1
+# AwanTV-install.ps1 - Version 1.1.0
 # Installs Awan TV on an Android TV / Google TV over adb and turns it on:
 #   1. the app (the APK you built in Android Studio)
 #   2. its permissions (radio level bars, sleep timer while the radio plays, Wi-Fi name)
@@ -18,7 +18,7 @@
 param([string]$Apk = "", [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.1"
+$ScriptVersion = "1.1.0"
 $Pkg = "app.awanpro.tv"
 $Dream = "$Pkg/app.awanpro.tv.AwanDream"
 $Service = "$Pkg/app.awanpro.tv.RemoteKeys"
@@ -240,6 +240,10 @@ foreach ($p in $perms) {
 # TCL keeps a sideloaded app's services from starting (at boot, and bound by the system) without its own two app ops
 # (as Afnon's install.sh grants them); on other TVs they are refused harmlessly. Granted before the service is on.
 foreach ($op in @("APP_AUTO_START", "APP_ASSOC_START", "AUTO_START")) { Shell "cmd appops set $Pkg $op allow 2>/dev/null" | Out-Null }
+# Update now in Awan TV (1.7.0): Android lets it install its own update only with this app op.
+Shell "cmd appops set $Pkg REQUEST_INSTALL_PACKAGES allow" | Out-Null
+$canUpdate = Shell "cmd appops get $Pkg REQUEST_INSTALL_PACKAGES"
+if ($canUpdate -match "allow") { Write-Host "      Updates from the TV itself: allowed" } else { Write-Host "      Updates from the TV itself: not allowed ($canUpdate)" }
 
 # --- screensaver
 Write-Host "[5/7] Screensaver: Awan TV"

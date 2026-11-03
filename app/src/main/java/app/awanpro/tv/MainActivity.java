@@ -224,6 +224,7 @@ public class MainActivity extends Screen {
         }
         lastKey = System.currentTimeMillis();
         ownSaverAt = -1;
+        SelfUpdate.listen(this::selfUpdateChanged);
         if (!askedCity && !Prefs.citySet(this)) {
             askedCity = true;
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
@@ -246,6 +247,7 @@ public class MainActivity extends Screen {
         if (Weather.listener == onWeather) Weather.listener = null;
         Reminders.home = null;
         Radio.unlisten(onRadio);
+        SelfUpdate.listen(null);
         super.onPause();
     }
 
@@ -280,16 +282,39 @@ public class MainActivity extends Screen {
     /** A newer version out, as a layer over Home (UpdateNotice); null when not shown. */
     private UpdateNotice.Card update;
 
-    /** A newer version, when due (UpdateNotice.due): never with What's new, a reminder or the radio card. */
+    /**
+     * A newer version, when due (UpdateNotice.due), or Update now's download or install going on (SelfUpdate): never
+     * with What's new, a reminder or the radio card.
+     */
     private void showUpdate() {
         if (update != null || news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
-        String v = UpdateNotice.due(this);
+        String v = SelfUpdate.busy() || SelfUpdate.state() == SelfUpdate.FAILED ? SelfUpdate.version() : UpdateNotice.due(this);
         if (v == null) return;
-        update = UpdateNotice.card(this, v, () -> closeUpdate(false), () -> closeUpdate(true));
+        String version = v;
+        update = UpdateNotice.card(this, version, new UpdateNotice.Actions() {
+            public void update() { SelfUpdate.start(MainActivity.this, version); }
+            public void later() { closeUpdate(false); }
+            public void mute() { closeUpdate(true); }
+            public void cancel() { SelfUpdate.cancel(); }
+        });
         root.addView(update.layer, new FrameLayout.LayoutParams(-1, -1));
         for (View n : nodes) if (n != null) n.setFocusable(false);
         root.post(update.ok::requestFocus);
         layerHints();
+    }
+
+    /** SelfUpdate moved on: the window again in its new state, or only its line and bar while downloading. */
+    private void selfUpdateChanged() {
+        if (update == null) {
+            if (shown && SelfUpdate.busy()) showUpdate();
+            return;
+        }
+        if (UpdateNotice.mode(update.version) == update.mode) {
+            UpdateNotice.progress(update, t);
+            return;
+        }
+        dropUpdate();
+        showUpdate();
     }
 
     /** A layer over Home (What's new, a newer version): its own key hints, over the dimmed screen, not Home's. */
@@ -304,6 +329,7 @@ public class MainActivity extends Screen {
     /** OK or Back: again in a week; mute: not for this version. */
     private void closeUpdate(boolean mute) {
         if (update == null) return;
+        SelfUpdate.reset();
         UpdateNotice.closed(this, update.version, mute);
         dropUpdate();
         focusStart();
@@ -1443,7 +1469,7 @@ public class MainActivity extends Screen {
         int k = e.getKeyCode();
         lastKey = System.currentTimeMillis();
         if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
-        if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false))) return true;
+        if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false), t.ar)) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
         if (k == KeyEvent.KEYCODE_TV_INPUT) {
             Intent source = FirmwareKeys.sourceMenu(this);

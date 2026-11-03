@@ -378,6 +378,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.7.0":
+                return ar ? new String[][] {
+                    {"التحديث بضغطة", "حين يصدر إصدار أحدث، اضغط «حدّث الآن» في نافذته، فينزّله التطبيق ويثبّته على الشاشة نفسها، دون جوال ولا حاسب."}}
+                  : new String[][] {
+                    {"Update with one press", "When a newer version is out, press Update now in its window: the app downloads it and installs it on the TV itself, with no phone or computer."}};
             case "1.5.0":
                 return ar ? new String[][] {
                     {"تنبيه بالإصدار الجديد", "حين يصدر إصدار أحدث تخبرك الرئيسية به برمز تمسحه بالجوال، وتبقى نقطة ذهبية على زر الإعدادات حتى تحدّث."}}
@@ -436,6 +441,36 @@ final class Text {
         return ar ? "نذكّرك كل أسبوع حتى تحدّث، وتجده في الإعدادات ← حول التطبيق." : "We'll remind you every week until you update; it is also in Settings › About.";
     }
     String updateMute() { return ar ? "لا تذكّرني بهذا الإصدار" : "Don't remind me of this version"; }
+    /** Update now (SelfUpdate), over Home and in Settings > About's window. */
+    String updateNow() { return ar ? "حدّث الآن" : "Update now"; }
+    String updateLater() { return ar ? "لاحقًا" : "Later"; }
+    String updateRetry() { return ar ? "حاول مرة أخرى" : "Try again"; }
+    String updateHowSelf() {
+        return ar ? "«حدّث الآن» ينزّل الإصدار ويثبّته على هذه الشاشة، والإعدادات والتلاوات المحفوظة تبقى. أو امسح الرمز بالجوال لتفتح صفحة التحميل."
+                  : "Update now downloads the version and installs it on this TV; the settings and saved recitations stay. Or scan the code with a phone to open the download page.";
+    }
+    /** Without the install appop (installed by hand): what Update now needs. */
+    String updateManual() {
+        return ar ? "للاستفادة من كل ميزات التطبيق، ومنها التحديث بضغطة من الشاشة، ثبّته بالمثبّت على الجوال أو من حاسب Windows، وهما الطريقتان 1 و2 في صفحة التحميل."
+                  : "To get every feature of the app, updating with one press on the TV among them, install it with the phone installer or from a Windows computer, ways 1 and 2 on the download page.";
+    }
+    String updateDownloading(String version, int percent) {
+        return d((ar ? "جارٍ تنزيل الإصدار " : "Downloading version ") + version + (ar ? "… " : "… ") + percent + (ar ? "٪" : "%"));
+    }
+    String updateLeave() { return ar ? "يمكنك ترك هذه النافذة، ويكمل التنزيل." : "You can leave this window; the download carries on."; }
+    String updateThen() {
+        return ar ? "بعده يثبّت Android التحديث، وتعود الشاشة الرئيسية الجديدة خلال ثوانٍ."
+                  : "Then Android installs the update, and the new Home comes back within seconds.";
+    }
+    String updateInstalling() { return ar ? "جارٍ التثبيت…" : "Installing…"; }
+    String updateConfirm() {
+        return ar ? "إن سألك Android «تثبيت؟» فاختر «تثبيت». ثم تعود الشاشة الرئيسية الجديدة."
+                  : "If Android asks \u201cInstall?\u201d, choose Install. The new Home then comes back.";
+    }
+    String updateFailed() {
+        return ar ? "تعذّر التحديث. تأكد من اتصال الشاشة بالإنترنت ثم حاول مرة أخرى، أو امسح الرمز وحدّث من صفحة التحميل."
+                  : "The update didn't go through. Check the TV's internet connection and try again, or scan the code and update from the download page.";
+    }
     String updateOpen() { return ar ? "فتح صفحة الإصدار" : "Open the release page"; }
     String hintBackClose() { return ar ? "رجوع  إغلاق" : "Back  Close"; }
     /** Prayer times > Adjust the times and the date (Prefs.adjustments, Prefs.hijriOffset). */

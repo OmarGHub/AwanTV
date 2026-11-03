@@ -66,18 +66,44 @@ final class UpdateNotice {
         ed.apply();
     }
 
-    /** The layer's parts the screen needs: the whole layer, and the button focus starts on. */
-    static final class Card {
-        FrameLayout layer;
-        FocusTile ok, mute;
-        String version;
+    /** What the window shows: the version (Update now where allowed), a download, the install, or a failure. */
+    static final int OFFER = 0, DOWNLOAD = 1, INSTALL = 2, FAILED = 3;
+
+    static int mode(String version) {
+        if (version == null || !version.equals(SelfUpdate.version())) return OFFER;
+        switch (SelfUpdate.state()) {
+            case SelfUpdate.DOWNLOADING: return DOWNLOAD;
+            case SelfUpdate.INSTALLING: return INSTALL;
+            case SelfUpdate.FAILED: return FAILED;
+            default: return OFFER;
+        }
     }
 
-    /** ok: OK (again in a week); mute: Don't remind me of this version. */
-    static Card card(Screen s, String version, Runnable ok, Runnable mute) {
+    /** The window's buttons. later: OK / Later (again in a week); mute: not for this version. */
+    interface Actions {
+        void update();
+        void later();
+        void mute();
+        void cancel();
+    }
+
+    /** The layer's parts the screen needs: the whole layer, its buttons in order, and the download's line and bar. */
+    static final class Card {
+        FrameLayout layer;
+        FocusTile ok;
+        java.util.List<FocusTile> buttons = new java.util.ArrayList<>();
+        String version;
+        int mode;
+        TextView progress;
+        LinearLayout bar;
+        View fill, rest;
+    }
+
+    static Card card(Screen s, String version, Actions a) {
         Text t = s.t;
         Card out = new Card();
         out.version = version;
+        out.mode = mode(version);
         out.layer = new FrameLayout(s);
         out.layer.setBackgroundColor(Tokens.SCRIM_MENU);
         out.layer.setClickable(true);
@@ -105,26 +131,65 @@ final class UpdateNotice {
         words.addView(title);
         s.lineHeight(title, 1.2f);
         words.addView(line(s, t.updateHave(installed(s)), Tokens.PLASTER_100, 24, 6, dir));
-        words.addView(line(s, t.updateWhy(), Tokens.PLASTER_100, 24, 10, dir));
-        words.addView(line(s, t.updateHow(), Tokens.MIST_400, 24, 10, dir));
-        words.addView(line(s, t.updateAgain(), Tokens.MIST_400, 20, 12, dir));
 
+        boolean allowed = SelfUpdate.allowed(s);
         float r = FocusTile.REACH;
         LinearLayout buttons = new LinearLayout(s);
         buttons.setClipChildren(false);
         buttons.setClipToPadding(false);
-        FocusTile first = button(s, t.newsOk(), ok);
-        FocusTile second = button(s, t.updateMute(), mute);
-        buttons.addView(first, new LinearLayout.LayoutParams(Ui.ipx(240 + 2 * r), Ui.ipx(68 + 2 * r)));
-        LinearLayout.LayoutParams b = new LinearLayout.LayoutParams(-2, Ui.ipx(68 + 2 * r));
-        b.setMarginStart(Ui.ipx(24 - 2 * r));
-        buttons.addView(second, b);
+        switch (out.mode) {
+            case DOWNLOAD:
+            case INSTALL: {
+                boolean down = out.mode == DOWNLOAD;
+                out.progress = line(s, down ? t.updateDownloading(version, SelfUpdate.percent()) : t.updateInstalling(),
+                    Tokens.PLASTER_100, 26, 14, dir);
+                words.addView(out.progress);
+                out.bar = new LinearLayout(s);
+                out.bar.setBackground(round(Tokens.LAPIS_700, 7));
+                out.bar.setClipToOutline(true);
+                out.fill = new View(s);
+                out.fill.setBackground(round(Tokens.GOLD_400, 7));
+                out.rest = new View(s);
+                out.bar.addView(out.fill, new LinearLayout.LayoutParams(0, -1, 1));
+                out.bar.addView(out.rest, new LinearLayout.LayoutParams(0, -1, 99));
+                LinearLayout.LayoutParams blp0 = new LinearLayout.LayoutParams(-1, Ui.ipx(14));
+                blp0.topMargin = Ui.ipx(20);
+                words.addView(out.bar, blp0);
+                progress(out, t);
+                if (down) {
+                    words.addView(line(s, t.updateLeave(), Tokens.MIST_400, 20, 16, dir));
+                    words.addView(line(s, t.updateThen(), Tokens.MIST_400, 20, 6, dir));
+                    out.buttons.add(button(s, t.cancel(), a::cancel));
+                } else {
+                    words.addView(line(s, t.updateConfirm(), Tokens.MIST_400, 20, 16, dir));
+                    out.buttons.add(button(s, t.close(), a::later));
+                }
+                break;
+            }
+            case FAILED:
+                words.addView(line(s, t.updateFailed(), Tokens.PLASTER_100, 24, 10, dir));
+                out.buttons.add(button(s, t.updateRetry(), a::update));
+                out.buttons.add(button(s, t.updateLater(), a::later));
+                break;
+            default:
+                words.addView(line(s, t.updateWhy(), Tokens.PLASTER_100, 24, 10, dir));
+                words.addView(line(s, allowed ? t.updateHowSelf() : t.updateHow(), Tokens.MIST_400, 24, 10, dir));
+                if (!allowed) words.addView(line(s, t.updateManual(), Tokens.GOLD_400, 22, 10, dir));
+                words.addView(line(s, t.updateAgain(), Tokens.MIST_400, 20, 12, dir));
+                if (allowed) out.buttons.add(button(s, t.updateNow(), a::update));
+                out.buttons.add(button(s, allowed ? t.updateLater() : t.newsOk(), a::later));
+                out.buttons.add(button(s, t.updateMute(), a::mute));
+        }
+        for (int i = 0; i < out.buttons.size(); i++) {
+            LinearLayout.LayoutParams b = new LinearLayout.LayoutParams(-2, Ui.ipx(68 + 2 * r));
+            if (i > 0) b.setMarginStart(Ui.ipx(24 - 2 * r));
+            buttons.addView(out.buttons.get(i), b);
+        }
         LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, -2);
         blp.topMargin = Ui.ipx(28 - r);
         blp.setMarginStart(-Ui.ipx(r));
         words.addView(buttons, blp);
-        out.ok = first;
-        out.mute = second;
+        out.ok = out.buttons.get(0);
 
         across.addView(words, new LinearLayout.LayoutParams(0, -2, 1));
         LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(-2, -2);
@@ -136,15 +201,33 @@ final class UpdateNotice {
         return out;
     }
 
-    /** The layer's keys: Back is OK; Left and Right move between its two buttons; Up and Down go nowhere. */
-    static boolean key(Card c, KeyEvent e, Runnable ok) {
+    /** The download's line and bar, as it moves (no rebuild, so focus stays). */
+    static void progress(Card c, Text t) {
+        if (c.progress == null) return;
+        int p = Math.max(0, Math.min(100, SelfUpdate.percent()));
+        if (c.mode == DOWNLOAD) c.progress.setText(t.updateDownloading(c.version, p));
+        int done = c.mode == INSTALL ? 100 : Math.max(1, p);
+        ((LinearLayout.LayoutParams) c.fill.getLayoutParams()).weight = done;
+        ((LinearLayout.LayoutParams) c.rest.getLayoutParams()).weight = Math.max(0, 100 - done);
+        c.bar.requestLayout();
+    }
+
+    /** The layer's keys: Back is Later (the download goes on); Left and Right move along its buttons. */
+    static boolean key(Card c, KeyEvent e, Runnable later, boolean rtl) {
         int k = e.getKeyCode();
         if (k == KeyEvent.KEYCODE_BACK) {
-            if (e.getAction() == KeyEvent.ACTION_UP) ok.run();
+            if (e.getAction() == KeyEvent.ACTION_UP) later.run();
             return true;
         }
         if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            if (e.getAction() == KeyEvent.ACTION_DOWN) (c.ok.isFocused() ? c.mute : c.ok).requestFocus();
+            if (e.getAction() == KeyEvent.ACTION_DOWN) {
+                int at = 0;
+                for (int i = 0; i < c.buttons.size(); i++) if (c.buttons.get(i).isFocused()) at = i;
+                // The buttons run from the start edge: the right one first in Arabic.
+                boolean forward = (k == KeyEvent.KEYCODE_DPAD_LEFT) == rtl;
+                int to = Math.max(0, Math.min(c.buttons.size() - 1, at + (forward ? 1 : -1)));
+                c.buttons.get(to).requestFocus();
+            }
             return true;
         }
         return k == KeyEvent.KEYCODE_DPAD_UP || k == KeyEvent.KEYCODE_DPAD_DOWN;

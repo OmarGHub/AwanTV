@@ -14,6 +14,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Settings > Awan TV > Remove opens Android's own uninstall, after putting the old screensaver back. -->
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <!-- Update now (SelfUpdate): installs the release it downloaded when asked to. The install appop is granted at
+         setup (phone installer, AwanTV-install); on Android 12+ the second lets the update go in without a dialog. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
     <!-- Saved recitations download quietly through Android's download manager (Library). -->
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -173,6 +177,11 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
+        <!-- Android's answer to Update now's install (SelfUpdate.Result). -->
+        <receiver
+            android:name=".SelfUpdate$Result"
+            android:exported="false" />
 
         <!-- A remote button set to the radio, through TCL's remapping (TclKeys, Buttons): TCL's window manager,
              in the system, sends it; not exported, so no other app can. -->

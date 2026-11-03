@@ -38,7 +38,8 @@ public class SettingsTransfer extends BroadcastReceiver {
     /**
      * Test builds only (a version with a letter, 1.5.0a): pretend GitHub's latest is the extra "version", and forget
      * what the notice was told, to see UpdateNotice without a newer release out; or, with the extra int "days_ago",
-     * move when the notice was last closed back that many days (the weekly reminder). A release answers Unknown action.
+     * move when the notice was last closed back that many days (the weekly reminder); or, with the extra "download"
+     * (a version, "1.6.0"), make Update now download that real release instead. A release answers Unknown action.
      */
     static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
     static final String FILE = "awantv-settings.jsonc";
@@ -94,7 +95,13 @@ public class SettingsTransfer extends BroadcastReceiver {
                 result = "Shown on the TV";
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
                 int days = intent.getIntExtra("days_ago", -1);
-                if (days >= 0) {
+                String download = intent.getStringExtra("download");
+                if (download != null) {
+                    // Update now downloads this real release instead (an older one: Android then refuses it).
+                    SelfUpdate.testDownload = download.isEmpty() ? null : download;
+                    result = download.isEmpty() ? "Update now downloads the version offered again (test build)"
+                        : "Update now downloads " + download + " instead (test build, until the app restarts)";
+                } else if (days >= 0) {
                     // The notice last closed that many days ago: a week's wait seen at once.
                     Prefs.of(c).edit().putLong("upd_shown_at", System.currentTimeMillis() - days * 24 * 3600_000L).apply();
                     result = "Notice last closed " + days + " day(s) ago (test build)";

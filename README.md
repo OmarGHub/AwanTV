@@ -66,12 +66,16 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. شاشة الاستراحة: يفتحها Awan TV بنفسه بعد دقائق دون ضغط زر وأنت على الرئيسية. أما جعلها شاشة استراحة التلفاز نفسه
    في كل التطبيقات فيحتاج الطريقة 1 أو 2 على Google TV.
 
+هذه الطريقة لا تعطي التطبيق كل ميزاته: التحديث بضغطة من الشاشة، وشاشة الاستراحة في كل التطبيقات، وغيرهما، تحتاج
+الطريقة 1 أو 2.
+
 **بعد التثبيت:** اضغط Home في الريموت. في أول تشغيل يقترح التطبيق موقع الشاشة، فتؤكده أو تختار موقعًا آخر. ولك أن تطفئ
 التصحيح من خيارات المطوّر، وتشغّله مرة أخرى عند التحديث.
 
-**التحديث:** الطريقة نفسها بالإصدار الجديد، وتبقى الإعدادات والتلاوات المحفوظة. ويخبرك التطبيق بالإصدار الجديد في
-الإعدادات ← حول التطبيق (ويُوقف من هناك)، أو ابحث بنفسك متى شئت: الإعدادات ← حول التطبيق ← ابحث عن تحديث الآن. وحين
-يجد إصدارًا أحدث يعرض رمز QR لصفحته تمسحه بكاميرا الجوال. وبعد التحديث تظهر نافذة «ما الجديد» مرة واحدة.
+**التحديث:** حين يصدر إصدار أحدث يخبرك التطبيق في الرئيسية، فتضغط «حدّث الآن» فينزّله ويثبّته على الشاشة نفسها (من
+الإصدار 1.7.0، لمن ثبّته بالطريقة 1 أو 2). أو حدّث بالطريقة التي ثبّت بها، بالإصدار الجديد. وتبقى الإعدادات والتلاوات
+المحفوظة في الحالين. وتبحث بنفسك متى شئت: الإعدادات ← حول التطبيق ← ابحث عن تحديث الآن. وبعد التحديث تظهر نافذة «ما
+الجديد» مرة واحدة.
 
 **الإزالة:** الإعدادات ← تشغيل Awan TV ← **إزالة Awan TV**: يعيد شاشة الاستراحة السابقة، ويسألك إن كانت عندك تلاوات
 محفوظة: تبقى أم تُحذف، ثم يفتح حذف التطبيق. أو من الحاسب: `AwanTV-restore.cmd`. ولو حُذف التطبيق من إعدادات التلفاز مباشرة
@@ -220,7 +224,7 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-restore.ps1 -Uninstall
    المكبّر والشاشة معًا، فيطلب المكبّر وصلة الصوت (ARC) والشاشة لم تجهز بعد. لتجنّبه: شغّل الشاشة أولًا بريموتها، ثم أيقظ
    الجهاز فيشغّل المكبّر بعد أن تجهز الشاشة (الشاشة ثم المكبّر، عكس توصية TCL العامة). وإن صمت: غيّر مدخل الشاشة إلى
    مدخل آخر ثم أعده (أو أطفئ المكبّر وشغّله)، ولا يستطيع تطبيق فعل ذلك عنك.
-8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد فيخبرك به (لا يُرسل شيء عن الشاشة، ولا يُنزَّل شيء). إيقاف الطقس (الإعدادات ← العرض واللغة) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. والمثبّت على الجوال يسأل GitHub مرة عند فتحه هل صدر مثبّت أحدث، ولا يرسل شيئًا. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
+8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد فيخبرك به (لا يُرسل شيء عن الشاشة)، ولا يُنزّل الإصدار إلا حين تضغط «حدّث الآن». إيقاف الطقس (الإعدادات ← العرض واللغة) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. والمثبّت على الجوال يسأل GitHub مرة عند فتحه هل صدر مثبّت أحدث، ولا يرسل شيئًا. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
 
 ## الشكر والترخيص
 
@@ -307,12 +311,16 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
 3. The screensaver: Awan TV opens its own after idle minutes on Home. Making it the TV's screensaver in every app needs
    way 1 or 2 on Google TV.
 
+This way doesn't give the app every feature: updating with one press on the TV, the screensaver in every app and more
+need way 1 or 2.
+
 **After installing:** press Home on the remote. On the first start the app suggests the TV's location; confirm it or
 choose another. You may switch debugging off in Developer options, and on again to update.
 
-**Updating:** the same way with the new release; the settings and saved recitations stay. The app tells you about a
-new release in Settings > About (and is turned off there), or ask any time: Settings > About > Check for updates now.
-A newer release shows a QR code for its page, to scan with a phone's camera. After an update, What's new shows once.
+**Updating:** when a newer release is out, the app tells you on Home; press Update now and it downloads and installs it
+on the TV itself (from 1.7.0, when installed way 1 or 2). Or update the way you installed, with the new release. The
+settings and saved recitations stay either way. Ask any time: Settings > About > Check for updates now. After an
+update, What's new shows once.
 
 **Removing:** Settings > Awan TV > **Remove Awan TV** puts back the earlier screensaver, asks whether any saved
 recitations stay or go, then opens the uninstall. Or from a computer: `AwanTV-restore.cmd`. If the app is removed from
@@ -456,7 +464,7 @@ the newest and saves every copy in `state\settings` for `-Import -File`.
 8. Privacy: the app connects only to the radio station you play and, for the weather, to Open-Meteo (the chosen
    place's coordinates, every 30 minutes while Home or the screensaver is on screen), to mp3quran.net when you
    use Saved recitations or open Settings > Radio, and to GitHub once a day to see whether a new release is out, to tell you of it
-   (nothing about the TV is sent, nothing is downloaded). Turning the weather off (Settings > Display & language) stops its
+   (nothing about the TV is sent); the release is downloaded only when you press Update now. Turning the weather off (Settings > Display & language) stops its
    connection. The TV's location is read
    on the first start only, to suggest yours, and is sent nowhere. The phone installer asks GitHub once when it opens
    whether a newer installer is out, and sends nothing. The record-audio permission (from Afnon) is for the

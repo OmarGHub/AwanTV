@@ -117,6 +117,10 @@ final class Setup {
             "for o in APP_AUTO_START APP_ASSOC_START AUTO_START; do cmd appops set " + PACKAGE
                 + " $o allow 2>/dev/null; done; true",
             "o=$(cmd appops get " + PACKAGE + " APP_AUTO_START 2>&1); case \"$o\" in *allow*) true ;; *) false ;; esac"),
+        // Update now in Awan TV (1.7.0): Android lets it install its own update only with this appop.
+        new Step(false, "Updates with one press on the TV", "التحديث بضغطة من الشاشة",
+            "cmd appops set " + PACKAGE + " REQUEST_INSTALL_PACKAGES allow",
+            "cmd appops get " + PACKAGE + " REQUEST_INSTALL_PACKAGES | grep -q allow"),
         new Step(false, "Awan TV is the screensaver", "Awan TV شاشة الاستراحة",
             "settings put secure screensaver_components " + DREAM + " && settings put secure screensaver_enabled 1",
             "settings get secure screensaver_components | grep -q '" + DREAM + "'"),

@@ -624,7 +624,8 @@ public class SettingsActivity extends Screen {
         why.setLineSpacing(0, 1.3f);
         ((LinearLayout.LayoutParams) why.getLayoutParams()).topMargin = Ui.ipx(10);
         words.addView(why);
-        TextView how = resetLine(t.updateHow(), Tokens.MIST_400, 24, null);
+        boolean self = SelfUpdate.allowed(this);
+        TextView how = resetLine(self ? t.updateHowSelf() : t.updateHow(), Tokens.MIST_400, 24, null);
         how.setLineSpacing(0, 1.3f);
         ((LinearLayout.LayoutParams) how.getLayoutParams()).topMargin = Ui.ipx(10);
         words.addView(how);
@@ -632,12 +633,24 @@ public class SettingsActivity extends Screen {
         where.setTextDirection(View.TEXT_DIRECTION_LTR);
         where.setGravity(Gravity.START);
         words.addView(where);
-        boolean browse = canBrowse(Updates.RELEASE);
+        if (!self) {
+            // Installed by hand (no install appop): how to get Update now, instead of a button that can't work.
+            TextView manual = resetLine(t.updateManual(), Tokens.GOLD_400, 22, null);
+            manual.setLineSpacing(0, 1.3f);
+            ((LinearLayout.LayoutParams) manual.getLayoutParams()).topMargin = Ui.ipx(10);
+            words.addView(manual);
+        }
+        boolean browse = !self && canBrowse(Updates.RELEASE);
         LinearLayout buttons = new LinearLayout(this);
         float r = FocusTile.REACH;
-        askFirst = resetButton(browse ? t.updateOpen() : t.close());
-        askSecond = browse ? resetButton(t.close()) : null;
-        askOnFirst = browse ? () -> startSafely(link(Updates.RELEASE)) : null;
+        askFirst = resetButton(self ? t.updateNow() : browse ? t.updateOpen() : t.close());
+        askSecond = self || browse ? resetButton(t.close()) : null;
+        // Update now: the download starts, and Home shows it (its window follows SelfUpdate).
+        askOnFirst = self ? () -> {
+            SelfUpdate.start(this, newer);
+            startSafely(new Intent(this, MainActivity.class));
+            finish();
+        } : browse ? () -> startSafely(link(Updates.RELEASE)) : null;
         LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
         buttons.addView(askFirst, a);
         if (askSecond != null) {
