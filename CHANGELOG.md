@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.3.0]
+
 ### The app
 - Calculation method «وزارة الأوقاف والشؤون الدينية، سلطنة عُمان» (Afnon 0.7): Fajr and Isha at 18°, the standard Asr,
   five minutes on Dhuhr, Asr and Maghrib, fitted by Afnon to the ministry's timetable. Omani cities and places take
