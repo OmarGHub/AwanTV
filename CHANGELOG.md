@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.5.0]
+
 ### The app
 - A newer version is told over Home, as What's new is (after it, never with it, a reminder or the radio card; never
   over the screensaver or the call, which run with no one at the remote): the version, this TV's, why to update, the
