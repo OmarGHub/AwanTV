@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.7.0]
+
 ### The app
 - Update now: the new version's window (over Home, and Settings > About's) downloads the release's AwanTV.apk from
   GitHub when pressed and installs it on the TV itself (SelfUpdate, after Afnon's feat/in-app-updates): a progress bar
