@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.4.0]
+
 ### The app
 - Home's radio card: Station, between Play and Screen off, lists the stations, the recitations and the saved
   recordings (as Settings > Radio does) over Home; the choice plays at once.
