@@ -67,13 +67,14 @@ final class UpdateNotice {
     }
 
     /** What the window shows: the version (Update now where allowed), a download, the install, or a failure. */
-    static final int OFFER = 0, DOWNLOAD = 1, INSTALL = 2, FAILED = 3;
+    static final int OFFER = 0, DOWNLOAD = 1, INSTALL = 2, FAILED = 3, ASK = 4;
 
     static int mode(String version) {
         if (version == null || !version.equals(SelfUpdate.version())) return OFFER;
         switch (SelfUpdate.state()) {
             case SelfUpdate.DOWNLOADING: return DOWNLOAD;
-            case SelfUpdate.INSTALLING: return INSTALL;
+            // Android's question waiting: its own mode, so the window is rebuilt with Continue installing.
+            case SelfUpdate.INSTALLING: return SelfUpdate.confirmWaiting() ? ASK : INSTALL;
             case SelfUpdate.FAILED: return FAILED;
             default: return OFFER;
         }
@@ -85,6 +86,7 @@ final class UpdateNotice {
         void later();
         void mute();
         void cancel();
+        void confirm();
     }
 
     /** The layer's parts the screen needs: the whole layer, its buttons in order, and the download's line and bar. */
@@ -139,7 +141,8 @@ final class UpdateNotice {
         buttons.setClipToPadding(false);
         switch (out.mode) {
             case DOWNLOAD:
-            case INSTALL: {
+            case INSTALL:
+            case ASK: {
                 boolean down = out.mode == DOWNLOAD;
                 out.progress = line(s, down ? t.updateDownloading(version, SelfUpdate.percent()) : t.updateInstalling(),
                     Tokens.PLASTER_100, 26, 14, dir);
@@ -162,6 +165,8 @@ final class UpdateNotice {
                     out.buttons.add(button(s, t.cancel(), a::cancel));
                 } else {
                     words.addView(line(s, t.updateConfirm(), Tokens.MIST_400, 20, 16, dir));
+                    // Android's question not on screen (blocked while the viewer was in another app): here again.
+                    if (SelfUpdate.confirmWaiting()) out.buttons.add(button(s, t.updateContinue(), a::confirm));
                     out.buttons.add(button(s, t.close(), a::later));
                 }
                 break;
@@ -206,7 +211,7 @@ final class UpdateNotice {
         if (c.progress == null) return;
         int p = Math.max(0, Math.min(100, SelfUpdate.percent()));
         if (c.mode == DOWNLOAD) c.progress.setText(t.updateDownloading(c.version, p));
-        int done = c.mode == INSTALL ? 100 : Math.max(1, p);
+        int done = c.mode == DOWNLOAD ? Math.max(1, p) : 100;
         ((LinearLayout.LayoutParams) c.fill.getLayoutParams()).weight = done;
         ((LinearLayout.LayoutParams) c.rest.getLayoutParams()).weight = Math.max(0, 100 - done);
         c.bar.requestLayout();

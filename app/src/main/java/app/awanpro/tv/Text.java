@@ -463,6 +463,7 @@ final class Text {
                   : "Then Android asks whether to update this app: move to Update and press OK, and the new Home comes back within seconds.";
     }
     String updateInstalling() { return ar ? "جارٍ التثبيت…" : "Installing…"; }
+    String updateContinue() { return ar ? "متابعة التثبيت" : "Continue installing"; }
     String updateConfirm() {
         return ar ? "إن سألك Android «هل تريد تحديث هذا التطبيق؟»، فانتقل إلى «تحديث» واضغط OK. ثم تعود الشاشة الرئيسية الجديدة."
                   : "If Android asks whether to update this app, move to Update and press OK. The new Home then comes back.";

@@ -41,6 +41,26 @@ final class SelfUpdate {
     private static volatile boolean cancelled;
     private static String version;
     private static Runnable listener;
+    /**
+     * Android's "Update this app?" for the session waiting on it. Started at once from {@link Result}; but Android 14
+     * blocks an activity start while no window of the app is visible (the viewer went into another app meanwhile),
+     * so the window offers it again (Continue the installation) when Home comes back.
+     */
+    private static volatile Intent confirm;
+
+    static boolean confirmWaiting() { return confirm != null && state == INSTALLING; }
+
+    /** Continue the installation: Android's question again. */
+    static void confirm(Context c) {
+        Intent i = confirm;
+        if (i == null) return;
+        try {
+            c.startActivity(new Intent(i).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (RuntimeException e) {
+            Log.i(TAG, "confirm: " + e);
+        }
+    }
+
     /** Test builds only (SettingsTransfer.TEST_UPDATE): a real release's version downloaded instead, e.g. an older one. */
     static volatile String testDownload;
 
@@ -75,6 +95,7 @@ final class SelfUpdate {
         Context app = c.getApplicationContext();
         if (!allowed(app)) return;
         version = v;
+        confirm = null;
         cancelled = false;
         percent = 0;
         state = DOWNLOADING;
@@ -169,26 +190,30 @@ final class SelfUpdate {
             switch (status) {
                 case PackageInstaller.STATUS_PENDING_USER_ACTION: {
                     // Android's own "Install?": one OK.
-                    Intent confirm = i.getParcelableExtra(Intent.EXTRA_INTENT);
-                    if (confirm == null) break;
-                    confirm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent ask = i.getParcelableExtra(Intent.EXTRA_INTENT);
+                    if (ask == null) break;
+                    confirm = ask;
+                    set(INSTALLING);   // the window offers Continue the installation from now on
                     try {
-                        c.startActivity(confirm);
-                        return;
+                        c.startActivity(new Intent(ask).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     } catch (RuntimeException ignored) {
-                        break;
+                        // Shown again from the window.
                     }
+                    return;
                 }
                 case PackageInstaller.STATUS_SUCCESS:
+                    confirm = null;
                     return;
                 case PackageInstaller.STATUS_FAILURE_ABORTED:
                     // Cancelled in Android's dialog: Update now is offered again.
+                    confirm = null;
                     set(IDLE);
                     return;
                 default:
                     break;
             }
             Log.i(TAG, "install refused: " + status + " " + i.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE));
+            confirm = null;
             set(FAILED);
         }
     }

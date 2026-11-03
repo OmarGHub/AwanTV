@@ -299,6 +299,7 @@ public class MainActivity extends Screen {
             public void later() { closeUpdate(false); }
             public void mute() { closeUpdate(true); }
             public void cancel() { SelfUpdate.cancel(); }
+            public void confirm() { SelfUpdate.confirm(MainActivity.this); }
         });
         root.addView(update.layer, new FrameLayout.LayoutParams(-1, -1));
         for (View n : nodes) if (n != null) n.setFocusable(false);

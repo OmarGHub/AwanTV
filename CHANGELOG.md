@@ -15,6 +15,8 @@ history is in its repository.
   Google TV Streamer (Android 14): Android asks "Update this app?" even so (the app was installed over adb, so it isn't
   its own installer), its focus on Cancel: the window says to move to Update. Back while downloading leaves the window
   closed until Home comes back.
+  Android 14 blocks its question while no window of Awan TV shows (the viewer went into another app during the
+  download): the question is kept, and the window offers Continue installing when Home comes back.
 - Without the install permission (installed by hand), no Update now: the window says to install with the phone
   installer or from Windows (ways 1 and 2) to get every feature.
 - What's new lists 1.7.0.
