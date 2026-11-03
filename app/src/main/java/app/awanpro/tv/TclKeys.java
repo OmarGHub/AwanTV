@@ -34,8 +34,10 @@ import java.util.Set;
  *   has read it.
  *
  * Every entry written here carries {@link #MISSING} (its appnotinstall), which is how ours are told from TCL's own
- * (or another app's): only ours are ever emptied. A TCL entry replaced by a viewer's button is kept in the prefs
- * ({@link #ORIGINAL}) and put back when the button goes. The viewer's buttons ({@link Buttons}) go here too, beside a
+ * (or another app's): only ours are ever emptied. An entry we replace (TCL's own, or another app's) is kept in the
+ * TV's own settings as "AwanSavedKey_<code>" ({@link #SAVED}, as Afnon's AfnonSavedKey_ in its #41) and put back when
+ * the button goes, by the app or by tools/AwanTV-restore.ps1, so it outlives the app (1.6.0: it was kept in the app's
+ * prefs, {@link #ORIGINAL}, lost when the app was removed some other way; moved over once). The viewer's buttons ({@link Buttons}) go here too, beside a
  * stock launcher or not, so TCL TVs answer them without key filtering. Entries outlive the app, so Remove Awan TV
  * empties them first ({@link #leave}), and tools/AwanTV-restore.ps1 empties every entry carrying the mark.
  */
@@ -48,7 +50,9 @@ final class TclKeys {
     private static final String MISSING = "app.awanpro.tv.KEY_TARGET_MISSING";
     /** Time for TCL's observer to reread the list before the keys change. */
     private static final long LIST_SETTLE_MS = 1000;
-    /** Prefs key prefix: TCL's own entry for a code, replaced by one of ours (SettingsTransfer.LOCAL keeps it). */
+    /** Settings.Global key prefix: the entry ours replaced, put back when ours goes (tools/AwanTV-restore.ps1 too). */
+    private static final String SAVED = "AwanSavedKey_";
+    /** Prefs key prefix where 1.1.0-1.5.0 kept it (SettingsTransfer.LOCAL); moved to {@link #SAVED} once. */
     static final String ORIGINAL = "tcl_orig_";
 
     /** True where TCL's remapping exists and Awan TV may write it (WRITE_SECURE_SETTINGS, granted over adb). */
@@ -78,15 +82,25 @@ final class TclKeys {
             Set<String> codes = codes(Settings.Global.getString(r, LIST));
             android.content.SharedPreferences prefs = Prefs.of(c);
             android.content.SharedPreferences.Editor ed = prefs.edit();
+            // What an older version kept in the prefs, into the TV's settings, once.
+            for (String k : prefs.getAll().keySet()) {
+                if (!k.startsWith(ORIGINAL)) continue;
+                String code = k.substring(ORIGINAL.length());
+                if (Settings.Global.getString(r, SAVED + code) == null) {
+                    Settings.Global.putString(r, SAVED + code, prefs.getString(k, ""));
+                }
+                ed.remove(k);
+            }
             JSONObject values = new JSONObject();
+            Set<String> restored = new java.util.HashSet<>();
             for (Map.Entry<Integer, Intent> e : targets.entrySet()) {
                 Intent i = packaged(e.getValue());
                 if (i == null) continue;
                 String code = String.valueOf(e.getKey());
-                // TCL's own entry for this code, kept once, to put back when ours goes.
+                // The entry there before ours (TCL's own, or another app's), kept once, to put back when ours goes.
                 String now = Settings.Global.getString(r, KEY_PREFIX + code);
-                if (now != null && !now.isEmpty() && !now.contains(MISSING) && !prefs.contains(ORIGINAL + code)) {
-                    ed.putString(ORIGINAL + code, now);
+                if (now != null && !now.isEmpty() && !now.contains(MISSING) && Settings.Global.getString(r, SAVED + code) == null) {
+                    Settings.Global.putString(r, SAVED + code, now);
                 }
                 values.put(code, entry(e.getKey(), i, packaged(holds.get(e.getKey()))).toString());
             }
@@ -96,18 +110,19 @@ final class TclKeys {
                 if (values.has(code)) continue;
                 String now = Settings.Global.getString(r, KEY_PREFIX + code);
                 if (now == null || !now.contains(MISSING)) continue;
-                values.put(code, prefs.getString(ORIGINAL + code, ""));
-                ed.remove(ORIGINAL + code);
+                String saved = Settings.Global.getString(r, SAVED + code);
+                values.put(code, saved != null ? saved : "");
+                if (saved != null) restored.add(code);
             }
             ed.apply();
             Set<String> all = new java.util.LinkedHashSet<>(codes);
             for (Iterator<String> it = values.keys(); it.hasNext(); ) all.add(it.next());
             if (all.equals(codes)) {
                 // The list as it was: the keys at once (Remove Awan TV cannot wait).
-                writeKeys(r, values);
+                writeKeys(r, values, restored);
             } else {
                 Settings.Global.putString(r, LIST, new JSONArray(all).toString());
-                new Handler(Looper.getMainLooper()).postDelayed(() -> writeKeys(r, values), LIST_SETTLE_MS);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> writeKeys(r, values, restored), LIST_SETTLE_MS);
             }
             return true;
         } catch (SecurityException | JSONException e) {
@@ -116,16 +131,18 @@ final class TclKeys {
         }
     }
 
-    private static void writeKeys(ContentResolver r, JSONObject values) {
+    /** restored: codes whose saved entry went back; the saved copy goes once the entry is written. */
+    private static void writeKeys(ContentResolver r, JSONObject values, Set<String> restored) {
         for (Iterator<String> it = values.keys(); it.hasNext(); ) {
             String code = it.next();
             String value = values.optString(code);
-            if (!value.equals(Settings.Global.getString(r, KEY_PREFIX + code))) {
-                try {
+            try {
+                if (!value.equals(Settings.Global.getString(r, KEY_PREFIX + code))) {
                     Settings.Global.putString(r, KEY_PREFIX + code, value);
-                } catch (SecurityException e) {
-                    Log.w(TAG, "could not write " + KEY_PREFIX + code, e);
                 }
+                if (restored.contains(code)) Settings.Global.putString(r, SAVED + code, null);
+            } catch (SecurityException e) {
+                Log.w(TAG, "could not write " + KEY_PREFIX + code, e);
             }
         }
     }

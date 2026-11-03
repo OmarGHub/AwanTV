@@ -6,6 +6,16 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- TCL's remote buttons: the entry a custom button replaces (TCL's own, or another app's) is kept in the TV's own
+  settings (`AwanSavedKey_<code>`, as Afnon's `AfnonSavedKey_` in its #41), no longer in the app's, where it was
+  lost when Awan TV was removed some other way than Remove Awan TV or AwanTV-restore: the button then did nothing.
+  What older versions kept is moved over once.
+
+### The tools
+- AwanTV-restore 1.2.0: puts that saved entry back (copied on the TV itself, so its quotes stay), and only touches
+  entries carrying Awan TV's full mark.
+
 ## [1.5.0]
 
 ### The app

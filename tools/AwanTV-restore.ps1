@@ -1,4 +1,4 @@
-# AwanTV-restore.ps1 - Version 1.1.0
+# AwanTV-restore.ps1 - Version 1.2.0
 # Undoes AwanTV-install.ps1: turns the Awan TV service off (the TV's own home screen is back at once), puts back
 # the screensaver saved at install, gives the remote's buttons back to a TCL TV's own remapping, and with -Uninstall
 # removes the app. Nothing else on the TV is touched.
@@ -10,7 +10,7 @@
 param([switch]$Uninstall, [switch]$RemoveRecitations, [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.1.0"
+$ScriptVersion = "1.2.0"
 $Pkg = "app.awanpro.tv"
 $Service = "$Pkg/app.awanpro.tv.RemoteKeys"
 # In the Windows package (AwanTV.apk or state\ beside this script) everything is in this folder;
@@ -169,8 +169,9 @@ if (Test-Path $saved) {
     Write-Host "[2/4] No saved screensaver for this TV ($saved); left as it is"
 }
 
-# --- TCL's remapping: every button Awan TV wrote carries its mark; emptied, the button is the TV's own again.
-# (An entry of TCL's own that a custom button replaced is kept in the app; Settings > Remove Awan TV puts it back.)
+# --- TCL's remapping: every button Awan TV wrote carries its full mark (only those: another app's mark may end the
+# same way). The entry it replaced (TCL's own, or another app's) waits in AwanSavedKey_<code> and goes back; else
+# the entry is emptied and the button is the TV's own again. (Before 1.6.0 that entry was kept in the app.)
 $mark = "app.awanpro.tv.KEY_TARGET_MISSING"
 $keyList = Shell "settings get global CustomKeyList"
 $freed = 0
@@ -180,9 +181,17 @@ if ($keyList -and $keyList -ne "null") {
     foreach ($code in $codes) {
         if ("$code" -notmatch "^\d+$") { continue }
         if ((Shell "settings get global CustomKey_$code") -like "*$mark*") {
-            Shell "settings put global CustomKey_$code ''" | Out-Null
+            $saved = Shell "settings get global AwanSavedKey_$code"
+            if ($saved -and $saved -ne "null") {
+                # Copied on the TV itself: the entry holds double quotes, which PS 5.1 drops from adb's arguments.
+                # No globbing (set -f) and no word splitting (IFS empty), so it goes as it was.
+                Shell "set -f; IFS=; settings put global CustomKey_$code `$(settings get global AwanSavedKey_$code)" | Out-Null
+            } else {
+                Shell "settings put global CustomKey_$code ''" | Out-Null
+            }
             $freed++
         }
+        Shell "settings delete global AwanSavedKey_$code" | Out-Null
     }
 }
 if ($freed -gt 0) { Write-Host "[3/4] Remote buttons back to the TV's own: $freed" }
