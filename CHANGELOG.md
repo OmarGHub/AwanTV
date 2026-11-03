@@ -15,8 +15,8 @@ history is in its repository.
 - A newer version opens a window in Settings > About (from Source and updates, or when Check for updates now finds
   it): the version, this TV's, a QR code for the release page, how to update, and Open the release page where the TV
   has a browser.
-- What's new: once over Home after an update, every version the TV had not seen; all of them in Settings > About >
-  What's new. Never on a new install.
+- What's new: once over Home after an update, every version the TV had not seen, until OK or Back (a layer of Home's
+  own, so returning to Home never closes it); all of them in Settings > About > What's new. Never on a new install.
 - Settings > About fits on the screen again (it had grown past it in 1.0.1): its sources and licences are on a page
   of their own, Sources and licences.
 - In Arabic a path reads with an arrow ("حول التطبيق ← حالة التطبيق"): the "›" read as a comma.
