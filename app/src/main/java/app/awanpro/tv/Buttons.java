@@ -35,8 +35,8 @@ final class Buttons {
     /** The first-customisation warning was accepted once. */
     static final String WARNED = "remote_buttons_warned";
 
-    /** Test builds show each button's keycode, scancode and remote under its name, to learn the remotes. */
-    static final boolean SHOW_CODES = true;
+    /** Test builds show each button's keycode or scancode under its name, to learn the remotes; off in a release. */
+    static final boolean SHOW_CODES = false;
 
     static final String NONE = "none", SAVER = "awan:saver", TODAY = "awan:today", RADIO = "awan:radio";
     private static final String APP = "app:";

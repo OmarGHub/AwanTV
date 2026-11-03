@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.1.0]
+
 ### The app
 - Settings > Device settings > Remote buttons: a button on any remote (the TV's own or a Bluetooth one), pressed
   once, opens an app, the screensaver, Today & Qibla or the radio, or does nothing. Add a button waits ten seconds
@@ -16,11 +18,13 @@ history is in its repository.
 - On a TCL TV the buttons go to TCL's own button remapping, so remote presses do not pass through Awan TV and holding
   Volume works as before (no warning there). TCL's own entries are never emptied; one a button replaced comes back
   when the button goes. Remove Awan TV gives the buttons back to the TV first.
-- Elsewhere, while keys pass through Awan TV, a held Volume key keeps moving the volume until it is let go.
 
 ### The tools (Windows)
 - `AwanTV-restore` gives a TCL TV's remote buttons back to the TV.
 - `AwanTV-release` refuses a test build's version (one with a letter, such as 1.1.0b).
+
+### The installer (phone)
+- A test build (a version with a letter, such as 1.1.0b) counts as older than its release, so the release updates it.
 
 ## [1.0.2]
 

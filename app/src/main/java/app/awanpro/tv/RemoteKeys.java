@@ -33,8 +33,9 @@ import java.util.Map;
  * filtered for them; elsewhere keys are filtered while one is set and a customised button does what the viewer
  * chose. Settings' "press the button" asks for the next key through {@link #capture}, filtering meanwhile.
  *
- * <p>While filtering, a held Volume key moves only one step (re-injected keys never repeat), so the service goes on
- * adjusting the volume itself until the key comes up ({@link #volume}).
+ * <p>While filtering, a held Volume key moves only one step (re-injected keys never repeat). Left so on purpose:
+ * the first customisation says so, and an app cannot send the volume on (AudioManager's adjustments never reached a
+ * Google TV Streamer's soundbar over HDMI-CEC); a TCL TV pays nothing.
  */
 public class RemoteKeys extends AccessibilityService {
 
@@ -166,14 +167,12 @@ public class RemoteKeys extends AccessibilityService {
         if (watch != null) watch.stop();
         watch = null;
         guard = null;
-        stopVolume();
         if (running == this) running = null;
         super.onDestroy();
     }
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
-        volume(event);
         if (captureKey(event)) return true;
         if (customKey(event)) return true;
         // Beside the stock launcher every key is its own, but Home's on an HDMI source box.
@@ -203,49 +202,6 @@ public class RemoteKeys extends AccessibilityService {
             }
         }
         return true;
-    }
-
-    private final android.os.Handler later = new android.os.Handler(android.os.Looper.getMainLooper());
-    /** The Volume key held now (0: none), adjusted here while it is down. */
-    private int volumeHeld;
-    private static final long VOLUME_REPEAT_MS = 100;
-    private final Runnable volumeStep = new Runnable() {
-        @Override
-        public void run() {
-            if (volumeHeld == 0) return;
-            android.media.AudioManager am = getSystemService(android.media.AudioManager.class);
-            // The TV's own volume, or on an HDMI box the TV's or soundbar's over HDMI-CEC, as the key itself does.
-            if (am != null) {
-                am.adjustSuggestedStreamVolume(volumeHeld == KeyEvent.KEYCODE_VOLUME_UP
-                        ? android.media.AudioManager.ADJUST_RAISE : android.media.AudioManager.ADJUST_LOWER,
-                    android.media.AudioManager.USE_DEFAULT_STREAM_TYPE, android.media.AudioManager.FLAG_SHOW_UI);
-            }
-            later.postDelayed(this, VOLUME_REPEAT_MS);
-        }
-    };
-
-    /**
-     * A held Volume key while keys are filtered: the press itself passes (one step), then after the usual repeat
-     * delay the volume goes on moving every 100 ms until the key comes up, as an unfiltered key would.
-     */
-    private void volume(KeyEvent e) {
-        int code = e.getKeyCode();
-        boolean vol = code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN;
-        if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) {
-            stopVolume();
-            if (vol) {
-                volumeHeld = code;
-                later.postDelayed(volumeStep, android.view.ViewConfiguration.getKeyRepeatTimeout());
-            }
-        } else if (vol && (e.getAction() == KeyEvent.ACTION_UP || e.getRepeatCount() > 0)) {
-            // Up: done. A repeat reaching here: this firmware repeats filtered keys itself, so leave it to them.
-            stopVolume();
-        }
-    }
-
-    private void stopVolume() {
-        volumeHeld = 0;
-        later.removeCallbacks(volumeStep);
     }
 
     /** Settings waiting for a button: its press goes there, its release and repeats nowhere. Back, moving, OK pass. */
@@ -316,7 +272,6 @@ public class RemoteKeys extends AccessibilityService {
     void keysChanged() {
         boolean stock = guard != null && guard.hasStock();
         boolean on = capture != null || customFilter || (stock ? guard.takesHome() : afnonFilter);
-        if (!on) stopVolume();
         if (filtering != null && filtering == on) return;
         filterKeys(on);
         android.util.Log.i(HomeGuard.TAG, "Key filtering: " + on + (stock ? " (Home taken: " + guard.takesHome() + ")" : ""));

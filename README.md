@@ -98,9 +98,10 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر.
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
-12. **ألوان الواجهة**: لازوردي أو زمردي أو عنّابي أو فحمي أو رقّ فاتح، أو تلقائي (لازوردي نهارًا وفحمي بعد المغرب). وشاشة الاستراحة سوداء ما لم تُختر لها الصور.
-13. **حماية الشاشة من الاحتراق**: الواجهة وشاشة الاستراحة تنزاحان بضع نقاط كل 3 دقائق.
-14. من أفنون: حساب المواقيت دون إنترنت لـ 136 مدينة، والأذان فوق أي تطبيق، والتذكير قبل الصلاة (ومنطوقًا)، والقبلة، والجمعة ورمضان، وإذاعة القرآن الكريم.
+12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
+13. **ألوان الواجهة**: لازوردي أو زمردي أو عنّابي أو فحمي أو رقّ فاتح، أو تلقائي (لازوردي نهارًا وفحمي بعد المغرب). وشاشة الاستراحة سوداء ما لم تُختر لها الصور.
+14. **حماية الشاشة من الاحتراق**: الواجهة وشاشة الاستراحة تنزاحان بضع نقاط كل 3 دقائق.
+15. من أفنون: حساب المواقيت دون إنترنت لـ 136 مدينة، والأذان فوق أي تطبيق، والتذكير قبل الصلاة (ومنطوقًا)، والقبلة، والجمعة ورمضان، وإذاعة القرآن الكريم.
 
 ## البناء (Android Studio على ويندوز)
 
@@ -348,15 +349,19 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    stay if you remove the app, unless you choose to delete them.
 10. **What runs** (Settings > Awan TV): all, Home only, the screensaver only, or off. The adhkar follow the
    screensaver; the adhan and reminders keep their own settings.
-11. **Colour themes**: Lapis, Emerald, Burgundy, Charcoal or a light Parchment, or Automatic (Lapis by day,
+11. **Remote buttons** (Settings > Device settings > Remote buttons): make a button on any remote, the TV's own or a
+   Bluetooth one, open an app, the screensaver, Today & Qibla or the radio, or turn it off. On TCL TVs they go to
+   TCL's own button remapping, with no side effect; elsewhere, while one is set, Volume moves one step per press
+   instead of running on when held.
+12. **Colour themes**: Lapis, Emerald, Burgundy, Charcoal or a light Parchment, or Automatic (Lapis by day,
    Charcoal after Maghrib).
-12. **Background photos** (Settings > Display): 26 photos of the Haramain, al-Aqsa, mosques, the night
+13. **Background photos** (Settings > Display): 26 photos of the Haramain, al-Aqsa, mosques, the night
    sky and nature, in the app. Home shows them under the theme's colour; they change every 10 or 30 minutes, every
    hour, with each prayer or daily (Automatic: Home daily, the screensaver every 10 minutes), only the dark ones from
    Isha until Fajr. Home starts with them (the pattern is the other choice); on the screensaver they are optional,
    otherwise it stays black.
-13. **Burn-in care**: Home and the screensaver shift a few pixels every three minutes.
-14. From Afnon: offline prayer times for 136 cities, the adhan over any app, reminders (also spoken), Qibla, Friday
+14. **Burn-in care**: Home and the screensaver shift a few pixels every three minutes.
+15. From Afnon: offline prayer times for 136 cities, the adhan over any app, reminders (also spoken), Qibla, Friday
    and Ramadan modes, Quran radio.
 
 ## Build (Android Studio on Windows)
