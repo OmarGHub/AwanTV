@@ -289,6 +289,8 @@ public class MainActivity extends Screen {
      */
     private void showUpdate() {
         if (update != null || news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
+        // Closed while downloading: the minute tick must not bring it back; Home's next resume does.
+        if (updateLeft && SelfUpdate.busy()) return;
         String v = SelfUpdate.busy() || SelfUpdate.state() == SelfUpdate.FAILED ? SelfUpdate.version() : UpdateNotice.due(this);
         if (v == null) return;
         String version = v;
@@ -310,7 +312,7 @@ public class MainActivity extends Screen {
     /** SelfUpdate moved on: the window again in its new state, or only its line and bar while downloading. */
     private void selfUpdateChanged() {
         if (update == null) {
-            if (shown && SelfUpdate.busy() && !updateLeft) showUpdate();
+            if (shown && SelfUpdate.busy()) showUpdate();
             return;
         }
         if (UpdateNotice.mode(update.version) == update.mode) {
