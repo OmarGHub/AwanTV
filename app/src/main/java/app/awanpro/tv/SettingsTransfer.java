@@ -45,7 +45,7 @@ public class SettingsTransfer extends BroadcastReceiver {
     /** Keys (or, ending in "_", key prefixes) that describe this TV, not the viewer's choices. */
     private static final String[] LOCAL = {
         "saver_before", "sleep_saved", "sleep_timeout", "called", "reminded", "announced", "radio_viz", "guard",
-        "last_adhan", "last_adhan_at", "last_adhan_ok", "service_on", "dl_", "lib_", "saved_ms_", "saved_surah_", "wx_", "upd_",
+        "last_adhan", "last_adhan_at", "last_adhan_ok", "service_on", "dl_", "lib_", "saved_ms_", "saved_surah_", "wx_", "upd_", "tcl_",
     };
 
     @Override

@@ -231,12 +231,40 @@ final class Buttons {
         Intent open = null;
         if (SAVER.equals(action)) open = SaverActivity.now(c);
         else if (TODAY.equals(action)) open = new Intent(c, PrayerDayActivity.class);
-        else if (RADIO.equals(action)) Radio.toggle(c);
+        else if (RADIO.equals(action)) app.awanpro.tv.Radio.toggle(c);
         if (open == null) return;
         try {
             c.startActivity(open.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } catch (ActivityNotFoundException | SecurityException ignored) {
             // Nothing to open; the key does nothing.
+        }
+    }
+
+    /**
+     * The action as an intent, for TCL's remapping ({@link TclKeys}): an activity, or for the radio and nothing a
+     * broadcast (TclKeys sends "app.awanpro.tv." actions as broadcasts). Null when its app is gone.
+     */
+    static Intent intent(Context c, String action) {
+        String pkg = pkg(action);
+        Intent i;
+        if (pkg != null) i = Apps.launchIntent(c, pkg);
+        else if (SAVER.equals(action)) i = SaverActivity.now(c);
+        else if (TODAY.equals(action)) i = new Intent(c, PrayerDayActivity.class);
+        else if (RADIO.equals(action)) return new Intent(RADIO_TOGGLE).setClass(c, Radio.class);
+        else if (NONE.equals(action)) return new Intent(NOTHING).setPackage(c.getPackageName());
+        else return null;
+        return i == null ? null : i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+    }
+
+    static final String RADIO_TOGGLE = "app.awanpro.tv.RADIO_TOGGLE";
+    /** A broadcast no one receives: TCL swallows the button and nothing happens. */
+    static final String NOTHING = "app.awanpro.tv.KEY_NOTHING";
+
+    /** The radio button through TCL's remapping: starts or stops the radio. */
+    public static final class Radio extends android.content.BroadcastReceiver {
+        @Override
+        public void onReceive(Context c, Intent i) {
+            if (RADIO_TOGGLE.equals(i.getAction())) app.awanpro.tv.Radio.toggle(c);
         }
     }
 

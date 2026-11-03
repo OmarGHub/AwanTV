@@ -1,6 +1,7 @@
-# AwanTV-restore.ps1 - Version 1.0.0
+# AwanTV-restore.ps1 - Version 1.1.0
 # Undoes AwanTV-install.ps1: turns the Awan TV service off (the TV's own home screen is back at once), puts back
-# the screensaver saved at install, and with -Uninstall removes the app. Nothing else on the TV is touched.
+# the screensaver saved at install, gives the remote's buttons back to a TCL TV's own remapping, and with -Uninstall
+# removes the app. Nothing else on the TV is touched.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-restore.ps1 [-Uninstall] [-RemoveRecitations] [-Device <serial or part of it>]
 #   -RemoveRecitations  also deletes the saved recitations (Music/Awan TV), which otherwise stay for a later install
@@ -9,7 +10,7 @@
 param([switch]$Uninstall, [switch]$RemoveRecitations, [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.1.0"
 $Pkg = "app.awanpro.tv"
 $Service = "$Pkg/app.awanpro.tv.RemoteKeys"
 # In the Windows package (AwanTV.apk or state\ beside this script) everything is in this folder;
@@ -152,26 +153,45 @@ $list = Shell "settings get secure enabled_accessibility_services"
 $rest = @($list -split ":" | Where-Object { $_ -and $_ -ne "null" -and $_ -notlike "$Pkg/*" })
 if ($rest.Count -eq 0) { Shell "settings delete secure enabled_accessibility_services" | Out-Null }
 else { Shell ("settings put secure enabled_accessibility_services " + ($rest -join ":")) | Out-Null }
-Write-Host "[1/3] Awan TV service off"
+Write-Host "[1/4] Awan TV service off"
 
 # --- screensaver
 if (Test-Path $saved) {
     $before = (Get-Content $saved -Raw).Trim()
     if ($before -and $before -ne "null") {
         Shell "settings put secure screensaver_components $before" | Out-Null
-        Write-Host "[2/3] Screensaver back to: $before"
+        Write-Host "[2/4] Screensaver back to: $before"
     } else {
         Shell "settings delete secure screensaver_components" | Out-Null
-        Write-Host "[2/3] Screensaver back to the TV's default"
+        Write-Host "[2/4] Screensaver back to the TV's default"
     }
 } else {
-    Write-Host "[2/3] No saved screensaver for this TV ($saved); left as it is"
+    Write-Host "[2/4] No saved screensaver for this TV ($saved); left as it is"
 }
+
+# --- TCL's remapping: every button Awan TV wrote carries its mark; emptied, the button is the TV's own again.
+# (An entry of TCL's own that a custom button replaced is kept in the app; Settings > Remove Awan TV puts it back.)
+$mark = "app.awanpro.tv.KEY_TARGET_MISSING"
+$keyList = Shell "settings get global CustomKeyList"
+$freed = 0
+if ($keyList -and $keyList -ne "null") {
+    # PS 5.1 hands a JSON array on as one object: the ForEach-Object takes it apart.
+    try { $codes = @(($keyList | ConvertFrom-Json) | ForEach-Object { $_ }) } catch { $codes = @() }
+    foreach ($code in $codes) {
+        if ("$code" -notmatch "^\d+$") { continue }
+        if ((Shell "settings get global CustomKey_$code") -like "*$mark*") {
+            Shell "settings put global CustomKey_$code ''" | Out-Null
+            $freed++
+        }
+    }
+}
+if ($freed -gt 0) { Write-Host "[3/4] Remote buttons back to the TV's own: $freed" }
+else { Write-Host "[3/4] No remote buttons of Awan TV on this TV" }
 
 # --- app
 if ($Uninstall) {
     $out = (Adb uninstall $Pkg | Out-String).Trim()
-    Write-Host "[3/3] Uninstall: $out"
+    Write-Host "[4/4] Uninstall: $out"
     # The saved recitations are in the shared Music folder, so they outlast the app unless asked otherwise.
     if ($RemoveRecitations) {
         Shell "rm -rf '/sdcard/Music/Awan TV'" | Out-Null
@@ -180,6 +200,6 @@ if ($Uninstall) {
         Write-Host "      Saved recitations kept in Music/Awan TV (add -RemoveRecitations to delete them)"
     }
 } else {
-    Write-Host "[3/3] App kept (add -Uninstall to remove it)"
+    Write-Host "[4/4] App kept (add -Uninstall to remove it)"
 }
 Write-Host "Done."

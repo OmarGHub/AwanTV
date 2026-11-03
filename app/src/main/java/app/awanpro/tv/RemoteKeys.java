@@ -29,8 +29,12 @@ import java.util.Map;
  * button alone ({@link HomeGuard#onHomeKey}); every other key passes straight through.
  *
  * <p>The viewer's own buttons ({@link Buttons}, Settings > Device settings > Remote buttons) come before all of
- * that, beside a stock launcher or not: while one is set, keys are filtered and a customised button does what the
- * viewer chose. Settings' "press the button" asks for the next key through {@link #capture}.
+ * that, beside a stock launcher or not. On a TCL TV they go to TCL's remapping ({@link #applyKeys}), so nothing is
+ * filtered for them; elsewhere keys are filtered while one is set and a customised button does what the viewer
+ * chose. Settings' "press the button" asks for the next key through {@link #capture}, filtering meanwhile.
+ *
+ * <p>While filtering, a held Volume key moves only one step (re-injected keys never repeat), so the service goes on
+ * adjusting the volume itself until the key comes up ({@link #volume}).
  */
 public class RemoteKeys extends AccessibilityService {
 
@@ -56,6 +60,8 @@ public class RemoteKeys extends AccessibilityService {
     private static RemoteKeys running;
     /** Afnon's own reason to filter, with no stock launcher and no TCL remapping (FirmwareKeys). */
     private boolean afnonFilter;
+    /** The viewer's buttons need filtering: a button is set and TCL's remapping cannot answer every one. */
+    private boolean customFilter;
 
     /** Settings' "press the button": hears the next key that can be customised, on the main thread. */
     interface Capture {
@@ -81,9 +87,34 @@ public class RemoteKeys extends AccessibilityService {
         if (running != null) running.keysChanged();
     }
 
-    /** The customised buttons changed in Settings: filtering follows. */
+    /** The customised buttons changed in Settings: TCL's remapping and filtering follow. */
     static void buttonsChanged() {
-        if (running != null) running.keysChanged();
+        if (running == null) return;
+        running.applyKeys();
+        running.keysChanged();
+    }
+
+    /**
+     * TCL's remapping: Afnon's table (no stock launcher only) with the viewer's buttons over it. A button known only
+     * by its scancode, or a TV without TCL's remapping, leaves the viewer's buttons to the key filter. Returns
+     * whether TCL's remapping took them.
+     */
+    private boolean applyKeys() {
+        boolean stock = guard != null && guard.hasStock();
+        Map<Integer, Intent> to = stock ? new HashMap<>() : targets();
+        boolean byScan = false;
+        for (Buttons.Entry b : Buttons.all(this)) {
+            if (b.id.startsWith("s")) {
+                byScan = true;
+                continue;
+            }
+            Intent i = Buttons.intent(this, b.action);
+            // Its app gone: the button does what it did before.
+            if (i != null) to.put(Integer.parseInt(b.id), i);
+        }
+        boolean tcl = TclKeys.install(this, to);
+        customFilter = Buttons.any(this) && (!tcl || byScan);
+        return tcl;
     }
 
     @Override
@@ -98,17 +129,12 @@ public class RemoteKeys extends AccessibilityService {
         Prefs.of(this).edit().putBoolean(ServiceCheck.ON, true).apply();
         running = this;
         guard = new HomeGuard(this);
-        if (guard.hasStock()) {
-            // Awan TV beside the TV's own home screen (shown over it or not): that launcher still answers the
-            // remote's buttons, so this service leaves every key alone (no filtering, no TCL remapping). The button table below is for a TV
-            // where Awan TV itself is Home and the stock launcher is gone.
-            // Except Home's own button on an HDMI source box (HomeGuard.takesHome).
-            keysChanged();
-        } else {
-            boolean tcl = TclKeys.install(this, targets());
-            afnonFilter = !tcl && FirmwareKeys.shouldFilter(this);
-            keysChanged();
-        }
+        // Beside the TV's own home screen (shown over it or not) that launcher still answers the remote's buttons,
+        // so Afnon's button table is for a TV where Awan TV itself is Home and the stock launcher is gone; beside it
+        // only the viewer's own buttons are answered, and Home's on an HDMI source box (HomeGuard.takesHome).
+        boolean tcl = applyKeys();
+        afnonFilter = !guard.hasStock() && !tcl && FirmwareKeys.shouldFilter(this);
+        keysChanged();
         // The radio may have left the TV's sleep timer off (a crash, a reboot mid-listen): put it back.
         Radio.restoreSleep(this);
         // Keep the TV's own screensaver to put back later, and the TV's in step with Settings > Awan TV.
@@ -140,12 +166,14 @@ public class RemoteKeys extends AccessibilityService {
         if (watch != null) watch.stop();
         watch = null;
         guard = null;
+        stopVolume();
         if (running == this) running = null;
         super.onDestroy();
     }
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
+        volume(event);
         if (captureKey(event)) return true;
         if (customKey(event)) return true;
         // Beside the stock launcher every key is its own, but Home's on an HDMI source box.
@@ -175,6 +203,49 @@ public class RemoteKeys extends AccessibilityService {
             }
         }
         return true;
+    }
+
+    private final android.os.Handler later = new android.os.Handler(android.os.Looper.getMainLooper());
+    /** The Volume key held now (0: none), adjusted here while it is down. */
+    private int volumeHeld;
+    private static final long VOLUME_REPEAT_MS = 100;
+    private final Runnable volumeStep = new Runnable() {
+        @Override
+        public void run() {
+            if (volumeHeld == 0) return;
+            android.media.AudioManager am = getSystemService(android.media.AudioManager.class);
+            // The TV's own volume, or on an HDMI box the TV's or soundbar's over HDMI-CEC, as the key itself does.
+            if (am != null) {
+                am.adjustSuggestedStreamVolume(volumeHeld == KeyEvent.KEYCODE_VOLUME_UP
+                        ? android.media.AudioManager.ADJUST_RAISE : android.media.AudioManager.ADJUST_LOWER,
+                    android.media.AudioManager.USE_DEFAULT_STREAM_TYPE, android.media.AudioManager.FLAG_SHOW_UI);
+            }
+            later.postDelayed(this, VOLUME_REPEAT_MS);
+        }
+    };
+
+    /**
+     * A held Volume key while keys are filtered: the press itself passes (one step), then after the usual repeat
+     * delay the volume goes on moving every 100 ms until the key comes up, as an unfiltered key would.
+     */
+    private void volume(KeyEvent e) {
+        int code = e.getKeyCode();
+        boolean vol = code == KeyEvent.KEYCODE_VOLUME_UP || code == KeyEvent.KEYCODE_VOLUME_DOWN;
+        if (e.getAction() == KeyEvent.ACTION_DOWN && e.getRepeatCount() == 0) {
+            stopVolume();
+            if (vol) {
+                volumeHeld = code;
+                later.postDelayed(volumeStep, android.view.ViewConfiguration.getKeyRepeatTimeout());
+            }
+        } else if (vol && (e.getAction() == KeyEvent.ACTION_UP || e.getRepeatCount() > 0)) {
+            // Up: done. A repeat reaching here: this firmware repeats filtered keys itself, so leave it to them.
+            stopVolume();
+        }
+    }
+
+    private void stopVolume() {
+        volumeHeld = 0;
+        later.removeCallbacks(volumeStep);
     }
 
     /** Settings waiting for a button: its press goes there, its release and repeats nowhere. Back, moving, OK pass. */
@@ -244,7 +315,8 @@ public class RemoteKeys extends AccessibilityService {
      */
     void keysChanged() {
         boolean stock = guard != null && guard.hasStock();
-        boolean on = capture != null || Buttons.any(this) || (stock ? guard.takesHome() : afnonFilter);
+        boolean on = capture != null || customFilter || (stock ? guard.takesHome() : afnonFilter);
+        if (!on) stopVolume();
         if (filtering != null && filtering == on) return;
         filterKeys(on);
         android.util.Log.i(HomeGuard.TAG, "Key filtering: " + on + (stock ? " (Home taken: " + guard.takesHome() + ")" : ""));

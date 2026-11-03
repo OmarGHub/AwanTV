@@ -1089,6 +1089,8 @@ public class SettingsActivity extends Screen {
      */
     private void remove() {
         Saver.leave(this);
+        // TCL's remapping outlives the app: the buttons back to the TV's own first.
+        TclKeys.leave(this);
         Intent i = new Intent(Intent.ACTION_DELETE, android.net.Uri.parse("package:" + getPackageName()));
         startSafely(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
@@ -1101,6 +1103,8 @@ public class SettingsActivity extends Screen {
         // Keep the TV's screensaver to put back later, and in step with the Run setting.
         Saver.remember(this);
         Saver.apply(this);
+        // The buttons back in TCL's remapping after a cancelled Remove Awan TV (no change: nothing written).
+        RemoteKeys.buttonsChanged();
         if (rows != null && !rows.isEmpty() && chooser == null && day != null) {
             // App status read again (back from the TV's settings, say).
             if (statusOpen && !onNav) {
@@ -1982,8 +1986,9 @@ public class SettingsActivity extends Screen {
                 String label() { return t.addButtonRow(); }
                 String help() { return t.addButtonHelp(); }
                 void open() {
-                    // The first time only: what customising costs, before anything is taken.
-                    if (Prefs.of(c).getBoolean(Buttons.WARNED, false)) openPress();
+                    // The first time only: what customising costs, before anything is taken. Not on a TCL TV,
+                    // whose own remapping answers the buttons at no cost.
+                    if (TclKeys.available(c) || Prefs.of(c).getBoolean(Buttons.WARNED, false)) openPress();
                     else openAsk(t.warnTitle(), new String[] {t.warnBody(), t.warnVolume(), t.warnUndo()},
                         t.resetContinue(), t.cancel(), () -> {
                             Prefs.of(c).edit().putBoolean(Buttons.WARNED, true).apply();
@@ -2010,7 +2015,7 @@ public class SettingsActivity extends Screen {
         s.append(t.buttonsInfoRow());
         s.setSpan(new android.text.style.ForegroundColorSpan(Tokens.PLASTER_100), head, s.length(),
             android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        s.append("\n").append(t.buttonsInfoHelp());
+        s.append("\n").append(TclKeys.available(this) ? t.buttonsInfoHelpTcl() : t.buttonsInfoHelp());
         v.setText(s);
         v.setLineSpacing(0, 1.3f);
         // Under the rows, lined up with their words.

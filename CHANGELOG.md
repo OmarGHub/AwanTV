@@ -13,6 +13,13 @@ history is in its repository.
   while one is set every press passes through Awan TV, so holding Volume moves it one step. The arrows, OK, Back,
   Home, Volume and Power are never taken. Reset settings clears them; the settings file leaves them out (remotes
   differ between TVs).
+- On a TCL TV the buttons go to TCL's own button remapping, so remote presses do not pass through Awan TV and holding
+  Volume works as before (no warning there). TCL's own entries are never emptied; one a button replaced comes back
+  when the button goes. Remove Awan TV gives the buttons back to the TV first.
+- Elsewhere, while keys pass through Awan TV, a held Volume key keeps moving the volume until it is let go.
+
+### The tools (Windows)
+- `AwanTV-restore` gives a TCL TV's remote buttons back to the TV.
 
 ## [1.0.2]
 

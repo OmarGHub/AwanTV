@@ -32,6 +32,12 @@ import java.util.Set;
  * - Changing "CustomKey_<code>" while <code> is not in the list throws (an observer outlives the list entry). So
  *   codes are never dropped from the list, only emptied, and keys are written a moment after the list, once TCL
  *   has read it.
+ *
+ * Every entry written here carries {@link #MISSING} (its appnotinstall), which is how ours are told from TCL's own
+ * (or another app's): only ours are ever emptied. A TCL entry replaced by a viewer's button is kept in the prefs
+ * ({@link #ORIGINAL}) and put back when the button goes. The viewer's buttons ({@link Buttons}) go here too, beside a
+ * stock launcher or not, so TCL TVs answer them without key filtering. Entries outlive the app, so Remove Awan TV
+ * empties them first ({@link #leave}), and tools/AwanTV-restore.ps1 empties every entry carrying the mark.
  */
 final class TclKeys {
 
@@ -42,6 +48,20 @@ final class TclKeys {
     private static final String MISSING = "app.awanpro.tv.KEY_TARGET_MISSING";
     /** Time for TCL's observer to reread the list before the keys change. */
     private static final long LIST_SETTLE_MS = 1000;
+    /** Prefs key prefix: TCL's own entry for a code, replaced by one of ours (SettingsTransfer.LOCAL keeps it). */
+    static final String ORIGINAL = "tcl_orig_";
+
+    /** True where TCL's remapping exists and Awan TV may write it (WRITE_SECURE_SETTINGS, granted over adb). */
+    static boolean available(Context c) {
+        return c.getPackageManager().hasSystemFeature(FEATURE)
+            && c.checkSelfPermission(android.Manifest.permission.WRITE_SECURE_SETTINGS)
+                == android.content.pm.PackageManager.PERMISSION_GRANTED;
+    }
+
+    /** Before Remove Awan TV: every entry of ours emptied (TCL's own put back), at once. */
+    static void leave(Context c) {
+        install(c, new java.util.HashMap<>());
+    }
 
     private TclKeys() {
     }
@@ -51,23 +71,44 @@ final class TclKeys {
      * written (no WRITE_SECURE_SETTINGS grant); the caller then filters keys itself.
      */
     static boolean install(Context c, Map<Integer, Intent> targets) {
-        if (!c.getPackageManager().hasSystemFeature(FEATURE)) return false;
+        if (!available(c)) return false;
         ContentResolver r = c.getContentResolver();
         try {
             Set<String> codes = codes(Settings.Global.getString(r, LIST));
+            android.content.SharedPreferences prefs = Prefs.of(c);
+            android.content.SharedPreferences.Editor ed = prefs.edit();
             JSONObject values = new JSONObject();
             for (Map.Entry<Integer, Intent> e : targets.entrySet()) {
                 Intent i = e.getValue();
                 if (i.getPackage() == null && i.getComponent() != null) i.setPackage(i.getComponent().getPackageName());
                 if (i.getPackage() == null) continue;
-                values.put(String.valueOf(e.getKey()), entry(e.getKey(), i).toString());
+                String code = String.valueOf(e.getKey());
+                // TCL's own entry for this code, kept once, to put back when ours goes.
+                String now = Settings.Global.getString(r, KEY_PREFIX + code);
+                if (now != null && !now.isEmpty() && !now.contains(MISSING) && !prefs.contains(ORIGINAL + code)) {
+                    ed.putString(ORIGINAL + code, now);
+                }
+                values.put(code, entry(e.getKey(), i).toString());
             }
-            // Buttons no longer ours (their app was uninstalled) are emptied, which hands them back to the firmware.
-            for (String code : codes) if (!values.has(code)) values.put(code, "");
-            JSONArray list = new JSONArray();
-            for (Iterator<String> it = values.keys(); it.hasNext(); ) list.put(it.next());
-            if (!codes(list.toString()).equals(codes)) Settings.Global.putString(r, LIST, list.toString());
-            new Handler(Looper.getMainLooper()).postDelayed(() -> writeKeys(r, values), LIST_SETTLE_MS);
+            // Ours no longer wanted (a button reset, its app uninstalled): TCL's own back, or emptied, which hands
+            // the button back to the firmware. An entry that is not ours stays as it is.
+            for (String code : codes) {
+                if (values.has(code)) continue;
+                String now = Settings.Global.getString(r, KEY_PREFIX + code);
+                if (now == null || !now.contains(MISSING)) continue;
+                values.put(code, prefs.getString(ORIGINAL + code, ""));
+                ed.remove(ORIGINAL + code);
+            }
+            ed.apply();
+            Set<String> all = new java.util.LinkedHashSet<>(codes);
+            for (Iterator<String> it = values.keys(); it.hasNext(); ) all.add(it.next());
+            if (all.equals(codes)) {
+                // The list as it was: the keys at once (Remove Awan TV cannot wait).
+                writeKeys(r, values);
+            } else {
+                Settings.Global.putString(r, LIST, new JSONArray(all).toString());
+                new Handler(Looper.getMainLooper()).postDelayed(() -> writeKeys(r, values), LIST_SETTLE_MS);
+            }
             return true;
         } catch (SecurityException | JSONException e) {
             Log.w(TAG, "TCL key remapping unavailable", e);
@@ -93,9 +134,11 @@ final class TclKeys {
         JSONObject missing = new JSONObject()
                 .put("type", 3)
                 .put("intent", new Intent(MISSING).toUri(Intent.URI_INTENT_SCHEME));
+        // Awan TV's own actions (the radio, nothing) are broadcasts; everything else opens an activity.
+        boolean broadcast = target.getAction() != null && target.getAction().startsWith("app.awanpro.tv.");
         JSONObject behavior = new JSONObject()
                 .put("keyaction", 1)
-                .put("type", 1)
+                .put("type", broadcast ? 3 : 1)
                 .put("intent", target.toUri(Intent.URI_INTENT_SCHEME))
                 .put("appnotinstall", missing);
         return new JSONObject().put("keycode", code).put("behavior", new JSONArray().put(behavior));

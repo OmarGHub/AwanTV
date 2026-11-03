@@ -425,6 +425,10 @@ final class Text {
         return ar ? "ما دام زر واحد مخصصًا تمر ضغطات الريموت كلها عبر Awan TV، فالضغط المطوّل على الصوت يرفعه درجة واحدة. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."
                   : "While one button is customised every remote press passes through Awan TV, so holding Volume moves it one step. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power.";
     }
+    String buttonsInfoHelpTcl() {
+        return ar ? "على هذه الشاشة تُخصَّص الأزرار بنظام TCL نفسه، فلا تمر ضغطات الريموت عبر Awan TV ويبقى زر الصوت كما هو. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."
+                  : "On this TV the buttons are customised in TCL's own remapping, so remote presses do not pass through Awan TV and Volume is as it was. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power.";
+    }
     String buttonsServiceOff() { return ar ? "خدمة Awan TV متوقفة: لا تعمل الأزرار المخصصة حتى تشغّلها" : "The Awan TV service is off: custom buttons work once it is on"; }
     String buttonOpens(String name) { return ar ? name + " يفتح" : name + " opens"; }
     String buttonOriginal() { return ar ? "عمله الأصلي (بلا تخصيص)" : "What it always did (not customised)"; }
