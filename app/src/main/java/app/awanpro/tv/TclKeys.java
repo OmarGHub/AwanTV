@@ -60,17 +60,18 @@ final class TclKeys {
 
     /** Before Remove Awan TV: every entry of ours emptied (TCL's own put back), at once. */
     static void leave(Context c) {
-        install(c, new java.util.HashMap<>());
+        install(c, new java.util.HashMap<>(), new java.util.HashMap<>());
     }
 
     private TclKeys() {
     }
 
     /**
-     * Maps each keycode to its intent. Returns false when this TV has no TCL remapping or the settings can't be
+     * Maps each keycode to its intent, and to what holding it opens (holds: those that have one; the press then acts
+     * on release, keyaction 3, and the hold on TCL's long press, keyaction 2). Returns false when this TV has no TCL remapping or the settings can't be
      * written (no WRITE_SECURE_SETTINGS grant); the caller then filters keys itself.
      */
-    static boolean install(Context c, Map<Integer, Intent> targets) {
+    static boolean install(Context c, Map<Integer, Intent> targets, Map<Integer, Intent> holds) {
         if (!available(c)) return false;
         ContentResolver r = c.getContentResolver();
         try {
@@ -79,16 +80,15 @@ final class TclKeys {
             android.content.SharedPreferences.Editor ed = prefs.edit();
             JSONObject values = new JSONObject();
             for (Map.Entry<Integer, Intent> e : targets.entrySet()) {
-                Intent i = e.getValue();
-                if (i.getPackage() == null && i.getComponent() != null) i.setPackage(i.getComponent().getPackageName());
-                if (i.getPackage() == null) continue;
+                Intent i = packaged(e.getValue());
+                if (i == null) continue;
                 String code = String.valueOf(e.getKey());
                 // TCL's own entry for this code, kept once, to put back when ours goes.
                 String now = Settings.Global.getString(r, KEY_PREFIX + code);
                 if (now != null && !now.isEmpty() && !now.contains(MISSING) && !prefs.contains(ORIGINAL + code)) {
                     ed.putString(ORIGINAL + code, now);
                 }
-                values.put(code, entry(e.getKey(), i).toString());
+                values.put(code, entry(e.getKey(), i, packaged(holds.get(e.getKey()))).toString());
             }
             // Ours no longer wanted (a button reset, its app uninstalled): TCL's own back, or emptied, which hands
             // the button back to the firmware. An entry that is not ours stays as it is.
@@ -130,18 +130,31 @@ final class TclKeys {
         }
     }
 
-    private static JSONObject entry(int code, Intent target) throws JSONException {
+    /** The intent with its package set (TCL needs one), or null when it has none. */
+    private static Intent packaged(Intent i) {
+        if (i == null) return null;
+        if (i.getPackage() == null && i.getComponent() != null) i.setPackage(i.getComponent().getPackageName());
+        return i.getPackage() == null ? null : i;
+    }
+
+    /** One button: its press (on press, or on release when it has a hold), and its hold if any. */
+    private static JSONObject entry(int code, Intent target, Intent hold) throws JSONException {
+        JSONArray behaviors = new JSONArray().put(behavior(hold == null ? 1 : 3, target));
+        if (hold != null) behaviors.put(behavior(2, hold));
+        return new JSONObject().put("keycode", code).put("behavior", behaviors);
+    }
+
+    private static JSONObject behavior(int keyaction, Intent target) throws JSONException {
         JSONObject missing = new JSONObject()
                 .put("type", 3)
                 .put("intent", new Intent(MISSING).toUri(Intent.URI_INTENT_SCHEME));
         // Awan TV's own actions (the radio, nothing) are broadcasts; everything else opens an activity.
         boolean broadcast = target.getAction() != null && target.getAction().startsWith("app.awanpro.tv.");
-        JSONObject behavior = new JSONObject()
-                .put("keyaction", 1)
+        return new JSONObject()
+                .put("keyaction", keyaction)
                 .put("type", broadcast ? 3 : 1)
                 .put("intent", target.toUri(Intent.URI_INTENT_SCHEME))
                 .put("appnotinstall", missing);
-        return new JSONObject().put("keycode", code).put("behavior", new JSONArray().put(behavior));
     }
 
     private static Set<String> codes(String json) {

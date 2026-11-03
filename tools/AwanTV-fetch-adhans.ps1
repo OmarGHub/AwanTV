@@ -1,8 +1,10 @@
-# AwanTV-fetch-adhans.ps1 - Version 1.0.0
+# AwanTV-fetch-adhans.ps1 - Version 1.1.0
 # Downloads the adhan recordings into app\src\main\assets\adhan\ before you build.
 # They come from https://github.com/abodehq/Athan-MP3, which states no licence, so they are not part of the
 # source (as Afnon does). The release APK carries them, credited to that collection; whoever holds the rights to
 # a recording and wants it removed can open an issue. Without them Awan TV still works; the call screen is silent.
+# Two more come from https://github.com/meypod/audio_files (as Afnon 0.8 and meypod/al-azan use them), no licence
+# stated there either.
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-fetch-adhans.ps1
 
 $ErrorActionPreference = "Stop"
@@ -24,10 +26,12 @@ $List = @(
     @("refaat", "Athan Mohammad Ref3at.mp3"),
     @("abdulbasit", "Athan Abed Albase6.mp3"),
     @("nuyne", "Athan Ahmad Nuyne3.mp3"),
-    @("makkah", "Athan Makkah.mp3")
+    @("makkah", "Athan Makkah.mp3"),
+    @("nabawi", "https://raw.githubusercontent.com/meypod/audio_files/main/adhan/masjid_an_nabawi.mp3"),
+    @("ghalwash", "https://raw.githubusercontent.com/meypod/audio_files/main/adhan/ragheb_mustafa_ghalwash.mp3")
 )
 
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.1.0"
 Write-Host "AwanTV-fetch-adhans v$ScriptVersion"
 # Windows PowerShell 5.1 may not offer TLS 1.2 by default; GitHub requires it.
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
@@ -40,7 +44,8 @@ foreach ($item in $List) {
         Write-Host ("[{0,2}/{1}] {2} already here" -f $n, $List.Count, $item[0])
         continue
     }
-    $url = $Base + "/" + [Uri]::EscapeDataString($item[1])
+    # A full address (the meypod pair) as it is; a name from abodehq's collection under its base.
+    $url = if ($item[1] -like "https://*") { $item[1] } else { $Base + "/" + [Uri]::EscapeDataString($item[1]) }
     # Into a .part file first, so a broken download is never taken for a finished one on the next run.
     $part = "$file.part"
     Invoke-WebRequest -Uri $url -OutFile $part -UseBasicParsing

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AwanTV-fetch-adhans.sh - Version 1.0.0
+# AwanTV-fetch-adhans.sh - Version 1.1.0
 # Downloads the adhan recordings into app/src/main/assets/adhan/. They come from
 # https://github.com/abodehq/Athan-MP3, which states no licence, so they are not committed to this repo (as Afnon
 # does). The release APK carries them, credited to that collection; whoever holds the rights to a recording and
@@ -30,4 +30,12 @@ abdulbasit|Athan Abed Albase6.mp3
 nuyne|Athan Ahmad Nuyne3.mp3
 makkah|Athan Makkah.mp3
 LIST
+# Two more from https://github.com/meypod/audio_files (as Afnon 0.8 and meypod/al-azan use them), no licence stated.
+BASE2="https://raw.githubusercontent.com/meypod/audio_files/main/adhan"
+for item in nabawi\|masjid_an_nabawi.mp3 ghalwash\|ragheb_mustafa_ghalwash.mp3; do
+  id="${item%%|*}"; name="${item#*|}"
+  [ -f "$DEST/$id.mp3" ] && continue
+  echo "  $id"
+  curl -fsSL -o "$DEST/$id.mp3" "$BASE2/$name"
+done
 echo "Adhan recordings are in $DEST"

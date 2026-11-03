@@ -103,7 +103,13 @@ public class MainActivity extends Screen {
     private RadioBars pillBars, cardBars;
     private TextView radioLabel, cardStatus, playLabel;
     private LinearLayout radioCard;
-    private FocusTile cardPlay, cardDark;
+    private FocusTile cardPlay, cardStation, cardDark;
+    /** The radio card's station name, renamed when the Station list picks another. */
+    private TextView cardTitle;
+    /** The Station list over Home (its groups, then a group's stations); null when closed. */
+    private ListLayer stations;
+    /** Back in the Station list: to its groups from a group, else null (closes it, focus on Station). */
+    private Runnable stationsBack;
     private final Radio.Listener onRadio = state -> styleRadio();
     /** Test only (shiftTo): how far Home's clock is moved. */
     private long shift;
@@ -362,6 +368,8 @@ public class MainActivity extends Screen {
         }
         card = null;   // a reminder card went with the old root
         radioCard = null;
+        stations = null;
+        stationsBack = null;
         // The short arch and the month's calendar instead of Afnon's tall arch.
         buildShortArch();
         buildCalendar();
@@ -1101,6 +1109,7 @@ public class MainActivity extends Screen {
         label.setText(t.radio());
         TextView title = text(displayBold, 48, Tokens.PLASTER_100);
         title.setText(t.station(Radio.station(this)));
+        cardTitle = title;
         cardStatus = text(ui400, 24, Tokens.GOLD_400);
         words.addView(label);
         words.addView(title);
@@ -1117,6 +1126,9 @@ public class MainActivity extends Screen {
         playLabel = text(ui400, 24, Tokens.PLASTER_100);
         cardPlay = radioButton(playIcon, playLabel, t.radioPlay());
         cardPlay.setOnClickListener(v -> Radio.toggle(this));
+        // Another station without going to Settings (Afnon 0.8): the same list as Settings > Radio > Station.
+        cardStation = radioButton(new Icon(this, Icon.RADIO, 2f), text(ui400, 24, Tokens.PLASTER_100), t.stationRow());
+        cardStation.setOnClickListener(v -> openStationGroups());
         cardDark = radioButton(new Icon(this, Icon.MOON, 2f), text(ui400, 24, Tokens.PLASTER_100), t.screenOff());
         cardDark.setOnClickListener(v -> {
             closeRadioCard(true);
@@ -1124,6 +1136,9 @@ public class MainActivity extends Screen {
         });
         float r = FocusTile.REACH;
         buttons.addView(cardPlay, new LinearLayout.LayoutParams(-2, Ui.ipx(68 + 2 * r)));
+        LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(-2, Ui.ipx(68 + 2 * r));
+        slp.setMarginStart(Ui.ipx(16 - 2 * r));
+        buttons.addView(cardStation, slp);
         LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(-2, Ui.ipx(68 + 2 * r));
         dlp.setMarginStart(Ui.ipx(16 - 2 * r));
         buttons.addView(cardDark, dlp);
@@ -1152,7 +1167,8 @@ public class MainActivity extends Screen {
     private void cardHints(View focused) {
         if (radioCard == null || hints == null) return;
         List<String> h = new ArrayList<>();
-        h.add(t.hintOk(focused == cardDark ? t.screenOff() : (Radio.on() ? t.radioStop() : t.radioPlay())));
+        h.add(t.hintOk(focused == cardDark ? t.screenOff() : focused == cardStation ? t.stationRow()
+            : (Radio.on() ? t.radioStop() : t.radioPlay())));
         h.add(t.hintClose());
         setHints(hints, h);
     }
@@ -1179,8 +1195,91 @@ public class MainActivity extends Screen {
         return b;
     }
 
+    // ---------------------------------------------------------------- the radio card's Station list
+
+    /** The groups (Quran radio stations, reciters, and saved recordings when there are some), the current one marked. */
+    private void openStationGroups() {
+        Radio.Station now = Radio.station(this);
+        String[] groups = t.stationGroups();
+        if (Library.savedKeys(this).isEmpty()) groups = java.util.Arrays.copyOf(groups, 2);
+        int sel = now.url == null ? 2 : now.reciter ? 1 : 0;
+        showStations(t.stationRow(), groups, sel, i -> {
+            if (i == 2) openSavedStations();
+            else openStationList(i == 1);
+        }, null);
+    }
+
+    /** One group's stations (Afnon's, then mp3quran.net's other reciter channels); OK moves the radio there. */
+    private void openStationList(boolean reciters) {
+        List<Radio.Station> found = new ArrayList<>();
+        for (Radio.Station s : Radio.STATIONS) if (s.reciter == reciters) found.add(s);
+        if (reciters) found.addAll(Radios.extra(this));
+        String[] names = new String[found.size()];
+        String current = Radio.station(this).id;
+        int sel = -1;
+        for (int k = 0; k < names.length; k++) {
+            names[k] = t.stationChoice(found.get(k));
+            if (found.get(k).id.equals(current)) sel = k;
+        }
+        showStations(t.stationGroups()[reciters ? 1 : 0], names, sel, k -> {
+            Radio.switchToId(this, found.get(k).id);
+            stationPicked();
+        }, this::openStationGroups);
+    }
+
+    private void openSavedStations() {
+        List<String> keys = Library.savedKeys(this);
+        String[] names = new String[keys.size()];
+        String now = Radio.station(this).savedKey();
+        int sel = -1;
+        for (int k = 0; k < names.length; k++) {
+            names[k] = t.d(Library.name(this, keys.get(k), t.ar));
+            if (keys.get(k).equals(now)) sel = k;
+        }
+        showStations(t.stationGroups()[2], names, sel, k -> {
+            Radio.switchToSaved(this, keys.get(k));
+            stationPicked();
+        }, this::openStationGroups);
+    }
+
+    /** One step of the list over Home and the card: the card's buttons wait under it. */
+    private void showStations(String title, String[] items, int selected, java.util.function.IntConsumer pick, Runnable back) {
+        closeStations(false);
+        stations = new ListLayer(this, title, items, selected, i -> root.post(() -> pick.accept(i)));
+        stationsBack = back;
+        root.addView(stations.layer, new FrameLayout.LayoutParams(-1, -1));
+        for (View b : new View[] {cardPlay, cardStation, cardDark}) if (b != null) b.setFocusable(false);
+        if (stations.start != null) root.post(stations.start::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintMove());
+        h.add(t.hintChoose());
+        h.add(t.hintBackCancel());
+        setHints(hints, h);
+    }
+
+    /** The list gone: the card's buttons back, focus on Station when asked. */
+    private void closeStations(boolean focusStation) {
+        if (stations == null) return;
+        root.removeView(stations.layer);
+        stations = null;
+        stationsBack = null;
+        for (View b : new View[] {cardPlay, cardStation, cardDark}) if (b != null) b.setFocusable(true);
+        if (focusStation && cardStation != null) {
+            cardStation.requestFocus();
+            cardHints(cardStation);
+        }
+    }
+
+    /** A station picked: the list closes, the card names it (the radio, if on, has moved there already). */
+    private void stationPicked() {
+        closeStations(true);
+        if (cardTitle != null) cardTitle.setText(t.station(Radio.station(this)));
+        styleRadio();
+    }
+
     private void closeRadioCard(boolean focusPill) {
         if (radioCard == null) return;
+        closeStations(false);
         root.removeView(radioCard);
         radioCard = null;
         for (View n : nodes) if (n != null) n.setFocusable(true);
@@ -1296,14 +1395,33 @@ public class MainActivity extends Screen {
                 return true;
             }
         }
+        if (stations != null) {
+            if (k == KeyEvent.KEYCODE_BACK) {
+                if (e.getAction() == KeyEvent.ACTION_UP) {
+                    Runnable back = stationsBack;
+                    if (back != null) back.run();
+                    else closeStations(true);
+                }
+                return true;
+            }
+            if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) return true;
+            return super.dispatchKeyEvent(e);
+        }
         if (radioCard != null) {
             if (k == KeyEvent.KEYCODE_BACK) {
                 if (e.getAction() == KeyEvent.ACTION_UP) closeRadioCard(true);
                 return true;
             }
             if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                // Play, Station, Screen off along the card (mirrored in Arabic).
                 boolean toEnd = (k == KeyEvent.KEYCODE_DPAD_RIGHT) != rtl;
-                if (e.getAction() == KeyEvent.ACTION_DOWN) (toEnd ? cardDark : cardPlay).requestFocus();
+                if (e.getAction() == KeyEvent.ACTION_DOWN) {
+                    View[] row = {cardPlay, cardStation, cardDark};
+                    int at = 0;
+                    for (int i = 0; i < row.length; i++) if (row[i] != null && row[i].isFocused()) at = i;
+                    int to = Math.max(0, Math.min(row.length - 1, at + (toEnd ? 1 : -1)));
+                    row[to].requestFocus();
+                }
                 return true;
             }
             if (k == KeyEvent.KEYCODE_DPAD_UP || k == KeyEvent.KEYCODE_DPAD_DOWN) return true;

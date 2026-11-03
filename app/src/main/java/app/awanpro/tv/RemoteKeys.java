@@ -73,6 +73,11 @@ public class RemoteKeys extends AccessibilityService {
     private static Capture capture;
     /** The key whose press went to the capture: its release (and repeats) are swallowed too. */
     private static int captured = -1;
+    /** A held custom button: its hold waiting to fire; heldFired once it has (its release then does nothing). */
+    private final android.os.Handler keys = new android.os.Handler(android.os.Looper.getMainLooper());
+    private Runnable held;
+    private int heldCode = -1;
+    private boolean heldFired;
 
     /** Starts listening for a button; false when the service is off (Settings then hears what reaches it). */
     static boolean startCapture(Capture c) {
@@ -103,6 +108,7 @@ public class RemoteKeys extends AccessibilityService {
     private boolean applyKeys() {
         boolean stock = guard != null && guard.hasStock();
         Map<Integer, Intent> to = stock ? new HashMap<>() : targets();
+        Map<Integer, Intent> holds = new HashMap<>();
         boolean byScan = false;
         for (Buttons.Entry b : Buttons.all(this)) {
             if (b.id.startsWith("s")) {
@@ -111,9 +117,13 @@ public class RemoteKeys extends AccessibilityService {
             }
             Intent i = Buttons.intent(this, b.action);
             // Its app gone: the button does what it did before.
-            if (i != null) to.put(Integer.parseInt(b.id), i);
+            if (i == null) continue;
+            int code = Integer.parseInt(b.id);
+            to.put(code, i);
+            Intent h = b.longAction == null ? null : Buttons.intent(this, b.longAction);
+            if (h != null) holds.put(code, h);
         }
-        boolean tcl = TclKeys.install(this, to);
+        boolean tcl = TclKeys.install(this, to, holds);
         customFilter = Buttons.any(this) && (!tcl || byScan);
         return tcl;
     }
@@ -221,14 +231,44 @@ public class RemoteKeys extends AccessibilityService {
         return true;
     }
 
-    /** A button the viewer customised: its action on release, the press and repeats swallowed. */
+    /**
+     * A button the viewer customised: its action on release, the press and repeats swallowed. With a hold too, the
+     * press starts Android's long-press time: still held then, the hold runs and the release does nothing.
+     */
     private boolean customKey(KeyEvent e) {
         String action = Buttons.action(this, e);
         if (action == null || !Buttons.available(this, action)) return false;
-        if (e.getAction() == KeyEvent.ACTION_UP && !e.isCanceled() && !Buttons.NONE.equals(action)) {
-            Buttons.run(this, action);
+        String hold = Buttons.longAction(this, e);
+        if (hold != null && !Buttons.available(this, hold)) hold = null;
+        int code = e.getKeyCode();
+        if (e.getAction() == KeyEvent.ACTION_DOWN) {
+            if (hold != null && e.getRepeatCount() == 0) {
+                cancelHold();
+                String run = hold;
+                heldCode = code;
+                heldFired = false;
+                held = () -> {
+                    heldFired = true;
+                    held = null;
+                    if (!Buttons.NONE.equals(run)) Buttons.run(this, run);
+                };
+                keys.postDelayed(held, Buttons.LONG_MS);
+            }
+            return true;
         }
+        if (e.getAction() != KeyEvent.ACTION_UP) return true;
+        boolean fired = heldCode == code && heldFired;
+        if (heldCode == code) {
+            cancelHold();
+            heldCode = -1;
+        }
+        if (!fired && !e.isCanceled() && !Buttons.NONE.equals(action)) Buttons.run(this, action);
         return true;
+    }
+
+    private void cancelHold() {
+        if (held != null) keys.removeCallbacks(held);
+        held = null;
     }
 
     /** Every button this service answers, with what it opens; buttons whose target is missing are left out. */

@@ -6,6 +6,22 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Home's radio card: Station, between Play and Screen off, lists the stations, the recitations and the saved
+  recordings (as Settings > Radio does) over Home; the choice plays at once.
+- Remote buttons: a customised button can also be held (half a second, Android's long press) to do something else:
+  nothing, one of Awan TV's screens, or an app. OK on a button's row asks which: its press or its hold. Only a button
+  whose press is customised can have a hold (its press taken, what it did before can't be given back). On a TCL TV
+  its remapping does both (the press on release, the hold on its long press); elsewhere the key filter times it.
+- Two adhan voices: Al-Masjid an-Nabawi, and Ragheb Mustafa Ghalwash (meypod/audio_files). Settings > About > Sources
+  and licences names both sources.
+- What's new lists 1.4.0.
+- THIRD_PARTY.md: Oman's radio and the Saudi Broadcasting Authority's stations (added in 1.3.0), and the new adhan
+  recordings.
+
+### The tools
+- AwanTV-fetch-adhans (.ps1 and .sh) 1.1.0: fetches the two new voices from meypod/audio_files too.
+
 ## [1.3.0]
 
 ### The app

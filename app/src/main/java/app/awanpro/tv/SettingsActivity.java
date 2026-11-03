@@ -2152,12 +2152,16 @@ public class SettingsActivity extends Screen {
                 String label() { return b.name; }
                 String help() {
                     String from = t.buttonFrom(b.from);
-                    if (!Buttons.SHOW_CODES) return from;
-                    String id = b.id.startsWith("s") ? "scan " + b.id.substring(1) : android.view.KeyEvent.keyCodeToString(Integer.parseInt(b.id));
-                    return from.isEmpty() ? id : from + t.sep() + id;
+                    if (Buttons.SHOW_CODES) {
+                        String id = b.id.startsWith("s") ? "scan " + b.id.substring(1) : android.view.KeyEvent.keyCodeToString(Integer.parseInt(b.id));
+                        from = from.isEmpty() ? id : from + t.sep() + id;
+                    }
+                    if (b.longAction == null) return from;
+                    String held = t.buttonLongShort(Buttons.label(c, t, b.longAction));
+                    return from.isEmpty() ? held : from + t.sep() + held;
                 }
                 String value() { return Buttons.label(c, t, b.action); }
-                void open() { openButtonChooser(b, null); }
+                void open() { openButtonKind(b, null); }
             });
         }
         if (out.size() < MAX_BUTTONS) {
@@ -2201,6 +2205,11 @@ public class SettingsActivity extends Screen {
      * (Home's order). heard is the press that brought it here (test builds show its codes), null from the list.
      */
     private void openButtonChooser(Buttons.Entry b, android.view.KeyEvent heard) {
+        openButtonChooser(b, heard, null);
+    }
+
+    /** back, if given, is where Back goes (the press-or-hold list of a button already customised). */
+    private void openButtonChooser(Buttons.Entry b, android.view.KeyEvent heard, Runnable back) {
         Context c = this;
         List<String> actions = new ArrayList<>();
         List<String> names = new ArrayList<>();
@@ -2218,11 +2227,7 @@ public class SettingsActivity extends Screen {
         }
         // A new button starts on the first of Awan TV's screens; one already set, on its choice.
         int sel = b.action == null ? -1 : actions.indexOf(b.action);
-        String sub = t.buttonFrom(b.from);
-        if (Buttons.SHOW_CODES && heard != null) {
-            String codes = Buttons.codes(heard.getKeyCode(), heard.getScanCode());
-            sub = sub.isEmpty() ? codes : sub + t.sep() + codes;
-        }
+        String sub = buttonSub(b, heard);
         openChooser(t.buttonOpens(b.name), sub.isEmpty() ? null : sub, names.toArray(new String[0]), sel, i -> {
             String action = actions.get(i);
             if (action == null && b.action == null) return;   // a new button left as it was: nothing to save
@@ -2238,8 +2243,71 @@ public class SettingsActivity extends Screen {
                 focusRow(Math.min(at, rows.size() - 1));
             });
         }, null);
+        chooserBack = back;
         // A new button's list opens on Awan TV's first screen, not on "what it always did".
         if (sel < 0) focusChooserItem(2);
+    }
+
+    /** The subtitle of a button's lists: its remote, and the codes heard (test builds only). */
+    private String buttonSub(Buttons.Entry b, android.view.KeyEvent heard) {
+        String sub = t.buttonFrom(b.from);
+        if (Buttons.SHOW_CODES && heard != null) {
+            String codes = Buttons.codes(heard.getKeyCode(), heard.getScanCode());
+            sub = sub.isEmpty() ? codes : sub + t.sep() + codes;
+        }
+        return sub;
+    }
+
+    /**
+     * A button already customised: its press or its hold. A hold is only for a button whose press is customised
+     * (with the press taken, what the button did before cannot be given back on a short press).
+     */
+    private void openButtonKind(Buttons.Entry b, android.view.KeyEvent heard) {
+        Context c = this;
+        String hold = b.longAction == null ? t.buttonLongNone() : Buttons.label(c, t, b.longAction);
+        String[] items = {t.buttonPressIs(Buttons.label(c, t, b.action)), t.buttonLongIs(hold)};
+        String sub = buttonSub(b, heard);
+        sub = sub.isEmpty() ? t.buttonLongNote() : sub + t.sep() + t.buttonLongNote();
+        Runnable again = () -> root.post(() -> openButtonKind(b, heard));
+        // The next list opens once this chooser has closed (closeChooser runs after the pick).
+        openChooser(b.name, sub, items, -1, i -> root.post(() -> {
+            if (i == 0) openButtonChooser(b, heard, again);
+            else openLongChooser(b, again);
+        }), null);
+    }
+
+    /** What holding the button does: no hold (a press), nothing, one of Awan TV's screens, or an app. */
+    private void openLongChooser(Buttons.Entry b, Runnable back) {
+        Context c = this;
+        List<String> actions = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        actions.add(null);
+        names.add(t.buttonLongNone());
+        actions.add(Buttons.NONE);
+        names.add(t.buttonNone());
+        for (String a : new String[] {Buttons.SAVER, Buttons.TODAY, Buttons.RADIO}) {
+            actions.add(a);
+            names.add(Buttons.label(c, t, a));
+        }
+        for (String pkg : Apps.sorted(c, t)) {
+            actions.add(Buttons.app(pkg));
+            names.add(Apps.name(c, t, pkg));
+        }
+        int sel = actions.indexOf(b.longAction);
+        openChooser(t.buttonLongTitle(b.name), t.buttonLongNote(), names.toArray(new String[0]), sel, i -> {
+            String action = actions.get(i);
+            if (java.util.Objects.equals(action, b.longAction)) return;
+            b.longAction = action;
+            Buttons.save(c, b, b.action);
+            RemoteKeys.buttonsChanged();
+            showSaved();
+            root.post(() -> {
+                showSection();
+                List<Buttons.Entry> now = Buttons.all(c);
+                for (int k = 0; k < now.size(); k++) if (now.get(k).id.equals(b.id)) focusRow(k);
+            });
+        }, null);
+        chooserBack = back;
     }
 
     /** Focus on one item of the open chooser (its list is the card's last child, in a ScrollView). */
@@ -2336,8 +2404,8 @@ public class SettingsActivity extends Screen {
         closePress();
         String id = Buttons.id(e);
         Buttons.Entry b = Buttons.find(this, id);
-        if (b == null) b = new Buttons.Entry(id, Buttons.name(t, e.getKeyCode(), e.getScanCode()), Buttons.remote(e), null);
-        openButtonChooser(b, e);
+        if (b == null) openButtonChooser(new Buttons.Entry(id, Buttons.name(t, e.getKeyCode(), e.getScanCode()), Buttons.remote(e), null), e);
+        else openButtonKind(b, e);
     }
 
     private void stopPress() {

@@ -173,8 +173,8 @@ final class Text {
                   : "Recitations: mp3quran.net (open to any developer) · their reciters'";
     }
     String adhanCredit() {
-        return ar ? "التسجيلات: github.com/abodehq/Athan-MP3 · يُحذف أي تسجيل بطلب صاحب حقه"
-                  : "Recordings: github.com/abodehq/Athan-MP3 · any one removed at its rights holder's request";
+        return ar ? "التسجيلات: github.com/abodehq/Athan-MP3 و github.com/meypod/audio_files · يُحذف أي تسجيل بطلب صاحب حقه"
+                  : "Recordings: github.com/abodehq/Athan-MP3 and github.com/meypod/audio_files · any one removed at its rights holder's request";
     }
     String nothingSaved() { return ar ? "لا تلاوات محفوظة بعد · من الإذاعة ← التلاوات المحفوظة" : "Nothing saved yet · Radio > Saved recitations"; }
     /** The decimal point: the Arabic one (٫) with Eastern digits, a point with Western ones. */
@@ -378,6 +378,15 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.4.0":
+                return ar ? new String[][] {
+                    {"المحطة من الرئيسية", "في بطاقة الإذاعة زر «المحطة»: بدّل الإذاعة أو التلاوة دون أن تفتح الإعدادات."},
+                    {"الضغطة المطوّلة", "لكل زر خصصته في أزرار الريموت ضغطة مطوّلة تفتح شيئًا آخر."},
+                    {"صوتان للأذان", "أذان المسجد النبوي، وأذان الشيخ راغب مصطفى غلوش، في الإعدادات ← الأذان."}}
+                  : new String[][] {
+                    {"The station from Home", "The radio card has a Station button: change the station or recitation without opening Settings."},
+                    {"Hold a button", "Each button you customised in Remote buttons can open something else when held."},
+                    {"Two adhan voices", "The adhan of Al-Masjid an-Nabawi, and Sheikh Ragheb Mustafa Ghalwash's, in Settings › Adhan."}};
             case "1.3.0":
                 return ar ? new String[][] {
                     {"طريقة وزارة الأوقاف العُمانية", "مواقيت سلطنة عُمان بطريقة وزارة الأوقاف والشؤون الدينية، تُختار تلقائيًا لمدنها."},
@@ -516,6 +525,13 @@ final class Text {
     }
     String buttonsServiceOff() { return ar ? "خدمة Awan TV متوقفة: لا تعمل الأزرار المخصصة حتى تشغّلها" : "The Awan TV service is off: custom buttons work once it is on"; }
     String buttonOpens(String name) { return ar ? name + " يفتح" : name + " opens"; }
+    /** A custom button's press and hold (Buttons.Entry.longAction). */
+    String buttonPressIs(String action) { return (ar ? "ضغطة: " : "Press: ") + action; }
+    String buttonLongIs(String action) { return (ar ? "ضغطة مطوّلة: " : "Hold: ") + action; }
+    String buttonLongNone() { return ar ? "بلا ضغطة مطوّلة" : "No hold"; }
+    String buttonLongNote() { return ar ? "الضغطة المطوّلة نصف ثانية أو أكثر" : "A hold is half a second or more"; }
+    String buttonLongShort(String action) { return (ar ? "مطوّلًا: " : "Held: ") + action; }
+    String buttonLongTitle(String name) { return ar ? name + " مطوّلًا" : name + ", held"; }
     String buttonOriginal() { return ar ? "عمله الأصلي (بلا تخصيص)" : "What it always did (not customised)"; }
     String buttonNone() { return ar ? "لا شيء (يعطّل الزر)" : "Nothing (turns the button off)"; }
     String buttonOff() { return ar ? "لا شيء (معطّل)" : "Nothing (off)"; }

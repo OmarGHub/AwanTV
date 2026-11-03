@@ -30,6 +30,9 @@ final class Adhans {
         {"abdulbasit", "عبد الباسط عبد الصمد", "Abdul Basit"},
         {"nuyne", "أحمد نعينع", "Ahmad Nuaina"},
         {"makkah", "الحرم المكي", "Makkah, Al-Haram"},
+        // Two more, as Afnon 0.8 and meypod/al-azan have them (meypod/audio_files; tools/AwanTV-fetch-adhans).
+        {"nabawi", "المسجد النبوي", "Al-Masjid an-Nabawi"},
+        {"ghalwash", "راغب مصطفى غلوش", "Ragheb Mustafa Ghalwash"},
     };
 
     /** True when this build carries the recordings (tools/AwanTV-fetch-adhans before building; not in the source). */

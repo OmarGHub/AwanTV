@@ -41,10 +41,11 @@ final class Buttons {
     static final String NONE = "none", SAVER = "awan:saver", TODAY = "awan:today", RADIO = "awan:radio";
     private static final String APP = "app:";
 
-    /** One customised button. */
+    /** One customised button: its press, and what holding it does (null: holding it is a press). */
     static final class Entry {
         final String id, name, from;
         String action;
+        String longAction;
 
         Entry(String id, String name, String from, String action) {
             this.id = id;
@@ -132,7 +133,9 @@ final class Buttons {
     // ---------------------------------------------------------------- the saved table
 
     private static String cachedRaw;
-    private static Map<String, String> cachedActions = new HashMap<>();
+    private static Map<String, String> cachedActions = new HashMap<>(), cachedLongs = new HashMap<>();
+    /** How long a press is held to count as held (Android's own long-press time). */
+    static final long LONG_MS = 500;
 
     static List<Entry> all(Context c) {
         List<Entry> out = new ArrayList<>();
@@ -142,7 +145,9 @@ final class Buttons {
             JSONArray a = new JSONArray(raw);
             for (int i = 0; i < a.length(); i++) {
                 JSONObject o = a.getJSONObject(i);
-                out.add(new Entry(o.getString("k"), o.optString("name"), o.optString("from"), o.getString("do")));
+                Entry e = new Entry(o.getString("k"), o.optString("name"), o.optString("from"), o.getString("do"));
+                e.longAction = o.has("long") ? o.getString("long") : null;
+                out.add(e);
             }
         } catch (JSONException ignored) {
             // Garbled: as if none were set.
@@ -174,7 +179,9 @@ final class Buttons {
         JSONArray a = new JSONArray();
         try {
             for (Entry e : list) {
-                a.put(new JSONObject().put("k", e.id).put("name", e.name).put("from", e.from).put("do", e.action));
+                JSONObject o = new JSONObject().put("k", e.id).put("name", e.name).put("from", e.from).put("do", e.action);
+                if (e.longAction != null) o.put("long", e.longAction);
+                a.put(o);
             }
         } catch (JSONException ignored) {
             // Plain strings only; cannot happen.
@@ -190,12 +197,25 @@ final class Buttons {
         String raw = Prefs.of(c).getString(KEY, null);
         if (raw == null) return new HashMap<>();
         if (!raw.equals(cachedRaw)) {
-            Map<String, String> m = new HashMap<>();
-            for (Entry e : all(c)) m.put(e.id, e.action);
+            Map<String, String> m = new HashMap<>(), l = new HashMap<>();
+            for (Entry e : all(c)) {
+                m.put(e.id, e.action);
+                if (e.longAction != null) l.put(e.id, e.longAction);
+            }
             cachedActions = m;
+            cachedLongs = l;
             cachedRaw = raw;
         }
         return cachedActions;
+    }
+
+    /** What holding the button does, or null when holding it is a press. */
+    static String longAction(Context c, KeyEvent e) {
+        if (excluded(e.getKeyCode())) return null;
+        String id = id(e);
+        if (id == null) return null;
+        actions(c);
+        return cachedLongs.get(id);
     }
 
     /** What the pressed button is set to do, or null when it is not customised (or never can be). */
