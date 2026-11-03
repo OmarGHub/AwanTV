@@ -130,6 +130,7 @@ final class SelfUpdate {
                 download(s, String.format(DOWNLOAD, from));
                 if (cancelled) throw new IOException("cancelled");
                 set(INSTALLING);
+                markUpdating(c);
                 int flags = PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_MUTABLE : 0);
                 PendingIntent done = PendingIntent.getBroadcast(c, id, new Intent(c, Result.class), flags);
                 s.commit(done.getIntentSender());
@@ -145,6 +146,39 @@ final class SelfUpdate {
             }
             if (!cancelled) set(FAILED);
         }
+    }
+
+    /**
+     * Before the install: Android may put the update in at once (seen on a Google TV Streamer, with no question),
+     * which ends this process, and the TV's own home screen comes up; nothing brings Home back, since no window
+     * change follows. So this is noted (synchronously: the process may end any moment), and the new version's
+     * service opens Home when it connects (afterUpdate), if Home was what the viewer had in front.
+     */
+    private static void markUpdating(Context c) {
+        Prefs.of(c).edit().putLong(UPDATING_AT, System.currentTimeMillis()).putBoolean(UPDATING_HOME, MainActivity.shown).commit();
+    }
+
+    private static final String UPDATING_AT = "upd_self_at", UPDATING_HOME = "upd_self_home";
+
+    /** The service connected: just after Update now's install, Home again if it was in front. Once. */
+    static void afterUpdate(Context c) {
+        android.content.SharedPreferences p = Prefs.of(c);
+        long at = p.getLong(UPDATING_AT, 0), now = System.currentTimeMillis();
+        if (at == 0) return;
+        boolean home = p.getBoolean(UPDATING_HOME, false);
+        p.edit().remove(UPDATING_AT).remove(UPDATING_HOME).apply();
+        // Ten minutes: an install that never happened (refused, cancelled) must not open Home on a later start.
+        if (!home || at > now || now - at > 10 * 60_000L || MainActivity.shown) return;
+        main.postDelayed(() -> {
+            if (MainActivity.shown) return;
+            Log.i(TAG, "updated: opening Home again");
+            try {
+                c.startActivity(new Intent(c, MainActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            } catch (RuntimeException e) {
+                Log.w(TAG, "could not open Home after the update", e);
+            }
+        }, 1500);
     }
 
     /** Streams the APK into the session, with the window's percentage; stops when cancelled. */
@@ -207,6 +241,7 @@ final class SelfUpdate {
                 case PackageInstaller.STATUS_FAILURE_ABORTED:
                     // Cancelled in Android's dialog: Update now is offered again.
                     confirm = null;
+                    Prefs.of(c).edit().remove(UPDATING_AT).remove(UPDATING_HOME).apply();
                     set(IDLE);
                     return;
                 default:
@@ -214,6 +249,7 @@ final class SelfUpdate {
             }
             Log.i(TAG, "install refused: " + status + " " + i.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE));
             confirm = null;
+            Prefs.of(c).edit().remove(UPDATING_AT).remove(UPDATING_HOME).apply();
             set(FAILED);
         }
     }

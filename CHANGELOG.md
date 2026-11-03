@@ -6,6 +6,14 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- After Update now, Home comes back by itself. On a Google TV Streamer the 1.7.0 update went in with no question,
+  which ended the old app; the TV's own home screen came up and stayed, since nothing changed on screen for the
+  service to see. The install now notes that Home was in front, and the new version's service opens Home when it
+  connects (within ten minutes; not when the viewer was in another app). From 1.7.1 on: an update from 1.7.0 still
+  leaves the TV's home screen up once (Home's button brings Awan TV back).
+- Test builds only: `TEST_UPDATE --ez updated true` marks the TV as just updated from Home.
+
 ## [1.7.0]
 
 ### The app

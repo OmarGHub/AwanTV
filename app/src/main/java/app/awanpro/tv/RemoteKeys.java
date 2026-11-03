@@ -140,6 +140,8 @@ public class RemoteKeys extends AccessibilityService {
         Prefs.of(this).edit().putBoolean(ServiceCheck.ON, true).apply();
         running = this;
         guard = new HomeGuard(this);
+        // Just updated by Update now: Home back in front, as it was (the TV's own home came up meanwhile).
+        SelfUpdate.afterUpdate(this);
         // Beside the TV's own home screen (shown over it or not) that launcher still answers the remote's buttons,
         // so Afnon's button table is for a TV where Awan TV itself is Home and the stock launcher is gone; beside it
         // only the viewer's own buttons are answered, and Home's on an HDMI source box (HomeGuard.takesHome).

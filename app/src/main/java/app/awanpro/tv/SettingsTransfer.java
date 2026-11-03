@@ -96,7 +96,12 @@ public class SettingsTransfer extends BroadcastReceiver {
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
                 int days = intent.getIntExtra("days_ago", -1);
                 String download = intent.getStringExtra("download");
-                if (download != null) {
+                if (intent.getBooleanExtra("updated", false)) {
+                    // As if Update now had just installed this version over Home: the service, when it connects again,
+                    // opens Home (SelfUpdate.afterUpdate).
+                    Prefs.of(c).edit().putLong("upd_self_at", System.currentTimeMillis()).putBoolean("upd_self_home", true).commit();
+                    result = "Marked as just updated from Home (test build); restart the service to see Home come back";
+                } else if (download != null) {
                     // Update now downloads this real release instead (an older one: Android then refuses it).
                     SelfUpdate.testDownload = download.isEmpty() ? null : download;
                     result = download.isEmpty() ? "Update now downloads the version offered again (test build)"
