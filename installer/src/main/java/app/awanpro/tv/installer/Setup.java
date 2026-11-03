@@ -123,7 +123,17 @@ final class Setup {
             int d = Integer.compare(number(x, i), number(y, i));
             if (d != 0) return d;
         }
-        return 0;
+        // The same numbers: a test build's letter (1.1.0a, 1.1.0b) comes before the release (1.1.0), in letter order.
+        String p = test(a), q = test(b);
+        if (p.equals(q)) return 0;
+        if (p.isEmpty()) return 1;
+        if (q.isEmpty()) return -1;
+        return p.compareTo(q);
+    }
+
+    /** A test build's letters after the last number ("b" in 1.1.0b), or "" for a release. */
+    private static String test(String v) {
+        return v.trim().replaceFirst("^.*?\\d+([a-z]*)$", "$1");
     }
 
     private static int number(String[] parts, int i) {

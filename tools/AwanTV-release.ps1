@@ -1,4 +1,4 @@
-# AwanTV-release.ps1 - Version 1.0.1
+# AwanTV-release.ps1 - Version 1.0.2
 # Gathers the files of a GitHub release into release\ (ignored by git). Their names stay the same in every
 # version, so the guide's .../releases/latest/download/<name> links keep working:
 #   AwanTV.apk           the TV app (app\release\AwanTV.apk)
@@ -11,7 +11,7 @@
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-release.ps1
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.0.1"
+$ScriptVersion = "1.0.2"
 $Root = Split-Path -Parent $PSScriptRoot
 $App = Join-Path $Root "app\release\AwanTV.apk"
 $Installer = Join-Path $Root "installer\release\AwanTVInstaller.apk"
@@ -26,6 +26,10 @@ foreach ($f in @($App, $Installer)) {
     if (-not (Test-Path $f)) { throw "Not found: $f  (Build > Generate Signed App Bundle or APK > APK > release)" }
 }
 $version = [regex]::Match((Get-Content (Join-Path $Root "gradle.properties") -Raw), "(?m)^awanVersion=(\S+)").Groups[1].Value
+# A test build (1.1.0a, 1.1.0b) is never released: the release is the plain X.Y.Z.
+if ($version -notmatch "^\d+\.\d+\.\d+$") {
+    throw "awanVersion is $version, a test build. Set it to the release's X.Y.Z in gradle.properties, then build the app and the installer again."
+}
 
 # The spoken reminders (tools\AwanTV-fetch-announce.ps1) are for one's own build only: a release never carries them.
 $zip = [IO.Compression.ZipFile]::OpenRead($App)

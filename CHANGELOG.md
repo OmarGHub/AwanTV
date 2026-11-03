@@ -20,6 +20,7 @@ history is in its repository.
 
 ### The tools (Windows)
 - `AwanTV-restore` gives a TCL TV's remote buttons back to the TV.
+- `AwanTV-release` refuses a test build's version (one with a letter, such as 1.1.0b).
 
 ## [1.0.2]
 
