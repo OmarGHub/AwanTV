@@ -37,7 +37,8 @@ public class SettingsTransfer extends BroadcastReceiver {
     static final String IDENTIFY = "app.awanpro.tv.IDENTIFY";
     /**
      * Test builds only (a version with a letter, 1.5.0a): pretend GitHub's latest is the extra "version", and forget
-     * what the notice was told, to see UpdateNotice without a newer release out. A release answers Unknown action.
+     * what the notice was told, to see UpdateNotice without a newer release out; or, with the extra int "days_ago",
+     * move when the notice was last closed back that many days (the weekly reminder). A release answers Unknown action.
      */
     static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
     static final String FILE = "awantv-settings.jsonc";
@@ -92,11 +93,18 @@ public class SettingsTransfer extends BroadcastReceiver {
                 RemoteKeys.watch.showIdentify(name, intent.getStringExtra("id"), versionName(c));
                 result = "Shown on the TV";
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
-                String v = intent.getStringExtra("version");
-                if (v == null || !v.matches("\\d+(\\.\\d+)*[a-z]*")) throw new IOException("Give --es version 1.9.0");
-                Prefs.of(c).edit().putString("upd_latest", v).putLong("upd_at", System.currentTimeMillis())
-                    .remove("upd_shown").remove("upd_shown_at").remove("upd_muted").apply();
-                result = "Latest set to " + v + " (test build)";
+                int days = intent.getIntExtra("days_ago", -1);
+                if (days >= 0) {
+                    // The notice last closed that many days ago: a week's wait seen at once.
+                    Prefs.of(c).edit().putLong("upd_shown_at", System.currentTimeMillis() - days * 24 * 3600_000L).apply();
+                    result = "Notice last closed " + days + " day(s) ago (test build)";
+                } else {
+                    String v = intent.getStringExtra("version");
+                    if (v == null || !v.matches("\\d+(\\.\\d+)*[a-z]*")) throw new IOException("Give --es version 1.9.0 or --ei days_ago 8");
+                    Prefs.of(c).edit().putString("upd_latest", v).putLong("upd_at", System.currentTimeMillis())
+                        .remove("upd_shown").remove("upd_shown_at").remove("upd_muted").apply();
+                    result = "Latest set to " + v + " (test build)";
+                }
             } else {
                 throw new IOException("Unknown action " + intent.getAction());
             }

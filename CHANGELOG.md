@@ -18,6 +18,8 @@ history is in its repository.
 - AwanTV-shot 1.0.1: an empty screenshot is said, not kept.
 - Test builds only: `adb shell am broadcast -a app.awanpro.tv.TEST_UPDATE --es version 1.9.0 -n
   app.awanpro.tv/.SettingsTransfer` pretends a newer release, to see the notice.
+  With `--ei days_ago 8` instead, the notice counts as closed eight days ago (the weekly reminder at once).
+- Over What's new and the newer version's notice, the key hints are theirs (OK Choose, Back Close), not Home's.
 - What's new lists 1.5.0.
 
 ## [1.4.0]

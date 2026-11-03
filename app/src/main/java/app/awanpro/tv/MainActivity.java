@@ -265,6 +265,7 @@ public class MainActivity extends Screen {
         root.addView(news.layer, new FrameLayout.LayoutParams(-1, -1));
         for (View n : nodes) if (n != null) n.setFocusable(false);
         root.post(news.ok::requestFocus);
+        layerHints();
     }
 
     private void closeNews() {
@@ -288,6 +289,16 @@ public class MainActivity extends Screen {
         root.addView(update.layer, new FrameLayout.LayoutParams(-1, -1));
         for (View n : nodes) if (n != null) n.setFocusable(false);
         root.post(update.ok::requestFocus);
+        layerHints();
+    }
+
+    /** A layer over Home (What's new, a newer version): its own key hints, over the dimmed screen, not Home's. */
+    private void layerHints() {
+        java.util.List<String> h = new java.util.ArrayList<>();
+        h.add(t.hintChoose());
+        h.add(t.hintBackClose());
+        setHints(hints, h);
+        hints.bringToFront();
     }
 
     /** OK or Back: again in a week; mute: not for this version. */
