@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.6.0]
+
 ### The app
 - TCL's remote buttons: the entry a custom button replaces (TCL's own, or another app's) is kept in the TV's own
   settings (`AwanSavedKey_<code>`, as Afnon's `AfnonSavedKey_` in its #41), no longer in the app's, where it was
