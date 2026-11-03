@@ -15,6 +15,7 @@ history is in its repository.
 - The daily question to GitHub is always asked: Settings > About > New versions is gone (an older settings file's
   `update_check` is passed over). Check for updates now still asks at once.
 - Settings > About's new-version window says why to update, and its code opens the download page.
+- AwanTV-shot 1.0.1: an empty screenshot is said, not kept.
 - Test builds only: `adb shell am broadcast -a app.awanpro.tv.TEST_UPDATE --es version 1.9.0 -n
   app.awanpro.tv/.SettingsTransfer` pretends a newer release, to see the notice.
 - What's new lists 1.5.0.

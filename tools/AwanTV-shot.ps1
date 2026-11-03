@@ -1,4 +1,4 @@
-# AwanTV-shot.ps1 - Version 1.0.0
+# AwanTV-shot.ps1 - Version 1.0.1
 # Takes a screenshot of the TV into state\shots\<installed Awan TV version>\<name>.png, so screenshots stay out of
 # the source folders (state\ is ignored by git and never packaged). Nothing is left on the TV.
 #
@@ -10,7 +10,7 @@
 param([string]$Name = "", [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.0.1"
 $Pkg = "app.awanpro.tv"
 $Root = Split-Path -Parent $PSScriptRoot
 
@@ -67,4 +67,10 @@ Adb shell screencap -p /sdcard/awantv-shot.png | Out-Null
 Adb pull /sdcard/awantv-shot.png $file | Out-Null
 Adb shell rm -f /sdcard/awantv-shot.png | Out-Null
 if (-not (Test-Path $file)) { throw "Screenshot failed (is the TV awake and connected?)" }
+# A TV can give an empty file without a word (seen on a TCL BeyondTV that took screenshots before; cause not found
+# yet): say so, keep nothing.
+if ((Get-Item $file).Length -eq 0) {
+    Remove-Item -Force $file
+    throw "The TV gave an empty screenshot (screencap wrote nothing). Nothing was saved."
+}
 Write-Host "AwanTV-shot v$ScriptVersion  ->  $file"
