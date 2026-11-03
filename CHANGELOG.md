@@ -6,6 +6,19 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- A newer version is told over Home, as What's new is (after it, never with it, a reminder or the radio card; never
+  over the screensaver or the call, which run with no one at the remote): the version, this TV's, why to update, the
+  QR code for the release page and how to update. Once for each new version, then a week after it was closed until
+  the TV has it, or until Don't remind me of this version (that version only; the next one shows again).
+- A gold mark on Home's Settings button and on Settings > About while a newer version is out, until the TV has it.
+- The daily question to GitHub is always asked: Settings > About > New versions is gone (an older settings file's
+  `update_check` is passed over). Check for updates now still asks at once.
+- Settings > About's new-version window says why to update, and its code opens the download page.
+- Test builds only: `adb shell am broadcast -a app.awanpro.tv.TEST_UPDATE --es version 1.9.0 -n
+  app.awanpro.tv/.SettingsTransfer` pretends a newer release, to see the notice.
+- What's new lists 1.5.0.
+
 ## [1.4.0]
 
 ### The app

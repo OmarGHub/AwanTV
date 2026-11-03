@@ -378,6 +378,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.5.0":
+                return ar ? new String[][] {
+                    {"تنبيه بالإصدار الجديد", "حين يصدر إصدار أحدث تخبرك الرئيسية به برمز تمسحه بالجوال، وتبقى نقطة ذهبية على زر الإعدادات حتى تحدّث."}}
+                  : new String[][] {
+                    {"Told of a new version", "When a newer version is out, Home tells you with a code to scan with a phone, and a gold mark stays on the Settings button until you update."}};
             case "1.4.0":
                 return ar ? new String[][] {
                     {"المحطة من الرئيسية", "في بطاقة الإذاعة زر «المحطة»: بدّل الإذاعة أو التلاوة دون أن تفتح الإعدادات."},
@@ -419,9 +424,18 @@ final class Text {
     String updateTitle(String version) { return ar ? "إصدار جديد: Awan TV " + version : "New version: Awan TV " + version; }
     String updateHave(String version) { return ar ? "على هذه الشاشة " + version + "." : "This TV has " + version + "."; }
     String updateHow() {
-        return ar ? "امسح الرمز بكاميرا الجوال لتفتح صفحة الإصدار وما الجديد فيه، ثم حدّث بالمثبّت على الجوال أو من حاسب Windows. الإعدادات والتلاوات المحفوظة تبقى."
-                  : "Scan the code with a phone's camera to open the release's page and what is new in it, then update with the phone installer or from a Windows computer. The settings and saved recitations stay.";
+        return ar ? "امسح الرمز بكاميرا الجوال لتفتح صفحة التحميل، ثم حدّث بالمثبّت على الجوال أو من حاسب Windows. الإعدادات والتلاوات المحفوظة تبقى."
+                  : "Scan the code with a phone's camera to open the download page, then update with the phone installer or from a Windows computer. The settings and saved recitations stay.";
     }
+    /** Over Home (UpdateNotice): why to update, when it comes again, and the version-only mute. */
+    String updateWhy() {
+        return ar ? "يوجد إصدار أحدث للتطبيق من الذي تستخدمه حاليًا. حدّث التطبيق لتحصل على الميزات الجديدة والإصلاحات، ونوصي بالتحديث دائمًا إلى أحدث إصدار متوفر."
+                  : "There is a newer version of the app than the one you are using. Update it to get the new features and fixes; we recommend always updating to the latest version available.";
+    }
+    String updateAgain() {
+        return ar ? "نذكّرك كل أسبوع حتى تحدّث، وتجده في الإعدادات ← حول التطبيق." : "We'll remind you every week until you update; it is also in Settings › About.";
+    }
+    String updateMute() { return ar ? "لا تذكّرني بهذا الإصدار" : "Don't remind me of this version"; }
     String updateOpen() { return ar ? "فتح صفحة الإصدار" : "Open the release page"; }
     String hintBackClose() { return ar ? "رجوع  إغلاق" : "Back  Close"; }
     /** Prayer times > Adjust the times and the date (Prefs.adjustments, Prefs.hijriOffset). */
@@ -852,23 +866,13 @@ final class Text {
     String newVersion(String v) { return d((ar ? "إصدار جديد متاح: " : "New version out: ") + v); }
     String qrHint() { return ar ? "امسح الرمز بكاميرا هاتفك" : "Scan a code with your phone's camera"; }
     String siteTitle() { return "AwanPro"; }
-    String updateCheckRow() { return ar ? "الإصدارات الجديدة" : "New versions"; }
     String checkNowRow() { return ar ? "ابحث عن تحديث الآن" : "Check for updates now"; }
     String checkNowHelp() {
-        return ar ? "يسأل GitHub الآن، حتى لو كانت الإصدارات الجديدة مطفأة" : "Asks GitHub now, even with New versions off";
+        return ar ? "يسأل GitHub الآن، دون انتظار سؤاله اليومي" : "Asks GitHub now, without waiting for its daily question";
     }
     String checking() { return ar ? "جارٍ البحث…" : "Checking…"; }
     String upToDate() { return ar ? "لديك أحدث إصدار" : "You have the latest version"; }
     String checkFailed() { return ar ? "تعذّر الوصول إلى GitHub" : "Couldn't reach GitHub"; }
-    String updateCheckHelp(boolean on) {
-        return on ? (ar ? "يسأل GitHub مرة في اليوم، ويظهر الجديد في «المصدر والتحديثات»"
-                        : "Asks GitHub once a day; a new one shows in Source and updates")
-                  : (ar ? "لا يتصل التطبيق لأجل الإصدارات" : "No connection for new versions");
-    }
-    String updateCheckFileHelp() {
-        return ar ? "يسأل GitHub مرة في اليوم عن إصدار أحدث ويُظهره في حول التطبيق، دون تنزيل شيء"
-                  : "Asks GitHub once a day for a newer version and shows it in About; nothing is downloaded";
-    }
     String basedOn() { return ar ? "مبني على تطبيقي أفنون وMasjid TV" : "Built on Afnon and Masjid TV"; }
     String mitLicence() { return ar ? "(ترخيص MIT)" : "(MIT licence)"; }
 

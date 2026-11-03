@@ -228,8 +228,9 @@ public class MainActivity extends Screen {
             askedCity = true;
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
         } else {
-            // After an update: what is new, once, over Home.
+            // After an update: what is new, once, over Home; else a newer version out, if it is due.
             showNews();
+            if (news == null) showUpdate();
         }
     }
 
@@ -275,6 +276,43 @@ public class MainActivity extends Screen {
         focusStart();
     }
 
+    /** A newer version out, as a layer over Home (UpdateNotice); null when not shown. */
+    private UpdateNotice.Card update;
+
+    /** A newer version, when due (UpdateNotice.due): never with What's new, a reminder or the radio card. */
+    private void showUpdate() {
+        if (update != null || news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
+        String v = UpdateNotice.due(this);
+        if (v == null) return;
+        update = UpdateNotice.card(this, v, () -> closeUpdate(false), () -> closeUpdate(true));
+        root.addView(update.layer, new FrameLayout.LayoutParams(-1, -1));
+        for (View n : nodes) if (n != null) n.setFocusable(false);
+        root.post(update.ok::requestFocus);
+    }
+
+    /** OK or Back: again in a week; mute: not for this version. */
+    private void closeUpdate(boolean mute) {
+        if (update == null) return;
+        UpdateNotice.closed(this, update.version, mute);
+        dropUpdate();
+        focusStart();
+    }
+
+    /** Taken away unread (a reminder came, or Home was rebuilt): still due. */
+    private void dropUpdate() {
+        if (update == null) return;
+        root.removeView(update.layer);
+        update = null;
+        for (View n : nodes) if (n != null) n.setFocusable(true);
+    }
+
+    /** The gold mark on Settings' button while a newer version is out (UpdateNotice.mark). */
+    private View settingsMark;
+
+    private void refreshMark() {
+        if (settingsMark != null) settingsMark.setVisibility(UpdateNotice.newer(this) != null ? View.VISIBLE : View.GONE);
+    }
+
     /** Home is the screen in front (between onResume and onPause), for HomeGuard. */
     static volatile boolean shown;
     static volatile long shownAt;
@@ -306,6 +344,9 @@ public class MainActivity extends Screen {
         shift();
         idle();
         Updates.refresh(this);
+        refreshMark();
+        // The daily answer may come while Home is open: told when someone is at the remote (a key this minute).
+        if (shown && System.currentTimeMillis() - lastKey < 60_000) showUpdate();
     }
 
     /**
@@ -521,6 +562,10 @@ public class MainActivity extends Screen {
             news = null;
             showNews();
         }
+        if (update != null) {
+            update = null;
+            showUpdate();
+        }
     }
 
     /**
@@ -593,6 +638,10 @@ public class MainActivity extends Screen {
         b.setLook(f -> gear.setColor(f ? Tokens.LAPIS_900 : Tokens.PLASTER_100));
         b.setOnClickListener(v -> startSafely(new Intent(this, SettingsActivity.class)));
         nodeLabel[SETTINGS] = t.settings();
+        // A newer version out: the gold mark on the button's corner until the TV has it.
+        settingsMark = UpdateNotice.mark(this, Tokens.LAPIS_900);
+        b.addView(settingsMark, new FrameLayout.LayoutParams(Ui.ipx(24), Ui.ipx(24), Gravity.TOP | Gravity.RIGHT));
+        refreshMark();
         placeEnd(b, 1920 - (Tokens.COURT_X + Tokens.COURT_W), 56, 72, 72);
         return b;
     }
@@ -1290,8 +1339,10 @@ public class MainActivity extends Screen {
 
     /** "Asr in 13 minutes" at the bottom end, over the apps; it takes focus until Got it, Today's prayers or Back. */
     private void showReminder() {
-        // The reminder is due now: What's new, if open, gives way (and counts as seen).
+        // The reminder is due now: What's new, if open, gives way (and counts as seen); a newer version's notice
+        // too, still due.
         closeNews();
+        dropUpdate();
         if (card != null) dismissReminder();
         closeRadioCard(false);
         Date now = new Date();
@@ -1381,6 +1432,7 @@ public class MainActivity extends Screen {
         int k = e.getKeyCode();
         lastKey = System.currentTimeMillis();
         if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
+        if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false))) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
         if (k == KeyEvent.KEYCODE_TV_INPUT) {
             Intent source = FirmwareKeys.sourceMenu(this);

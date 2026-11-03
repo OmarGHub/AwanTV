@@ -16,12 +16,11 @@ import java.net.URL;
 /**
  * Where Awan TV lives, and whether a newer version is out.
  *
- * <p>Settings > About > New versions (on by default) lets Home ask GitHub for the latest release at most once a
- * day, on Home's minute tick (no timer or service of its own): one small request, nothing about the TV sent. A newer
- * version shows in Settings > About under Source and updates. Nothing is downloaded or installed: updating stays with
- * the installer, which carries the release. Off, nothing is asked. With no releases yet (or the repository still
- * private) GitHub answers 404 and nothing shows. Settings > About > Check for updates now asks at once
- * ({@link #checkNow}), on or off.
+ * <p>Home asks GitHub for the latest release at most once a day, on Home's minute tick (no timer or service of its
+ * own): one small request, nothing about the TV sent; always on since 1.5.0 (a TV off the internet just gets no
+ * answer). A newer version is told over Home (UpdateNotice) and shows in Settings > About under Source and updates.
+ * Nothing is downloaded or installed: updating stays with the installer, which carries the release. With no releases
+ * yet GitHub answers 404 and nothing shows. Settings > About > Check for updates now asks at once ({@link #checkNow}).
  */
 final class Updates {
     private Updates() {}
@@ -42,16 +41,15 @@ final class Updates {
         return url.replaceFirst("^https?://", "");
     }
 
-    /** The newer version out on GitHub ("1.1.0"), or null: none, off, or not asked yet. */
+    /** The newer version out on GitHub ("1.1.0"), or null: none, or not asked yet. */
     static String newer(Context c, String current) {
-        if (!Prefs.updateCheck(c)) return null;
         String latest = Prefs.of(c).getString("upd_latest", "");
         return !latest.isEmpty() && compare(latest, current) > 0 ? latest : null;
     }
 
     /** Asks GitHub when the last answer is a day old (three hours after a failed try). Home's minute tick. */
     static void refresh(Context c) {
-        if (!Prefs.updateCheck(c) || fetching) return;
+        if (fetching) return;
         SharedPreferences p = Prefs.of(c);
         long now = System.currentTimeMillis();
         long ok = p.getLong("upd_at", 0), tried = p.getLong("upd_try", 0);
@@ -78,7 +76,7 @@ final class Updates {
         void done(String latest);
     }
 
-    /** Asks GitHub now, whatever the daily setting and timer say; the answer comes on the main thread. */
+    /** Asks GitHub now, whatever the daily timer says; the answer comes on the main thread. */
     static void checkNow(Context c, Checked done) {
         Context app = c.getApplicationContext();
         Handler main = new Handler(Looper.getMainLooper());

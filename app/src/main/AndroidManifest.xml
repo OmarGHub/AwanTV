@@ -200,6 +200,7 @@
                 <action android:name="app.awanpro.tv.EXPORT" />
                 <action android:name="app.awanpro.tv.IMPORT" />
                 <action android:name="app.awanpro.tv.IDENTIFY" />
+                <action android:name="app.awanpro.tv.TEST_UPDATE" />
             </intent-filter>
         </receiver>
 

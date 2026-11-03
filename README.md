@@ -220,7 +220,7 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-restore.ps1 -Uninstall
    المكبّر والشاشة معًا، فيطلب المكبّر وصلة الصوت (ARC) والشاشة لم تجهز بعد. لتجنّبه: شغّل الشاشة أولًا بريموتها، ثم أيقظ
    الجهاز فيشغّل المكبّر بعد أن تجهز الشاشة (الشاشة ثم المكبّر، عكس توصية TCL العامة). وإن صمت: غيّر مدخل الشاشة إلى
    مدخل آخر ثم أعده (أو أطفئ المكبّر وشغّله)، ولا يستطيع تطبيق فعل ذلك عنك.
-8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد (لا يُرسل شيء عن الشاشة). إيقاف الطقس (الإعدادات ← العرض واللغة) أو الإصدارات الجديدة (الإعدادات ← حول التطبيق) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. والمثبّت على الجوال يسأل GitHub مرة عند فتحه هل صدر مثبّت أحدث، ولا يرسل شيئًا. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
+8. **الخصوصية:** لا يتصل التطبيق إلا بالإذاعة التي تشغّلها، وبـ Open-Meteo للطقس (إحداثيات المكان المختار فقط، كل 30 دقيقة أثناء ظهور الشاشة)، وبـ mp3quran.net حين تستخدم التلاوات المحفوظة أو تفتح الإعدادات ← الإذاعة، وبـ GitHub مرة في اليوم ليعرف هل صدر إصدار جديد فيخبرك به (لا يُرسل شيء عن الشاشة، ولا يُنزَّل شيء). إيقاف الطقس (الإعدادات ← العرض واللغة) يوقف اتصاله. وموقع الشاشة يُقرأ في أول تشغيل فقط ليقترح موقعك، ولا يُرسل إلى أي مكان. والمثبّت على الجوال يسأل GitHub مرة عند فتحه هل صدر مثبّت أحدث، ولا يرسل شيئًا. وصلاحية تسجيل الصوت (من أفنون) لأشرطة مستوى صوت الإذاعة فقط: تقرأ صوت التطبيق نفسه وهو يشغّل الإذاعة، لا صوت الغرفة، ولا يُحفظ منها شيء ولا يُرسل.
 
 ## الشكر والترخيص
 
@@ -455,8 +455,9 @@ the newest and saves every copy in `state\settings` for `-Import -File`.
    soundbar off and on); no app can do that for you.
 8. Privacy: the app connects only to the radio station you play and, for the weather, to Open-Meteo (the chosen
    place's coordinates, every 30 minutes while Home or the screensaver is on screen), to mp3quran.net when you
-   use Saved recitations or open Settings > Radio, and to GitHub once a day to see whether a new release is out (nothing about the TV is
-   sent). Turning the weather (Settings > Display & language) or new versions (Settings > About) off stops its connection. The TV's location is read
+   use Saved recitations or open Settings > Radio, and to GitHub once a day to see whether a new release is out, to tell you of it
+   (nothing about the TV is sent, nothing is downloaded). Turning the weather off (Settings > Display & language) stops its
+   connection. The TV's location is read
    on the first start only, to suggest yours, and is sent nowhere. The phone installer asks GitHub once when it opens
    whether a newer installer is out, and sends nothing. The record-audio permission (from Afnon) is for the
    radio's level bars only: it reads the app's own sound while the radio plays, not the room, and nothing is kept or sent.

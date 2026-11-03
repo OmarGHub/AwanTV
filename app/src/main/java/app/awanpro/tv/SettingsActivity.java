@@ -119,6 +119,7 @@ public class SettingsActivity extends Screen {
             if (isFinishing() || isDestroyed()) return;
             boolean newer = latest != null && !latest.isEmpty() && Updates.compare(latest, versionName()) > 0;
             checkNowAnswer = latest == null ? t.checkFailed() : newer ? t.newVersion(latest) : t.upToDate();
+            styleNav(ABOUT);
             // The row is redrawn only while it is still on screen (the section may have changed meanwhile).
             if (rows.contains(r)) {
                 render(r, r.tile.isFocused());
@@ -452,6 +453,13 @@ public class SettingsActivity extends Screen {
         v.setSingleLine(true);
         b.addView(v, new FrameLayout.LayoutParams(-1, -1));
         navLabel[i] = v;
+        if (i == ABOUT) {
+            // A newer version out: the gold mark at About's end, until the TV has it (UpdateNotice).
+            aboutMark = UpdateNotice.mark(this, Tokens.LAPIS_800);
+            FrameLayout.LayoutParams mlp = new FrameLayout.LayoutParams(Ui.ipx(22), Ui.ipx(22), Gravity.CENTER_VERTICAL | Gravity.END);
+            mlp.setMarginEnd(Ui.ipx(28));
+            b.addView(aboutMark, mlp);
+        }
         b.setLook(f -> styleNav(i));
         placeTile(b, 96, NAV_TOP + i * (NAV_H + NAV_GAP), 424, NAV_H);
         return b;
@@ -463,7 +471,15 @@ public class SettingsActivity extends Screen {
         boolean open = i == section;
         if (nav[i] != null) nav[i].setRest(open ? Tokens.LAPIS_800 : 0, Tokens.GOLD_400, open ? 2 : 0);
         navLabel[i].setTextColor(focused ? Tokens.LAPIS_900 : (open ? Tokens.PLASTER_100 : Tokens.MIST_400));
+        if (i == ABOUT && aboutMark != null) {
+            aboutMark.setVisibility(UpdateNotice.newer(this) != null ? View.VISIBLE : View.GONE);
+            // On the focused gold tile, the mark in the tile's dark ink.
+            ((GradientDrawable) aboutMark.getBackground()).setColor(focused ? Tokens.LAPIS_900 : Tokens.GOLD_400);
+        }
     }
+
+    /** Settings > About's mark of a newer version (UpdateNotice.mark). */
+    private View aboutMark;
 
     private void showSection() {
         for (Row r : rows) root.removeView(r.tile);
@@ -604,6 +620,10 @@ public class SettingsActivity extends Screen {
         words.addView(resetTitle(t.updateTitle(newer), Gravity.START));
         TextView have = resetLine(t.updateHave(versionName()), Tokens.PLASTER_100, 24, null);
         words.addView(have);
+        TextView why = resetLine(t.updateWhy(), Tokens.PLASTER_100, 24, null);
+        why.setLineSpacing(0, 1.3f);
+        ((LinearLayout.LayoutParams) why.getLayoutParams()).topMargin = Ui.ipx(10);
+        words.addView(why);
         TextView how = resetLine(t.updateHow(), Tokens.MIST_400, 24, null);
         how.setLineSpacing(0, 1.3f);
         ((LinearLayout.LayoutParams) how.getLayoutParams()).topMargin = Ui.ipx(10);
@@ -974,19 +994,12 @@ public class SettingsActivity extends Screen {
                         else if (canBrowse(Updates.PAGE)) startSafely(link(Updates.PAGE));
                     }
                 },
-                // Updates beside where they show: a daily question to GitHub (off, no connection for it), and the
-                // same question at once, on or off, its answer beside it while Settings is open.
+                // The daily question to GitHub, at once, its answer beside it while Settings is open.
                 new Row(VALUE) {
                     String label() { return t.checkNowRow(); }
                     String help() { return t.checkNowHelp(); }
                     String value() { return checkNowAnswer; }
                     void open() { checkNow(this); }
-                },
-                new Row(TOGGLE) {
-                    String label() { return t.updateCheckRow(); }
-                    String help() { return t.updateCheckHelp(Prefs.updateCheck(c)); }
-                    boolean on() { return Prefs.updateCheck(c); }
-                    void set(boolean on) { Prefs.setUpdateCheck(c, on); }
                 },
                 // What's new in every version written (NewsActivity), as after an update.
                 new Row(VALUE) {

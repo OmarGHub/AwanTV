@@ -35,6 +35,11 @@ public class SettingsTransfer extends BroadcastReceiver {
      * (UTF-8 in Base64: adb's command line would garble Arabic) and id (its serial). Nothing is kept on the TV.
      */
     static final String IDENTIFY = "app.awanpro.tv.IDENTIFY";
+    /**
+     * Test builds only (a version with a letter, 1.5.0a): pretend GitHub's latest is the extra "version", and forget
+     * what the notice was told, to see UpdateNotice without a newer release out. A release answers Unknown action.
+     */
+    static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
     static final String FILE = "awantv-settings.jsonc";
     /**
      * Written beside {@link #FILE} on export, for tools/AwanTV-editor.ps1 (SettingsFile.schema): the description in
@@ -86,6 +91,12 @@ public class SettingsTransfer extends BroadcastReceiver {
                 }
                 RemoteKeys.watch.showIdentify(name, intent.getStringExtra("id"), versionName(c));
                 result = "Shown on the TV";
+            } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
+                String v = intent.getStringExtra("version");
+                if (v == null || !v.matches("\\d+(\\.\\d+)*[a-z]*")) throw new IOException("Give --es version 1.9.0");
+                Prefs.of(c).edit().putString("upd_latest", v).putLong("upd_at", System.currentTimeMillis())
+                    .remove("upd_shown").remove("upd_shown_at").remove("upd_muted").apply();
+                result = "Latest set to " + v + " (test build)";
             } else {
                 throw new IOException("Unknown action " + intent.getAction());
             }

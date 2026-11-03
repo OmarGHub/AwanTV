@@ -746,15 +746,6 @@ final class Prefs {
         of(c).edit().putString("weather", v).apply();
     }
 
-    /** Settings > About > New versions: Home asks GitHub once a day (Updates). On by default. */
-    static boolean updateCheck(Context c) {
-        return of(c).getBoolean("update_check", true);
-    }
-
-    static void setUpdateCheck(Context c, boolean on) {
-        of(c).edit().putBoolean("update_check", on).apply();
-    }
-
     /** The countries that read the temperature in °F, by the TV's time zone. */
     private static boolean fahrenheitCountry() {
         try {

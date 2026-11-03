@@ -210,9 +210,6 @@ final class SettingsFile {
 
         // Device settings, About, then Home's apps (arranged on Home itself on the TV)
         out.add(new Item("home_button", BOOL, t.homeButtonRow()).help(t.homeButtonFileHelp()).def(false).section("device", t.sectionDevice()));
-        // About: new versions (its other rows are information, App status and Reset)
-        out.add(new Item("update_check", BOOL, t.updateCheckRow()).help(t.updateCheckFileHelp()).def(true)
-            .section("about", t.sectionAbout()));
         Item favs = new Item("favourites", LIST, t.favouritesFile()).help(t.packagesHelp())
             .reader(x -> Apps.favourites(x)).section("home", t.homeSectionFile()).note(t.homeAppsNoteFile());
         out.add(favs);
@@ -528,6 +525,8 @@ final class SettingsFile {
             String key = keys.next();
             if (key.equals("app") || key.equals("format") || key.equals("version")) continue;
             Item it = table.get(key);
+            // Settings no longer kept (an older TV's file): passed over, not a mistake.
+            if (it == null && RETIRED.contains(key)) continue;
             if (it == null) {
                 errors.add(key + ": not a setting" + (SettingsTransfer.local(key) ? " that is copied (it belongs to one TV)" : ""));
                 continue;
@@ -547,6 +546,9 @@ final class SettingsFile {
         if (changed > 0 && !ed.commit()) throw new java.io.IOException("The settings could not be saved");
         return changed;
     }
+
+    /** Keys of settings since removed: New versions (1.5.0, the daily question is always asked). */
+    private static final java.util.Set<String> RETIRED = new java.util.HashSet<>(java.util.Arrays.asList("update_check"));
 
     private static final Pattern TIME_RE = Pattern.compile("^(\\d{1,2}):(\\d{2})$");
     private static final Pattern PACKAGE_RE = Pattern.compile("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$");
