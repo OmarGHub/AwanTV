@@ -204,6 +204,16 @@
         </receiver>
 
         <!-- Listening to the radio with the screen off. -->
+        <!-- What's new after an update (NewsActivity): over Home, which shows dimmed under it. -->
+        <activity
+            android:name=".NewsActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Theme.Awan.Call"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
         <activity
             android:name=".ScreenOffActivity"
             android:exported="false"

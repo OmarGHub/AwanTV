@@ -8,6 +8,7 @@ import com.batoulapps.adhan.CalculationParameters;
 import com.batoulapps.adhan.Coordinates;
 import com.batoulapps.adhan.HighLatitudeRule;
 import com.batoulapps.adhan.Madhab;
+import com.batoulapps.adhan.PrayerAdjustments;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.Qibla;
 import com.batoulapps.adhan.data.DateComponents;
@@ -37,14 +38,17 @@ final class PrayerDay {
     final int hijriDay, hijriMonth, hijriYear;
     final double qibla;
 
-    /** With the saved location, method, Asr school and Hijri adjustment (Afnon Settings). */
+    /** With the saved location, method, Asr school, the times' adjustments and the Hijri adjustment (Settings). */
     PrayerDay(Context c, Date now) {
-        this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.hijriOffset(c));
+        this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c), Prefs.hijriOffset(c));
     }
 
-    PrayerDay(Date now, Coordinates where, CalculationMethod method, Madhab madhab, int hijriOffset) {
+    PrayerDay(Date now, Coordinates where, CalculationMethod method, Madhab madhab, int[] adjust, int hijriOffset) {
         CalculationParameters params = method.getParameters();
         params.madhab = madhab;
+        // The viewer's minutes on each time (Prefs.adjustments): the adhan, iqamah, reminders and screens all follow.
+        params.adjustments = new PrayerAdjustments(adjust[FAJR], adjust[SUNRISE], adjust[DHUHR], adjust[ASR],
+            adjust[MAGHRIB], adjust[ISHA]);
         // Above 48°, where summer nights never reach the method's angles: Fajr no earlier than a seventh of the night
         // before sunrise and Isha no later than a seventh after Maghrib (as meypod/al-azan and Afnon 0.8), not
         // adhan-java's default middle of the night, which put both near 1 a.m.

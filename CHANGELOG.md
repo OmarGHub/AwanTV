@@ -6,6 +6,21 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Settings > Prayer times > Adjust the times and the date: each of the six times up to 30 minutes earlier or later
+  (Afnon 0.8's, as in meypod/al-azan), for a masjid a little off the calculation; the adhan, iqamah, reminders and
+  screens follow. The Hijri date's adjustment moved onto the same page. In the settings file and the editor too.
+- A newer version opens a window in Settings > About (from Source and updates, or when Check for updates now finds
+  it): the version, this TV's, a QR code for the release page, how to update, and Open the release page where the TV
+  has a browser.
+- What's new: once over Home after an update, every version the TV had not seen; all of them in Settings > About >
+  What's new. Never on a new install.
+- Settings > About fits on the screen again (it had grown past it in 1.0.1): its sources and licences are on a page
+  of their own, Sources and licences.
+
+### The tools
+- `AwanTV-build-qr` (1.1.0) also builds the release page's code.
+
 ## [1.1.0]
 
 ### The app

@@ -414,6 +414,21 @@ final class Prefs {
         of(c).edit().putInt("hijri_offset", Math.max(-2, Math.min(2, days))).apply();
     }
 
+    /**
+     * Minutes added to Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha (Settings > Prayer times > Adjust the times and the
+     * date, as in Afnon 0.8 and meypod/al-azan): -30 to +30, for a masjid a little off the calculation.
+     */
+    static int[] adjustments(Context c) {
+        SharedPreferences p = of(c);
+        int[] a = new int[6];
+        for (int i = 0; i < 6; i++) a[i] = p.getInt("adjust_" + i, 0);
+        return a;
+    }
+
+    static void setAdjustment(Context c, int prayer, int minutes) {
+        of(c).edit().putInt("adjust_" + prayer, Math.max(-30, Math.min(30, minutes))).apply();
+    }
+
     // ---------------------------------------------------------------- reminders
 
     /** Minutes before each prayer to show the reminder; 0 is off. */
@@ -742,7 +757,8 @@ final class Prefs {
         SharedPreferences p = of(c);
         return p.getString("locale", "") + "|" + p.getString("digits", "") + "|" + clock24(c) + "|" + city(c).id + "|" + city(c).lat + "," + city(c).lng
             + "|" + city(c).ar
-            + "|" + method(c) + "|" + madhab(c) + "|" + hijriOffset(c) + "|" + p.getInt("facing", -1) + "|" + theme(c)
+            + "|" + method(c) + "|" + madhab(c) + "|" + hijriOffset(c) + "|" + java.util.Arrays.toString(adjustments(c))
+            + "|" + p.getInt("facing", -1) + "|" + theme(c)
             + "|" + background(c) + "|" + photoEvery(c)
             // Set or still guessed: Home's reminder comes and goes with it (the guessed city may be the one chosen).
             + "|" + citySet(c);

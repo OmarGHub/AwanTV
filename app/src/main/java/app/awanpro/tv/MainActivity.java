@@ -221,6 +221,9 @@ public class MainActivity extends Screen {
         if (!askedCity && !Prefs.citySet(this)) {
             askedCity = true;
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
+        } else {
+            // After an update: what is new, once, over Home.
+            NewsActivity.showIfNew(this);
         }
     }
 

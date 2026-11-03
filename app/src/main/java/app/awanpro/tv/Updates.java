@@ -124,7 +124,7 @@ final class Updates {
         }
     }
 
-    /** Versions by their numbers ("1.10.0" after "1.9.2"); anything after a number ("1.1.0-beta") is ignored. */
+    /** Versions by their numbers ("1.10.0" after "1.9.2"); a test build's letter (1.1.0b) comes before its release. */
     static int compare(String a, String b) {
         String[] x = a.split("\\."), y = b.split("\\.");
         for (int i = 0; i < Math.max(x.length, y.length); i++) {

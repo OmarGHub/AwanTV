@@ -107,6 +107,10 @@ final class SettingsFile {
         out.add(new Item("madhab", STR_CHOICE, t.asrSchool()).help(t.asrSchoolHelp())
             .choices(new String[] {"shafi", "hanafi"}, t.asrSchools())
             .depends(t.byCity(), x -> Prefs.madhab(x) == com.batoulapps.adhan.Madhab.HANAFI ? "hanafi" : "shafi"));
+        String[] times = t.prayerNames();
+        for (int i = 0; i < 6; i++) {
+            out.add(new Item("adjust_" + i, INT_RANGE, t.adjustFileLabel(times[i])).help(t.adjustFileHelp()).range(-30, 30).def(0));
+        }
         out.add(new Item("hijri_offset", INT_RANGE, t.hijriAdjust()).range(-2, 2).def(0));
         out.add(new Item("facing", INT_RANGE, t.roomRow()).help(t.roomHelp() + t.sepPlain() + t.facingNote()).range(-1, 359).def(-1));
         out.add(new Item("friday_mode", INT_CHOICE, t.fridayRow())

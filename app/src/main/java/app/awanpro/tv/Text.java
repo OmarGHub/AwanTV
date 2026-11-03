@@ -361,6 +361,81 @@ final class Text {
     String asrSchoolHelp() { return ar ? "يغيّر وقت العصر فقط" : "Only changes the Asr time"; }
     String[] asrSchools() { return ar ? new String[] {"الجمهور", "الحنفي"} : new String[] {"Standard", "Hanafi"}; }
     String hijriAdjust() { return ar ? "تعديل التاريخ الهجري" : "Hijri date adjustment"; }
+    /** About > Sources and licences (SettingsActivity.creditRows). */
+    String creditsRow() { return ar ? "المصادر والتراخيص" : "Sources and licences"; }
+    String creditsHelp() { return ar ? "أفنون، والطقس، والمدن، والتلاوات، والأذان" : "Afnon, the weather, the cities, the recitations, the adhan"; }
+    String creditsSection() { return ar ? "حول التطبيق › المصادر والتراخيص" : "About › Sources and licences"; }
+
+    /** What's new (NewsActivity): after an update, and from About. */
+    String newsRow() { return ar ? "ما الجديد" : "What's new"; }
+    String newsRowHelp() { return ar ? "ما أضافه كل إصدار" : "What each version added"; }
+    String newsAll() { return ar ? "ما الجديد" : "What's new"; }
+    String newsTitle(String version) { return ar ? "الجديد في Awan TV " + version : "New in Awan TV " + version; }
+    String newsAlso(String version) { return ar ? "ومن " + version : "And from " + version; }
+    String newsLater() { return ar ? "تجده لاحقًا في الإعدادات › حول التطبيق › ما الجديد." : "Find it later in Settings › About › What's new."; }
+    String newsOk() { return ar ? "حسنًا" : "OK"; }
+    /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
+    String[][] news(String version) {
+        switch (version) {
+            case "1.2.0":
+                return ar ? new String[][] {
+                    {"تعديل المواقيت بالدقائق", d("الإعدادات › مواقيت الصلاة › تعديل المواقيت والتاريخ: كل وقت حتى 30 دقيقة قبله أو بعده، ليطابق مسجدك.")},
+                    {"الإصدار الجديد برمز QR", "حين يصدر إصدار أحدث، يفتح «حول التطبيق» نافذة برمز تمسحه بالجوال لتصل إلى صفحته."},
+                    {"ما الجديد", "هذه النافذة، مرة بعد كل تحديث، وتجدها في «حول التطبيق»."}}
+                  : new String[][] {
+                    {"Adjust the times by minutes", d("Settings › Prayer times › Adjust the times and the date: each time up to 30 minutes earlier or later, to match your masjid.")},
+                    {"A new version's QR code", "When a newer version is out, About opens a window with a code to scan with a phone to reach its page."},
+                    {"What's new", "This window, once after each update, and in About."}};
+            case "1.1.0":
+                return ar ? new String[][] {
+                    {"أزرار الريموت", "الإعدادات › إعدادات الجهاز › أزرار الريموت: اجعل زرًا في أي ريموت يفتح ما تختار."}}
+                  : new String[][] {
+                    {"Remote buttons", "Settings › Device settings › Remote buttons: make a button on any remote open what you choose."}};
+            default:
+                return new String[0][];
+        }
+    }
+
+    /** The new version's window (SettingsActivity.openUpdate). */
+    String updateTitle(String version) { return ar ? "إصدار جديد: Awan TV " + version : "New version: Awan TV " + version; }
+    String updateHave(String version) { return ar ? "على هذه الشاشة " + version + "." : "This TV has " + version + "."; }
+    String updateHow() {
+        return ar ? "امسح الرمز بكاميرا الجوال لتفتح صفحة الإصدار وما الجديد فيه، ثم حدّث بالمثبّت على الجوال أو من حاسب Windows. الإعدادات والتلاوات المحفوظة تبقى."
+                  : "Scan the code with a phone's camera to open the release's page and what is new in it, then update with the phone installer or from a Windows computer. The settings and saved recitations stay.";
+    }
+    String updateOpen() { return ar ? "فتح صفحة الإصدار" : "Open the release page"; }
+    String hintBackClose() { return ar ? "رجوع  إغلاق" : "Back  Close"; }
+    /** Prayer times > Adjust the times and the date (Prefs.adjustments, Prefs.hijriOffset). */
+    String adjustRow() { return ar ? "تعديل المواقيت والتاريخ" : "Adjust the times and the date"; }
+    String adjustRowHelp() { return d(ar ? "كل وقت حتى 30 دقيقة قبله أو بعده، والتاريخ الهجري" : "Each time up to 30 minutes earlier or later, and the Hijri date"); }
+    String adjustSection() { return ar ? "مواقيت الصلاة › تعديل المواقيت والتاريخ" : "Prayer times › Adjust the times and the date"; }
+    String hintBackPrayer() { return ar ? "رجوع  مواقيت الصلاة" : "Back  Prayer times"; }
+    /** The row's value: what is adjusted ("الفجر +2، المغرب +1"), the first two and "…" after; "بلا تعديل" for none. */
+    String adjustSummary(int[] minutes, int hijriDays) {
+        java.util.List<String> parts = new java.util.ArrayList<>();
+        String[] names = prayerNames();
+        for (int i = 0; i < minutes.length; i++) if (minutes[i] != 0) parts.add(names[i] + " " + minutesSigned(minutes[i]));
+        if (hijriDays != 0) parts.add((ar ? "الهجري " : "Hijri ") + minutesSigned(hijriDays));
+        if (parts.isEmpty()) return ar ? "بلا تعديل" : "None";
+        String s = parts.get(0) + (parts.size() > 1 ? (ar ? "، " : ", ") + parts.get(1) : "");
+        return parts.size() > 2 ? s + " …" : s;
+    }
+    /** A time's adjustment between its − and + buttons: "+2", "0", "-3" (minutes). */
+    String minutesSigned(int n) {
+        // Left-to-right embedding: in an Arabic line the sign would otherwise land after the number ("2+").
+        return "\u202A" + d(n > 0 ? "+" + n : String.valueOf(n)) + "\u202C";
+    }
+    /** Under each time's name: what it is with the adjustment (Fajr is tomorrow's after Isha), and how far it goes. */
+    String adjustTimeHelp(String time, boolean tomorrow) {
+        return d(ar ? (tomorrow ? "غدًا " : "اليوم ") + time + " · بالدقائق، حتى 30 قبله أو بعده"
+                    : (tomorrow ? "Tomorrow " : "Today ") + time + " · in minutes, up to 30 earlier or later");
+    }
+    String adjustNote() {
+        return ar ? "لمن يتبع مسجدًا يختلف قليلًا عن الحساب. الأذان والإقامة والتنبيهات وشاشة الاستراحة كلها تتبع الوقت بعد التعديل."
+                  : "For a masjid a little off the calculation. The adhan, the iqamah, the reminders and the screensaver all follow the adjusted time.";
+    }
+    String adjustFileLabel(String prayer) { return ar ? "تعديل " + prayer + " بالدقائق" : prayer + " adjustment (minutes)"; }
+    String adjustFileHelp() { return ar ? "دقائق تُضاف إلى الوقت المحسوب، وبالسالب قبله" : "Minutes added to the calculated time; negative is earlier"; }
     String hijriToday(String date) { return (ar ? "اليوم: " : "Today: ") + date; }
     String days(int n) {
         // No adjustment reads as such, not "0 يوم".

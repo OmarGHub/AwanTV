@@ -70,7 +70,8 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 التصحيح من خيارات المطوّر، وتشغّله مرة أخرى عند التحديث.
 
 **التحديث:** الطريقة نفسها بالإصدار الجديد، وتبقى الإعدادات والتلاوات المحفوظة. ويخبرك التطبيق بالإصدار الجديد في
-الإعدادات ← حول التطبيق (ويُوقف من هناك)، أو ابحث بنفسك متى شئت: الإعدادات ← حول التطبيق ← ابحث عن تحديث الآن.
+الإعدادات ← حول التطبيق (ويُوقف من هناك)، أو ابحث بنفسك متى شئت: الإعدادات ← حول التطبيق ← ابحث عن تحديث الآن. وحين
+يجد إصدارًا أحدث يعرض رمز QR لصفحته تمسحه بكاميرا الجوال. وبعد التحديث تظهر نافذة «ما الجديد» مرة واحدة.
 
 **الإزالة:** الإعدادات ← تشغيل Awan TV ← **إزالة Awan TV**: يعيد شاشة الاستراحة السابقة، ويسألك إن كانت عندك تلاوات
 محفوظة: تبقى أم تُحذف، ثم يفتح حذف التطبيق. أو من الحاسب: `AwanTV-restore.cmd`. ولو حُذف التطبيق من إعدادات التلفاز مباشرة
@@ -95,7 +96,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    **ومستوى أذان الفجر** (التنبيهات والأذان ← أذان الفجر): كامل أو 75% أو 50% أو 25% من صوت التلفاز، والبقية كاملة.
    **وحالة التطبيق** (حول التطبيق): هل الخدمة وشاشة الاستراحة تعمل، وآخر أذان شُغّل ومتى، والصلاحية والطقس والنسخة.
 8. **الطقس** بجانب الساعة: الحرارة الآن وأيقونة للحالة (صافٍ، غائم، مطر...)، من Open-Meteo للمكان المختار، ويختفي دون إنترنت. يُوقف أو يُختار °م / °ف من الإعدادات.
-9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر.
+9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ).
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
 12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
@@ -311,6 +312,7 @@ choose another. You may switch debugging off in Developer options, and on again 
 
 **Updating:** the same way with the new release; the settings and saved recitations stay. The app tells you about a
 new release in Settings > About (and is turned off there), or ask any time: Settings > About > Check for updates now.
+A newer release shows a QR code for its page, to scan with a phone's camera. After an update, What's new shows once.
 
 **Removing:** Settings > Awan TV > **Remove Awan TV** puts back the earlier screensaver, asks whether any saved
 recitations stay or go, then opens the uninstall. Or from a computer: `AwanTV-restore.cmd`. If the app is removed from
@@ -343,7 +345,8 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    when offline; off, °C or °F in Settings.
 8. **Any location in the world**: on the first start the app suggests the TV's own location from its location
    service; or search 34,000 cities (GeoNames) in Arabic or English, whose country's method comes with them; or enter
-   coordinates for a smaller place.
+   coordinates for a smaller place. Each time can be moved up to 30 minutes earlier or later to match your masjid
+   (Prayer times > Adjust the times and the date).
 9. **Saved recitations**: download a reciter's surahs, or the whole Quran, from mp3quran.net and play them from the
    radio without internet; 2 GB are always left free for the TV. They are kept in `Music/Awan TV` on the TV, so they
    stay if you remove the app, unless you choose to delete them.

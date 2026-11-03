@@ -117,20 +117,28 @@ public class SettingsActivity extends Screen {
         Updates.checkNow(this, latest -> {
             checkingNow = false;
             if (isFinishing() || isDestroyed()) return;
-            checkNowAnswer = latest == null ? t.checkFailed()
-                : !latest.isEmpty() && Updates.compare(latest, versionName()) > 0 ? t.newVersion(latest) : t.upToDate();
+            boolean newer = latest != null && !latest.isEmpty() && Updates.compare(latest, versionName()) > 0;
+            checkNowAnswer = latest == null ? t.checkFailed() : newer ? t.newVersion(latest) : t.upToDate();
             // The row is redrawn only while it is still on screen (the section may have changed meanwhile).
-            if (rows.contains(r)) render(r, r.tile.isFocused());
+            if (rows.contains(r)) {
+                render(r, r.tile.isFocused());
+                // A newer version: how to get it, at once, unless something else is open over the rows.
+                if (newer && chooser == null && resetStage == 0) openUpdate(latest);
+            }
         });
     }
 
     /** About shows App status's rows instead of its own (Back returns to About). */
     private boolean statusOpen;
+    /** About shows the sources and licences instead of its own rows (Back returns to About). */
+    private boolean creditsOpen;
 
     /** Device settings shows the remote buttons instead of its own rows (Back returns to Device settings). */
     private boolean buttonsOpen;
-    /** The note under the remote buttons (what customising costs, the service off); null elsewhere. */
-    private TextView buttonsNote;
+    /** Prayer times shows the times' and the Hijri date's adjustments instead of its own rows (Back returns). */
+    private boolean adjustOpen;
+    /** The note under a sub-page's rows (remote buttons, adjustments); null elsewhere. */
+    private TextView pageNote;
     /** At most this many custom buttons: the rows, Add a button and the note fit above the hints. */
     private static final int MAX_BUTTONS = 6;
 
@@ -462,17 +470,23 @@ public class SettingsActivity extends Screen {
         rows.clear();
         sectionLabel.setText(sectionName(section));
         if (section == NETWORK) sectionLabel.setText(t.sectionNetwork(null));
-        if (section != ABOUT) statusOpen = false;
+        if (section != ABOUT) {
+            statusOpen = false;
+            creditsOpen = false;
+        }
         if (statusOpen) sectionLabel.setText(t.statusSection());
+        if (creditsOpen) sectionLabel.setText(t.creditsSection());
         if (section != DEVICE) buttonsOpen = false;
         if (buttonsOpen) sectionLabel.setText(t.buttonsSection());
+        if (section != PRAYER) adjustOpen = false;
+        if (adjustOpen) sectionLabel.setText(t.adjustSection());
         for (int i = 0; i < SECTIONS; i++) styleNav(i);
         rows.addAll(rowsFor(section));
         for (int i = 0; i < rows.size(); i++) addRow(rows.get(i), i);
         if (qrPanel != null) root.removeView(qrPanel);
         qrPanel = qrShown() ? qrPanel() : null;
-        if (buttonsNote != null) root.removeView(buttonsNote);
-        buttonsNote = buttonsOpen ? buttonsNote() : null;
+        if (pageNote != null) root.removeView(pageNote);
+        pageNote = buttonsOpen ? buttonsNote() : adjustOpen ? note(t.adjustNote()) : null;
         refresh();
     }
 
@@ -485,7 +499,7 @@ public class SettingsActivity extends Screen {
     private View qrPanel;
 
     private boolean qrShown() {
-        return section == ABOUT && !statusOpen;
+        return section == ABOUT && !statusOpen && !creditsOpen;
     }
 
     /**
@@ -536,6 +550,20 @@ public class SettingsActivity extends Screen {
         box.setBackground(round(Tokens.LAPIS_700, 16));
         box.setPadding(Ui.ipx(10), Ui.ipx(16), Ui.ipx(10), Ui.ipx(14));
 
+        box.addView(qrTile(image, logo, title + " " + address), new LinearLayout.LayoutParams(-2, -2));
+
+        TextView name = centred(text(ui500, 22, Tokens.GOLD_400));
+        name.setText(title);
+        box.addView(name, wide(12));
+        TextView where = centred(text(ui400, 15, Tokens.MIST_400));
+        where.setText(address);
+        where.setTextDirection(View.TEXT_DIRECTION_LTR);
+        box.addView(where, wide(2));
+        return box;
+    }
+
+    /** A code on its light rounded tile (the padding is its quiet zone), drawn without smoothing, its logo in the middle. */
+    private FrameLayout qrTile(int image, View logo, String description) {
         FrameLayout tile = new FrameLayout(this);
         tile.setBackground(round(QR_LIGHT, 14));
         int quiet = Ui.ipx(QR_QUIET);
@@ -549,7 +577,7 @@ public class SettingsActivity extends Screen {
         ImageView code = new ImageView(this);
         code.setImageDrawable(d);
         code.setScaleType(ImageView.ScaleType.FIT_XY);
-        code.setContentDescription(title + " " + address);
+        code.setContentDescription(description);
         tile.addView(code, new FrameLayout.LayoutParams(Ui.ipx(QR_SIDE), Ui.ipx(QR_SIDE)));
         // The logo with a ring of the light ground around it, so no module touches it.
         FrameLayout ring = new FrameLayout(this);
@@ -558,16 +586,65 @@ public class SettingsActivity extends Screen {
         ring.setPadding(r, r, r, r);
         ring.addView(logo, new FrameLayout.LayoutParams(Ui.ipx(QR_LOGO), Ui.ipx(QR_LOGO)));
         tile.addView(ring, new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER));
-        box.addView(tile, new LinearLayout.LayoutParams(-2, -2));
+        return tile;
+    }
 
-        TextView name = centred(text(ui500, 22, Tokens.GOLD_400));
-        name.setText(title);
-        box.addView(name, wide(12));
-        TextView where = centred(text(ui400, 15, Tokens.MIST_400));
-        where.setText(address);
+    /**
+     * A newer version out: which, what this TV has, a QR code for its release page (releases/latest, so one image
+     * serves every version) and how to update; Open the release page where the TV has a browser, and Close.
+     */
+    private void openUpdate(String newer) {
+        LinearLayout card = resetCard(1180);
+        LinearLayout across = new LinearLayout(this);
+        across.setGravity(Gravity.TOP);
+        LinearLayout words = new LinearLayout(this);
+        words.setOrientation(LinearLayout.VERTICAL);
+        words.setClipChildren(false);
+        words.setClipToPadding(false);
+        words.addView(resetTitle(t.updateTitle(newer), Gravity.START));
+        TextView have = resetLine(t.updateHave(versionName()), Tokens.PLASTER_100, 24, null);
+        words.addView(have);
+        TextView how = resetLine(t.updateHow(), Tokens.MIST_400, 24, null);
+        how.setLineSpacing(0, 1.3f);
+        ((LinearLayout.LayoutParams) how.getLayoutParams()).topMargin = Ui.ipx(10);
+        words.addView(how);
+        TextView where = resetLine(Updates.shown(Updates.RELEASE), Tokens.MIST_400, 18, null);
         where.setTextDirection(View.TEXT_DIRECTION_LTR);
-        box.addView(where, wide(2));
-        return box;
+        where.setGravity(Gravity.START);
+        words.addView(where);
+        boolean browse = canBrowse(Updates.RELEASE);
+        LinearLayout buttons = new LinearLayout(this);
+        float r = FocusTile.REACH;
+        askFirst = resetButton(browse ? t.updateOpen() : t.close());
+        askSecond = browse ? resetButton(t.close()) : null;
+        askOnFirst = browse ? () -> startSafely(link(Updates.RELEASE)) : null;
+        LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+        buttons.addView(askFirst, a);
+        if (askSecond != null) {
+            LinearLayout.LayoutParams b = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+            b.setMarginStart(Ui.ipx(24));
+            buttons.addView(askSecond, b);
+        }
+        LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, -2);
+        blp.topMargin = Ui.ipx(30 - r);
+        blp.setMarginStart(-Ui.ipx(r));
+        blp.setMarginEnd(-Ui.ipx(r));
+        buttons.setClipChildren(false);
+        buttons.setClipToPadding(false);
+        words.addView(buttons, blp);
+        across.addView(words, new LinearLayout.LayoutParams(0, -2, 1));
+        LinearLayout.LayoutParams qlp = new LinearLayout.LayoutParams(-2, -2);
+        qlp.setMarginStart(Ui.ipx(40));
+        across.addView(qrTile(R.drawable.qr_release, archLogo(), Updates.shown(Updates.RELEASE)), qlp);
+        across.setClipChildren(false);
+        card.setClipToPadding(false);
+        card.addView(across, new LinearLayout.LayoutParams(-1, -2));
+        showReset(card, 1180, ASK);
+        root.post(askFirst::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintChoose());
+        h.add(t.hintBackClose());
+        setHints(hints, h);
     }
 
     /** AwanPro's logo (res/drawable-nodpi/awanpro_logo.png), with its rounded corners as on its site. */
@@ -606,7 +683,8 @@ public class SettingsActivity extends Screen {
     private List<Row> rowsFor(int s) {
         Context c = this;
         switch (s) {
-            case PRAYER: return withFridayAndImsak(Arrays.asList(
+            case PRAYER: if (adjustOpen) return adjustRows();
+                return withFridayAndImsak(Arrays.asList(
                 new Row(VALUE) {
                     String label() { return t.location(); }
                     String help() {
@@ -652,14 +730,16 @@ public class SettingsActivity extends Screen {
                     int selected() { return Prefs.madhab(c) == Madhab.HANAFI ? 1 : 0; }
                     void select(int i) { Prefs.setMadhab(c, i == 1 ? Madhab.HANAFI : Madhab.SHAFI); }
                 },
-                new Row(STEP) {
-                    String label() { return t.hijriAdjust(); }
-                    String help() { return t.hijriToday(hijri(day)); }
-                    int amount() { return Prefs.hijriOffset(c); }
-                    void setAmount(int n) { Prefs.setHijriOffset(c, n); }
-                    int lowest() { return -2; }
-                    int highest() { return 2; }
-                    String valueOf(int n) { return t.days(n); }
+                // The six times' minutes and the Hijri date on a page of their own (Prayer times had no room left).
+                new Row(VALUE) {
+                    String label() { return t.adjustRow(); }
+                    String help() { return t.adjustRowHelp(); }
+                    String value() { return t.adjustSummary(Prefs.adjustments(c), Prefs.hijriOffset(c)); }
+                    void open() {
+                        adjustOpen = true;
+                        showSection();
+                        focusRow(0);
+                    }
                 },
                 new Row(VALUE) {
                     String label() { return t.roomRow(); }
@@ -866,7 +946,9 @@ public class SettingsActivity extends Screen {
                 });
             case ABOUT: {
                 if (statusOpen) return statusRows();
-                List<Row> about = new ArrayList<>(Arrays.asList(
+                if (creditsOpen) return creditRows();
+                // Eight rows at most, so the last one stays above the key hints (the sources have a page of their own).
+                return new ArrayList<>(Arrays.asList(
                 new Row(VALUE) {
                     String label() { return t.statusRow(); }
                     String help() { return t.statusHelp(); }
@@ -877,16 +959,20 @@ public class SettingsActivity extends Screen {
                     }
                 },
                 // The version is by the title; here, where Awan TV lives and a newer version when one is out (Updates).
-                // OK opens the page where the TV has a browser; the QR codes beside serve every other TV.
-                new Row(canBrowse(Updates.PAGE) ? VALUE : INFO) {
+                // A newer version: OK opens its window (a QR code for every TV); else the page where the TV has a
+                // browser, the QR codes beside serving every other TV.
+                new Row(canBrowse(Updates.PAGE) || Updates.newer(c, versionName()) != null ? VALUE : INFO) {
                     String label() { return t.sourceRow(); }
                     String help() {
                         String newer = Updates.newer(c, versionName());
                         String page = Updates.shown(Updates.PAGE);
                         return newer == null ? page : t.newVersion(newer) + t.sep() + page;
                     }
-                    // A newer version out: straight to its release page and files; else the repository.
-                    void open() { startSafely(link(Updates.newer(c, versionName()) != null ? Updates.RELEASE : Updates.PAGE)); }
+                    void open() {
+                        String newer = Updates.newer(c, versionName());
+                        if (newer != null) openUpdate(newer);
+                        else if (canBrowse(Updates.PAGE)) startSafely(link(Updates.PAGE));
+                    }
                 },
                 // Updates beside where they show: a daily question to GitHub (off, no connection for it), and the
                 // same question at once, on or off, its answer beside it while Settings is open.
@@ -902,26 +988,25 @@ public class SettingsActivity extends Screen {
                     boolean on() { return Prefs.updateCheck(c); }
                     void set(boolean on) { Prefs.setUpdateCheck(c, on); }
                 },
+                // What's new in every version written (NewsActivity), as after an update.
+                new Row(VALUE) {
+                    String label() { return t.newsRow(); }
+                    String help() { return t.newsRowHelp(); }
+                    void open() { startSafely(new Intent(c, NewsActivity.class).putExtra(NewsActivity.ALL, true)); }
+                },
                 new Row(canBrowse(Updates.SITE) ? VALUE : INFO) {
                     String label() { return t.byAwan(); }
                     String help() { return Updates.shown(Updates.SITE); }
                     void open() { startSafely(link(Updates.SITE)); }
                 },
-                new Row(INFO) {
-                    String label() { return t.basedOn(); }
-                    String help() { return t.mitLicence(); }
-                },
-                new Row(INFO) {
-                    String label() { return t.weatherRow(); }
-                    String help() { return t.weatherCredit(); }
-                },
-                new Row(INFO) {
-                    String label() { return t.location(); }
-                    String help() { return t.citiesCreditLong(); }
-                },
-                new Row(INFO) {
-                    String label() { return t.libraryRow(); }
-                    String help() { return t.recitationsCreditLong(); }
+                new Row(VALUE) {
+                    String label() { return t.creditsRow(); }
+                    String help() { return t.creditsHelp(); }
+                    void open() {
+                        creditsOpen = true;
+                        showSection();
+                        focusRow(0);
+                    }
                 },
                 // Every setting back to a new install's.
                 new Row(VALUE) {
@@ -929,12 +1014,6 @@ public class SettingsActivity extends Screen {
                     String help() { return t.resetHelp(); }
                     void open() { openResetAsk(); }
                 }));
-                // The adhan recordings' source, when this build carries them (tools/AwanTV-fetch-adhans before building).
-                if (Adhans.present(c)) about.add(about.size() - 1, new Row(INFO) {
-                    String label() { return t.adhanRow(); }
-                    String help() { return t.adhanCredit(); }
-                });
-                return about;
             }
             default: {
                 if (buttonsOpen) return buttonsRows();
@@ -1619,7 +1698,7 @@ public class SettingsActivity extends Screen {
         List<String> h = new ArrayList<>();
         h.add(t.hintMove());
         if (r.kind != INFO) h.add(r.kind == VALUE ? t.hintChoose() : r.kind == TOGGLE ? t.hintSwitch() : t.hintEdit());
-        h.add(statusOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice() : t.hintBackMenu());
+        h.add(statusOpen || creditsOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice() : adjustOpen ? t.hintBackPrayer() : t.hintBackMenu());
         setHints(hints, h);
         styleNav(section);
     }
@@ -1691,11 +1770,23 @@ public class SettingsActivity extends Screen {
                     if (firstRunUnset()) openLocationAsk();
                     else finish();
                 }
+                else if (creditsOpen) {
+                    // The sources back to About, on their row.
+                    creditsOpen = false;
+                    showSection();
+                    focusRow(CREDITS_ROW);
+                }
                 else if (statusOpen) {
                     // App status back to About, on its row.
                     statusOpen = false;
                     showSection();
                     focusRow(0);
+                }
+                else if (adjustOpen) {
+                    // The adjustments back to Prayer times, on their row.
+                    adjustOpen = false;
+                    showSection();
+                    focusRow(ADJUST_ROW);
                 }
                 else if (buttonsOpen) {
                     // The remote buttons back to Device settings, on their row (the last).
@@ -1962,6 +2053,94 @@ public class SettingsActivity extends Screen {
         for (Row r : rows) r.tile.setFocusable(on);
     }
 
+    // ---------------------------------------------------------------- About > Sources and licences
+
+    /** About's row of the sources (its place in the list), for Back from their page. */
+    private static final int CREDITS_ROW = 6;
+
+    /** Where Awan TV comes from and what it carries: Afnon, the weather, the cities, the recitations, the adhan. */
+    private List<Row> creditRows() {
+        Context c = this;
+        List<Row> out = new ArrayList<>(Arrays.asList(
+            new Row(INFO) {
+                String label() { return t.basedOn(); }
+                String help() { return t.mitLicence(); }
+            },
+            new Row(INFO) {
+                String label() { return t.weatherRow(); }
+                String help() { return t.weatherCredit(); }
+            },
+            new Row(INFO) {
+                String label() { return t.location(); }
+                String help() { return t.citiesCreditLong(); }
+            },
+            new Row(INFO) {
+                String label() { return t.libraryRow(); }
+                String help() { return t.recitationsCreditLong(); }
+            }));
+        // The adhan recordings' source, when this build carries them (tools/AwanTV-fetch-adhans before building).
+        if (Adhans.present(c)) out.add(new Row(INFO) {
+            String label() { return t.adhanRow(); }
+            String help() { return t.adhanCredit(); }
+        });
+        return out;
+    }
+
+    // ---------------------------------------------------------------- adjust the times and the date
+
+    /** Prayer times' row of the adjustments (its place in the list), for Back from their page. */
+    private static final int ADJUST_ROW = 3;
+
+    /**
+     * Prayer times > Adjust the times and the date (Afnon 0.8's Adjust the times, as in meypod/al-azan): each of the
+     * six times up to 30 minutes earlier or later, with what it is today under its name, then the Hijri date.
+     */
+    private List<Row> adjustRows() {
+        Context c = this;
+        List<Row> out = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            final int prayer = i;
+            out.add(new Row(STEP) {
+                String label() { return t.prayerNames()[prayer]; }
+                String help() {
+                    // After Isha, PrayerDay holds tomorrow's Fajr.
+                    boolean tomorrow = prayer == PrayerDay.FAJR && day.times[prayer].after(day.times[PrayerDay.ISHA]);
+                    return t.adjustTimeHelp(time(day.times[prayer], 1f).toString(), tomorrow);
+                }
+                int amount() { return Prefs.adjustments(c)[prayer]; }
+                void setAmount(int n) {
+                    Prefs.setAdjustment(c, prayer, n);
+                    // The reminders, the call and the iqamah countdown follow at once.
+                    if (RemoteKeys.watch != null) RemoteKeys.watch.refreshCounter();
+                }
+                int lowest() { return -30; }
+                int highest() { return 30; }
+                String valueOf(int n) { return t.minutesSigned(n); }
+            });
+        }
+        out.add(new Row(STEP) {
+            String label() { return t.hijriAdjust(); }
+            String help() { return t.hijriToday(hijri(day)); }
+            int amount() { return Prefs.hijriOffset(c); }
+            void setAmount(int n) { Prefs.setHijriOffset(c, n); }
+            int lowest() { return -2; }
+            int highest() { return 2; }
+            String valueOf(int n) { return t.days(n); }
+        });
+        return out;
+    }
+
+    /** A note under a sub-page's rows, lined up with their words. */
+    private TextView note(CharSequence s) {
+        TextView v = text(ui400, 20, Tokens.MIST_400);
+        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+        v.setText(s);
+        v.setLineSpacing(0, 1.3f);
+        place(v, 640 + 28, ROWS_TOP + rows.size() * (ROW_H + ROW_GAP) + 14, Tokens.LAYOUT_SETTINGS_ROW_WIDTH - 56,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+        return v;
+    }
+
     // ---------------------------------------------------------------- remote buttons
 
     /** Device settings > Remote buttons: one row per custom button, then Add a button (until MAX_BUTTONS). */
@@ -2002,8 +2181,6 @@ public class SettingsActivity extends Screen {
 
     /** Under the rows: what customising costs and which keys never are; the service's state when it is off. */
     private TextView buttonsNote() {
-        TextView v = text(ui400, 20, Tokens.MIST_400);
-        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         android.text.SpannableStringBuilder s = new android.text.SpannableStringBuilder();
         if (RemoteKeys.guard == null) {
             s.append(t.buttonsServiceOff());
@@ -2016,12 +2193,7 @@ public class SettingsActivity extends Screen {
         s.setSpan(new android.text.style.ForegroundColorSpan(Tokens.PLASTER_100), head, s.length(),
             android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         s.append("\n").append(TclKeys.available(this) ? t.buttonsInfoHelpTcl() : t.buttonsInfoHelp());
-        v.setText(s);
-        v.setLineSpacing(0, 1.3f);
-        // Under the rows, lined up with their words.
-        place(v, 640 + 28, ROWS_TOP + rows.size() * (ROW_H + ROW_GAP) + 14, Tokens.LAYOUT_SETTINGS_ROW_WIDTH - 56,
-            ViewGroup.LayoutParams.WRAP_CONTENT);
-        return v;
+        return note(s);
     }
 
     /**
@@ -2335,7 +2507,7 @@ public class SettingsActivity extends Screen {
             if (k == KeyEvent.KEYCODE_BACK) {
                 if (!down) closeReset();
             } else if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                if (down) (askFirst.isFocused() ? askSecond : askFirst).requestFocus();
+                if (down && askSecond != null) (askFirst.isFocused() ? askSecond : askFirst).requestFocus();
             } else if (ok) {
                 if (down && e.getRepeatCount() == 0) resetPressed = true;
                 else if (!down && resetPressed && !e.isCanceled()) {
