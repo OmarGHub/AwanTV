@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.7.1]
+
 ### The app
 - After Update now, Home comes back by itself. On a Google TV Streamer the 1.7.0 update went in with no question,
   which ended the old app; the TV's own home screen came up and stayed, since nothing changed on screen for the
