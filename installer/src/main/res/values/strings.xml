@@ -72,8 +72,11 @@
     <string name="update_button">Update Awan TV</string>
     <string name="same_title">Awan TV is up to date on it</string>
     <string name="same_lead">It has %1$s, the version this installer carries. Set up again puts the service, permissions and screensaver right in seconds, without installing again.</string>
+    <string name="newer_installer_title">A newer installer is out: %1$s</string>
+    <string name="newer_installer_body">This one carries Awan TV %1$s. To install the newest, get the newer installer: %2$s</string>
     <string name="same_chip">Awan TV %1$s · the same version</string>
     <string name="setup_button">Set up again</string>
+    <string name="reinstall_button">Install it again</string>
     <string name="newer_title">It has a newer version</string>
     <string name="newer_lead">It has %1$s, newer than the %2$s this installer carries. Get the latest installer from github.com/OmarGHub/AwanTV/releases</string>
     <string name="newer_chip">Awan TV %1$s · newer than this installer</string>
@@ -107,6 +110,9 @@
 
     <string name="problem_title">That didn’t work</string>
     <string name="error_connect">Couldn’t reach the TV (%1$s).</string>
+    <string name="error_timeout">The TV doesn’t answer on its debugging port. Unplug the TV for a minute and try again, or switch USB debugging off and on in Developer options.</string>
+    <string name="error_refused">The TV refused the connection. If it uses Wireless debugging, open that screen again so it shows its new port, then go back and look for the TV again.</string>
+    <string name="error_unreachable">This phone can’t reach the TV on the network. Check that both are on the same Wi-Fi and that the TV is awake.</string>
     <string name="not_accepted">The TV didn’t allow this phone. Try again and choose Allow on the TV.</string>
     <string name="scan_none">No debugging port is open on %1$s.</string>
     <string name="pair_failed">Pairing didn’t work (%1$s). Open the pairing dialog on the TV again; it shows a new code each time.</string>

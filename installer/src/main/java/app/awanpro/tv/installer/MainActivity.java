@@ -97,6 +97,16 @@ public final class MainActivity extends Activity {
         root.addView(footer, Ui.wide(this, 0));
         setContentView(root);
 
+        // A newer installer than this one? Asked once, shown on the guide (where everyone starts).
+        work.execute(() -> {
+            String latest = Setup.latest();
+            String own = ownVersion();
+            if (latest == null || own.isEmpty() || Setup.compare(latest, own) <= 0) return;
+            runOnUiThread(() -> {
+                newerInstaller = latest;
+                if (newerSlot != null && newerSlot.isAttachedToWindow()) fillNewer(newerSlot);
+            });
+        });
         hero = new Hero(this);
         finder = new Finder(this, tvs -> runOnUiThread(() -> showTvs(tvs)));
 
@@ -178,9 +188,34 @@ public final class MainActivity extends Activity {
 
     // Prepare
 
+    /** A newer installer than this one on GitHub ("1.3.0"), once the question at start-up has an answer; else null. */
+    private String newerInstaller;
+    /** The guide's place for that notice (empty until there is one). */
+    private LinearLayout newerSlot;
+
+    /** The notice: which version, and where to get the newer installer (a link this phone's browser opens). */
+    private void fillNewer(LinearLayout slot) {
+        slot.removeAllViews();
+        LinearLayout card = Ui.card(this);
+        GradientDrawable bg = Ui.round(Ui.LAPIS_800, 18, this);
+        bg.setStroke(dp(1), 0x99d8b46a);
+        card.setBackground(bg);
+        TextView title = Ui.label(this, getString(R.string.newer_installer_title, "\u2066" + newerInstaller + "\u2069"));
+        title.setTextColor(Ui.GOLD_400);
+        card.addView(title);
+        TextView body = Ui.small(this, getString(R.string.newer_installer_body, "\u2066" + ownVersion() + "\u2069",
+                Setup.LATEST_INSTALLER));
+        Ui.links(body);
+        card.addView(body, Ui.wide(this, 6));
+        slot.addView(card, Ui.wide(this, 0));
+    }
+
     private void showGuide() {
         stopFinders();
         frame(PREPARE, Hero.Mode.TV, getString(R.string.guide_title), getString(R.string.guide_lead));
+        newerSlot = Ui.column(this);
+        if (newerInstaller != null) fillNewer(newerSlot);
+        add(newerSlot, 12);
         TextView both = Ui.chip(this, getString(R.string.guide_both), false);
         // Whole, on two lines if it must: cut short it said nothing.
         both.setSingleLine(false);
@@ -419,7 +454,7 @@ public final class MainActivity extends Activity {
                 }
                 fail(g, getString(R.string.scan_none, host));
             } catch (Exception e) {
-                fail(g, getString(R.string.error_connect, message(e)));
+                fail(g, connectError(e));
             }
         });
     }
@@ -438,7 +473,7 @@ public final class MainActivity extends Activity {
                 a = adb();
                 a.disconnect();
             } catch (Exception e) {
-                fail(g, getString(R.string.error_connect, message(e)));
+                fail(g, connectError(e));
                 return;
             }
             if (tls > 0) {
@@ -452,7 +487,7 @@ public final class MainActivity extends Activity {
                     return;
                 } catch (Exception e) {
                     if (classic == 0) {
-                        fail(g, getString(R.string.error_connect, message(e)));
+                        fail(g, connectError(e));
                         return;
                     }
                 }
@@ -466,7 +501,7 @@ public final class MainActivity extends Activity {
                     }
                     fail(g, getString(R.string.not_accepted));
                 } catch (Exception e) {
-                    fail(g, getString(R.string.error_connect, message(e)));
+                    fail(g, connectError(e));
                 }
                 return;
             }
@@ -596,6 +631,8 @@ public final class MainActivity extends Activity {
     private boolean setUpOnly;
     /** What the confirmation's main button does once the TV's version is known: install, or set up only. */
     private Runnable confirmGo;
+    /** The TV has the very version carried (showVersions): Install it again is offered beside Set up again. */
+    private boolean sameVersion;
     /** The address of the TV this run is working on, remembered for next time. */
     private String host;
 
@@ -639,9 +676,13 @@ public final class MainActivity extends Activity {
         confirmGo = this::install;
         TextView main = Ui.primary(this, getString(R.string.confirm_install), v -> go(confirmGo));
         TextView other = Ui.secondary(this, getString(R.string.cancel), v -> go(this::showFind));
+        // The same version on the TV: set up again (main), or send it all the same (a damaged install, a test build).
+        TextView again = Ui.secondary(this, getString(R.string.reinstall_button), v -> go(this::install));
+        again.setVisibility(View.GONE);
         // Nothing to press until the version is known (a second or two): an install must not race the answer.
         Ui.enabled(main, false);
         foot(main);
+        foot(again);
         foot(other);
         back = () -> go(this::showFind);
         int g = gen;
@@ -673,7 +714,10 @@ public final class MainActivity extends Activity {
                 // The address alone still says which TV it is; the install itself finds out the rest.
             }
             String have = onTv, ours = carried;
-            post(g, () -> showVersions(have, ours, state, main, other));
+            post(g, () -> {
+                showVersions(have, ours, state, main, other);
+                if (sameVersion) again.setVisibility(View.VISIBLE);
+            });
         });
     }
 
@@ -684,6 +728,7 @@ public final class MainActivity extends Activity {
      */
     private void showVersions(String onTv, String carried, TextView state, TextView main, TextView other) {
         Ui.enabled(main, true);
+        sameVersion = false;
         if (onTv == null || carried.isEmpty()) {
             state.setVisibility(View.GONE);
             return;
@@ -707,6 +752,7 @@ public final class MainActivity extends Activity {
             state.setText(getString(R.string.same_chip, tv));
             main.setText(R.string.setup_button);
             confirmGo = this::setUpOnly;
+            sameVersion = true;
         } else {
             titleView.setText(R.string.newer_title);
             leadView.setText(getString(R.string.newer_lead, tv, ours));
@@ -953,6 +999,27 @@ public final class MainActivity extends Activity {
             foot(Ui.secondary(this, getString(R.string.back), v -> go(this::showGuide)));
             back = () -> go(this::showGuide);
         });
+    }
+
+    /**
+     * Why the TV could not be reached, with what to do: no answer from its debugging port (a TV that stopped
+     * listening until unplugged, as a TCL on Android 11 did), refused (Wireless debugging's port changed), or no way to
+     * it on the network; else the plain reason with the same first advice.
+     */
+    private String connectError(Exception e) {
+        for (Throwable x = e; x != null; x = x.getCause()) {
+            String m = String.valueOf(x.getMessage());
+            if (x instanceof java.net.SocketTimeoutException || m.contains("ETIMEDOUT") || m.contains("timed out")) {
+                return getString(R.string.error_timeout);
+            }
+            if (x instanceof java.net.NoRouteToHostException || m.contains("EHOSTUNREACH") || m.contains("ENETUNREACH")) {
+                return getString(R.string.error_unreachable);
+            }
+            if (x instanceof java.net.ConnectException || m.contains("ECONNREFUSED")) {
+                return getString(R.string.error_refused);
+            }
+        }
+        return getString(R.string.error_connect, message(e));
     }
 
     private static String message(Exception e) {

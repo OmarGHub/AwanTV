@@ -296,13 +296,14 @@ final class Text {
             case NORTH_AMERICA: return ar ? "الجمعية الإسلامية لأمريكا الشمالية" : "ISNA, North America";
             case MOON_SIGHTING_COMMITTEE: return ar ? "لجنة رؤية الهلال" : "Moonsighting Committee";
             case SINGAPORE: return ar ? "سنغافورة" : "Singapore";
+            case OTHER: return ar ? "وزارة الأوقاف والشؤون الدينية، سلطنة عُمان" : "Ministry of Awqaf, Oman";
             default: return ar ? "الهيئة المصرية العامة للمساحة" : "Egyptian General Authority of Survey";
         }
     }
 
     /** "Fajr angle 19.5° · Isha 17.5°", or Isha as minutes after Maghrib where the method fixes it that way. */
     String methodAngles(CalculationMethod m) {
-        CalculationParameters p = m.getParameters();
+        CalculationParameters p = Prefs.parameters(m);
         String fajr = (ar ? "زاوية الفجر " : "Fajr angle ") + trim(p.fajrAngle) + "°";
         String isha = p.ishaInterval > 0
             ? (ar ? "العشاء بعد المغرب بـ " + p.ishaInterval + " دقيقة" : "Isha " + p.ishaInterval + " min after Maghrib")
@@ -377,6 +378,15 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.3.0":
+                return ar ? new String[][] {
+                    {"طريقة وزارة الأوقاف العُمانية", "مواقيت سلطنة عُمان بطريقة وزارة الأوقاف والشؤون الدينية، تُختار تلقائيًا لمدنها."},
+                    {"ثلاث إذاعات", "إذاعة القرآن الكريم من سلطنة عُمان، وإذاعة القرآن الكريم ونداء الإسلام من السعودية، في الإعدادات ← الإذاعة."},
+                    {"المثبّت على الجوال", "يخبرك بالمثبّت الأحدث، ويقول لماذا لم يصل إلى الشاشة وماذا تفعل."}}
+                  : new String[][] {
+                    {"Oman's Ministry of Awqaf method", "Oman's prayer times by its Ministry of Awqaf, chosen for its cities by themselves."},
+                    {"Three radio stations", "Oman's Holy Quran Radio, and Saudi Arabia's Quran Radio and Nida Al-Islam, in Settings › Radio."},
+                    {"The phone installer", "It tells you of a newer installer, and says why it couldn't reach the TV and what to do."}};
             case "1.2.0":
                 return ar ? new String[][] {
                     {"تعديل المواقيت بالدقائق", d("الإعدادات ← مواقيت الصلاة ← تعديل المواقيت والتاريخ: كل وقت حتى 30 دقيقة قبله أو بعده، ليطابق مسجدك.")},

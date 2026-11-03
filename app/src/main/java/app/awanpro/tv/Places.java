@@ -185,11 +185,13 @@ final class Places {
             case "AE": return CalculationMethod.DUBAI;
             case "KW": return CalculationMethod.KUWAIT;
             case "QA": return CalculationMethod.QATAR;
+            // Oman's Ministry of Awqaf (Prefs.OMAN, adhan-java's OTHER standing for it).
+            case "OM": return CalculationMethod.OTHER;
             case "US": case "CA": return CalculationMethod.NORTH_AMERICA;
             case "IN": case "PK": case "BD": case "LK": return CalculationMethod.KARACHI;
             case "ID": case "SG": case "BN": case "TH": return CalculationMethod.SINGAPORE;
             case "MY": return CalculationMethod.MOON_SIGHTING_COMMITTEE;
-            case "JO": case "PS": case "LB": case "SY": case "IQ": case "BH": case "OM": case "YE": case "MV":
+            case "JO": case "PS": case "LB": case "SY": case "IQ": case "BH": case "YE": case "MV":
             case "JP": case "KR": case "TR": case "GB": case "FR": case "DE": case "NL": case "BE": case "AT":
             case "CH": case "IT": case "ES": case "BA": case "KE": case "NG": case "ZA": case "AU": case "NZ":
                 return CalculationMethod.MUSLIM_WORLD_LEAGUE;

@@ -44,7 +44,7 @@ final class PrayerDay {
     }
 
     PrayerDay(Date now, Coordinates where, CalculationMethod method, Madhab madhab, int[] adjust, int hijriOffset) {
-        CalculationParameters params = method.getParameters();
+        CalculationParameters params = Prefs.parameters(method);
         params.madhab = madhab;
         // The viewer's minutes on each time (Prefs.adjustments): the adhan, iqamah, reminders and screens all follow.
         params.adjustments = new PrayerAdjustments(adjust[FAJR], adjust[SUNRISE], adjust[DHUHR], adjust[ASR],

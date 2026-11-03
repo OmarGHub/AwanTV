@@ -6,6 +6,20 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Calculation method «وزارة الأوقاف والشؤون الدينية، سلطنة عُمان» (Afnon 0.7): Fajr and Isha at 18°, the standard Asr,
+  five minutes on Dhuhr, Asr and Maghrib, fitted by Afnon to the ministry's timetable. Omani cities and places take
+  it (they were on the Muslim World League); Muscat sits where the ministry's Muscat timetable matches.
+- Settings > Radio: Oman's Holy Quran Radio, and the Saudi Broadcasting Authority's Quran Radio and Nida Al-Islam
+  (Afnon 0.8).
+- What's new lists 1.3.0.
+
+### The installer (phone)
+- It says when a newer installer is out (one question to GitHub when it opens), with the link to get it.
+- A TV that can't be reached gets the reason and what to do: no answer from its debugging port (unplug it a minute,
+  or switch USB debugging off and on), refused (Wireless debugging's port changed), or not on this network.
+- Install it again, beside Set up again, when the TV has the very version it carries.
+
 ## [1.2.0]
 
 ### The app

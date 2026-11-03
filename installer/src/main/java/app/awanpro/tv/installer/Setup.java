@@ -23,6 +23,39 @@ final class Setup {
     private Setup() {}
 
     static final String PACKAGE = "app.awanpro.tv";
+    /** The newest release (GitHub's API) and the installer in it, for a newer installer than this one. */
+    private static final String LATEST = "https://api.github.com/repos/OmarGHub/AwanTV/releases/latest";
+    static final String LATEST_INSTALLER = "github.com/OmarGHub/AwanTV/releases/latest/download/AwanTVInstaller.apk";
+
+    /**
+     * The newest release's version ("1.3.0"), or null when unknown (offline, no release). One question to GitHub when
+     * the installer opens, nothing sent but the request itself; the app's own update check asks the same.
+     */
+    static String latest() {
+        java.net.HttpURLConnection http = null;
+        try {
+            http = (java.net.HttpURLConnection) new java.net.URL(LATEST).openConnection();
+            http.setConnectTimeout(8000);
+            http.setReadTimeout(8000);
+            // GitHub asks every caller for a User-Agent.
+            http.setRequestProperty("User-Agent", "AwanTV-installer (https://awanpro.app)");
+            http.setRequestProperty("Accept", "application/vnd.github+json");
+            if (http.getResponseCode() != 200) return null;
+            java.io.ByteArrayOutputStream body = new java.io.ByteArrayOutputStream();
+            try (java.io.InputStream in = http.getInputStream()) {
+                byte[] buf = new byte[4096];
+                int n;
+                while ((n = in.read(buf)) > 0 && body.size() < 256 * 1024) body.write(buf, 0, n);
+            }
+            String tag = new org.json.JSONObject(body.toString("UTF-8")).optString("tag_name", "").trim();
+            tag = tag.replaceFirst("^[vV]", "");
+            return tag.isEmpty() ? null : tag;
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (http != null) http.disconnect();
+        }
+    }
     private static final String ASSET = "AwanTV.apk";
     /** The screensaver Awan TV replaces, kept on the TV (shell can write here) so any phone or a PC finds it. */
     private static final String SAVER_BEFORE = "/data/local/tmp/awantv-saver-before.txt";

@@ -83,6 +83,8 @@ final class Prefs {
     private static final CalculationMethod MWL = CalculationMethod.MUSLIM_WORLD_LEAGUE;
     private static final CalculationMethod IN = CalculationMethod.KARACHI;
     private static final CalculationMethod SG = CalculationMethod.SINGAPORE;
+    /** Oman's Ministry of Awqaf (adhan-java's OTHER stands for it: see {@link #OMAN}). */
+    private static final CalculationMethod OM = CalculationMethod.OTHER;
     private static final CalculationMethod NA = CalculationMethod.NORTH_AMERICA;
     /** Hanafi Asr (about an hour later), the usual school in Pakistan, Bangladesh and most of North India. */
     private static final Madhab HANAFI = Madhab.HANAFI;
@@ -152,10 +154,11 @@ final class Prefs {
         new City("sulaymaniyah", "السليمانية", "Sulaymaniyah", "العراق", "Iraq", 35.5500, 45.4333, MWL),
         new City("manama", "المنامة", "Manama", "البحرين", "Bahrain", 26.2167, 50.5833, MWL),
         new City("muharraq", "المحرق", "Muharraq", "البحرين", "Bahrain", 26.2533, 50.6083, MWL),
-        new City("muscat", "مسقط", "Muscat", "عُمان", "Oman", 23.6139, 58.5922, MWL),
-        new City("salalah", "صلالة", "Salalah", "عُمان", "Oman", 17.0197, 54.0897, MWL),
-        new City("sohar", "صحار", "Sohar", "عُمان", "Oman", 24.3420, 56.7299, MWL),
-        new City("nizwa", "نزوى", "Nizwa", "عُمان", "Oman", 22.9333, 57.5333, MWL),
+        // Muscat at the point the ministry's own Muscat timetable matches (Afnon 0.7).
+        new City("muscat", "مسقط", "Muscat", "عُمان", "Oman", 23.6139, 58.2800, OM),
+        new City("salalah", "صلالة", "Salalah", "عُمان", "Oman", 17.0197, 54.0897, OM),
+        new City("sohar", "صحار", "Sohar", "عُمان", "Oman", 24.3420, 56.7299, OM),
+        new City("nizwa", "نزوى", "Nizwa", "عُمان", "Oman", 22.9333, 57.5333, OM),
         new City("sanaa", "صنعاء", "Sanaa", "اليمن", "Yemen", 15.3500, 44.2000, MWL),
         new City("aden", "عدن", "Aden", "اليمن", "Yemen", 12.8000, 45.0333, MWL),
         new City("taiz", "تعز", "Taiz", "اليمن", "Yemen", 13.5789, 44.0219, MWL),
@@ -319,7 +322,7 @@ final class Prefs {
         double lng = Double.longBitsToDouble(p.getLong("custom_lng", Double.doubleToLongBits(0)));
         CalculationMethod m = MWL;
         String saved = p.getString("method", null);
-        if (saved != null) for (CalculationMethod x : METHODS) if (x.name().equals(saved)) m = x;
+        if (saved != null) for (CalculationMethod x : METHODS) if (methodId(x).equals(saved)) m = x;
         // Picked from the world list: its country (Android's names), so the iqamah preset and the place line know it.
         String cc = p.getString("custom_cc", "");
         return new City(CUSTOM, name, name, countryName(cc, true), countryName(cc, false), lat, lng, m,
@@ -336,7 +339,7 @@ final class Prefs {
         Madhab h = known != null ? Places.madhab(cc) : madhab(c);
         of(c).edit().putString("city", CUSTOM).putString("custom_name", name).putString("custom_cc", cc == null ? "" : cc)
             .putLong("custom_lat", Double.doubleToLongBits(lat)).putLong("custom_lng", Double.doubleToLongBits(lng))
-            .putString("method", m.name()).putString("madhab", h == Madhab.HANAFI ? "hanafi" : "shafi").apply();
+            .putString("method", methodId(m)).putString("madhab", h == Madhab.HANAFI ? "hanafi" : "shafi").apply();
     }
 
     /** The region of the other places, after the six of {@link #REGIONS} in the first list. */
@@ -345,7 +348,7 @@ final class Prefs {
     /** A new city also takes that city's usual method and Asr school; their rows can still override them after. */
     static void setCity(Context c, int index) {
         City city = CITIES[index];
-        of(c).edit().putString("city", city.id).putString("method", city.method.name())
+        of(c).edit().putString("city", city.id).putString("method", methodId(city.method))
             .putString("madhab", city.madhab == Madhab.HANAFI ? "hanafi" : "shafi").apply();
     }
 
@@ -382,16 +385,37 @@ final class Prefs {
     static final CalculationMethod[] METHODS = {
         CalculationMethod.EGYPTIAN, CalculationMethod.UMM_AL_QURA, CalculationMethod.MUSLIM_WORLD_LEAGUE,
         CalculationMethod.KARACHI, CalculationMethod.DUBAI, CalculationMethod.KUWAIT, CalculationMethod.QATAR,
+        CalculationMethod.OTHER,
         CalculationMethod.NORTH_AMERICA, CalculationMethod.MOON_SIGHTING_COMMITTEE, CalculationMethod.SINGAPORE};
+
+    /**
+     * Oman's Ministry of Awqaf and Religious Affairs (Afnon 0.7): Fajr and Isha at 18°, Asr by the standard shadow, five
+     * minutes on Dhuhr, Asr and Maghrib, fitted to the ministry's own timetable (mara.gov.om/arabic/calendar_page1.asp):
+     * every prayer within about two minutes across Omani cities in 2026. adhan-java has no such method, so its OTHER
+     * stands for it here, saved as {@link #OMAN} (the settings file and the editor show that name).
+     */
+    static final String OMAN = "OMAN_AWQAF";
+
+    /** What Settings saves for a method: adhan-java's name, or {@link #OMAN}. */
+    static String methodId(CalculationMethod m) {
+        return m == CalculationMethod.OTHER ? OMAN : m.name();
+    }
+
+    /** Fresh parameters for a method (the caller sets the Asr school and adjustments on them). */
+    static com.batoulapps.adhan.CalculationParameters parameters(CalculationMethod m) {
+        if (m != CalculationMethod.OTHER) return m.getParameters();
+        return new com.batoulapps.adhan.CalculationParameters(18.0, 18.0, CalculationMethod.OTHER)
+            .withMethodAdjustments(new com.batoulapps.adhan.PrayerAdjustments(0, 0, 5, 5, 5, 0));
+    }
 
     static CalculationMethod method(Context c) {
         String name = of(c).getString("method", null);
-        if (name != null) for (CalculationMethod m : METHODS) if (m.name().equals(name)) return m;
+        if (name != null) for (CalculationMethod m : METHODS) if (methodId(m).equals(name)) return m;
         return city(c).method;
     }
 
     static void setMethod(Context c, CalculationMethod m) {
-        of(c).edit().putString("method", m.name()).apply();
+        of(c).edit().putString("method", methodId(m)).apply();
     }
 
     static Madhab madhab(Context c) {

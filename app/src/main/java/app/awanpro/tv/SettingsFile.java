@@ -99,11 +99,11 @@ final class SettingsFile {
         out.add(city);
         String[] methods = new String[Prefs.METHODS.length], methodNames = new String[Prefs.METHODS.length];
         for (int i = 0; i < methods.length; i++) {
-            methods[i] = Prefs.METHODS[i].name();
+            methods[i] = Prefs.methodId(Prefs.METHODS[i]);
             methodNames[i] = t.methodName(Prefs.METHODS[i]);
         }
         out.add(new Item("method", STR_CHOICE, t.method()).choices(methods, methodNames)
-            .depends(t.byCity(), x -> Prefs.method(x).name()));
+            .depends(t.byCity(), x -> Prefs.methodId(Prefs.method(x))));
         out.add(new Item("madhab", STR_CHOICE, t.asrSchool()).help(t.asrSchoolHelp())
             .choices(new String[] {"shafi", "hanafi"}, t.asrSchools())
             .depends(t.byCity(), x -> Prefs.madhab(x) == com.batoulapps.adhan.Madhab.HANAFI ? "hanafi" : "shafi"));

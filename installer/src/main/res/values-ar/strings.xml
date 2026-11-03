@@ -70,8 +70,11 @@
     <string name="update_button">حدّث Awan TV</string>
     <string name="same_title">Awan TV محدّث عليه</string>
     <string name="same_lead">عليه %1$s، الإصدار نفسه الذي يحمله المثبّت. «أعد الإعداد» يصلح الخدمة والصلاحيات وشاشة الاستراحة في ثوانٍ، دون إعادة التثبيت.</string>
+    <string name="newer_installer_title">صدر مثبّت أحدث: %1$s</string>
+    <string name="newer_installer_body">هذا المثبّت يحمل Awan TV %1$s. لتثبيت الأحدث، نزّل المثبّت الجديد: %2$s</string>
     <string name="same_chip">Awan TV %1$s · الإصدار نفسه</string>
     <string name="setup_button">أعد الإعداد</string>
+    <string name="reinstall_button">أعد التثبيت</string>
     <string name="newer_title">عليه إصدار أحدث</string>
     <string name="newer_lead">عليه %1$s، وهو أحدث من %2$s الذي يحمله هذا المثبّت. نزّل أحدث مثبّت من github.com/OmarGHub/AwanTV/releases</string>
     <string name="newer_chip">Awan TV %1$s · أحدث من المثبّت</string>
@@ -105,6 +108,9 @@
 
     <string name="problem_title">لم ينجح ذلك</string>
     <string name="error_connect">تعذّر الوصول إلى التلفاز (%1$s).</string>
+    <string name="error_timeout">لا يرد التلفاز على منفذ التصحيح. افصله عن الكهرباء دقيقة ثم أعد المحاولة، أو أطفئ «تصحيح أخطاء USB» في خيارات المطوّر ثم شغّله.</string>
+    <string name="error_refused">رفض التلفاز الاتصال. إن كان على «تصحيح الأخطاء اللاسلكي» فافتح تلك الشاشة من جديد ليظهر منفذه الجديد، ثم ارجع وابحث عن التلفاز مرة أخرى.</string>
+    <string name="error_unreachable">لا يصل هذا الهاتف إلى التلفاز على الشبكة. تأكد أنهما على شبكة الواي فاي نفسها، وأن التلفاز مستيقظ.</string>
     <string name="not_accepted">لم يسمح التلفاز لهذا الهاتف. أعد المحاولة واختر «سماح» على التلفاز.</string>
     <string name="scan_none">لا يوجد منفذ تصحيح مفتوح على %1$s.</string>
     <string name="pair_failed">لم ينجح الإقران (%1$s). افتح نافذة الإقران على التلفاز من جديد؛ فهي تعرض رمزًا جديدًا كل مرة.</string>
