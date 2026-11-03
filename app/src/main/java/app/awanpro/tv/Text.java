@@ -364,7 +364,7 @@ final class Text {
     /** About > Sources and licences (SettingsActivity.creditRows). */
     String creditsRow() { return ar ? "المصادر والتراخيص" : "Sources and licences"; }
     String creditsHelp() { return ar ? "أفنون، والطقس، والمدن، والتلاوات، والأذان" : "Afnon, the weather, the cities, the recitations, the adhan"; }
-    String creditsSection() { return ar ? "حول التطبيق › المصادر والتراخيص" : "About › Sources and licences"; }
+    String creditsSection() { return ar ? "حول التطبيق ← المصادر والتراخيص" : "About › Sources and licences"; }
 
     /** What's new (NewsActivity): after an update, and from About. */
     String newsRow() { return ar ? "ما الجديد" : "What's new"; }
@@ -372,14 +372,14 @@ final class Text {
     String newsAll() { return ar ? "ما الجديد" : "What's new"; }
     String newsTitle(String version) { return ar ? "الجديد في Awan TV " + version : "New in Awan TV " + version; }
     String newsAlso(String version) { return ar ? "ومن " + version : "And from " + version; }
-    String newsLater() { return ar ? "تجده لاحقًا في الإعدادات › حول التطبيق › ما الجديد." : "Find it later in Settings › About › What's new."; }
+    String newsLater() { return ar ? "تجده لاحقًا في الإعدادات ← حول التطبيق ← ما الجديد." : "Find it later in Settings › About › What's new."; }
     String newsOk() { return ar ? "حسنًا" : "OK"; }
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
             case "1.2.0":
                 return ar ? new String[][] {
-                    {"تعديل المواقيت بالدقائق", d("الإعدادات › مواقيت الصلاة › تعديل المواقيت والتاريخ: كل وقت حتى 30 دقيقة قبله أو بعده، ليطابق مسجدك.")},
+                    {"تعديل المواقيت بالدقائق", d("الإعدادات ← مواقيت الصلاة ← تعديل المواقيت والتاريخ: كل وقت حتى 30 دقيقة قبله أو بعده، ليطابق مسجدك.")},
                     {"الإصدار الجديد برمز QR", "حين يصدر إصدار أحدث، يفتح «حول التطبيق» نافذة برمز تمسحه بالجوال لتصل إلى صفحته."},
                     {"ما الجديد", "هذه النافذة، مرة بعد كل تحديث، وتجدها في «حول التطبيق»."}}
                   : new String[][] {
@@ -388,7 +388,7 @@ final class Text {
                     {"What's new", "This window, once after each update, and in About."}};
             case "1.1.0":
                 return ar ? new String[][] {
-                    {"أزرار الريموت", "الإعدادات › إعدادات الجهاز › أزرار الريموت: اجعل زرًا في أي ريموت يفتح ما تختار."}}
+                    {"أزرار الريموت", "الإعدادات ← إعدادات الجهاز ← أزرار الريموت: اجعل زرًا في أي ريموت يفتح ما تختار."}}
                   : new String[][] {
                     {"Remote buttons", "Settings › Device settings › Remote buttons: make a button on any remote open what you choose."}};
             default:
@@ -408,7 +408,7 @@ final class Text {
     /** Prayer times > Adjust the times and the date (Prefs.adjustments, Prefs.hijriOffset). */
     String adjustRow() { return ar ? "تعديل المواقيت والتاريخ" : "Adjust the times and the date"; }
     String adjustRowHelp() { return d(ar ? "كل وقت حتى 30 دقيقة قبله أو بعده، والتاريخ الهجري" : "Each time up to 30 minutes earlier or later, and the Hijri date"); }
-    String adjustSection() { return ar ? "مواقيت الصلاة › تعديل المواقيت والتاريخ" : "Prayer times › Adjust the times and the date"; }
+    String adjustSection() { return ar ? "مواقيت الصلاة ← تعديل المواقيت والتاريخ" : "Prayer times › Adjust the times and the date"; }
     String hintBackPrayer() { return ar ? "رجوع  مواقيت الصلاة" : "Back  Prayer times"; }
     /** The row's value: what is adjusted ("الفجر +2، المغرب +1"), the first two and "…" after; "بلا تعديل" for none. */
     String adjustSummary(int[] minutes, int hijriDays) {
@@ -487,7 +487,7 @@ final class Text {
         if (n == 2) return "زران مخصصان";
         return d(n <= 10 ? n + " أزرار مخصصة" : n + " زرًا مخصصًا");
     }
-    String buttonsSection() { return ar ? "إعدادات الجهاز › أزرار الريموت" : "Device settings › Remote buttons"; }
+    String buttonsSection() { return ar ? "إعدادات الجهاز ← أزرار الريموت" : "Device settings › Remote buttons"; }
     String hintBackDevice() { return ar ? "رجوع  إعدادات الجهاز" : "Back  Device settings"; }
     String buttonFrom(String remote) {
         if (remote == null || remote.isEmpty()) return "";
@@ -939,12 +939,12 @@ final class Text {
     }
     String statusRow() { return ar ? "حالة التطبيق" : "App status"; }
     String statusHelp() { return ar ? "هل الخدمة والاستراحة والأذان تعمل على هذا الجهاز" : "Whether the service, the screensaver and the adhan work on this device"; }
-    String statusSection() { return ar ? "حول التطبيق › حالة التطبيق" : "About › App status"; }
+    String statusSection() { return ar ? "حول التطبيق ← حالة التطبيق" : "About › App status"; }
     String hintBackAbout() { return ar ? "رجوع  حول التطبيق" : "Back  About"; }
     String serviceRow() { return ar ? "خدمة Awan TV" : "Awan TV service"; }
     String serviceHelp() { return ar ? "الرئيسية فوق واجهة الجهاز، والأذان فوق أي تطبيق" : "Home over the device's own, and the adhan over any app"; }
     String running(boolean on) { return ar ? (on ? "تعمل" : "متوقفة") : (on ? "Running" : "Stopped"); }
-    String serviceOffHelp() { return ar ? "شغّلها من إعدادات الجهاز › إمكانية الوصول › Awan TV" : "Turn it on in the device's Settings › Accessibility › Awan TV"; }
+    String serviceOffHelp() { return ar ? "شغّلها من إعدادات الجهاز ← إمكانية الوصول ← Awan TV" : "Turn it on in the device's Settings › Accessibility › Awan TV"; }
     String saverStatusRow() { return ar ? "شاشة الاستراحة" : "Screensaver"; }
     String saverStatusHelp(int state) {
         return ar ? new String[] {"شاشة استراحة الجهاز هي Awan TV", "يفتحها Awan TV بنفسه من الرئيسية (لا صلاحية لضبط شاشة الجهاز)", "مطفأة في «تشغيل Awan TV»"}[state]

@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.2.0]
+
 ### The app
 - Settings > Prayer times > Adjust the times and the date: each of the six times up to 30 minutes earlier or later
   (Afnon 0.8's, as in meypod/al-azan), for a masjid a little off the calculation; the adhan, iqamah, reminders and
@@ -17,6 +19,7 @@ history is in its repository.
   What's new. Never on a new install.
 - Settings > About fits on the screen again (it had grown past it in 1.0.1): its sources and licences are on a page
   of their own, Sources and licences.
+- In Arabic a path reads with an arrow ("حول التطبيق ← حالة التطبيق"): the "›" read as a comma.
 
 ### The tools
 - `AwanTV-build-qr` (1.1.0) also builds the release page's code.
