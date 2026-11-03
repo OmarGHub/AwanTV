@@ -223,7 +223,7 @@ public class MainActivity extends Screen {
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
         } else {
             // After an update: what is new, once, over Home.
-            NewsActivity.showIfNew(this);
+            showNews();
         }
     }
 
@@ -240,6 +240,33 @@ public class MainActivity extends Screen {
         Reminders.home = null;
         Radio.unlisten(onRadio);
         super.onPause();
+    }
+
+    /** What's new after an update, as a layer over Home (NewsActivity.card); null when not shown. */
+    private NewsActivity.Card news;
+
+    /**
+     * What's new once after an update, the location set first. A layer of Home's own, not an activity over it: HomeGuard
+     * opens Home again when the stock home seems to stay in front, and that closed an activity over Home (a TCL TV).
+     * Seen only when closed, so a rebuild of Home (a new photo, the theme at Maghrib) shows it again until then.
+     */
+    private void showNews() {
+        if (news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
+        java.util.List<String> versions = NewsActivity.pending(this);
+        if (versions.isEmpty()) return;
+        news = NewsActivity.card(this, versions, false, this::closeNews);
+        root.addView(news.layer, new FrameLayout.LayoutParams(-1, -1));
+        for (View n : nodes) if (n != null) n.setFocusable(false);
+        root.post(news.ok::requestFocus);
+    }
+
+    private void closeNews() {
+        if (news == null) return;
+        Prefs.of(this).edit().putString(NewsActivity.SEEN, NewsActivity.current(this)).apply();
+        root.removeView(news.layer);
+        news = null;
+        for (View n : nodes) if (n != null) n.setFocusable(true);
+        focusStart();
     }
 
     /** Home is the screen in front (between onResume and onPause), for HomeGuard. */
@@ -481,6 +508,11 @@ public class MainActivity extends Screen {
         lastMinute = -1;
         render(true);
         focusStart();
+        // What's new was open over the old root: again over the new one (it is seen only once closed).
+        if (news != null) {
+            news = null;
+            showNews();
+        }
     }
 
     /**
@@ -1159,6 +1191,8 @@ public class MainActivity extends Screen {
 
     /** "Asr in 13 minutes" at the bottom end, over the apps; it takes focus until Got it, Today's prayers or Back. */
     private void showReminder() {
+        // The reminder is due now: What's new, if open, gives way (and counts as seen).
+        closeNews();
         if (card != null) dismissReminder();
         closeRadioCard(false);
         Date now = new Date();
@@ -1247,6 +1281,7 @@ public class MainActivity extends Screen {
     public boolean dispatchKeyEvent(KeyEvent e) {
         int k = e.getKeyCode();
         lastKey = System.currentTimeMillis();
+        if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
         if (k == KeyEvent.KEYCODE_TV_INPUT) {
             Intent source = FirmwareKeys.sourceMenu(this);

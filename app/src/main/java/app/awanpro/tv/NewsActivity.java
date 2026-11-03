@@ -1,7 +1,6 @@
 package app.awanpro.tv;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
@@ -16,11 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * What's new: once over Home after an update, the versions the TV has not seen yet, newest first (an update that
- * skipped some shows them all); from Settings > About, every version written ({@link #ALL}). Never on a new install.
+ * What's new: once after an update, the versions the TV has not seen yet, newest first (an update that skipped some
+ * shows them all), as a layer over Home itself (MainActivity.showNews: an activity of its own over Home was closed
+ * again by HomeGuard on a TCL TV, Home being no longer in front); this activity shows every version written, from
+ * Settings > About ({@link #ALL}). Never on a new install.
  * Each version's lines are in {@link Text#news}; {@link #VERSIONS} lists the versions that have them, newest first, and a
  * release adds its own at the top. The last one seen is the prefs key {@link #SEEN} (SettingsTransfer.LOCAL, so a Reset
- * does not show it all again). Translucent (Theme.Awan.Call): Home shows dimmed under the card.
+ * does not show it all again), only once it has been closed. Translucent (Theme.Awan.Call): Settings shows dimmed
+ * under the card.
  */
 public class NewsActivity extends Screen {
 
@@ -72,42 +74,25 @@ public class NewsActivity extends Screen {
         }
     }
 
-    /** From Home's onResume: the window, when there is something new and the location is set (the first run first). */
-    static void showIfNew(Context c) {
-        if (!Prefs.citySet(c) || pending(c).isEmpty()) return;
-        try {
-            c.startActivity(new Intent(c, NewsActivity.class));
-        } catch (RuntimeException ignored) {
-            // Shown on a later return to Home.
-        }
+    /** The card's parts that the screen holding it needs: the whole layer, its list (Up/Down) and OK. */
+    static final class Card {
+        FrameLayout layer;
+        ScrollView scroll;
+        FocusTile ok;
     }
 
-    private ScrollView scroll;
-    private boolean all;
-    /** The versions shown, worked out once: a rebuild (the theme turning at Maghrib) keeps them after SEEN moved on. */
-    private List<String> versions;
+    /**
+     * The dimmed layer with the card: after an update over Home itself (MainActivity.showNews, so Home stays the screen
+     * in front and HomeGuard leaves it be), and in this activity from Settings > About.
+     */
+    static Card card(Screen s, List<String> versions, boolean all, Runnable close) {
+        Text t = s.t;
+        Card out = new Card();
+        out.layer = new FrameLayout(s);
+        out.layer.setBackgroundColor(Tokens.SCRIM_MENU);
+        out.layer.setClickable(true);
 
-    @Override
-    void build() {
-        all = getIntent().getBooleanExtra(ALL, false);
-        if (versions == null) {
-            versions = new ArrayList<>();
-            if (all) {
-                for (String v : VERSIONS) if (Updates.compare(v, current(this)) <= 0) versions.add(v);
-            } else {
-                versions.addAll(pending(this));
-            }
-        }
-        if (versions.isEmpty()) {
-            finish();
-            return;
-        }
-        // Seen once shown, however it is left (OK, Back, or Home over it): it never comes back for these versions.
-        if (!all) Prefs.of(this).edit().putString(SEEN, current(this)).apply();
-        newRoot();
-        root.setBackgroundColor(Tokens.SCRIM_MENU);
-
-        LinearLayout card = new LinearLayout(this);
+        LinearLayout card = new LinearLayout(s);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(Ui.ipx(48), Ui.ipx(40), Ui.ipx(48), Ui.ipx(32));
         GradientDrawable bg = new GradientDrawable();
@@ -118,27 +103,28 @@ public class NewsActivity extends Screen {
         card.setClipChildren(false);
         card.setClipToPadding(false);
 
-        TextView title = text(displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
+        TextView title = s.text(s.displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
         title.setText(all ? t.newsAll() : t.newsTitle(versions.get(0)));
         card.addView(title);
-        lineHeight(title, 1.2f);
+        s.lineHeight(title, 1.2f);
 
-        LinearLayout list = new LinearLayout(this);
+        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        LinearLayout list = new LinearLayout(s);
         list.setOrientation(LinearLayout.VERTICAL);
         for (int i = 0; i < versions.size(); i++) {
             String v = versions.get(i);
             // After an update the title names the newest; the others (and every one in the full list) get a heading.
             if (all || i > 0) {
-                TextView head = text(ui500, 22, Tokens.GOLD_400);
+                TextView head = s.text(s.ui500, 22, Tokens.GOLD_400);
                 head.setText(all ? "Awan TV " + v : t.newsAlso(v));
-                head.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+                head.setTextDirection(dir);
                 LinearLayout.LayoutParams hl = new LinearLayout.LayoutParams(-1, -2);
                 hl.topMargin = Ui.ipx(i == 0 ? 14 : 28);
                 list.addView(head, hl);
             }
-            for (String[] item : t.news(v)) list.addView(feature(item[0], item[1]));
+            for (String[] item : t.news(v)) list.addView(feature(s, item[0], item[1]));
         }
-        scroll = new ScrollView(this);
+        ScrollView scroll = new ScrollView(s);
         scroll.setVerticalScrollBarEnabled(false);
         scroll.setFocusable(false);
         scroll.addView(list);
@@ -148,53 +134,94 @@ public class NewsActivity extends Screen {
         // Long lists scroll (Up/Down) within at most this height.
         scroll.post(() -> {
             int most = Ui.ipx(560);
-            if (scroll.getHeight() > most) scroll.getLayoutParams().height = most;
-            scroll.requestLayout();
+            if (scroll.getHeight() > most) {
+                scroll.getLayoutParams().height = most;
+                scroll.requestLayout();
+            }
         });
+        out.scroll = scroll;
 
         if (!all) {
-            TextView later = text(ui400, 20, Tokens.MIST_400);
+            TextView later = s.text(s.ui400, 20, Tokens.MIST_400);
             later.setText(t.newsLater());
-            later.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+            later.setTextDirection(dir);
             LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(-1, -2);
             ll.topMargin = Ui.ipx(22);
             card.addView(later, ll);
         }
 
         float reach = FocusTile.REACH;
-        FocusTile ok = new FocusTile(this, 14);
+        FocusTile ok = new FocusTile(s, 14);
         ok.setRest(Tokens.LAPIS_700, 0, 0);
-        TextView okText = text(ui500, 26, Tokens.PLASTER_100);
+        TextView okText = s.text(s.ui500, 26, Tokens.PLASTER_100);
         okText.setText(t.newsOk());
         okText.setGravity(Gravity.CENTER);
         ok.addView(okText, new FrameLayout.LayoutParams(-1, -1));
         ok.setLook(f -> okText.setTextColor(f ? Tokens.LAPIS_900 : Tokens.PLASTER_100));
         ok.setFocusable(true);
-        ok.setOnClickListener(v -> close());
+        ok.setOnClickListener(v -> close.run());
         LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(Ui.ipx(240 + 2 * reach), Ui.ipx(68 + 2 * reach));
         olp.topMargin = Ui.ipx(26 - reach);
         olp.setMarginStart(-Ui.ipx(reach));
         card.addView(ok, olp);
+        out.ok = ok;
 
-        root.addView(card, new FrameLayout.LayoutParams(Ui.ipx(1000), -2, Gravity.CENTER));
+        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(1000), -2, Gravity.CENTER));
+        return out;
+    }
+
+    /** The card's keys: Back closes, Up/Down scroll its list, OK on its one button; nothing else moves. */
+    static boolean key(Card c, KeyEvent e, Runnable close) {
+        int k = e.getKeyCode();
+        boolean down = e.getAction() == KeyEvent.ACTION_DOWN;
+        if (k == KeyEvent.KEYCODE_BACK) {
+            if (!down) close.run();
+            return true;
+        }
+        if (k == KeyEvent.KEYCODE_DPAD_UP || k == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (down) c.scroll.smoothScrollBy(0, Ui.ipx(k == KeyEvent.KEYCODE_DPAD_UP ? -180 : 180));
+            return true;
+        }
+        return k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT;
+    }
+
+    private Card shown;
+    /** The versions shown, worked out once (a rebuild for the theme at Maghrib keeps them). */
+    private List<String> versions;
+
+    /** Settings > About > What's new: every version written, newest first. */
+    @Override
+    void build() {
+        if (versions == null) {
+            versions = new ArrayList<>();
+            for (String v : VERSIONS) if (Updates.compare(v, current(this)) <= 0) versions.add(v);
+        }
+        if (versions.isEmpty()) {
+            finish();
+            return;
+        }
+        newRoot();
+        root.setBackground(null);
+        shown = card(this, versions, true, this::finish);
+        root.addView(shown.layer, new FrameLayout.LayoutParams(-1, -1));
         setContentView(root);
-        root.post(ok::requestFocus);
+        root.post(shown.ok::requestFocus);
     }
 
     /** One line of what's new: a gold dot, its name, and where it is or what it does. */
-    private View feature(String name, String help) {
-        LinearLayout row = new LinearLayout(this);
+    private static View feature(Screen s, String name, String help) {
+        LinearLayout row = new LinearLayout(s);
         row.setGravity(Gravity.TOP);
-        TextView dot = text(ui500, 26, Tokens.GOLD_400);
+        TextView dot = s.text(s.ui500, 26, Tokens.GOLD_400);
         dot.setText("•");
-        LinearLayout words = new LinearLayout(this);
+        LinearLayout words = new LinearLayout(s);
         words.setOrientation(LinearLayout.VERTICAL);
-        TextView n = text(ui500, 26, Tokens.PLASTER_100);
+        TextView n = s.text(s.ui500, 26, Tokens.PLASTER_100);
         n.setText(name);
-        TextView h = text(ui400, 21, Tokens.MIST_400);
+        TextView h = s.text(s.ui400, 21, Tokens.MIST_400);
         h.setText(help);
         h.setLineSpacing(0, 1.25f);
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = s.t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         n.setTextDirection(dir);
         h.setTextDirection(dir);
         words.addView(n);
@@ -209,24 +236,9 @@ public class NewsActivity extends Screen {
         return row;
     }
 
-    /** OK or Back: back to what was under it. */
-    private void close() {
-        finish();
-    }
-
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
-        int k = e.getKeyCode();
-        boolean down = e.getAction() == KeyEvent.ACTION_DOWN;
-        if (k == KeyEvent.KEYCODE_BACK) {
-            if (!down) close();
-            return true;
-        }
-        if (k == KeyEvent.KEYCODE_DPAD_UP || k == KeyEvent.KEYCODE_DPAD_DOWN) {
-            if (down && scroll != null) scroll.smoothScrollBy(0, Ui.ipx(k == KeyEvent.KEYCODE_DPAD_UP ? -180 : 180));
-            return true;
-        }
-        if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) return true;
+        if (shown != null && key(shown, e, this::finish)) return true;
         return super.dispatchKeyEvent(e);
     }
 
