@@ -6,6 +6,12 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Phone installer
+- After "Update the installer" the new installer opens by itself: Android's answer to the install now goes to the
+  installer's screen (an activity PendingIntent the system sends) rather than a broadcast, since a phone stops the
+  installer to replace it and a receiver may not open a screen from the background. It takes effect from the update
+  after the one carrying it (the PendingIntent is the old installer's).
+
 ### Tools
 - `AwanTV-editor` 1.4.2: opening the editor while adb was not running yet (after the computer started) stopped it with
   "daemon not running; starting now", adb's own note on starting; adb is now started without that ending the editor.

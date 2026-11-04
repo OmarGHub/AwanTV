@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LocaleManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.pm.ApplicationInfo;
@@ -71,9 +72,18 @@ public final class MainActivity extends Activity {
     private LinearLayout tvList;
     private View help;
 
+    /** The answer to "Update the installer" (SelfUpdate.status): Android's question, or a failure, while open. */
+    @Override
+    protected void onNewIntent(Intent i) {
+        super.onNewIntent(i);
+        SelfUpdate.status(this, i);
+    }
+
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        // After the installer updated itself, Android opens the new one with its answer (SUCCESS): read and dropped.
+        SelfUpdate.status(this, getIntent());
         Ui.init(this);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setStatusBarColor(Ui.LAPIS_900);

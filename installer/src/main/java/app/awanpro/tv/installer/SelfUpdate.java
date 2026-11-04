@@ -119,8 +119,13 @@ final class SelfUpdate {
                 download(s, String.format(DOWNLOAD, v));
                 if (cancelled) throw new IOException("cancelled");
                 set(INSTALLING);
+                // Android's answer goes to the installer's own screen, not a receiver: updating itself, the installer is
+                // stopped and replaced, and only an activity started by the system (this PendingIntent) may open it
+                // again from the background. So the new installer comes back by itself (on SUCCESS the new version's
+                // MainActivity opens); a receiver could not start it. Mutable: Android fills in the status.
                 int flags = PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_MUTABLE : 0);
-                PendingIntent result = PendingIntent.getBroadcast(c, id, new Intent(c, Result.class), flags);
+                Intent back = new Intent(c, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent result = PendingIntent.getActivity(c, id, back, flags);
                 s.commit(result.getIntentSender());
             }
         } catch (IOException | RuntimeException e) {
@@ -172,10 +177,25 @@ final class SelfUpdate {
         }
     }
 
-    /** Android's answer to the install. On success this process is being replaced by the new installer. */
+    /**
+     * Android's answer to the install, delivered to MainActivity (onCreate, onNewIntent) since 1.13.0. On success the
+     * new installer is already running it: nothing to do but show its start. Read once (the extra is removed).
+     */
+    static void status(Context c, Intent i) {
+        if (i == null || !i.hasExtra(PackageInstaller.EXTRA_STATUS)) return;
+        Intent answer = new Intent(i);
+        i.removeExtra(PackageInstaller.EXTRA_STATUS);
+        Result.handle(c, answer);
+    }
+
+    /** The answer as a broadcast: sessions committed by an installer before 1.13.0. */
     public static final class Result extends BroadcastReceiver {
         @Override
         public void onReceive(Context c, Intent i) {
+            handle(c, i);
+        }
+
+        static void handle(Context c, Intent i) {
             int status = i.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE);
             switch (status) {
                 case PackageInstaller.STATUS_PENDING_USER_ACTION: {
