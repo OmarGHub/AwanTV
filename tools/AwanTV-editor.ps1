@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.4.1
+﻿# AwanTV-editor.ps1 - Version 1.4.2
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.4.1"
+$ScriptVersion = "1.4.2"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -277,9 +277,12 @@ $script:Adb = Find-Adb
 
 # The adb server keeps open the folder it was first started from, so Windows refuses to move, rename or delete
 # that folder until adb stops. Started from the temp folder, it never holds the project.
+# Its "* daemon not running; starting now" comes on stderr: under this script's Stop, Windows PowerShell made it an
+# error that ended the editor at its start whenever adb was not running yet (after the computer started).
 function Start-AdbServer([string]$adb) {
+    $old = $ErrorActionPreference; $ErrorActionPreference = "Continue"
     Push-Location $env:TEMP
-    try { & $adb start-server 2>&1 | Out-Null } finally { Pop-Location }
+    try { & $adb start-server 2>&1 | Out-Null } finally { Pop-Location; $ErrorActionPreference = $old }
 }
 if ($script:Adb) { Start-AdbServer $script:Adb }
 

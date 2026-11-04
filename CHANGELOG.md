@@ -7,6 +7,8 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.4.2: opening the editor while adb was not running yet (after the computer started) stopped it with
+  "daemon not running; starting now", adb's own note on starting; adb is now started without that ending the editor.
 - `AwanTV-editor` 1.4.1: a TV on Wireless debugging whose serial did not answer got a second card under its wireless
   name (adb-<serial>-…._adb-tls-connect._tcp); its serial is now taken from that name, a TV that answers nothing is
   skipped, and such a card saved before is moved to its TV (a name you gave it kept).
