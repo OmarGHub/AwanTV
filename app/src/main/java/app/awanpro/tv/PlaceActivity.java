@@ -106,7 +106,12 @@ public class PlaceActivity extends Screen {
         placeEnd(lng, in, 452, half, 72);
         method = text(ui400, 22, Tokens.GOLD_400);
         method.setSingleLine(true);
-        placeEnd(method, in, 552, inW, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // A long method name with its hint ("· check it after saving") shrinks to fit, never cut (Morocco's ministry).
+        method.setIncludeFontPadding(false);
+        method.setGravity(android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.START);
+        method.setAutoSizeTextTypeUniformWithConfiguration(Math.max(1, Math.round(Ui.px(22 * 0.7f))),
+            Math.max(2, Math.round(Ui.px(22))), 1, android.util.TypedValue.COMPLEX_UNIT_PX);
+        placeEnd(method, in, 548, inW, 34);
         iqama = text(ui400, 20, Tokens.MIST_400);
         placeEnd(iqama, in, 590, inW, ViewGroup.LayoutParams.WRAP_CONTENT);
         FocusTile save = button(t.placeSave(), true);
