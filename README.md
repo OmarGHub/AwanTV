@@ -28,6 +28,11 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 <p align="center"><img src="docs/images/editor.webp" alt="محرر الإعدادات على Windows" width="80%"></p>
 <p align="center">محرر الإعدادات على Windows: يجلبها من شاشة، ويرسلها إلى شاشة أو أكثر</p>
 
+| | |
+|:---:|:---:|
+| ![الشاشات الآن في المحرر](docs/images/editor-now.webp) | ![التلاوات المحفوظة في المحرر](docs/images/editor-recitations.webp) |
+| الشاشات الآن: ما تبثه كل شاشة، وتشغيل الإذاعة أو إيقافها من حاسبك | التلاوات من حاسبك: تُحمَّل على أي شاشة دون الذهاب إليها |
+
 > رسوم توضيحية من تصميم التطبيق نفسه؛ التطبيقات والمواقيت والطقس على شاشتك تختلف. الخلفية (نقش أو صور) والسمة (ست سمات)
 > من الإعدادات ← العرض واللغة، وعدّاد الإقامة من الإعدادات ← الإقامة.
 
@@ -53,6 +58,9 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 1. ثبّت [AwanTVInstaller.apk](../../releases/latest/download/AwanTVInstaller.apk) على جوالك الأندرويد، وتأكد أن الجوال
    والتلفاز على شبكة الواي فاي نفسها.
 2. افتح المثبّت، واختر شاشتك، ثم «ثبّت Awan TV». إن طلبت الشاشة السماح أو ظهر عليها رمز، فوافق أو اكتب الرمز في المثبّت.
+   ويظهر أعلى المثبّت رقم Awan TV الذي سيثبّته.
+
+<p align="center"><img src="docs/images/installer.webp" alt="المثبّت على الجوال" width="30%"></p>
 
 ### 2. من حاسب Windows 10 أو 11
 1. نزّل [AwanTV-Windows.zip](../../releases/latest/download/AwanTV-Windows.zip) وفُكّه في مجلد.
@@ -276,6 +284,11 @@ That is what **Awan TV** brings you, and more.
 <p align="center"><img src="docs/images/editor-en.webp" alt="The settings editor on Windows" width="80%"></p>
 <p align="center">The settings editor on Windows: get them from a TV, send them to one or more</p>
 
+| | |
+|:---:|:---:|
+| ![TVs now in the editor](docs/images/editor-now-en.webp) | ![Saved recitations in the editor](docs/images/editor-recitations-en.webp) |
+| TVs now: what each TV is playing, and its radio started or stopped from your computer | Recitations from your computer: downloaded on any TV without walking to it |
+
 > Illustrations drawn from the app's own design; the apps, times and weather on your TV differ. The background (pattern
 > or photos) and the theme (six of them) are in Settings > Display & language; the iqamah countdown in Settings > Iqamah.
 
@@ -302,7 +315,9 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
 1. Install [AwanTVInstaller.apk](../../releases/latest/download/AwanTVInstaller.apk) on your Android phone, on the same
    Wi-Fi as the TV.
 2. Open it, choose your TV, then "Install Awan TV". If the TV asks to allow it or shows a code, accept or type the code
-   in the installer.
+   in the installer. Its top shows the number of the Awan TV it installs.
+
+<p align="center"><img src="docs/images/installer-en.webp" alt="The phone installer" width="30%"></p>
 
 ### 2. From a Windows 10 or 11 computer
 1. Download [AwanTV-Windows.zip](../../releases/latest/download/AwanTV-Windows.zip) and unzip it into a folder.
