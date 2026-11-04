@@ -7,6 +7,9 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.4.1: a TV on Wireless debugging whose serial did not answer got a second card under its wireless
+  name (adb-<serial>-…._adb-tls-connect._tcp); its serial is now taken from that name, a TV that answers nothing is
+  skipped, and such a card saved before is moved to its TV (a name you gave it kept).
 - `AwanTV-editor` 1.4.0: Update TVs ticks an up-to-date TV too, to put it right: with this very APK on it (by
   SHA-256, as AwanTV-install) nothing is sent and it is only set up again (permissions, TCL's app ops, the service
   started and checked); another file with the same number (a local build) is installed again, then set up. The button

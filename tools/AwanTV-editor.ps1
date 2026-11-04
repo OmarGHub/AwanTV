@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.4.0
+﻿# AwanTV-editor.ps1 - Version 1.4.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.4.0"
+$ScriptVersion = "1.4.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -329,6 +329,9 @@ function Version-Less([string]$a, [string]$b) {
 
 $script:Registry = $null     # id -> @{ name; model; deviceName; address; version; seen }
 
+# Wireless debugging's name for a TV in adb devices: adb-<the TV's serial>-<random>._adb-tls-connect._tcp
+$MdnsName = '^adb-(.+)-[^-]+\._adb-tls-connect\._tcp\.?$'
+
 function Load-Registry {
     $script:Registry = [ordered]@{}
     $dirty = $false
@@ -344,7 +347,16 @@ function Load-Registry {
                 $script:Registry[$p.Name] = $e
             }
         } catch { Log "tvs.jsonc unreadable: $($_.Exception.Message)" }
-        if ($dirty) { Log "tvs.jsonc: adb error text cleared"; Save-Registry }
+        # Editor 1.4.0 and older could keep a TV under its wireless name when its serial did not answer: a second card
+        # for the same TV. Moved to its serial (the name you gave it kept, unless the TV has one there already).
+        foreach ($k in @($script:Registry.Keys)) {
+            if ($k -notmatch $MdnsName) { continue }
+            $real = $Matches[1] -replace "[^A-Za-z0-9._-]", "_"
+            $e = $script:Registry[$k]; $script:Registry.Remove($k); $dirty = $true
+            if ($script:Registry.Contains($real)) { if ($e.name -and -not $script:Registry[$real].name) { $script:Registry[$real].name = $e.name } }
+            else { $e.address = ""; $script:Registry[$real] = $e }
+        }
+        if ($dirty) { Log "tvs.jsonc: cleaned"; Save-Registry }
     }
 }
 
@@ -382,11 +394,14 @@ function Get-Tvs {
             $sn = Shell $serial "getprop ro.serialno"
             if (Adb-Failed $sn) { Log "$serial stopped answering: $sn"; continue }
             $id = $sn -replace "[^A-Za-z0-9._-]", "_"
+            # No serial answered: a wireless name carries it (else the same TV got a second card under that name).
+            if (-not $id -and $serial -match $MdnsName) { $id = $Matches[1] -replace "[^A-Za-z0-9._-]", "_" }
             if (-not $id) { $id = $serial -replace "[^A-Za-z0-9._-]", "_" }
             if ($online.ContainsKey($id)) { continue }
             # Read everything first: a TV that stops answering on the way is not online now, and what was saved of
             # it stays as it was.
             $model = Shell $serial "getprop ro.product.model"
+            if (-not $sn -and -not $model) { Log "$serial gave no answer"; continue }
             $dn = Shell $serial "settings get global device_name"
             $vo = Shell $serial "dumpsys package $Pkg | grep versionName"
             if ((Adb-Failed $model) -or (Adb-Failed $dn) -or (($vo -notmatch "versionName=") -and (Adb-Failed $vo))) {
