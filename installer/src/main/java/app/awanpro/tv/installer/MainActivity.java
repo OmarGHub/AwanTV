@@ -799,10 +799,14 @@ public final class MainActivity extends Activity {
             boolean same = carried.equals(versionOnTv(a));
             if (same && !hash.isEmpty() && hash.equals(hashOnTv(a))) {
                 progressLine(g, t, getString(R.string.upd_tv_same_setting), -1);
-                boolean all = quietSteps(a);
+                boolean all = quietSteps(a, false);
                 t.state = MyTvs.State.SAME;
                 return all ? getString(R.string.upd_tv_setup_done, iso(carried)) : getString(R.string.upd_tv_fix_partly, iso(carried));
             }
+            // The install stops Awan TV: its Home (or screensaver) in front now opens again at the end; another app the
+            // viewer is in is left alone.
+            String front = a.shell("dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'").out;
+            boolean reopen = front.contains(Setup.PACKAGE + "/") || front.contains("DreamActivity");
             progressLine(g, t, getString(R.string.upd_tv_sending, number(0)), 0);
             int[] last = {0};
             String result = a.install(apk, f -> {
@@ -817,7 +821,7 @@ public final class MainActivity extends Activity {
             progressLine(g, t, getString(R.string.upd_tv_setting), -1);
             // As after Find my TV's install: Android may handle the update's force-stop a moment later.
             Thread.sleep(5000);
-            boolean all = quietSteps(a);
+            boolean all = quietSteps(a, reopen);
             String now = versionOnTv(a);
             if (now != null) {
                 t.version = now;
@@ -853,10 +857,14 @@ public final class MainActivity extends Activity {
         }
     }
 
-    /** On the worker: Setup.STEPS without the timeline (as runSteps); true when every required step is checked. */
-    private boolean quietSteps(Adb a) throws IOException, InterruptedException {
+    /**
+     * On the worker: Setup.STEPS without the timeline (as runSteps); true when every required step is checked. Awan TV
+     * is opened at the end only when open: it was in front before (1.13.0), never over another app.
+     */
+    private boolean quietSteps(Adb a, boolean open) throws IOException, InterruptedException {
         boolean all = true;
         for (Setup.Step s : Setup.STEPS) {
+            if (!open && s.command.contains("am start")) continue;
             if (s.check != null && a.shell(s.check).ok()) continue;
             boolean ran = a.shell(s.command).ok();
             boolean ok = s.check == null ? ran : a.shell(s.check).ok();

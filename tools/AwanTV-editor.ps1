@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.4.2
+﻿# AwanTV-editor.ps1 - Version 1.4.3
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.4.2"
+$ScriptVersion = "1.4.3"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -2127,8 +2127,13 @@ function Do-Tv($t, [string]$apk, [string]$want, [string]$hash) {
             if ($tvHash -and $tvHash -eq $hash) { $t.Kind = "setup" }
         }
     }
+    # What the TV shows now: the install stops Awan TV, so its Home (or its screensaver) in front now is opened again
+    # at the end; another app the viewer is in is left alone.
+    $front = Sh $s "dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'"
+    $t.Reopen = ($front -match ([regex]::Escape($Pkg) + "/")) -or ($front -match "DreamActivity")
     if ($t.Kind -eq "setup") {
         L "Set up $($t.Id) again: it has this very APK ($want)"
+        $t.Reopen = $false
     } else {
         $out = A $s @("install", "-r", $apk)
         L "$(if ($t.Kind -eq 'reinstall') { 'Install again' } else { 'Update' }) $($t.Id) to ${want}: $out"
@@ -2158,6 +2163,12 @@ function Do-Tv($t, [string]$apk, [string]$want, [string]$hash) {
         $bound = (Sh $s "dumpsys accessibility") -match "Bound services:\{[^}]*label=Awan TV"
     }
     $v = [regex]::Match((Sh $s "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+    if ($t.Reopen) {
+        # A key that does nothing (Shift) around the start, as AwanTV-install: "am start" is no user activity and would
+        # open straight into the screensaver. Not WAKEUP (HDMI-CEC on source boxes).
+        L "Opening Home again on $($t.Id): it was in front before the update"
+        [void](Sh $s "input keyevent KEYCODE_SHIFT_LEFT; am start -n $Pkg/.MainActivity >/dev/null; sleep 2; input keyevent KEYCODE_SHIFT_LEFT")
+    }
     if ($v -ne $want) { return "failed:v$v" }
     if (-not $bound) { return "noService" }
     return ""
@@ -2351,7 +2362,7 @@ function Update-Chosen {
     $url = if ($local -or (Test-Path $path)) { $null } else { "https://github.com/OmarGHub/AwanTV/releases/download/v$want/AwanTV.apk" }
     New-Item -ItemType Directory -Force -Path $ApkDir | Out-Null
     $list = New-Object Collections.ArrayList
-    foreach ($tv in $tvs) { [void]$list.Add([hashtable]::Synchronized(@{ Id = $tv.Id; Name = (Name-Of $tv); Serial = $tv.Serial; State = "wait"; Step = 0; Started = $null; Seconds = 0; Why = $null; Kind = $null })) }
+    foreach ($tv in $tvs) { [void]$list.Add([hashtable]::Synchronized(@{ Id = $tv.Id; Name = (Name-Of $tv); Serial = $tv.Serial; State = "wait"; Step = 0; Started = $null; Seconds = 0; Why = $null; Kind = $null; Reopen = $false })) }
     $job = [hashtable]::Synchronized(@{ Url = $url; Path = $path; Want = $want; Cert = $ReleaseCert; Local = $local; Down = "wait"; Done = [long]0; Total = [long]0
         Started = [DateTime]::Now; Error = $null; Stop = $false; Finished = $false; Tvs = $list; Fix = (Upd-Fixing) })
     Log "Update $($tvs.Count) TV(s) to $want ($(if ($local) { 'local build' } else { 'GitHub' }))"

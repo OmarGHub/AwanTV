@@ -18,6 +18,8 @@ history is in its repository.
 - What's new for 1.13.0.
 
 ### Phone installer
+- My TVs opens Awan TV after an update only when its Home (or its screensaver) was in front before it, as the
+  editor 1.4.3 does; never over another app the viewer is in.
 - My TVs ticks an up-to-date TV too, to put it right, as the editor's Update TVs: with this very APK on it (by
   SHA-256) nothing is sent and it is only set up again; another file with the same number is installed again, then
   set up. The button, the titles and each result say which was done ("Run on the ticked"). A newer TV has no box.
@@ -27,6 +29,9 @@ history is in its repository.
   after the one carrying it (the PendingIntent is the old installer's).
 
 ### Tools
+- `AwanTV-editor` 1.4.3: after an update, Awan TV's Home opens again on a TV where it (or its screensaver) was in front
+  before it: the install stops the app, and the TV's own home stayed up until a key. Another app the viewer is in is
+  left alone.
 - `AwanTV-editor` 1.4.2: opening the editor while adb was not running yet (after the computer started) stopped it with
   "daemon not running; starting now", adb's own note on starting; adb is now started without that ending the editor.
 - `AwanTV-editor` 1.4.1: a TV on Wireless debugging whose serial did not answer got a second card under its wireless
