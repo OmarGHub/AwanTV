@@ -7,6 +7,9 @@ history is in its repository.
 ## [Unreleased]
 
 ### Phone installer
+- My TVs ticks an up-to-date TV too, to put it right, as the editor's Update TVs: with this very APK on it (by
+  SHA-256) nothing is sent and it is only set up again; another file with the same number is installed again, then
+  set up. The button, the titles and each result say which was done ("Run on the ticked"). A newer TV has no box.
 - After "Update the installer" the new installer opens by itself: Android's answer to the install now goes to the
   installer's screen (an activity PendingIntent the system sends) rather than a broadcast, since a phone stops the
   installer to replace it and a receiver may not open a screen from the background. It takes effect from the update

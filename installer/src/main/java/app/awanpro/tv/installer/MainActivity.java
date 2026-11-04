@@ -610,11 +610,14 @@ public final class MainActivity extends Activity {
         myList.removeAllViews();
         String carried = ownVersion();
         int chosen = 0;
-        boolean reading = false;
+        boolean reading = false, fixing = false;
         for (MyTvs.Tv t : myTvs) {
             if (t.state == MyTvs.State.CHECKING) reading = true;
-            if (t.state != MyTvs.State.OLDER) t.chosen = false;
-            if (t.chosen) chosen++;
+            if (!tickable(t)) t.chosen = false;
+            if (t.chosen) {
+                chosen++;
+                if (t.state == MyTvs.State.SAME) fixing = true;
+            }
             String line;
             int color = Ui.MIST;
             switch (t.state) {
@@ -627,13 +630,22 @@ public final class MainActivity extends Activity {
                 case MOVED: line = getString(R.string.mytvs_moved); color = Ui.CORAL; break;
                 default: line = getString(R.string.mytvs_checking); break;
             }
-            View card = myTvCard(t, line, color, t.state == MyTvs.State.OLDER);
+            View card = myTvCard(t, line, color, tickable(t));
             myList.addView(card, Ui.wide(this, 10));
         }
         if (myUpdate != null) {
-            myUpdate.setText(getString(R.string.mytvs_update, number(chosen)));
+            // An up-to-date TV among the ticked: "Run on the ticked" (it is set up again, or installed again).
+            myUpdate.setText(getString(fixing ? R.string.mytvs_run : R.string.mytvs_update, number(chosen)));
             Ui.enabled(myUpdate, chosen > 0 && !reading);
         }
+    }
+
+    /**
+     * Ticked: one needing an update, or (1.13.0) an up-to-date one to put right, as the editor's Update TVs: with this
+     * very APK on it nothing is sent, it is only set up again. A newer one never: going back needs Awan TV removed.
+     */
+    private static boolean tickable(MyTvs.Tv t) {
+        return t.state == MyTvs.State.OLDER || t.state == MyTvs.State.SAME;
     }
 
     /** One TV: its box (or the same room empty), the TV glyph, name, model and a state line. */
@@ -667,6 +679,11 @@ public final class MainActivity extends Activity {
         TextView state = Ui.text(this, line, color, 13, Ui.medium());
         state.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
         words.addView(state, Ui.wide(this, 4));
+        if (tickable && t.state == MyTvs.State.SAME) {
+            TextView hint = Ui.small(this, getString(R.string.mytvs_same_hint));
+            hint.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            words.addView(hint, Ui.wide(this, 3));
+        }
         if (t.percent >= 0) words.addView(bar(t.percent), Ui.wide(this, 6));
         card.addView(words, Ui.fill(this));
         if (tickable) {
@@ -701,7 +718,11 @@ public final class MainActivity extends Activity {
             return;
         }
         List<MyTvs.Tv> all = myTvs;
-        frame(INSTALL, Hero.Mode.PROGRESS, getString(R.string.upd_tvs_title), getString(R.string.upd_tvs_lead));
+        boolean fixing = false;
+        for (MyTvs.Tv t : chosen) if (t.state == MyTvs.State.SAME) fixing = true;
+        boolean fix = fixing;
+        frame(INSTALL, Hero.Mode.PROGRESS, getString(fix ? R.string.upd_tvs_title_do : R.string.upd_tvs_title),
+                getString(R.string.upd_tvs_lead));
         aboutChrome();
         hero.setVisibility(View.GONE);
         back = null;
@@ -718,17 +739,18 @@ public final class MainActivity extends Activity {
         int g = gen;
         work.execute(() -> {
             File apk;
-            String carried;
+            String carried, hash;
             try {
                 apk = Setup.bundled(this);
                 carried = Setup.version(this, apk);
+                hash = sha256(apk);
             } catch (Exception e) {
                 for (MyTvs.Tv t : chosen) t.result = "✗ " + message(e);
-                post(g, () -> updatesDone(all, chosen));
+                post(g, () -> updatesDone(all, chosen, fix));
                 return;
             }
             for (MyTvs.Tv t : chosen) {
-                String end = updateOne(g, t, apk, carried);
+                String end = updateOne(g, t, apk, carried, hash);
                 post(g, () -> {
                     t.result = end;
                     t.percent = -1;
@@ -736,17 +758,51 @@ public final class MainActivity extends Activity {
                 });
             }
             disconnectQuietly();
-            post(g, () -> updatesDone(all, chosen));
+            post(g, () -> updatesDone(all, chosen, fix));
         });
     }
 
+    /** The APK's SHA-256 in hex, as the TV's sha256sum prints it. */
+    private static String sha256(File f) throws IOException, java.security.NoSuchAlgorithmException {
+        java.security.MessageDigest d = java.security.MessageDigest.getInstance("SHA-256");
+        try (java.io.InputStream in = new java.io.FileInputStream(f)) {
+            byte[] buf = new byte[64 * 1024];
+            int n;
+            while ((n = in.read(buf)) > 0) d.update(buf, 0, n);
+        }
+        StringBuilder b = new StringBuilder();
+        for (byte x : d.digest()) b.append(String.format(java.util.Locale.ROOT, "%02x", x));
+        return b.toString();
+    }
+
+    /** On the worker: the TV's Awan TV APK's SHA-256 (pm path, then sha256sum), or "" when it can't be read. */
+    private static String hashOnTv(Adb a) throws IOException, InterruptedException {
+        String path = "";
+        for (String l : a.shell("pm path " + Setup.PACKAGE).out.split("\n")) {
+            l = l.trim();
+            if (l.startsWith("package:")) { path = l.substring(8); break; }
+        }
+        if (path.isEmpty()) return "";
+        Adb.Result r = a.shell("sha256sum " + path);
+        return r.ok() ? r.out.trim().split("\\s+")[0].toLowerCase(java.util.Locale.ROOT) : "";
+    }
+
     /** On the worker: one TV, as Find my TV's update does (install over it, wait, the setup steps); its line at the end. */
-    private String updateOne(int g, MyTvs.Tv t, File apk, String carried) {
+    private String updateOne(int g, MyTvs.Tv t, File apk, String carried, String hash) {
         try {
             progressLine(g, t, getString(R.string.upd_tv_connecting), -1);
             Adb a = adb();
             if (!reach(a, t)) return "✗ " + getString(R.string.mytvs_no_answer);
             if (!t.id.equals(a.shell("getprop ro.serialno").out.trim())) return "✗ " + getString(R.string.mytvs_moved);
+            // The same version there: this very APK is not sent again (as AwanTV-install), only the steps run;
+            // another file with the same number (a build of one's own) is installed again.
+            boolean same = carried.equals(versionOnTv(a));
+            if (same && !hash.isEmpty() && hash.equals(hashOnTv(a))) {
+                progressLine(g, t, getString(R.string.upd_tv_same_setting), -1);
+                boolean all = quietSteps(a);
+                t.state = MyTvs.State.SAME;
+                return all ? getString(R.string.upd_tv_setup_done, iso(carried)) : getString(R.string.upd_tv_fix_partly, iso(carried));
+            }
             progressLine(g, t, getString(R.string.upd_tv_sending, number(0)), 0);
             int[] last = {0};
             String result = a.install(apk, f -> {
@@ -769,6 +825,7 @@ public final class MainActivity extends Activity {
             }
             if (!carried.equals(now)) return "✗ " + getString(R.string.install_failed, String.valueOf(now));
             t.state = MyTvs.State.SAME;
+            if (same) return all ? getString(R.string.upd_tv_again_done, iso(now)) : getString(R.string.upd_tv_fix_partly, iso(now));
             return all ? getString(R.string.upd_tv_done, iso(now)) : getString(R.string.upd_tv_partly, iso(now));
         } catch (AdbPairingRequiredException e) {
             return "✗ " + getString(R.string.mytvs_pair);
@@ -809,14 +866,15 @@ public final class MainActivity extends Activity {
     }
 
     /** The end: how many went, each TV's line, Try again for those that failed. */
-    private void updatesDone(List<MyTvs.Tv> all, List<MyTvs.Tv> chosen) {
+    private void updatesDone(List<MyTvs.Tv> all, List<MyTvs.Tv> chosen, boolean fix) {
         int ok = 0;
         List<MyTvs.Tv> failed = new ArrayList<>();
         for (MyTvs.Tv t : chosen) {
             if (t.result != null && t.result.startsWith("✗")) failed.add(t); else ok++;
         }
-        frame(DONE, failed.isEmpty() ? Hero.Mode.DONE : Hero.Mode.PROBLEM, getString(R.string.upd_done_title),
-                getString(R.string.upd_done_lead, number(ok), number(chosen.size())));
+        frame(DONE, failed.isEmpty() ? Hero.Mode.DONE : Hero.Mode.PROBLEM,
+                getString(fix ? R.string.upd_done_title_do : R.string.upd_done_title),
+                getString(fix ? R.string.upd_done_lead_do : R.string.upd_done_lead, number(ok), number(chosen.size())));
         aboutChrome();
         hero.setVisibility(View.GONE);
         myTvs = chosen;

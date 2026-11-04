@@ -172,16 +172,19 @@
     <string name="mytvs_checking">يقرأ الإصدار…</string>
     <string name="mytvs_older">تحتاج تحديثًا: %1$s ← %2$s</string>
     <string name="mytvs_same">محدّثة: %1$s</string>
+    <string name="mytvs_same_hint">بتحديدها يُعاد إعدادها، أو تثبيتها إن كان ملفها مختلفًا</string>
     <string name="mytvs_newer">عليها %1$s، أحدث من هذا المثبّت</string>
     <string name="mytvs_none">Awan TV غير مثبّت عليها</string>
     <string name="mytvs_no_answer">لا ترد: التصحيح مطفأ أو الشاشة مغلقة</string>
     <string name="mytvs_pair">نسيت الشاشة اقترانها بهذا الجوال: أضفها من الشبكة</string>
     <string name="mytvs_moved">عنوانها تغيّر: أضفها من الشبكة</string>
     <string name="mytvs_update">حدّث المحددة (%1$s)</string>
+    <string name="mytvs_run">نفّذ على المحددة (%1$s)</string>
     <string name="mytvs_add">+ أضف شاشة من الشبكة</string>
     <string name="mytvs_remove_q">إزالة «%1$s» من شاشاتي؟ لا يتغير شيء على الشاشة.</string>
     <string name="mytvs_remove">إزالة</string>
     <string name="upd_tvs_title">تحديث الشاشات</string>
+    <string name="upd_tvs_title_do">على المحددة</string>
     <string name="upd_tvs_lead">لا تغلق المثبّت حتى ينتهي. الشاشات لا تُسأل، ويعود Awan TV على كل منها وحده.</string>
     <string name="upd_tv_wait">في الانتظار</string>
     <string name="upd_tv_connecting">يتصل…</string>
@@ -189,8 +192,14 @@
     <string name="upd_tv_setting">يتأكد من الخدمة والصلاحيات…</string>
     <string name="upd_tv_done">✓ حُدّثت إلى %1$s</string>
     <string name="upd_tv_partly">✓ حُدّثت إلى %1$s، لكن خطوة لم تكتمل: من «ابحث عن تلفازي» اختر «أعد الإعداد»</string>
+    <string name="upd_tv_same_setting">عليها الملف نفسه، فلا يُرسل · الصلاحيات وتشغيل الخدمة…</string>
+    <string name="upd_tv_setup_done">✓ أُعيد إعدادها، وعليها %1$s كما هو (لم يُرسل الملف)</string>
+    <string name="upd_tv_again_done">✓ أُعيد تثبيت %1$s (ملف مختلف بالرقم نفسه) وإعدادها</string>
+    <string name="upd_tv_fix_partly">✓ عليها %1$s، لكن خطوة لم تكتمل: من «ابحث عن تلفازي» اختر «أعد الإعداد»</string>
     <string name="upd_tv_other_key">Awan TV عليها بتوقيع آخر: حدّثها من «ابحث عن تلفازي»</string>
     <string name="upd_done_title">انتهى التحديث</string>
     <string name="upd_done_lead">حُدّثت %1$s من %2$s.</string>
+    <string name="upd_done_title_do">انتهى</string>
+    <string name="upd_done_lead_do">نجحت %1$s من %2$s.</string>
     <string name="upd_retry_failed">أعد المحاولة لما فشل</string>
 </resources>

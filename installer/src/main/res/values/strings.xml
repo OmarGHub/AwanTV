@@ -174,16 +174,19 @@
     <string name="mytvs_checking">Reading its version…</string>
     <string name="mytvs_older">Needs an update: %1$s → %2$s</string>
     <string name="mytvs_same">Up to date: %1$s</string>
+    <string name="mytvs_same_hint">Ticked, it is set up again, or installed again if its file differs</string>
     <string name="mytvs_newer">Has %1$s, newer than this installer</string>
     <string name="mytvs_none">Awan TV is not on it</string>
     <string name="mytvs_no_answer">No answer: debugging is off or the TV is off</string>
     <string name="mytvs_pair">The TV forgot its pairing with this phone: add it from the network</string>
     <string name="mytvs_moved">Its address changed: add it from the network</string>
     <string name="mytvs_update">Update the ticked (%1$s)</string>
+    <string name="mytvs_run">Run on the ticked (%1$s)</string>
     <string name="mytvs_add">+ Add a TV from the network</string>
     <string name="mytvs_remove_q">Remove %1$s from My TVs? Nothing changes on the TV.</string>
     <string name="mytvs_remove">Remove</string>
     <string name="upd_tvs_title">Updating the TVs</string>
+    <string name="upd_tvs_title_do">On the ticked</string>
     <string name="upd_tvs_lead">Keep the installer open until it ends. The TVs are not asked anything, and Awan TV comes back on each by itself.</string>
     <string name="upd_tv_wait">Waiting</string>
     <string name="upd_tv_connecting">Connecting…</string>
@@ -191,8 +194,14 @@
     <string name="upd_tv_setting">Checking the service and permissions…</string>
     <string name="upd_tv_done">✓ Updated to %1$s</string>
     <string name="upd_tv_partly">✓ Updated to %1$s, but a step did not finish: in Find my TV choose Set up again</string>
+    <string name="upd_tv_same_setting">It has this very file, so nothing is sent · permissions and the service…</string>
+    <string name="upd_tv_setup_done">✓ Set up again; %1$s stays as it was (the file not sent)</string>
+    <string name="upd_tv_again_done">✓ %1$s installed again (another file, same number) and set up</string>
+    <string name="upd_tv_fix_partly">✓ It has %1$s, but a step did not finish: in Find my TV choose Set up again</string>
     <string name="upd_tv_other_key">Awan TV there is signed with another key: update it through Find my TV</string>
     <string name="upd_done_title">Update finished</string>
     <string name="upd_done_lead">%1$s of %2$s updated.</string>
+    <string name="upd_done_title_do">Finished</string>
+    <string name="upd_done_lead_do">%1$s of %2$s done.</string>
     <string name="upd_retry_failed">Try again for those that failed</string>
 </resources>
