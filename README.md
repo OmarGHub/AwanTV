@@ -187,6 +187,10 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Import -File
 8. **التلاوات المحفوظة والمحطة عن بعد** (من 1.9.0): صفحة «التلاوات المحفوظة» تعرض مساحة الشاشة وما حُفظ عليها وما يُحمَّل،
    و«إضافة تلاوة» (القارئ، المصحف، القرآن كاملًا أو سور مختارة) تُرسل مع «إرسال» فتبدأ كل شاشة مختارة التحميل بنفسها.
    والمحطة تُختار من قائمة الشاشة، والشاشة التي لا توجد عليها تبقي محطتها وتقول ذلك. الحذف من الشاشة نفسها فقط.
+9. **الشاشات الآن** (من 1.10.0، أول القائمة، ولا تحتاج جلب الإعدادات): ما تبثه كل شاشة متصلة الآن (الإذاعة تعمل، متوقفة، أو صوت
+   من تطبيق آخر)، و«تشغيل» أو «إيقاف» بجانب كل شاشة، و«تشغيل في المحددة» و«إيقاف في المحددة» للشاشات التي تحددها (يُحفظ
+   تحديدك في الحاسب، ولا شاشة محددة أول مرة، فلا تُشغَّل شاشة يستخدمها غيرك). الإذاعة تعمل بمحطة الشاشة نفسها، ولا تقاطع
+   شاشة يصدر منها صوت تطبيق آخر إلا إن اخترت «شغّل رغم ذلك» لها.
 
 **التراجع من الحاسب:**
 ```powershell
@@ -429,6 +433,10 @@ Saved recitations and the station from the computer (1.9.0 on): the Saved recita
 it has and what it is downloading; Add a recitation (reciter, recording, the whole Quran or chosen surahs) goes with
 Send, and each TV chosen downloads it by itself. The station is picked from the TV's own list; a TV that doesn't have it
 keeps its own and says so. Deleting stays on the TV.
+TVs now (1.10.0 on; first in the list, no settings needed): what each connected TV is playing now (the radio on, off, or
+another app's sound), Play or Stop beside each, and Play / Stop on the TVs you tick (kept on the computer, none at first,
+so a TV someone else uses is never started). The radio plays the TV's own station, and never cuts in on another app's
+sound unless you choose Play anyway for that TV.
 Settings > About > Reset settings puts every setting back to a new install's (two confirmations: what goes and what
 stays, then OK held for three seconds) and starts from the location; saved recitations and the TV's earlier screensaver
 stay. The settings are kept on the TV first, one copy per reset (the last five; none when nothing but the location is

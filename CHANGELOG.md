@@ -6,17 +6,20 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.10.0]
+
 ### The app
 - The editor's TVs now: `SettingsTransfer` answers STATUS (the radio on or off, its station's id and names, whether
   another app plays sound now) and RADIO (`--es do play|stop`). Play starts the radio at its chosen station, but not
   over sound from another app (Android gives sound to one, so a video would stop) unless `--ez force true`; then it
   answers "Busy". Both over adb only, as the settings.
 
-### Settings editor 1.2.0
-- TVs now, first in the list: each TV's radio (playing, stopped, other sound, or a version before 1.10.0), Play or
-  Stop beside it, and Play / Stop on the TVs ticked there (kept on this computer, none at first, so a TV someone else
-  uses is never played by surprise). A TV playing something else asks first (Play anyway); on the ticked TVs, those
-  playing another app's sound are listed after the answers, each with its own box, none ticked.
+### Tools
+- `AwanTV-editor` 1.2.3: TVs now, first in the list: each TV's radio (playing, stopped, other sound, or a version
+  before 1.10.0), Play or Stop beside it, and Play / Stop on the TVs ticked there (kept on this computer, none at
+  first, so a TV someone else uses is never played by surprise). A TV playing something else asks first (Play anyway);
+  on the ticked TVs, those playing another app's sound are listed after the answers, each with its own box, none
+  ticked. The page needs no settings shown, and Working… no longer stays on while a question waits.
 
 ## [1.9.0]
 
