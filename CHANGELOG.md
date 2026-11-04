@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.8.0]
+
 ### The app
 - Morocco: the Ministry of Habous and Islamic Affairs' method («وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية»).
   The ministry publishes a timetable for each of its 191 localities, not its method, so the rules are the ones
