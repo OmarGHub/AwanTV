@@ -6,6 +6,17 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- A safety net (`Crash`, `CrashActivity`): an error nothing caught is written down (files\crash.txt) and, when one
+  of Awan TV's screens was in front, a screen of its own opens in place of Android's "keeps stopping", in its own
+  process: Restart, the TV's own home, and Details to report (the version, Android, model, the error and its first
+  frames, no address, and a code to the project's new issue page). Two stops within two minutes hold Home off for half
+  an hour (HomeGuard leaves the TV's own home up), so a Home that stops as it opens cannot loop; the TV's own home
+  chosen there holds it too, Restart lets go. It closes by itself after ten minutes without a key. A stop in the
+  background is only written down. About > App status shows the last one. The idea is CustomActivityOnCrash's
+  (Ereza, Apache 2.0), written here without the library. Test builds: `TEST_UPDATE --ez crash true`.
+- What's new for 1.13.0.
+
 ### Phone installer
 - My TVs ticks an up-to-date TV too, to put it right, as the editor's Update TVs: with this very APK on it (by
   SHA-256) nothing is sent and it is only set up again; another file with the same number is installed again, then

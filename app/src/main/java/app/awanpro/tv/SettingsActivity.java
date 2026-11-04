@@ -1495,6 +1495,24 @@ public class SettingsActivity extends Screen {
                 fresh ? Tokens.STATUS_OK : Tokens.STATUS_BAD));
         }
 
+        // The safety net's last record (Crash): when, and the error's name.
+        String[] crash = Crash.last(c);
+        long crashAt = Crash.lastAt(c);
+        if (crash != null && crashAt > 0) {
+            String[] lines = crash[1].split("\n");
+            String what = lines.length > 2 ? lines[2] : "";
+            int colon = what.indexOf(':');
+            if (colon > 0) what = what.substring(0, colon);
+            what = what.substring(what.lastIndexOf('.') + 1);
+            Date at = new Date(crashAt);
+            String when = android.text.format.DateUtils.isToday(crashAt) ? t.todayWord() + " " + time(at, 1f)
+                : gregorian(at) + " " + time(at, 1f);
+            boolean recent = System.currentTimeMillis() - crashAt < 24 * 3600_000L;
+            out.add(status(t.lastCrashRow(), t.lastCrashHelp(when, what), "", recent ? Tokens.STATUS_WARN : 0));
+        } else {
+            out.add(status(t.lastCrashRow(), t.noCrash(), t.none(), 0));
+        }
+
         String device = Settings.Global.getString(getContentResolver(), "device_name");
         if (device == null || device.isEmpty()) device = android.os.Build.MODEL;
         String version = versionName() + t.sep() + "Android " + android.os.Build.VERSION.RELEASE + t.sep() + device;

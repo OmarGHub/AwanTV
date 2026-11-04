@@ -286,6 +286,12 @@ final class HomeGuard {
     }
 
     private void open() {
+        // Awan TV stopped twice in a row, or the viewer chose the TV's own home on the crash screen: left up a while
+        // rather than opening a Home that may stop again (Crash).
+        if (Crash.holding(service)) {
+            Log.i(TAG, "Home held after Awan TV stopped: the TV's own home stays");
+            return;
+        }
         // A start Android cancels (the next Home press came first) is caught by looking again.
         settleIn(SETTLE_MS);
         try {

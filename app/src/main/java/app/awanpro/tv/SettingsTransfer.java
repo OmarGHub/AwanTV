@@ -39,7 +39,8 @@ public class SettingsTransfer extends BroadcastReceiver {
      * Test builds only (a version with a letter, 1.5.0a): pretend GitHub's latest is the extra "version", and forget
      * what the notice was told, to see UpdateNotice without a newer release out; or, with the extra int "days_ago",
      * move when the notice was last closed back that many days (the weekly reminder); or, with the extra "download"
-     * (a version, "1.6.0"), make Update now download that real release instead. A release answers Unknown action.
+     * (a version, "1.6.0"), make Update now download that real release instead; or, with --ez crash true, stop the
+     * app a second later to see the safety net (Crash). A release answers Unknown action.
      */
     static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
     /**
@@ -139,7 +140,14 @@ public class SettingsTransfer extends BroadcastReceiver {
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
                 int days = intent.getIntExtra("days_ago", -1);
                 String download = intent.getStringExtra("download");
-                if (intent.getBooleanExtra("updated", false)) {
+                if (intent.getBooleanExtra("crash", false)) {
+                    // The safety net seen (Crash, 1.13.0): an error nothing catches, on the main thread, a second on.
+                    // With Home or Settings in front the crash screen opens; twice within two minutes holds Home.
+                    new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                        throw new IllegalStateException("Test stop (TEST_UPDATE --ez crash true)");
+                    }, 1000);
+                    result = "Awan TV stops in a second (test build)";
+                } else if (intent.getBooleanExtra("updated", false)) {
                     // As if Update now had just installed this version over Home: the service, when it connects again,
                     // opens Home (SelfUpdate.afterUpdate).
                     Prefs.of(c).edit().putLong("upd_self_at", System.currentTimeMillis()).putBoolean("upd_self_home", true).commit();

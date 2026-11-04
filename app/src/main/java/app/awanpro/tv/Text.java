@@ -392,6 +392,13 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.13.0":
+                return ar ? new String[][] {
+                    {"شاشة أمان إن توقف", "إن توقف Awan TV على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية. وإن تكرر التوقف يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل."},
+                    {"إصلاح الشاشة من الجوال أو الحاسب", "حدّد شاشة محدّثة في «شاشاتي» بالمثبّت أو في «تحديث الشاشات» بالمحرر، فيُعاد إعدادها دون إرسال التطبيق من جديد."}}
+                  : new String[][] {
+                    {"A safety screen if it stops", "If Awan TV stops unexpectedly, a screen restarts it or opens the TV's own home. If it stops again, the TV runs on its own home for half an hour, so it stays usable."},
+                    {"Put a TV right from the phone or the computer", "Tick an up-to-date TV in the installer's My TVs or the editor's Update TVs, and it is set up again without sending the app anew."}};
             case "1.10.0":
                 return ar ? new String[][] {
                     {"الإذاعة على شاشاتك من الحاسب", "من محرر الإعدادات: ترى ما تبثه كل شاشة الآن، وتشغّل الإذاعة أو توقفها على شاشة أو على كل الشاشات. ولا تُقطع شاشة يُسمع عليها شيء آخر إلا إن اخترت ذلك."}}
@@ -632,6 +639,38 @@ final class Text {
     }
     String tryAgain() { return ar ? "حاول مرة أخرى" : "Try again"; }
     String close() { return ar ? "إغلاق" : "Close"; }
+
+    // The safety net's screen (Crash, CrashActivity, 1.13.0).
+    String crashTitle() { return ar ? "توقف Awan TV على غير المتوقع" : "Awan TV stopped unexpectedly"; }
+    String crashLead() {
+        return ar ? "حدث خطأ في التطبيق فأُوقف. إعداداتك وتلاواتك المحفوظة لم تتأثر."
+            : "Something went wrong in the app, so it was stopped. Your settings and saved recitations are untouched.";
+    }
+    String crashHow() {
+        return ar ? "«أعد التشغيل» يفتح الرئيسية من جديد، وفي الغالب يكفي. إن تكرر التوقف خلال دقيقتين يترك Awan TV شاشة التلفاز الأصلية تعمل نصف ساعة حتى لا يتعطل التلفاز."
+            : "Restart opens Home again, which is usually enough. If it stops again within two minutes, Awan TV leaves the TV's own home screen on for half an hour, so the TV stays usable.";
+    }
+    String crashAgainTitle() { return ar ? "تكرر توقف Awan TV" : "Awan TV stopped again"; }
+    String crashAgainLead() {
+        return ar ? "توقف مرتين خلال دقيقتين، فأوقفنا فتح رئيسية Awan TV نصف ساعة، وتعمل شاشة التلفاز الأصلية. إعداداتك محفوظة."
+            : "It stopped twice within two minutes, so Awan TV's Home stays closed for half an hour and the TV's own home screen is on. Your settings are kept.";
+    }
+    String crashAgainHow() {
+        return ar ? "جرّب «أعد التشغيل» الآن، أو اتركه يعود وحده بعد نصف ساعة. وإن استمر فأبلغنا من «تفاصيل للإبلاغ»."
+            : "Try Restart now, or leave it to come back by itself in half an hour. If it goes on, tell us from Details to report.";
+    }
+    String crashCloses() { return d(ar ? "تُغلق هذه الشاشة وحدها بعد 10 دقائق دون ضغط." : "This screen closes by itself after 10 minutes without a key."); }
+    String crashRestart() { return ar ? "أعد التشغيل" : "Restart"; }
+    String crashStock() { return ar ? "الشاشة الأصلية للتلفاز" : "The TV's own home"; }
+    String crashDetails() { return ar ? "تفاصيل للإبلاغ" : "Details to report"; }
+    String crashDetailsTitle() { return ar ? "تفاصيل التوقف" : "What stopped it"; }
+    String crashDetailsLead() {
+        return ar ? "امسح الرمز بالجوال لتفتح بلاغًا على صفحة المشروع، ثم الصق فيه هذه الأسطر أو صوّرها. لا تحمل شيئًا عنك ولا عن شبكتك."
+            : "Scan the code with a phone to open a report on the project's page, then paste these lines or a photo of them. They carry nothing about you or your network.";
+    }
+    String lastCrashRow() { return ar ? "آخر توقف للتطبيق" : "Last time the app stopped"; }
+    String lastCrashHelp(String when, String what) { return d(when) + sep() + what; }
+    String noCrash() { return ar ? "لا توقف مسجّل" : "No stop recorded"; }
     String warnTitle() { return ar ? "قبل أول تخصيص" : "Before the first button"; }
     String warnBody() {
         return ar ? "لكي يعرف Awan TV الزر الذي ضغطته، تمر ضغطات الريموت كلها عبره ما دام زر واحد مخصصًا."

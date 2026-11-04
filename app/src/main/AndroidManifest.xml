@@ -74,6 +74,7 @@
 
     <!-- requestLegacyExternalStorage: Android 10 reads and writes Music/Awan TV as files only so (11+ ignores it). -->
     <application
+        android:name=".AwanApp"
         android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
         android:icon="@drawable/ic_arch"
@@ -147,6 +148,17 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:theme="@style/Theme.Awan.Saver"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
+            android:screenOrientation="landscape" />
+
+        <!-- The safety net's screen (Crash): its own process, so the error that ended Awan TV cannot end it too, and
+             its own task. -->
+        <activity
+            android:name=".CrashActivity"
+            android:exported="false"
+            android:process=":crash"
+            android:excludeFromRecents="true"
+            android:taskAffinity="app.awanpro.tv.crash"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation|touchscreen|uiMode|locale|layoutDirection"
             android:screenOrientation="landscape" />
 

@@ -75,6 +75,8 @@ abstract class Screen extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        // For the safety net: a stop while this screen is built counts as in front (Crash).
+        Crash.screenStarted = android.os.SystemClock.uptimeMillis();
         Ui.init(this);
         loadSettings(getIntent());
         build();
@@ -108,6 +110,12 @@ abstract class Screen extends Activity {
 
     /** The screen in front, for {@link #settingsChanged}; null when none of Awan TV's is. */
     private static Screen front;
+
+    /** The screen in front's name, for the safety net (Crash): null when none of Awan TV's is. */
+    static String frontName() {
+        Screen f = front;
+        return f == null ? null : f.getClass().getSimpleName();
+    }
 
     /**
      * Settings changed from outside the screens (an import or restore from AwanTV-settings.ps1): the
