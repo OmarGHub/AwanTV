@@ -14,7 +14,9 @@ history is in its repository.
 
 ### Settings editor 1.2.0
 - TVs now, first in the list: each TV's radio (playing, stopped, other sound, or a version before 1.10.0), Play or
-  Stop beside it, and Play all / Stop all. A TV playing something else asks first (Play anyway).
+  Stop beside it, and Play / Stop on the TVs ticked there (kept on this computer, none at first, so a TV someone else
+  uses is never played by surprise). A TV playing something else asks first (Play anyway); on the ticked TVs, those
+  playing another app's sound are listed after the answers, each with its own box, none ticked.
 
 ## [1.9.0]
 

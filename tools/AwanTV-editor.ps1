@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.2.0
+﻿# AwanTV-editor.ps1 - Version 1.2.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -20,11 +20,12 @@
 # the ع / EN switch at the top, kept in state\editor\editor.json. The settings' names and help follow it too (the TV
 # describes them in both languages).
 # TVs now (first in the list, Awan TV 1.10.0 on the TV): each connected TV's radio, with Play or Stop beside it, and
-# Play all / Stop all. Play uses the station chosen on that TV (changed on the Radio page, then Send), and does not
+# Play / Stop on the TVs ticked there (kept in state\editor\now.json, none at first: a TV someone else uses is never
+# played by surprise). Play uses the station chosen on that TV (changed on the Radio page, then Send), and does not
 # cut in on a TV playing sound from another app (Android gives sound to one: a video would stop) unless asked.
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.2.0"
+$ScriptVersion = "1.2.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -108,13 +109,16 @@ $Words = @{
         noSettingChanged = "لم يتغيّر أي إعداد"; queuedSent = "أُضيف إلى قائمة التحميل: {0} سورة من {1} تلاوة"; queuedNone = "ما أُرسل محفوظ عليها أو في قائمة تحميلها من قبل"
         keptSaved = "بقيت محطتها: «{0}» غير محفوظة عليها"; keptChannels = "بقيت محطتها: قائمة إذاعات القرّاء لم تُحفظ عليها بعد (تقرؤها الآن؛ أعد الإرسال بعد دقيقة)"; keptUnknown = "بقيت محطتها: «{0}» غير موجودة عليها"
         olderNoLibrary = "على نسخة أقدم من 1.9.0: لم تُرسل إليها التلاوات ولا المحطة (حدّثها)"
-        nowTitle = "الشاشات الآن"; nowRefresh = "⟳ تحديث الحالة"; playAll = "▶ تشغيل في الكل"; stopAll = "■ إيقاف في الكل"; playAllTitle = "تشغيل في الكل"; stopAllTitle = "إيقاف في الكل"
+        nowTitle = "الشاشات الآن"; nowRefresh = "⟳ تحديث الحالة"; playChosen = "▶ تشغيل في المحددة ({0})"; stopChosen = "■ إيقاف في المحددة ({0})"; playChosenTitle = "تشغيل في المحددة ({0})"; stopChosenTitle = "إيقاف في المحددة ({0})"
+        chooseNote = "حدّد الشاشات التي يشملها «تشغيل في المحددة» و«إيقاف في المحددة». يُحفظ تحديدك على هذا الحاسب للمرة القادمة."
+        busyHead = "يصدر منها صوت الآن من تطبيق آخر (فيديو أو موسيقى)، فلم تُشغَّل:"; busyPick = "حدّد ما تريد تشغيله رغم ذلك: يتوقف ما يُعرض عليها بالصورة والصوت."
+        playTicked = "شغّل المحددة رغم ذلك"; playTickedN = "شغّل المحددة رغم ذلك ({0})"; playTickedTitle = "تشغيل رغم ذلك ({0})"
         nowNote = "الإذاعة على كل شاشة متصلة، بمحطتها المختارة فيها (تُغيَّر من صفحة «الإذاعة» ثم «إرسال»). «تشغيل» لا يقاطع شاشة يصدر منها صوت الآن إلا إن طلبت ذلك."
         nowAt = "الحالة كما كانت عند {0}"; nowUnknown = "اضغط «تحديث الحالة» لترى ما تبثه."; play = "▶ تشغيل"; stop = "■ إيقاف"
         radioOn = "● الإذاعة تعمل: {0}"; radioOff = "○ الإذاعة متوقفة · المحطة: {0}"; otherSound = "◐ يصدر منها صوت الآن من تطبيق آخر · المحطة: {0}"
         nowOlder = "على نسخة أقدم من 1.10.0: حدّثها لتتحكم في إذاعتها من هنا"; nowOlderShort = "على نسخة أقدم من 1.10.0"; noAwan = "Awan TV غير مثبّت عليها"; noAnswer = "لم تُجب: {0}"
         busyText = "يصدر منها صوت الآن من تطبيق آخر (فيديو أو موسيقى)، فلم تُشغَّل الإذاعة."; busyNote = "إن شغّلتها رغم ذلك، يتوقف ما يُعرض عليها بالصورة والصوت."
-        playAnyway = "شغّل رغم ذلك"; playAnywayOne = "شغّل {0} رغم ذلك"; playAnywayAll = "شغّلها كلها رغم ذلك"
+        playAnyway = "شغّل رغم ذلك"
         started = "بدأت الإذاعة ({0})"; alreadyOn = "تعمل من قبل"; stopped = "توقفت الإذاعة"; alreadyOff = "متوقفة من قبل"; busyShort = "يصدر منها صوت من تطبيق آخر، فلم تُشغَّل"
     }
     en = @{
@@ -153,13 +157,16 @@ $Words = @{
         noSettingChanged = "No setting changed"; queuedSent = "Queued {0} surah(s) of {1} recitation(s)"; queuedNone = "What was sent is already saved or queued there"
         keptSaved = "Kept its station: {0} is not saved there"; keptChannels = "Kept its station: it has no reciter channel list yet (reading it now; send again in a minute)"; keptUnknown = "Kept its station: {0} is not there"
         olderNoLibrary = "On a version before 1.9.0: recitations and the station were not sent (update it)"
-        nowTitle = "TVs now"; nowRefresh = "⟳ Refresh status"; playAll = "▶ Play on all"; stopAll = "■ Stop on all"; playAllTitle = "Play on all"; stopAllTitle = "Stop on all"
+        nowTitle = "TVs now"; nowRefresh = "⟳ Refresh status"; playChosen = "▶ Play on chosen ({0})"; stopChosen = "■ Stop on chosen ({0})"; playChosenTitle = "Play on chosen ({0})"; stopChosenTitle = "Stop on chosen ({0})"
+        chooseNote = "Tick the TVs that Play on chosen and Stop on chosen include. Your choice is kept on this computer for next time."
+        busyHead = "Another app is playing sound on these now (a video or music), so they were not started:"; busyPick = "Tick the ones to play anyway: what they are showing stops, picture and sound."
+        playTicked = "Play on ticked anyway"; playTickedN = "Play on ticked anyway ({0})"; playTickedTitle = "Played anyway ({0})"
         nowNote = "The radio on each connected TV, at the station chosen on it (changed on the Radio page, then Send). Play does not cut in on a TV playing sound now unless you ask."
         nowAt = "Status as of {0}"; nowUnknown = "Press Refresh status to see what it is playing."; play = "▶ Play"; stop = "■ Stop"
         radioOn = "● The radio is playing: {0}"; radioOff = "○ The radio is stopped · station: {0}"; otherSound = "◐ Another app is playing sound on it now · station: {0}"
         nowOlder = "On a version before 1.10.0: update it to control its radio from here"; nowOlderShort = "On a version before 1.10.0"; noAwan = "Awan TV is not installed on it"; noAnswer = "Did not answer: {0}"
         busyText = "Another app is playing sound on it now (a video or music), so the radio was not started."; busyNote = "Played anyway, what it is showing stops, picture and sound."
-        playAnyway = "Play anyway"; playAnywayOne = "Play on {0} anyway"; playAnywayAll = "Play on them anyway"
+        playAnyway = "Play anyway"
         started = "Radio started ({0})"; alreadyOn = "Already playing"; stopped = "Radio stopped"; alreadyOff = "Already stopped"; busyShort = "Another app is playing sound, so it was not started"
     }
 }
@@ -1482,26 +1489,100 @@ function Radio-Words($tv, [string]$head) {
     return $head
 }
 
+# The TVs ticked for Play on chosen / Stop on chosen, kept on this computer (state\editor\now.json, by TV id).
+$NowFile = Join-Path $EditorDir "now.json"
+$script:NowChosen = @{}
+try {
+    if (Test-Path $NowFile) { foreach ($id in @((Read-Json $NowFile).chosen)) { if ($id) { $script:NowChosen[[string]$id] = $true } } }
+} catch { Log "now.json unreadable: $($_.Exception.Message)" }
+function Save-NowChosen {
+    Write-Utf8 $NowFile (ConvertTo-Json -InputObject @{ chosen = @($script:NowChosen.Keys | Sort-Object) })
+}
+
+# A TV whose radio can be played or stopped from here now (connected, 1.10.0 on, answered).
+function Can-Control($tv) {
+    $st = $script:NowStatus[$tv.Id]
+    return ($tv.Online -and $st -and @("on", "off", "sound") -contains $st.State)
+}
+function Chosen-Tvs { return @($script:Tvs | Where-Object { $script:NowChosen[$_.Id] -and (Can-Control $_) }) }
+
+# While a question waits for the viewer: the window as usual, not "Working…"; then busy again for what follows.
+function Wait-Free { $window.Cursor = $null; Update-Chrome }
+function Wait-Busy { $window.Cursor = [Windows.Input.Cursors]::Wait; $ui.ShownText.Text = W "working"; $window.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background) }
+
 # Play on one TV; sound from another app there: asked first, Play anyway forces it.
 function Play-One($tv) {
     $head = Radio-Do $tv "play"
     if ($head -like "Busy*") {
+        Wait-Free
         $r = Show-Dialog (Name-Of $tv) @(@{ Text = (W "busyText") }, @{ Text = (W "busyNote") }) "ask" @((W "playAnyway"), (W "cancel"))
-        if ($r -eq 0) { $head = Radio-Do $tv "play" $true }
+        if ($r -eq 0) { Wait-Busy; $head = Radio-Do $tv "play" $true }
     }
     $script:Notice = "$(Name-Of $tv): $(Radio-Words $tv $head)"
 }
 
-# Play or Stop on every connected TV, then one window with each TV's answer (and Play anyway for the busy ones).
+# Play on chosen's answers, with the TVs that play another app's sound each with a box (none ticked): returns the
+# ticked ones to play anyway, none when OK (Enter, Esc) closes it.
+function Ask-Busy([string]$title, [object[]]$results, [object[]]$busy) {
+    $dlg = New-Object Windows.Window
+    $dlg.Title = "Awan TV"; $dlg.ResizeMode = "NoResize"; $dlg.SizeToContent = "WidthAndHeight"; $dlg.ShowInTaskbar = $false
+    $dlg.Background = Brush "#F3F3F3"; $dlg.FontFamily = $window.FontFamily; $dlg.FontSize = 14; $dlg.FlowDirection = $window.FlowDirection
+    $dlg.Owner = $window; $dlg.WindowStartupLocation = "CenterOwner"
+    try { $dlg.Icon = $window.Icon } catch { }
+    $panel = New-Object Windows.Controls.StackPanel; $panel.Margin = "22,18"; $panel.Width = 560
+    $h = New-Object Windows.Controls.TextBlock; $h.Text = $title; $h.FontWeight = "SemiBold"; $h.FontSize = 16; $h.Margin = "0,0,0,10"
+    [void]$panel.Children.Add($h)
+    foreach ($it in $results) {
+        $t = New-Object Windows.Controls.TextBlock; $t.Text = $it.Text; $t.TextWrapping = "Wrap"; $t.Margin = "0,3"
+        if ($it.Text -like "!*") { $t.Foreground = Brush "#7A5A14" }
+        [void]$panel.Children.Add($t)
+    }
+    $box = New-Object Windows.Controls.Border; $box.Background = Brush "#F6EEDC"; $box.CornerRadius = 8; $box.Padding = "14,10"; $box.Margin = "0,12,0,0"
+    $inner = New-Object Windows.Controls.StackPanel
+    $bh = New-Object Windows.Controls.TextBlock; $bh.Text = W "busyHead"; $bh.FontWeight = "SemiBold"; $bh.Foreground = Brush "#7A5A14"; $bh.TextWrapping = "Wrap"; $bh.Margin = "0,0,0,6"
+    [void]$inner.Children.Add($bh)
+    $force = New-Object Windows.Controls.Button; $force.Style = $window.FindResource("Btn"); $force.IsEnabled = $false; $force.Content = W "playTicked"
+    $script:BusyState = @{ Boxes = @(); Force = $force; Result = @() }
+    foreach ($tv in $busy) {
+        $cb = New-Object Windows.Controls.CheckBox; $cb.Content = Name-Of $tv; $cb.Tag = $tv; $cb.Margin = "0,4"; $cb.VerticalContentAlignment = "Center"
+        # Through $script:BusyState: WPF calls the handler later.
+        $cb.Add_Click({
+            $n = @($script:BusyState.Boxes | Where-Object { $_.IsChecked }).Count
+            $script:BusyState.Force.IsEnabled = $n -gt 0
+            $script:BusyState.Force.Content = if ($n -gt 0) { [string]::Format((W "playTickedN"), $n) } else { W "playTicked" }
+        })
+        $script:BusyState.Boxes += $cb
+        [void]$inner.Children.Add($cb)
+    }
+    $note = New-Object Windows.Controls.TextBlock; $note.Text = W "busyPick"; $note.Foreground = Brush "#5F5F5F"; $note.TextWrapping = "Wrap"; $note.Margin = "0,6,0,0"
+    [void]$inner.Children.Add($note)
+    $box.Child = $inner
+    [void]$panel.Children.Add($box)
+    $bar = New-Object Windows.Controls.StackPanel; $bar.Orientation = "Horizontal"; $bar.HorizontalAlignment = "Right"; $bar.Margin = "0,16,0,0"
+    $ok = New-Object Windows.Controls.Button; $ok.Content = W "okBtn"; $ok.Style = $window.FindResource("Primary"); $ok.IsDefault = $true; $ok.IsCancel = $true
+    $ok.Add_Click({ [Windows.Window]::GetWindow($this).Close() })
+    $force.Add_Click({
+        $script:BusyState.Result = @($script:BusyState.Boxes | Where-Object { $_.IsChecked } | ForEach-Object { $_.Tag })
+        [Windows.Window]::GetWindow($this).Close()
+    })
+    [void]$bar.Children.Add($force); [void]$bar.Children.Add($ok)
+    [void]$panel.Children.Add($bar)
+    $dlg.Content = $panel
+    [void]$dlg.ShowDialog()
+    return @($script:BusyState.Result)
+}
+
+# Play or Stop on the chosen TVs, then their answers in one window; Play: the ones playing another app's sound are
+# offered to play anyway, each ticked by the viewer.
 function Radio-All([string]$what) {
+    $tvs = Chosen-Tvs
+    $title = [string]::Format((W $(if ($what -eq "play") { "playChosenTitle" } else { "stopChosenTitle" })), $tvs.Count)
     $results = @(); $busy = @()
-    foreach ($tv in @($script:Tvs | Where-Object { $_.Online })) {
+    foreach ($tv in $tvs) {
         $name = Name-Of $tv
-        if (-not $tv.Version) { $results += @{ Text = "! ${name}: $(W 'noAwan')" }; continue }
-        if (Version-Less $tv.Version $NowSince) { $results += @{ Text = "! ${name}: $(W 'nowOlderShort')" }; continue }
         try {
             $head = Radio-Do $tv $what
-            if ($head -like "Busy*") { $busy += $tv; $results += @{ Text = "! ${name}: $(Radio-Words $tv $head)" } }
+            if ($head -like "Busy*") { $busy += $tv }
             else { $results += @{ Text = "✓ ${name}: $(Radio-Words $tv $head)" } }
         } catch {
             $msg = $_.Exception.Message
@@ -1509,19 +1590,25 @@ function Radio-All([string]$what) {
             else { $results += @{ Text = "! ${name}: $msg" } }
         }
     }
-    if ($results.Count -eq 0) { $results += @{ Text = (W "noTv") } }
-    $title = if ($what -eq "play") { W "playAllTitle" } else { W "stopAllTitle" }
+    Wait-Free
     if ($busy.Count -eq 0) { [void](Show-Dialog $title $results "info" @((W "okBtn"))); return }
-    # A question: Enter keeps OK, so nothing is cut off by a key pressed too soon.
-    $force = if ($busy.Count -eq 1) { [string]::Format((W "playAnywayOne"), (Name-Of $busy[0])) } else { W "playAnywayAll" }
-    $results += @{ Text = (W "busyNote") }
-    if ((Show-Dialog $title $results "ask" @($force, (W "okBtn"))) -ne 0) { return }
-    $again = @()
-    foreach ($tv in $busy) {
-        try { $again += @{ Text = "✓ $(Name-Of $tv): $(Radio-Words $tv (Radio-Do $tv 'play' $true))" } }
-        catch { $again += @{ Text = "! $(Name-Of $tv): $($_.Exception.Message)" } }
+    $again = @(Ask-Busy $title $results $busy)
+    if ($again.Count -eq 0) { return }
+    Wait-Busy
+    $done = @()
+    foreach ($tv in $again) {
+        try { $done += @{ Text = "✓ $(Name-Of $tv): $(Radio-Words $tv (Radio-Do $tv 'play' $true))" } }
+        catch { $done += @{ Text = "! $(Name-Of $tv): $($_.Exception.Message)" } }
     }
-    [void](Show-Dialog $title $again "info" @((W "okBtn")))
+    Wait-Free
+    [void](Show-Dialog ([string]::Format((W "playTickedTitle"), $again.Count)) $done "info" @((W "okBtn")))
+}
+
+# The two buttons' counts, after a box is ticked (the page is not built again).
+function Now-Counts {
+    $n = (Chosen-Tvs).Count
+    if ($script:NowPlay) { $script:NowPlay.Content = [string]::Format((W "playChosen"), $n); $script:NowPlay.IsEnabled = $n -gt 0 }
+    if ($script:NowStop) { $script:NowStop.Content = [string]::Format((W "stopChosen"), $n); $script:NowStop.IsEnabled = $n -gt 0 }
 }
 
 function Now-Card($tv, $st) {
@@ -1529,7 +1616,22 @@ function Now-Card($tv, $st) {
     $card.Background = Brush "#FFFFFF"; $card.BorderBrush = Brush "#E5E5E5"; $card.BorderThickness = 1; $card.CornerRadius = 6
     $card.Padding = "16,10"; $card.Margin = "0,0,0,4"
     $dock = New-Object Windows.Controls.DockPanel
-    if ($tv.Online -and $st -and @("on", "off", "sound") -contains $st.State) {
+    $can = Can-Control $tv
+    # Its box, or the same room left empty so the names line up.
+    $cb = New-Object Windows.Controls.CheckBox; $cb.VerticalAlignment = "Center"; $cb.Margin = "0,0,14,0"; $cb.Tag = $card
+    if ($can) {
+        $cb.IsChecked = [bool]$script:NowChosen[$tv.Id]
+        $card.Tag = $tv
+        if ($cb.IsChecked) { $card.BorderBrush = Brush $Navy }
+        $cb.Add_Click({
+            param($s, $e)
+            $c = $s.Tag; $id = $c.Tag.Id
+            if ($s.IsChecked) { $script:NowChosen[$id] = $true; $c.BorderBrush = Brush $Navy } else { $script:NowChosen.Remove($id); $c.BorderBrush = Brush "#E5E5E5" }
+            Save-NowChosen; Now-Counts
+        })
+    } else { $cb.Visibility = "Hidden" }
+    [Windows.Controls.DockPanel]::SetDock($cb, "Left"); [void]$dock.Children.Add($cb)
+    if ($can) {
         $btn = New-Object Windows.Controls.Button; $btn.Tag = $tv; $btn.VerticalAlignment = "Center"; $btn.Margin = "16,0,0,0"; $btn.MinWidth = 96
         if ($st.State -eq "on") {
             $btn.Content = W "stop"; $btn.Style = $window.FindResource("Btn")
@@ -1566,6 +1668,14 @@ function Now-Card($tv, $st) {
     [void]$ui.Rows.Children.Add($card)
 }
 
+function Link-Text([string]$text, [scriptblock]$onClick) {
+    $t = New-Object Windows.Controls.TextBlock; $t.Margin = "14,0,0,0"; $t.VerticalAlignment = "Center"
+    $link = New-Object Windows.Documents.Hyperlink; [void]$link.Inlines.Add($text); $link.Add_Click($onClick)
+    [void]$t.Inlines.Add($link)
+    [Windows.Controls.DockPanel]::SetDock($t, "Right")
+    return $t
+}
+
 # TVs now: the page from the last status asked (opening the page or Refresh status asks again).
 function Show-Now {
     $top = New-Object Windows.Controls.DockPanel; $top.Margin = "0,0,0,8"
@@ -1574,16 +1684,30 @@ function Show-Now {
     $online = @($script:Tvs | Where-Object { $_.Online })
     $refresh = New-Object Windows.Controls.Button; $refresh.Content = W "nowRefresh"; $refresh.Style = $window.FindResource("Btn")
     $refresh.Add_Click({ Busy { Refresh-Tvs; Query-Now }; Show-Section $script:Section })
-    $playAll = New-Object Windows.Controls.Button; $playAll.Content = W "playAll"; $playAll.Style = $window.FindResource("Btn"); $playAll.IsEnabled = $online.Count -gt 0
-    $playAll.Add_Click({ Busy { Radio-All "play" }; Show-Section $script:Section })
-    $stopAll = New-Object Windows.Controls.Button; $stopAll.Content = W "stopAll"; $stopAll.Style = $window.FindResource("Btn"); $stopAll.IsEnabled = $online.Count -gt 0
-    $stopAll.Add_Click({ Busy { Radio-All "stop" }; Show-Section $script:Section })
-    foreach ($b in @($refresh, $playAll, $stopAll)) { [void]$buttons.Children.Add($b) }
+    $script:NowPlay = New-Object Windows.Controls.Button; $script:NowPlay.Style = $window.FindResource("Primary")
+    $script:NowPlay.Add_Click({ Busy { Radio-All "play" }; Show-Section $script:Section })
+    $script:NowStop = New-Object Windows.Controls.Button; $script:NowStop.Style = $window.FindResource("Btn")
+    $script:NowStop.Add_Click({ Busy { Radio-All "stop" }; Show-Section $script:Section })
+    foreach ($b in @($refresh, $script:NowPlay, $script:NowStop)) { [void]$buttons.Children.Add($b) }
+    Now-Counts
     [void]$top.Children.Add($buttons)
     $head = New-Object Windows.Controls.TextBlock; $head.Text = W "nowTitle"; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.VerticalAlignment = "Center"
     [void]$top.Children.Add($head)
     [void]$ui.Rows.Children.Add($top)
     Note-Line (W "nowNote")
+    # Tick all / none (the TVs that can be controlled now), beside what the boxes are for.
+    $pick = New-Object Windows.Controls.DockPanel; $pick.Margin = "4,0,4,8"
+    [void]$pick.Children.Add((Link-Text (W "none") {
+        foreach ($t in @($script:Tvs | Where-Object { Can-Control $_ })) { $script:NowChosen.Remove($t.Id) }
+        Save-NowChosen; Show-Section $script:Section
+    }))
+    [void]$pick.Children.Add((Link-Text (W "all") {
+        foreach ($t in @($script:Tvs | Where-Object { Can-Control $_ })) { $script:NowChosen[$t.Id] = $true }
+        Save-NowChosen; Show-Section $script:Section
+    }))
+    $pn = New-Object Windows.Controls.TextBlock; $pn.Text = W "chooseNote"; $pn.TextWrapping = "Wrap"; $pn.FontSize = 12; $pn.Foreground = Brush "#5F5F5F"; $pn.VerticalAlignment = "Center"
+    [void]$pick.Children.Add($pn)
+    [void]$ui.Rows.Children.Add($pick)
     if ($script:NowAt) { Note-Line ([string]::Format((W "nowAt"), $script:NowAt)) }
     if ($online.Count -eq 0) { Note-Line $(if ($script:Adb) { W "noTv" } else { W "noAdb" }) $Gold }
     $headed = $false
