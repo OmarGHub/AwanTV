@@ -162,4 +162,35 @@
     <string name="about_licences_detail">نصوص التراخيص كاملة</string>
     <string name="licences_lead">تراخيص المثبّت وما بُني منه، بنصوصها الأصلية بالإنجليزية.</string>
     <string name="licence_open">افتح النص</string>
+
+    <!-- My TVs (MyTvs): the TVs this phone set up, their version, and updating them -->
+    <string name="mytvs_button">شاشاتي · تحديث Awan TV عليها</string>
+    <string name="mytvs_title">شاشاتي</string>
+    <string name="mytvs_lead">الشاشات التي ثبّت عليها هذا الجوال Awan TV. يحمل المثبّت %1$s، ويحتاج التصحيح مفعّلًا على الشاشة.</string>
+    <string name="mytvs_empty">لا شاشات بعد. كل شاشة تثبّت عليها Awan TV أو تعيد إعدادها من هذا الجوال تظهر هنا، أو أضفها من الشبكة. وللإزالة من القائمة: اضغط على الشاشة مطولًا.</string>
+    <string name="mytvs_pick">حدّد ما يحتاج تحديثًا</string>
+    <string name="mytvs_checking">يقرأ الإصدار…</string>
+    <string name="mytvs_older">تحتاج تحديثًا: %1$s ← %2$s</string>
+    <string name="mytvs_same">محدّثة: %1$s</string>
+    <string name="mytvs_newer">عليها %1$s، أحدث من هذا المثبّت</string>
+    <string name="mytvs_none">Awan TV غير مثبّت عليها</string>
+    <string name="mytvs_no_answer">لا ترد: التصحيح مطفأ أو الشاشة مغلقة</string>
+    <string name="mytvs_pair">نسيت الشاشة اقترانها بهذا الجوال: أضفها من الشبكة</string>
+    <string name="mytvs_moved">عنوانها تغيّر: أضفها من الشبكة</string>
+    <string name="mytvs_update">حدّث المحددة (%1$s)</string>
+    <string name="mytvs_add">+ أضف شاشة من الشبكة</string>
+    <string name="mytvs_remove_q">إزالة «%1$s» من شاشاتي؟ لا يتغير شيء على الشاشة.</string>
+    <string name="mytvs_remove">إزالة</string>
+    <string name="upd_tvs_title">تحديث الشاشات</string>
+    <string name="upd_tvs_lead">لا تغلق المثبّت حتى ينتهي. الشاشات لا تُسأل، ويعود Awan TV على كل منها وحده.</string>
+    <string name="upd_tv_wait">في الانتظار</string>
+    <string name="upd_tv_connecting">يتصل…</string>
+    <string name="upd_tv_sending">يُرسَل التطبيق: %1$s%%</string>
+    <string name="upd_tv_setting">يتأكد من الخدمة والصلاحيات…</string>
+    <string name="upd_tv_done">✓ حُدّثت إلى %1$s</string>
+    <string name="upd_tv_partly">✓ حُدّثت إلى %1$s، لكن خطوة لم تكتمل: من «ابحث عن تلفازي» اختر «أعد الإعداد»</string>
+    <string name="upd_tv_other_key">Awan TV عليها بتوقيع آخر: حدّثها من «ابحث عن تلفازي»</string>
+    <string name="upd_done_title">انتهى التحديث</string>
+    <string name="upd_done_lead">حُدّثت %1$s من %2$s.</string>
+    <string name="upd_retry_failed">أعد المحاولة لما فشل</string>
 </resources>

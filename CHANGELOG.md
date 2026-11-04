@@ -6,6 +6,15 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Phone installer
+- My TVs (a second button on the guide): the TVs this phone installed Awan TV on or set up again (kept on the phone,
+  saved at Find my TV's confirmation by the TV's serial), each with Awan TV's version on it, read without anything
+  shown on the TV (it already trusts this phone: no other TV on the network is asked). Tick those needing an update
+  (none at first; "Tick those needing an update" does it) and Update the ticked: one after another, the Awan TV the
+  installer carries, as Find my TV's update (install over it, the setup steps), with no question on the TVs, then each
+  TV's result and Try again for those that failed. Held, a TV leaves the list. Wireless debugging's port is heard by
+  mDNS meanwhile; a TV at another address or that forgot the pairing says to add it again.
+
 ## [1.11.0]
 
 ### Tools

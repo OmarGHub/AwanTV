@@ -464,6 +464,366 @@ public final class MainActivity extends Activity {
         }
     }
 
+    // My TVs
+
+    /** The saved TVs on the screen now, with what was read from each; null off My TVs. */
+    private List<MyTvs.Tv> myTvs;
+    private LinearLayout myList;
+    private TextView myUpdate;
+    /** Wireless debugging's ports heard by mDNS while My TVs is open: host -> port. */
+    private final java.util.Map<String, Integer> tlsHeard = new java.util.concurrent.ConcurrentHashMap<>();
+    private Finder myFinder;
+
+    /** My TVs: each saved TV's Awan TV version, read without a prompt on any screen; tick and update. */
+    private void showMyTvs() {
+        stopFinders();
+        frame(PREPARE, Hero.Mode.TV, getString(R.string.mytvs_title), getString(R.string.mytvs_lead, iso(ownVersion())));
+        aboutChrome();
+        hero.setVisibility(View.GONE);
+        myTvs = MyTvs.load(this);
+        TextView pick = Ui.text(this, getString(R.string.mytvs_pick), Ui.GOLD_200, 13, Ui.medium());
+        pick.setPaintFlags(pick.getPaintFlags() | android.graphics.Paint.UNDERLINE_TEXT_FLAG);
+        pick.setOnClickListener(v -> {
+            for (MyTvs.Tv t : myTvs) t.chosen = t.state == MyTvs.State.OLDER;
+            fillMyTvs();
+        });
+        LinearLayout.LayoutParams pp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        pp.topMargin = dp(12);
+        pp.gravity = Gravity.END;
+        if (!myTvs.isEmpty()) content.addView(pick, pp);
+        myList = Ui.column(this);
+        add(myList, 4);
+        if (myTvs.isEmpty()) {
+            LinearLayout card = Ui.card(this);
+            card.addView(Ui.small(this, getString(R.string.mytvs_empty)));
+            add(card, 16);
+        }
+        myUpdate = Ui.primary(this, getString(R.string.mytvs_update, number(0)), v -> go(this::updateChosen));
+        foot(myUpdate);
+        foot(Ui.secondary(this, getString(R.string.mytvs_add), v -> go(this::showFind)));
+        back = () -> go(this::showGuide);
+        fillMyTvs();
+        if (!myTvs.isEmpty()) readMyTvs();
+    }
+
+    /** Reads each saved TV in turn on the worker: reached, the same TV (its serial), and its Awan TV version. */
+    private void readMyTvs() {
+        listenForTls();
+        int g = gen;
+        List<MyTvs.Tv> tvs = myTvs;
+        String carried = ownVersion();
+        work.execute(() -> {
+            for (MyTvs.Tv t : tvs) {
+                if (g != gen) return;
+                MyTvs.State st;
+                try {
+                    Adb a = adb();
+                    if (!reach(a, t)) {
+                        st = MyTvs.State.NO_ANSWER;
+                    } else if (!t.id.equals(a.shell("getprop ro.serialno").out.trim())) {
+                        st = MyTvs.State.MOVED;
+                    } else {
+                        String v = versionOnTv(a);
+                        t.version = v == null ? "" : v;
+                        MyTvs.version(this, t.id, t.version);
+                        int c = t.version.isEmpty() ? 0 : Setup.compare(t.version, carried);
+                        st = t.version.isEmpty() ? MyTvs.State.NONE : c < 0 ? MyTvs.State.OLDER
+                                : c == 0 ? MyTvs.State.SAME : MyTvs.State.NEWER;
+                    }
+                } catch (AdbPairingRequiredException e) {
+                    st = MyTvs.State.PAIR;
+                } catch (Exception e) {
+                    st = MyTvs.State.NO_ANSWER;
+                }
+                MyTvs.State shown = st;
+                post(g, () -> {
+                    t.state = shown;
+                    fillMyTvs();
+                });
+            }
+            disconnectQuietly();
+        });
+    }
+
+    /** Wireless debugging's port changes: heard by mDNS while My TVs is open. */
+    private void listenForTls() {
+        if (myFinder != null) myFinder.stop();
+        myFinder = new Finder(this, tvs -> {
+            for (Finder.Tv t : tvs) if (t.tls > 0) tlsHeard.put(t.host, t.tls);
+        });
+        myFinder.start();
+    }
+
+    /**
+     * On the worker: connects to a saved TV with no prompt (it trusts this phone): its network port first, then
+     * Wireless debugging at the port heard now (waiting a few seconds for it), else the one saved. False if neither
+     * answered; AdbPairingRequiredException when the TV forgot this phone's pairing.
+     */
+    private boolean reach(Adb a, MyTvs.Tv t) throws Exception {
+        try { a.disconnect(); } catch (Exception ignored) { }
+        a.setTimeout(10, TimeUnit.SECONDS);
+        try {
+            if (t.classic > 0) {
+                try {
+                    if (a.connect(t.host, t.classic)) return true;
+                } catch (AdbPairingRequiredException e) {
+                    throw e;
+                } catch (Exception ignored) {
+                    // Not on that port now: Wireless debugging next.
+                }
+            }
+            Integer tls = tlsHeard.get(t.host);
+            for (int i = 0; tls == null && i < 20; i++) {
+                Thread.sleep(300);
+                tls = tlsHeard.get(t.host);
+            }
+            int port = tls != null ? tls : t.tls;
+            if (port <= 0) return false;
+            try { a.disconnect(); } catch (Exception ignored) { }
+            return a.connect(t.host, port);
+        } finally {
+            a.setTimeout(90, TimeUnit.SECONDS);
+        }
+    }
+
+    private void disconnectQuietly() {
+        Adb a = adb;
+        if (a != null) {
+            try { a.disconnect(); } catch (Throwable ignored) { }
+        }
+    }
+
+    /** The list as it stands: a box on each TV that needs an update, its state under its name. */
+    private void fillMyTvs() {
+        if (myList == null || myTvs == null) return;
+        myList.removeAllViews();
+        String carried = ownVersion();
+        int chosen = 0;
+        boolean reading = false;
+        for (MyTvs.Tv t : myTvs) {
+            if (t.state == MyTvs.State.CHECKING) reading = true;
+            if (t.state != MyTvs.State.OLDER) t.chosen = false;
+            if (t.chosen) chosen++;
+            String line;
+            int color = Ui.MIST;
+            switch (t.state) {
+                case OLDER: line = getString(R.string.mytvs_older, iso(t.version), iso(carried)); color = Ui.GOLD_400; break;
+                case SAME: line = getString(R.string.mytvs_same, iso(t.version)); color = 0xff7fc79a; break;
+                case NEWER: line = getString(R.string.mytvs_newer, iso(t.version)); break;
+                case NONE: line = getString(R.string.mytvs_none); break;
+                case NO_ANSWER: line = getString(R.string.mytvs_no_answer); break;
+                case PAIR: line = getString(R.string.mytvs_pair); color = Ui.CORAL; break;
+                case MOVED: line = getString(R.string.mytvs_moved); color = Ui.CORAL; break;
+                default: line = getString(R.string.mytvs_checking); break;
+            }
+            View card = myTvCard(t, line, color, t.state == MyTvs.State.OLDER);
+            myList.addView(card, Ui.wide(this, 10));
+        }
+        if (myUpdate != null) {
+            myUpdate.setText(getString(R.string.mytvs_update, number(chosen)));
+            Ui.enabled(myUpdate, chosen > 0 && !reading);
+        }
+    }
+
+    /** One TV: its box (or the same room empty), the TV glyph, name, model and a state line. */
+    private View myTvCard(MyTvs.Tv t, String line, int color, boolean tickable) {
+        LinearLayout card = Ui.row(this);
+        GradientDrawable bg = Ui.round(Ui.LAPIS_800, 16, this);
+        bg.setStroke(dp(1), t.chosen ? 0x99d8b46a : Ui.LINE_SOFT);
+        card.setBackground(bg);
+        card.setPadding(dp(14), dp(12), dp(14), dp(12));
+        TextView box = Ui.text(this, t.chosen ? "✓" : "", Ui.LAPIS_900, 14, Ui.semibold());
+        box.setGravity(Gravity.CENTER);
+        GradientDrawable bb = Ui.round(t.chosen ? Ui.GOLD_400 : 0x00000000, 6, this);
+        if (!t.chosen) bb.setStroke(dp(1.5f), Ui.MIST);
+        box.setBackground(bb);
+        box.setVisibility(tickable ? View.VISIBLE : View.INVISIBLE);
+        LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(dp(22), dp(22));
+        blp.setMarginEnd(dp(12));
+        card.addView(box, blp);
+        card.addView(new TvGlyph(this), new LinearLayout.LayoutParams(dp(42), dp(42)));
+        LinearLayout words = Ui.column(this);
+        words.setPaddingRelative(dp(12), 0, 0, 0);
+        TextView name = Ui.text(this, t.shown(), Ui.PLASTER, 16, Ui.semibold());
+        name.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        words.addView(name);
+        String sub = t.model != null && !t.model.isEmpty() && !t.model.equals(t.shown()) ? "⁨" + t.model + "⁩" : "";
+        if (!sub.isEmpty()) {
+            TextView m = Ui.small(this, sub);
+            m.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            words.addView(m, Ui.wide(this, 2));
+        }
+        TextView state = Ui.text(this, line, color, 13, Ui.medium());
+        state.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        words.addView(state, Ui.wide(this, 4));
+        if (t.percent >= 0) words.addView(bar(t.percent), Ui.wide(this, 6));
+        card.addView(words, Ui.fill(this));
+        if (tickable) {
+            card.setOnClickListener(v -> {
+                t.chosen = !t.chosen;
+                fillMyTvs();
+            });
+        }
+        // Held: out of My TVs (nothing changes on the TV).
+        card.setOnLongClickListener(v -> {
+            if (back == null) return false;
+            new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+                    .setMessage(getString(R.string.mytvs_remove_q, t.shown()))
+                    .setPositiveButton(R.string.mytvs_remove, (d, w) -> {
+                        MyTvs.forget(this, t.id);
+                        myTvs.remove(t);
+                        fillMyTvs();
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+            return true;
+        });
+        return card;
+    }
+
+    /** Updates the ticked TVs one after another with the Awan TV this installer carries; nothing is asked on them. */
+    private void updateChosen() {
+        List<MyTvs.Tv> chosen = new ArrayList<>();
+        if (myTvs != null) for (MyTvs.Tv t : myTvs) if (t.chosen) chosen.add(t);
+        if (chosen.isEmpty()) {
+            go(this::showMyTvs);
+            return;
+        }
+        List<MyTvs.Tv> all = myTvs;
+        frame(INSTALL, Hero.Mode.PROGRESS, getString(R.string.upd_tvs_title), getString(R.string.upd_tvs_lead));
+        aboutChrome();
+        hero.setVisibility(View.GONE);
+        back = null;
+        myTvs = chosen;
+        for (MyTvs.Tv t : chosen) {
+            t.chosen = false;
+            t.result = getString(R.string.upd_tv_wait);
+            t.percent = -1;
+        }
+        myList = Ui.column(this);
+        add(myList, 8);
+        myUpdate = null;
+        showUpdating();
+        int g = gen;
+        work.execute(() -> {
+            File apk;
+            String carried;
+            try {
+                apk = Setup.bundled(this);
+                carried = Setup.version(this, apk);
+            } catch (Exception e) {
+                for (MyTvs.Tv t : chosen) t.result = "✗ " + message(e);
+                post(g, () -> updatesDone(all, chosen));
+                return;
+            }
+            for (MyTvs.Tv t : chosen) {
+                String end = updateOne(g, t, apk, carried);
+                post(g, () -> {
+                    t.result = end;
+                    t.percent = -1;
+                    showUpdating();
+                });
+            }
+            disconnectQuietly();
+            post(g, () -> updatesDone(all, chosen));
+        });
+    }
+
+    /** On the worker: one TV, as Find my TV's update does (install over it, wait, the setup steps); its line at the end. */
+    private String updateOne(int g, MyTvs.Tv t, File apk, String carried) {
+        try {
+            progressLine(g, t, getString(R.string.upd_tv_connecting), -1);
+            Adb a = adb();
+            if (!reach(a, t)) return "✗ " + getString(R.string.mytvs_no_answer);
+            if (!t.id.equals(a.shell("getprop ro.serialno").out.trim())) return "✗ " + getString(R.string.mytvs_moved);
+            progressLine(g, t, getString(R.string.upd_tv_sending, number(0)), 0);
+            int[] last = {0};
+            String result = a.install(apk, f -> {
+                int pct = (int) (f * 100);
+                if (pct == last[0]) return;
+                last[0] = pct;
+                progressLine(g, t, getString(R.string.upd_tv_sending, number(pct)), pct);
+            });
+            if (result.contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) return "✗ " + getString(R.string.upd_tv_other_key);
+            if (result.contains("INSTALL_FAILED_VERSION_DOWNGRADE")) return "✗ " + getString(R.string.newer_on_tv);
+            if (!result.startsWith("Success")) return "✗ " + getString(R.string.install_failed, result);
+            progressLine(g, t, getString(R.string.upd_tv_setting), -1);
+            // As after Find my TV's install: Android may handle the update's force-stop a moment later.
+            Thread.sleep(5000);
+            boolean all = quietSteps(a);
+            String now = versionOnTv(a);
+            if (now != null) {
+                t.version = now;
+                MyTvs.version(this, t.id, now);
+            }
+            if (!carried.equals(now)) return "✗ " + getString(R.string.install_failed, String.valueOf(now));
+            t.state = MyTvs.State.SAME;
+            return all ? getString(R.string.upd_tv_done, iso(now)) : getString(R.string.upd_tv_partly, iso(now));
+        } catch (AdbPairingRequiredException e) {
+            return "✗ " + getString(R.string.mytvs_pair);
+        } catch (Exception e) {
+            return "✗ " + connectError(e);
+        }
+    }
+
+    private void progressLine(int g, MyTvs.Tv t, String line, int percent) {
+        post(g, () -> {
+            t.result = line;
+            t.percent = percent;
+            showUpdating();
+        });
+    }
+
+    /** The update's list: each TV with its line (a bar while its APK goes). */
+    private void showUpdating() {
+        if (myList == null || myTvs == null) return;
+        myList.removeAllViews();
+        for (MyTvs.Tv t : myTvs) {
+            String r = t.result == null ? "" : t.result;
+            int color = r.startsWith("✗") ? Ui.CORAL : r.startsWith("✓") ? 0xff7fc79a : Ui.GOLD_200;
+            myList.addView(myTvCard(t, r, color, false), Ui.wide(this, 10));
+        }
+    }
+
+    /** On the worker: Setup.STEPS without the timeline (as runSteps); true when every required step is checked. */
+    private boolean quietSteps(Adb a) throws IOException, InterruptedException {
+        boolean all = true;
+        for (Setup.Step s : Setup.STEPS) {
+            if (s.check != null && a.shell(s.check).ok()) continue;
+            boolean ran = a.shell(s.command).ok();
+            boolean ok = s.check == null ? ran : a.shell(s.check).ok();
+            if (!ok && s.required) all = false;
+        }
+        return all;
+    }
+
+    /** The end: how many went, each TV's line, Try again for those that failed. */
+    private void updatesDone(List<MyTvs.Tv> all, List<MyTvs.Tv> chosen) {
+        int ok = 0;
+        List<MyTvs.Tv> failed = new ArrayList<>();
+        for (MyTvs.Tv t : chosen) {
+            if (t.result != null && t.result.startsWith("✗")) failed.add(t); else ok++;
+        }
+        frame(DONE, failed.isEmpty() ? Hero.Mode.DONE : Hero.Mode.PROBLEM, getString(R.string.upd_done_title),
+                getString(R.string.upd_done_lead, number(ok), number(chosen.size())));
+        aboutChrome();
+        hero.setVisibility(View.GONE);
+        myTvs = chosen;
+        myList = Ui.column(this);
+        add(myList, 8);
+        showUpdating();
+        if (!failed.isEmpty()) {
+            foot(Ui.primary(this, getString(R.string.upd_retry_failed), v -> {
+                myTvs = all;
+                for (MyTvs.Tv t : all) t.chosen = failed.contains(t);
+                go(this::updateChosen);
+            }));
+        }
+        foot(Ui.secondary(this, getString(R.string.finish), v -> go(this::showMyTvs)));
+        back = () -> go(this::showMyTvs);
+    }
+
     // Prepare
 
     private void showGuide() {
@@ -496,6 +856,11 @@ public final class MainActivity extends Activity {
             if (!SelfUpdate.busy()) go(this::showFind);
         });
         foot(findButton);
+        int mine = MyTvs.count(this);
+        foot(Ui.secondary(this, getString(R.string.mytvs_button) + (mine > 0 ? " (" + number(mine) + ")" : ""),
+                v -> {
+                    if (!SelfUpdate.busy()) go(this::showMyTvs);
+                }));
         fillUpdate();
         back = this::finish;
     }
@@ -723,6 +1088,8 @@ public final class MainActivity extends Activity {
     /** Wireless debugging first (no prompt on the TV once paired), then classic with "Allow debugging?". */
     private void connect(String host, int tls, int classic) {
         this.host = host;
+        connTls = tls;
+        connClassic = classic;
         stopFinders();
         frame(CONNECT, Hero.Mode.SEARCH, getString(R.string.connecting_title), getString(R.string.connecting, host));
         foot(Ui.secondary(this, getString(R.string.back), v -> go(this::showFind)));
@@ -861,6 +1228,7 @@ public final class MainActivity extends Activity {
     }
 
     private void pair(String host, int pairPort, String code, int tlsPort) {
+        connTls = tlsPort;
         stopFinders();
         frame(CONNECT, Hero.Mode.PAIR, getString(R.string.pair_title), getString(R.string.pairing));
         back = null;
@@ -899,6 +1267,9 @@ public final class MainActivity extends Activity {
 
     /** The TV's own name (Settings' device name), else its model, else its address: for the confirmation and the end. */
     private String tvName;
+    /** The TV's serial (ro.serialno) and the ports this run reached it on, for My TVs. */
+    private String tvSerial;
+    private int connTls, connClassic;
 
     /**
      * Connected: which TV this is, from the TV itself, and a choice before anything is sent, so a TV tapped by mistake
@@ -958,10 +1329,17 @@ public final class MainActivity extends Activity {
             try {
                 String[] lines = adb().shell("settings get global device_name; echo; getprop ro.product.model; echo; "
                         + "getprop ro.build.version.release; echo; dumpsys package " + Setup.PACKAGE
-                        + " 2>/dev/null | grep -m1 versionName").out.split("\n", -1);
+                        + " 2>/dev/null | grep -m1 versionName; echo; getprop ro.serialno").out.split("\n", -1);
                 String device = clean(lines, 0), made = clean(lines, 2), android = clean(lines, 4);
                 java.util.regex.Matcher m = java.util.regex.Pattern.compile("versionName=(\\S+)").matcher(clean(lines, 6));
                 onTv = m.find() ? m.group(1) : "";
+                // Connected, so this TV trusts this phone: one of My TVs from now on (kept on the phone only).
+                // The last line (the version's line is missing on a TV without Awan TV, so not by its index).
+                String serial = "";
+                for (int i = lines.length - 1; i >= 0 && serial.isEmpty(); i--) serial = clean(lines, i);
+                if (serial.contains("versionName")) serial = "";
+                tvSerial = serial.isEmpty() ? null : serial;
+                MyTvs.remember(this, serial, device, made, host, connClassic, connTls, onTv);
                 post(g, () -> {
                     if (!device.isEmpty()) tvName = device;
                     else if (!made.isEmpty()) tvName = made;
@@ -1205,6 +1583,7 @@ public final class MainActivity extends Activity {
 
     /** The end: what to do on the TV now, and the tip about debugging. */
     void showDone() {
+        if (installedOk && tvSerial != null && !version.isEmpty()) MyTvs.version(this, tvSerial, version);
         Timeline steps = timeline;
         if (steps != null && steps.getParent() != null) ((ViewGroup) steps.getParent()).removeView(steps);
         boolean ok = installedOk;
@@ -1289,7 +1668,7 @@ public final class MainActivity extends Activity {
     }
 
     // Debug builds only: one screen with sample data, for screenshots and checking layouts without a TV.
-    // adb shell am start -n app.awanpro.tv.installer/.MainActivity --es screen find|about|licences|allow|pair|confirm|install|done|partly|problem
+    // adb shell am start -n app.awanpro.tv.installer/.MainActivity --es screen find|about|licences|mytvs|allow|pair|confirm|install|done|partly|problem
 
     /** For the sample screens: the installer's own version, which is always the Awan TV version it carries. */
     private String ownVersion() {
@@ -1320,6 +1699,9 @@ public final class MainActivity extends Activity {
             }
             case "about":
                 showAbout();
+                break;
+            case "mytvs":
+                showMyTvs();
                 break;
             case "licences":
                 showLicences();
@@ -1403,6 +1785,7 @@ public final class MainActivity extends Activity {
         versionOpensAbout(false);
         updateSlot = null;
         findButton = null;
+        myList = null;
         content.addView(hero, Ui.wide(this, 8));
         titleView = Ui.title(this, title);
         content.addView(titleView, Ui.wide(this, 18));
@@ -1467,6 +1850,8 @@ public final class MainActivity extends Activity {
     }
 
     private void stopFinders() {
+        if (myFinder != null) myFinder.stop();
+        myFinder = null;
         finder.stop();
         if (pairFinder != null) pairFinder.stop();
         pairFinder = null;

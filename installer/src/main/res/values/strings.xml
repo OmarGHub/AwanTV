@@ -164,4 +164,35 @@
     <string name="about_licences_detail">The licence texts in full</string>
     <string name="licences_lead">The licences of the installer and what it is built from, in their own words.</string>
     <string name="licence_open">Open the text</string>
+
+    <!-- My TVs (MyTvs): the TVs this phone set up, their version, and updating them -->
+    <string name="mytvs_button">My TVs · update Awan TV on them</string>
+    <string name="mytvs_title">My TVs</string>
+    <string name="mytvs_lead">The TVs this phone installed Awan TV on. The installer carries %1$s; debugging must be on on the TV.</string>
+    <string name="mytvs_empty">No TVs yet. Every TV you install Awan TV on or set up again from this phone shows here, or add one from the network. To take one off the list, hold it.</string>
+    <string name="mytvs_pick">Tick those needing an update</string>
+    <string name="mytvs_checking">Reading its version…</string>
+    <string name="mytvs_older">Needs an update: %1$s → %2$s</string>
+    <string name="mytvs_same">Up to date: %1$s</string>
+    <string name="mytvs_newer">Has %1$s, newer than this installer</string>
+    <string name="mytvs_none">Awan TV is not on it</string>
+    <string name="mytvs_no_answer">No answer: debugging is off or the TV is off</string>
+    <string name="mytvs_pair">The TV forgot its pairing with this phone: add it from the network</string>
+    <string name="mytvs_moved">Its address changed: add it from the network</string>
+    <string name="mytvs_update">Update the ticked (%1$s)</string>
+    <string name="mytvs_add">+ Add a TV from the network</string>
+    <string name="mytvs_remove_q">Remove %1$s from My TVs? Nothing changes on the TV.</string>
+    <string name="mytvs_remove">Remove</string>
+    <string name="upd_tvs_title">Updating the TVs</string>
+    <string name="upd_tvs_lead">Keep the installer open until it ends. The TVs are not asked anything, and Awan TV comes back on each by itself.</string>
+    <string name="upd_tv_wait">Waiting</string>
+    <string name="upd_tv_connecting">Connecting…</string>
+    <string name="upd_tv_sending">Sending the app: %1$s%%</string>
+    <string name="upd_tv_setting">Checking the service and permissions…</string>
+    <string name="upd_tv_done">✓ Updated to %1$s</string>
+    <string name="upd_tv_partly">✓ Updated to %1$s, but a step did not finish: in Find my TV choose Set up again</string>
+    <string name="upd_tv_other_key">Awan TV there is signed with another key: update it through Find my TV</string>
+    <string name="upd_done_title">Update finished</string>
+    <string name="upd_done_lead">%1$s of %2$s updated.</string>
+    <string name="upd_retry_failed">Try again for those that failed</string>
 </resources>
