@@ -140,6 +140,8 @@ public class RemoteKeys extends AccessibilityService {
         Prefs.of(this).edit().putBoolean(ServiceCheck.ON, true).apply();
         running = this;
         guard = new HomeGuard(this);
+        // Just booted: the TV's own home is up already, with no event to say so.
+        guard.afterBoot();
         // Just updated by Update now: Home back in front, as it was (the TV's own home came up meanwhile).
         SelfUpdate.afterUpdate(this);
         // Beside the TV's own home screen (shown over it or not) that launcher still answers the remote's buttons,

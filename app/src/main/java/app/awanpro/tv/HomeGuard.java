@@ -265,6 +265,26 @@ final class HomeGuard {
         }
     }
 
+    /** How long after a boot the service's start still opens Home (Masjid TV's GuardService: five minutes). */
+    private static final long BOOT_MS = 5 * 60_000L;
+    /** The boot (Settings.Global.BOOT_COUNT) Home was last opened for, so a service started again opens it once. */
+    private static final String BOOT_PREF = "home_boot";
+
+    /**
+     * Just bound after a boot (1.10.1): the TV's own home came up before this service did, and no window event says
+     * so, so it stayed until a key was pressed. Within {@link #BOOT_MS} of a boot, once per boot, Home opens over it,
+     * unless Home is already up or the Home part is off, as Masjid TV's GuardService does when it connects.
+     */
+    void afterBoot() {
+        if (!active() || MainActivity.shown || android.os.SystemClock.elapsedRealtime() > BOOT_MS) return;
+        int boot = android.provider.Settings.Global.getInt(service.getContentResolver(), android.provider.Settings.Global.BOOT_COUNT, -1);
+        android.content.SharedPreferences p = Prefs.of(service);
+        if (boot >= 0 && p.getInt(BOOT_PREF, -1) == boot) return;
+        p.edit().putInt(BOOT_PREF, boot).apply();
+        Log.i(TAG, "just booted (" + boot + "): opening Home over the TV's own");
+        open();
+    }
+
     private void open() {
         // A start Android cancels (the next Home press came first) is caught by looking again.
         settleIn(SETTLE_MS);

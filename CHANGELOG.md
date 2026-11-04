@@ -6,6 +6,11 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- After the TV restarts, Home comes up by itself: the TV's own home screen came up before Awan TV's service started
+  and stayed until a key was pressed. Within five minutes of a boot, once per boot, the service's start opens Home
+  over it (as Masjid TV does), unless Home is already up or Settings > Awan TV leaves Home off.
+
 ## [1.10.0]
 
 ### The app
