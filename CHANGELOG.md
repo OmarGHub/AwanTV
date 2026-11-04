@@ -6,6 +6,10 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Tools
+- `AwanTV-editor` 1.0.1: a TV on a test build (1.8.0a) no longer stops the list of TVs with "Cannot convert value
+  \"0a\" to type System.Int32"; such a version counts as older than its release, as in the app.
+
 ## [1.8.0]
 
 ### The app

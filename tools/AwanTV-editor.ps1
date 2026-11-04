@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.0.0
+﻿# AwanTV-editor.ps1 - Version 1.0.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -21,7 +21,7 @@
 # describes them in both languages).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.0.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -176,18 +176,25 @@ function Version-Of([string]$serial) {
     return $null
 }
 
-# "1.0.0" compared part by part; a missing version is the oldest.
+# "1.0.0" compared part by part; a missing version is the oldest. A test build's letter (1.8.0a, 1.8.0b) comes before
+# its release (1.8.0), as in the app (Updates.compare).
 function Version-Less([string]$a, [string]$b) {
     if (-not $a) { return $true }
     if (-not $b) { return $false }
-    $x = @($a -split "\." | ForEach-Object { [int]$_ }); $y = @($b -split "\." | ForEach-Object { [int]$_ })
+    $ma = [regex]::Match($a, "^([\d.]*\d)([a-z]*)"); $mb = [regex]::Match($b, "^([\d.]*\d)([a-z]*)")
+    if (-not $ma.Success -or -not $mb.Success) { return ($a -lt $b) }
+    $x = @($ma.Groups[1].Value -split "\." | ForEach-Object { [int]$_ }); $y = @($mb.Groups[1].Value -split "\." | ForEach-Object { [int]$_ })
     for ($i = 0; $i -lt [Math]::Max($x.Count, $y.Count); $i++) {
         $p = 0; $q = 0
         if ($i -lt $x.Count) { $p = $x[$i] }
         if ($i -lt $y.Count) { $q = $y[$i] }
         if ($p -ne $q) { return ($p -lt $q) }
     }
-    return $false
+    $la = $ma.Groups[2].Value; $lb = $mb.Groups[2].Value
+    if ($la -eq $lb) { return $false }
+    if (-not $la) { return $false }
+    if (-not $lb) { return $true }
+    return ($la -lt $lb)
 }
 
 # ---------------------------------------------------------------- the TVs this computer has met (tvs.jsonc)
