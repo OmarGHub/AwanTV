@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.batoulapps.adhan.CalculationMethod;
 import com.batoulapps.adhan.Madhab;
 
 import java.util.ArrayList;
@@ -717,7 +716,7 @@ public class SettingsActivity extends Screen {
         Context c = this;
         switch (s) {
             case PRAYER: if (adjustOpen) return adjustRows();
-                return withFridayAndImsak(Arrays.asList(
+                return withHabous(Arrays.asList(
                 new Row(VALUE) {
                     String label() { return t.location(); }
                     String help() {
@@ -744,7 +743,10 @@ public class SettingsActivity extends Screen {
                 },
                 new Row(VALUE) {
                     String label() { return t.method(); }
-                    String help() { return t.methodAngles(Prefs.method(c)); }
+                    String help() {
+                        Method m = Prefs.method(c);
+                        return m == Method.MOROCCO_HABOUS ? t.habousAngles(Habous.table(c) != null) : t.methodAngles(m);
+                    }
                     String value() { return t.methodName(Prefs.method(c)); }
                     void open() {
                         String[] names = new String[Prefs.METHODS.length];
@@ -753,7 +755,12 @@ public class SettingsActivity extends Screen {
                             names[i] = t.methodName(Prefs.METHODS[i]);
                             if (Prefs.METHODS[i] == Prefs.method(c)) sel = i;
                         }
-                        openChooser(t.method(), names, sel, i -> { Prefs.setMethod(c, Prefs.METHODS[i]); showSaved(); });
+                        openChooser(t.method(), names, sel, i -> {
+                            Prefs.setMethod(c, Prefs.METHODS[i]);
+                            showSaved();
+                            // Morocco's method brings its Ministry table row, another takes it away.
+                            if (habousShown != (habousTable() != null)) root.post(() -> { showSection(); focusRow(1); });
+                        });
                     }
                 },
                 new Row(SEG) {
@@ -1215,6 +1222,10 @@ public class SettingsActivity extends Screen {
             if (statusOpen && !onNav) {
                 showSection();
                 focusRow(Math.min(rowIndex, rows.size() - 1));
+            } else if (section == PRAYER && !adjustOpen && habousShown != (habousTable() != null)) {
+                // Back from Another place with a place in Morocco (or out of it): the Ministry table row comes or goes.
+                showSection();
+                focusRow(Math.min(rowIndex, rows.size() - 1));
             } else {
                 refresh();
             }
@@ -1332,6 +1343,58 @@ public class SettingsActivity extends Screen {
      * Prayer times' own rows, then Friday's khutbah (by country, at Dhuhr or
      * a fixed time, whose time row shows only then) and Ramadan's imsak (none by default). Eight rows at most.
      */
+    /** Whether Prayer times shows the Ministry table row (built with it), for a rebuild when that changes. */
+    private boolean habousShown;
+
+    /** The ministry's table the place takes when Morocco's method is chosen; null otherwise. */
+    private Habous.Locality habousTable() {
+        return Prefs.method(this) == Method.MOROCCO_HABOUS ? Habous.table(this) : null;
+    }
+
+    /** Prayer times' rows, with Morocco's Ministry table after the method when it applies, then Friday and imsak. */
+    private List<Row> withHabous(List<Row> prayer) {
+        Context c = this;
+        List<Row> out = new ArrayList<>(prayer);
+        habousShown = habousTable() != null;
+        if (habousShown) out.add(2, new Row(VALUE) {
+            String label() { return t.habousRow(); }
+            String help() {
+                Habous.Locality l = habousTable();
+                Prefs.City city = Prefs.city(c);
+                if (l == null) return "";
+                return t.habousHelp((int) Math.round(Places.km(city.lat, city.lng, l.lat, l.lng)),
+                    Prefs.of(c).getInt(Habous.PREF, 0) != 0);
+            }
+            String value() { Habous.Locality l = habousTable(); return l == null ? "" : l.name(t.ar); }
+            void open() {
+                Prefs.City city = Prefs.city(c);
+                List<Habous.Locality> near = Habous.nearest(c, city.lat, city.lng);
+                near = new ArrayList<>(near.subList(0, Math.min(HABOUS_CHOICES, near.size())));
+                Habous.Locality now = habousTable();
+                // The one in use first when it is not among the nearest (chosen before, far off).
+                if (now != null && !near.contains(now)) near.add(0, now);
+                String[] names = new String[near.size()];
+                int sel = 0;
+                for (int i = 0; i < names.length; i++) {
+                    Habous.Locality l = near.get(i);
+                    names[i] = t.habousItem(l.name(t.ar), (int) Math.round(Places.km(city.lat, city.lng, l.lat, l.lng)));
+                    if (l == now) sel = i;
+                }
+                List<Habous.Locality> list = near;
+                openChooser(t.habousRow(), t.habousChooser(), names, sel, i -> {
+                    // The automatic one picked again stays automatic (it follows a new place by itself).
+                    Habous.Locality pick = list.get(i);
+                    Habous.choose(c, pick == Habous.automatic(c) ? 0 : pick.id);
+                    showSaved();
+                }, null);
+            }
+        });
+        return withFridayAndImsak(out);
+    }
+
+    /** How many of the ministry's localities the Ministry table list offers, nearest first. */
+    private static final int HABOUS_CHOICES = 10;
+
     private List<Row> withFridayAndImsak(List<Row> prayer) {
         Context c = this;
         List<Row> out = new ArrayList<>(prayer);
@@ -1812,7 +1875,7 @@ public class SettingsActivity extends Screen {
                     // The adjustments back to Prayer times, on their row.
                     adjustOpen = false;
                     showSection();
-                    focusRow(ADJUST_ROW);
+                    focusRow(ADJUST_ROW + (habousShown ? 1 : 0));
                 }
                 else if (buttonsOpen) {
                     // The remote buttons back to Device settings, on their row (the last).
@@ -2084,7 +2147,7 @@ public class SettingsActivity extends Screen {
     /** About's row of the sources (its place in the list), for Back from their page. */
     private static final int CREDITS_ROW = 6;
 
-    /** Where Awan TV comes from and what it carries: Afnon, the weather, the cities, the recitations, the adhan. */
+    /** Where Awan TV comes from and what it carries: Afnon, the weather, the cities, Morocco's tables, the recitations, the adhan. */
     private List<Row> creditRows() {
         Context c = this;
         List<Row> out = new ArrayList<>(Arrays.asList(
@@ -2101,6 +2164,10 @@ public class SettingsActivity extends Screen {
                 String help() { return t.citiesCreditLong(); }
             },
             new Row(INFO) {
+                String label() { return t.habousCreditRow(); }
+                String help() { return t.habousCredit(); }
+            },
+            new Row(INFO) {
                 String label() { return t.libraryRow(); }
                 String help() { return t.recitationsCreditLong(); }
             }));
@@ -2114,7 +2181,7 @@ public class SettingsActivity extends Screen {
 
     // ---------------------------------------------------------------- adjust the times and the date
 
-    /** Prayer times' row of the adjustments (its place in the list), for Back from their page. */
+    /** Prayer times' row of the adjustments (its place in the list, one more with the Ministry table), for Back from their page. */
     private static final int ADJUST_ROW = 3;
 
     /**

@@ -104,6 +104,18 @@ final class SettingsFile {
         }
         out.add(new Item("method", STR_CHOICE, t.method()).choices(methods, methodNames)
             .depends(t.byCity(), x -> Prefs.methodId(Prefs.method(x))));
+        // Morocco's method: which of the ministry's 191 tables (0, none: the one Habous finds for the place).
+        List<Habous.Locality> localities = Habous.all(c);
+        Integer[] tables = new Integer[localities.size() + 1];
+        String[] tableNames = new String[tables.length];
+        tables[0] = 0;
+        tableNames[0] = t.habousAuto();
+        for (int i = 0; i < localities.size(); i++) {
+            tables[i + 1] = localities.get(i).id;
+            tableNames[i + 1] = localities.get(i).name(t.ar);
+        }
+        out.add(new Item(Habous.PREF, INT_CHOICE, t.habousRow()).help(t.habousFileHelp()).choices(tables, tableNames).def(0)
+            .when("method", Method.MOROCCO_HABOUS.id));
         out.add(new Item("madhab", STR_CHOICE, t.asrSchool()).help(t.asrSchoolHelp())
             .choices(new String[] {"shafi", "hanafi"}, t.asrSchools())
             .depends(t.byCity(), x -> Prefs.madhab(x) == com.batoulapps.adhan.Madhab.HANAFI ? "hanafi" : "shafi"));

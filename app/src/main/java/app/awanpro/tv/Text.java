@@ -1,6 +1,5 @@
 package app.awanpro.tv;
 
-import com.batoulapps.adhan.CalculationMethod;
 import com.batoulapps.adhan.CalculationParameters;
 import com.batoulapps.adhan.Madhab;
 
@@ -285,24 +284,22 @@ final class Text {
         return ar ? "العصر: الجمهور (شافعي)" : "Asr: standard (Shafi‘i)";
     }
 
-    String methodName(CalculationMethod m) {
-        switch (m) {
-            case UMM_AL_QURA: return ar ? "أم القرى، مكة المكرمة" : "Umm al-Qura, Makkah";
-            case MUSLIM_WORLD_LEAGUE: return ar ? "رابطة العالم الإسلامي" : "Muslim World League";
-            case KARACHI: return ar ? "جامعة العلوم الإسلامية، كراتشي" : "University of Islamic Sciences, Karachi";
-            case DUBAI: return ar ? "دبي" : "Dubai";
-            case KUWAIT: return ar ? "الكويت" : "Kuwait";
-            case QATAR: return ar ? "قطر" : "Qatar";
-            case NORTH_AMERICA: return ar ? "الجمعية الإسلامية لأمريكا الشمالية" : "ISNA, North America";
-            case MOON_SIGHTING_COMMITTEE: return ar ? "لجنة رؤية الهلال" : "Moonsighting Committee";
-            case SINGAPORE: return ar ? "سنغافورة" : "Singapore";
-            case OTHER: return ar ? "وزارة الأوقاف والشؤون الدينية، سلطنة عُمان" : "Ministry of Awqaf, Oman";
-            default: return ar ? "الهيئة المصرية العامة للمساحة" : "Egyptian General Authority of Survey";
-        }
+    String methodName(Method m) {
+        if (m == Method.UMM_AL_QURA) return ar ? "أم القرى، مكة المكرمة" : "Umm al-Qura, Makkah";
+        if (m == Method.MUSLIM_WORLD_LEAGUE) return ar ? "رابطة العالم الإسلامي" : "Muslim World League";
+        if (m == Method.KARACHI) return ar ? "جامعة العلوم الإسلامية، كراتشي" : "University of Islamic Sciences, Karachi";
+        if (m == Method.DUBAI) return ar ? "دبي" : "Dubai";
+        if (m == Method.KUWAIT) return ar ? "الكويت" : "Kuwait";
+        if (m == Method.QATAR) return ar ? "قطر" : "Qatar";
+        if (m == Method.NORTH_AMERICA) return ar ? "الجمعية الإسلامية لأمريكا الشمالية" : "ISNA, North America";
+        if (m == Method.MOON_SIGHTING_COMMITTEE) return ar ? "لجنة رؤية الهلال" : "Moonsighting Committee";
+        if (m == Method.SINGAPORE) return ar ? "سنغافورة" : "Singapore";
+        if (m == Method.OMAN_AWQAF) return ar ? "وزارة الأوقاف والشؤون الدينية، سلطنة عُمان" : "Ministry of Awqaf, Oman";
+        if (m == Method.MOROCCO_HABOUS) return ar ? "وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية" : "Ministry of Habous, Morocco";
+        return ar ? "الهيئة المصرية العامة للمساحة" : "Egyptian General Authority of Survey";
     }
 
-    /** "Fajr angle 19.5° · Isha 17.5°", or Isha as minutes after Maghrib where the method fixes it that way. */
-    String methodAngles(CalculationMethod m) {
+    String methodAngles(Method m) {
         CalculationParameters p = Prefs.parameters(m);
         String fajr = (ar ? "زاوية الفجر " : "Fajr angle ") + trim(p.fajrAngle) + "°";
         String isha = p.ishaInterval > 0
@@ -310,6 +307,23 @@ final class Text {
             : (ar ? "العشاء " : "Isha ") + trim(p.ishaAngle) + "°";
         return d(fajr + " · " + isha);
     }
+
+    /** Morocco's method under its name: in Morocco by the ministry's tables, elsewhere at its coastal horizon. */
+    String habousAngles(boolean table) {
+        return d(table ? (ar ? "الفجر 19° · العشاء 17° · كما تحسب الوزارة جداولها" : "Fajr 19° · Isha 17° · as the ministry computes its tables")
+                       : (ar ? "خارج المغرب: الفجر 19° · العشاء 17° · باحتياط الوزارة" : "Outside Morocco: Fajr 19° · Isha 17° · with the ministry's margins"));
+    }
+
+    /** Settings > Prayer times > Ministry table (Morocco): which of the ministry's 191 timetables. */
+    String habousRow() { return ar ? "جدول الوزارة" : "Ministry table"; }
+    String habousHelp(int km, boolean chosen) {
+        return d(chosen ? (ar ? "اخترته أنت، على بعد " + km + " كم من موقعك" : "Chosen by you, " + km + " km from your location")
+                        : (ar ? "أقرب مدن الوزارة إلى موقعك، على بعد " + km + " كم" : "The ministry's nearest locality, " + km + " km away"));
+    }
+    String habousChooser() { return ar ? "الوزارة تنشر جدولًا لكل مدينة من 191 مدينة ومركزًا. هذه أقربها إلى موقعك." : "The ministry publishes a table for each of 191 localities. These are the nearest to your location."; }
+    String habousItem(String name, int km) { return d(name + "  ·  " + km + (ar ? " كم" : " km")); }
+    String habousAuto() { return ar ? "تلقائي: الأقرب إلى الموقع" : "Automatic: the nearest"; }
+    String habousFileHelp() { return ar ? "أي جداول وزارة الأوقاف المغربية تتبعه الشاشة في المغرب" : "Which of the Moroccan ministry's tables the TV follows in Morocco"; }
 
     private static String trim(double v) {
         return v == Math.rint(v) ? String.valueOf((int) v) : String.valueOf(v);
@@ -378,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.8.0":
+                return ar ? new String[][] {
+                    {"مواقيت المغرب كما تنشرها الوزارة", "طريقة وزارة الأوقاف والشؤون الإسلامية المغربية بجدول كل مدينة من مدنها الـ 191، وتختار الأقرب إلى موقعك من الإعدادات ← مواقيت الصلاة ← جدول الوزارة."}}
+                  : new String[][] {
+                    {"Morocco's times as the ministry publishes them", "The Moroccan Ministry of Habous' method, with the table of each of its 191 localities; pick the one near you in Settings › Prayer times › Ministry table."}};
             case "1.7.0":
                 return ar ? new String[][] {
                     {"التحديث بضغطة", "حين يصدر إصدار أحدث، اضغط «حدّث الآن» في نافذته، فينزّله التطبيق ويثبّته على الشاشة نفسها، دون جوال ولا حاسب."}}
@@ -872,6 +891,8 @@ final class Text {
     String hintToChosen() { return ar ? "◀  إلى المكان المختار" : "▶  To the chosen place"; }
     String hintCancel() { return ar ? "رجوع  إلغاء" : "Back  Cancel"; }
     String citiesCredit() { return ar ? "المدن: GeoNames.org" : "Cities: GeoNames.org"; }
+    String habousCreditRow() { return ar ? "مواقيت المغرب" : "Morocco's times"; }
+    String habousCredit() { return ar ? "مستخرجة من جداول وزارة الأوقاف والشؤون الإسلامية المغربية (habous.gov.ma)" : "Fitted to the timetables of Morocco's Ministry of Habous and Islamic Affairs (habous.gov.ma)"; }
     String citiesCreditLong() { return ar ? "قائمة المدن: GeoNames.org (ترخيص CC BY 4.0)" : "City list: GeoNames.org (CC BY 4.0)"; }
     String placeSave() { return ar ? "حفظ" : "Save"; }
     String placeCancel() { return ar ? "إلغاء" : "Cancel"; }

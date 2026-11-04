@@ -2,7 +2,6 @@ package app.awanpro.tv;
 
 import android.content.Context;
 
-import com.batoulapps.adhan.CalculationMethod;
 import com.batoulapps.adhan.Madhab;
 
 import java.io.BufferedReader;
@@ -177,24 +176,26 @@ final class Places {
      * The method most of a country's mosques follow, for the countries Afnon's city list already sets (each with
      * its reasons in {@link Prefs#CITIES}); null for the rest, where the viewer is asked to check it.
      */
-    static CalculationMethod method(String cc) {
+    static Method method(String cc) {
         if (cc == null) return null;
         switch (cc) {
-            case "SA": return CalculationMethod.UMM_AL_QURA;
-            case "EG": return CalculationMethod.EGYPTIAN;
-            case "AE": return CalculationMethod.DUBAI;
-            case "KW": return CalculationMethod.KUWAIT;
-            case "QA": return CalculationMethod.QATAR;
-            // Oman's Ministry of Awqaf (Prefs.OMAN, adhan-java's OTHER standing for it).
-            case "OM": return CalculationMethod.OTHER;
-            case "US": case "CA": return CalculationMethod.NORTH_AMERICA;
-            case "IN": case "PK": case "BD": case "LK": return CalculationMethod.KARACHI;
-            case "ID": case "SG": case "BN": case "TH": return CalculationMethod.SINGAPORE;
-            case "MY": return CalculationMethod.MOON_SIGHTING_COMMITTEE;
+            case "SA": return Method.UMM_AL_QURA;
+            case "EG": return Method.EGYPTIAN;
+            case "AE": return Method.DUBAI;
+            case "KW": return Method.KUWAIT;
+            case "QA": return Method.QATAR;
+            // Oman's Ministry of Awqaf (Method.OMAN_AWQAF).
+            case "OM": return Method.OMAN_AWQAF;
+            // Morocco's Ministry of Habous: its own timetables, which Laayoune and Dakhla (GeoNames' EH) follow too.
+            case "MA": case "EH": return Method.MOROCCO_HABOUS;
+            case "US": case "CA": return Method.NORTH_AMERICA;
+            case "IN": case "PK": case "BD": case "LK": return Method.KARACHI;
+            case "ID": case "SG": case "BN": case "TH": return Method.SINGAPORE;
+            case "MY": return Method.MOON_SIGHTING_COMMITTEE;
             case "JO": case "PS": case "LB": case "SY": case "IQ": case "BH": case "YE": case "MV":
             case "JP": case "KR": case "TR": case "GB": case "FR": case "DE": case "NL": case "BE": case "AT":
             case "CH": case "IT": case "ES": case "BA": case "KE": case "NG": case "ZA": case "AU": case "NZ":
-                return CalculationMethod.MUSLIM_WORLD_LEAGUE;
+                return Method.MUSLIM_WORLD_LEAGUE;
             default: return null;
         }
     }

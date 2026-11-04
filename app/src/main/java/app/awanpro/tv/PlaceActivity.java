@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.batoulapps.adhan.CalculationMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,7 +268,7 @@ public class PlaceActivity extends Screen {
 
     /** The method line: the country's, or today's when the country is not known. And the iqamah, where it has one. */
     private void showMethod(String cc) {
-        CalculationMethod m = Places.method(cc);
+        Method m = Places.method(cc);
         String country = Prefs.countryName(cc, t.ar);
         if (m != null) {
             method.setText(t.placeMethod(t.methodName(m), country));

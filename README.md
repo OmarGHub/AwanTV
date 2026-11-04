@@ -100,7 +100,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    **ومستوى أذان الفجر** (التنبيهات والأذان ← أذان الفجر): كامل أو 75% أو 50% أو 25% من صوت التلفاز، والبقية كاملة.
    **وحالة التطبيق** (حول التطبيق): هل الخدمة وشاشة الاستراحة تعمل، وآخر أذان شُغّل ومتى، والصلاحية والطقس والنسخة.
 8. **الطقس** بجانب الساعة: الحرارة الآن وأيقونة للحالة (صافٍ، غائم، مطر...)، من Open-Meteo للمكان المختار، ويختفي دون إنترنت. يُوقف أو يُختار °م / °ف من الإعدادات.
-9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ).
+9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة.
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
 12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
@@ -354,7 +354,9 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
 8. **Any location in the world**: on the first start the app suggests the TV's own location from its location
    service; or search 34,000 cities (GeoNames) in Arabic or English, whose country's method comes with them; or enter
    coordinates for a smaller place. Each time can be moved up to 30 minutes earlier or later to match your masjid
-   (Prayer times > Adjust the times and the date).
+   (Prayer times > Adjust the times and the date). In Morocco the times follow the Ministry of Habous and Islamic
+   Affairs, with your locality's table out of its 191 (Prayer times > Ministry table): the ministry's published minute
+   for 99% of times, the rest a minute off.
 9. **Saved recitations**: download a reciter's surahs, or the whole Quran, from mp3quran.net and play them from the
    radio without internet; 2 GB are always left free for the TV. They are kept in `Music/Awan TV` on the TV, so they
    stay if you remove the app, unless you choose to delete them.

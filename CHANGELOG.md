@@ -6,7 +6,25 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Morocco: the Ministry of Habous and Islamic Affairs' method («وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية»).
+  The ministry publishes a timetable for each of its 191 localities, not its method, so the rules are the ones
+  recovered from its tables (Afnon 0.8's `Habous`, which Mihrab's reading agrees with): Fajr 19° rounded down to the
+  minute, Isha 17°, Asr one shadow length, Dhuhr five minutes after the transit, sunrise and Maghrib at each
+  locality's own horizon, the rest rounded. Each locality's point and horizons are fitted to the ministry's tables by
+  `tools/AwanTV-build-habous.py` (new): on 2026-09-26 to 2026-11-11 its published minute for 99.03% of 53,862 times,
+  never more than a minute off. The usual method elsewhere (AlAdhan's Morocco: 19°/17°, Maghrib at sunset) gave
+  Dhuhr 5 minutes and Maghrib about 6 minutes before the ministry's.
+- A place in Morocco (Laayoune and Dakhla too) starts on it and takes the table of the ministry's locality named like
+  it near by, else the nearest: Settings > Prayer times > Ministry table (shown only then) lists the ten nearest, with
+  their distance, to follow another. Chosen by hand elsewhere, it computes at the place itself with the ministry's
+  coastal horizon, so Maghrib never comes before the ministry's would.
+- Calculation methods are Awan TV's own `Method` (after Afnon 0.8's), not adhan-java's list, so a method adhan-java
+  lacks needs no stand-in; saved choices keep their names (OMAN_AWQAF too).
+
 ### Tools
+- `AwanTV-build-habous.py` 1.0.0 builds `assets/habous/localities.tsv` from a copy of the ministry's tables (see above)
+  and refuses to write when under 97% on the minute or anything two minutes off.
 - `AwanTV-release` 1.1.0 guards Update now on the TVs already out: it refuses an APK signed with another key than the
   release key, an AwanTV.apk whose versionName or versionCode is not awanVersion's (an older build left in
   app\release), and a version older than the one published on GitHub; it then prints the tag and the file names that

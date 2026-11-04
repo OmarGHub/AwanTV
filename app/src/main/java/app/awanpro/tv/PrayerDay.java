@@ -3,7 +3,6 @@ package app.awanpro.tv;
 import android.content.Context;
 import android.icu.util.IslamicCalendar;
 
-import com.batoulapps.adhan.CalculationMethod;
 import com.batoulapps.adhan.CalculationParameters;
 import com.batoulapps.adhan.Coordinates;
 import com.batoulapps.adhan.HighLatitudeRule;
@@ -40,10 +39,15 @@ final class PrayerDay {
 
     /** With the saved location, method, Asr school, the times' adjustments and the Hijri adjustment (Settings). */
     PrayerDay(Context c, Date now) {
-        this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c), Prefs.hijriOffset(c));
+        this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c), Prefs.hijriOffset(c),
+            Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null);
     }
 
-    PrayerDay(Date now, Coordinates where, CalculationMethod method, Madhab madhab, int[] adjust, int hijriOffset) {
+    /**
+     * {@code table}: with Morocco's method, the ministry's locality whose timetable the place takes (its point and
+     * horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon).
+     */
+    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table) {
         CalculationParameters params = Prefs.parameters(method);
         params.madhab = madhab;
         // The viewer's minutes on each time (Prefs.adjustments): the adhan, iqamah, reminders and screens all follow.
@@ -53,13 +57,8 @@ final class PrayerDay {
         // before sunrise and Isha no later than a seventh after Maghrib (as meypod/al-azan and Afnon 0.8), not
         // adhan-java's default middle of the night, which put both near 1 a.m.
         if (Math.abs(where.latitude) > 48) params.highLatitudeRule = HighLatitudeRule.SEVENTH_OF_THE_NIGHT;
-        PrayerTimes today = times(where, DateComponents.from(now), params);
-        times[FAJR] = minute(today.fajr);
-        times[SUNRISE] = minute(today.sunrise);
-        times[DHUHR] = minute(today.dhuhr);
-        times[ASR] = minute(today.asr);
-        times[MAGHRIB] = minute(today.maghrib);
-        times[ISHA] = minute(today.isha);
+        Date[] today = times(method, table, where, DateComponents.from(now), params);
+        for (int i = 0; i < 6; i++) times[i] = minute(today[i]);
 
         IslamicCalendar h = new IslamicCalendar();
         h.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);
@@ -82,7 +81,7 @@ final class PrayerDay {
         // Umm al-Qura's Isha is 90 minutes after Maghrib, and 120 on Ramadan's nights (the Ministry of Islamic
         // Affairs, after Umm al-Qura). adhan-java leaves the Ramadan half hour to the caller
         // (CalculationMethod.UMM_AL_QURA: "add a +30 minute custom adjustment").
-        if (ishaRamadan && method == CalculationMethod.UMM_AL_QURA) times[ISHA] = new Date(times[ISHA].getTime() + 30 * 60_000L);
+        if (ishaRamadan && method == Method.UMM_AL_QURA) times[ISHA] = new Date(times[ISHA].getTime() + 30 * 60_000L);
 
         int latest = -1;
         for (int i = 0; i < 6; i++) if (!times[i].after(now)) latest = i;
@@ -92,7 +91,7 @@ final class PrayerDay {
         for (int i = 0; i < 6; i++) {
             if (i != SUNRISE && times[i].after(now)) { next = i; break; }
         }
-        Date tomorrowFajr = minute(times(where, DateComponents.from(c.getTime()), params).fajr);
+        Date tomorrowFajr = minute(times(method, table, where, DateComponents.from(c.getTime()), params)[FAJR]);
         boolean tomorrowsFajr = next == -1;
         if (next == -1) {
             next = FAJR;
@@ -147,7 +146,28 @@ final class PrayerDay {
      */
     static final double POLAR_FALLBACK_LATITUDE = 45;
 
-    private static PrayerTimes times(Coordinates where, DateComponents date, CalculationParameters params) {
+    /**
+     * The six times (FAJR..ISHA). Morocco's method by {@link Habous} at its locality's point and horizons (or the
+     * place's own at the coast's) with the viewer's minutes added after the ministry's rounding, as adhan adds them;
+     * where the sun doesn't reach 19°/17° (far north, chosen by hand), adhan-java's way below.
+     */
+    private static Date[] times(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+                                CalculationParameters params) {
+        if (method == Method.MOROCCO_HABOUS) {
+            Coordinates at = table != null ? new Coordinates(table.lat, table.lng) : where;
+            Date[] t = Habous.times(at, date, params.madhab, table != null ? table.horizon : Habous.COAST);
+            if (t != null) {
+                PrayerAdjustments a = params.adjustments;
+                int[] minutes = {a.fajr, a.sunrise, a.dhuhr, a.asr, a.maghrib, a.isha};
+                for (int i = 0; i < 6; i++) t[i] = new Date(t[i].getTime() + minutes[i] * 60_000L);
+                return t;
+            }
+        }
+        PrayerTimes p = adhan(where, date, params);
+        return new Date[] {p.fajr, p.sunrise, p.dhuhr, p.asr, p.maghrib, p.isha};
+    }
+
+    private static PrayerTimes adhan(Coordinates where, DateComponents date, CalculationParameters params) {
         PrayerTimes p = new PrayerTimes(where, date, params);
         if (p.fajr != null) return p;
         // 45° is below the seventh-of-the-night band: its own times, by the method's angles as anywhere below 48°.
