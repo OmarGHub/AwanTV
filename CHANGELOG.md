@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.12.0]
+
 ### Phone installer
 - My TVs (a second button on the guide): the TVs this phone installed Awan TV on or set up again (kept on the phone,
   saved at Find my TV's confirmation by the TV's serial), each with Awan TV's version on it, read without anything

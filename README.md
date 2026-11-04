@@ -61,6 +61,8 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    ويظهر أعلى المثبّت رقم Awan TV الذي سيثبّته.
 3. إن صدر مثبّت أحدث، يعرضه المثبّت بزر «حدّث المثبّت» فيحدّث نفسه (من 1.11.0). ومن ⓘ بجانب الرقم: «حول»، وفيها
    التحقق من التحديث، وروابط المشروع، والتراخيص.
+4. **شاشاتي** (من 1.12.0): الشاشات التي ثبّت عليها هذا الجوال Awan TV، برقم الإصدار على كل منها. حدّد ما يحتاج تحديثًا
+   واضغط «حدّث المحددة»، فتُحدَّث واحدة بعد أخرى دون أي سؤال على الشاشات. يحتاج التصحيح مفعّلًا عليها.
 
 <p align="center"><img src="docs/images/installer.webp" alt="المثبّت على الجوال" width="30%"></p>
 
@@ -320,6 +322,8 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
    in the installer. Its top shows the number of the Awan TV it installs.
 3. When a newer installer is out, it offers it with "Update the installer" and updates itself (from 1.11.0). The i by
    the number opens About: checking for updates, the project's links and the licences.
+4. **My TVs** (from 1.12.0): the TVs this phone installed Awan TV on, each with its version. Tick those needing an update
+   and press "Update the ticked": they update one after another, with no question on the TVs. Debugging must be on.
 
 <p align="center"><img src="docs/images/installer-en.webp" alt="The phone installer" width="30%"></p>
 
