@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.10.1]
+
 ### The app
 - After the TV restarts, Home comes up by itself: the TV's own home screen came up before Awan TV's service started
   and stayed until a key was pressed. Within five minutes of a boot, once per boot, the service's start opens Home
