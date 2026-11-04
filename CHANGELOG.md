@@ -7,6 +7,11 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.4.0: Update TVs ticks an up-to-date TV too, to put it right: with this very APK on it (by
+  SHA-256, as AwanTV-install) nothing is sent and it is only set up again (permissions, TCL's app ops, the service
+  started and checked); another file with the same number (a local build) is installed again, then set up. The button
+  and the window then say "Run on the ticked", and each result says which was done. A TV with a newer version still
+  has no box.
 - `AwanTV-editor` 1.3.3: a TV that went offline while being read no longer gets adb's error text ("device offline",
   PowerShell's NativeCommandError) saved as its model or name: it shows as not connected, what was saved of it stays,
   and text an older editor saved that way is cleared from state\editor\tvs.jsonc on start.

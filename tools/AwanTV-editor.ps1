@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.3.3
+﻿# AwanTV-editor.ps1 - Version 1.4.0
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.3.3"
+$ScriptVersion = "1.4.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -132,12 +132,12 @@ $Words = @{
         connFailed = "تعذّر الاتصال ({0}). إن كانت الشاشة على «التصحيح اللاسلكي» فاقترن بها أولًا:"
         pairTitle = "الشاشة تطلب اقترانًا بهذا الحاسب، مرة واحدة"; pairHow = "على الشاشة: خيارات المطوّر ← التصحيح اللاسلكي ← «اقتران الجهاز برمز». تظهر نافذة فيها رمز من ستة أرقام ومنفذ للاقتران."
         pairPort = "منفذ الاقتران"; pairCode = "الرمز"; pairGo = "اقتران واتصال"; pairFailed = "لم ينجح الاقتران ({0}). افتح نافذة الاقتران على الشاشة من جديد: تعطي رمزًا جديدًا كل مرة."
-        updTitle = "تحديث الشاشات"; updCheck = "⟳ تحقق من الإصدار"; updGo = "⤓ حدّث المحددة ({0})"; updChosenTitle = "تحديث المحددة ({0})"
+        updTitle = "تحديث الشاشات"; updCheck = "⟳ تحقق من الإصدار"; updGo = "⤓ حدّث المحددة ({0})"; updChosenTitle = "تحديث المحددة ({0})"; updGoDo = "⤓ نفّذ على المحددة ({0})"; updChosenTitleDo = "على المحددة ({0})"
         updSource = "ما يُرسل إلى الشاشات"; updFromGithub = "آخر إصدار منشور: Awan TV {0} · من GitHub"; updChecked = "نُزّل وتحقّق المحرر أنه موقّع بمفتاح Awan TV"
         updWillDownload = "يُنزَّل عند التحديث ويُتحقق من توقيعه"; updNoGithub = "تعذّر سؤال GitHub الآن ({0})"; updAsking = "آخر إصدار منشور: يسأل GitHub…"
         updFromLocal = "نسختك المبنية محليًا: Awan TV {0} · app\release\AwanTV.apk، بمفتاح Awan TV"; updTest = "نسخة تجريبية"
         updSourceNote = "يظهر الخيار الثاني فقط حين يوجد ذلك الملف وهو موقّع بمفتاح Awan TV. ويحفظ المحرر اختيارك للمرة القادمة."
-        updPickOld = "حدّد ما يحتاج تحديثًا"; updNote = "حدّد ما تريد تحديثه. التحديث لا يسأل الشاشة شيئًا، وتبقى إعداداتها وتلاواتها المحفوظة."
+        updPickOld = "حدّد ما يحتاج تحديثًا"; updNote = "حدّد ما تريد تحديثه، أو شاشة محدّثة لإصلاحها. لا يُسأل في الشاشة شيء، وتبقى إعداداتها وتلاواتها المحفوظة."; updSameHint = "بتحديدها يُعاد إعدادها، أو تثبيتها إن كان ملفها مختلفًا"
         updConnected = "متصلة"; updLastKnown = "غير متصلة · آخر رقم عُرف: {0}"; updOlder = "تحتاج تحديثًا: {0} ← {1}"; updSame = "محدّثة: {0}"; updNewer = "عليها {0}، أحدث مما يُرسل"
         updDownloading = "يُنزّل Awan TV {0} من GitHub…"; updNotOurs = "الملف المنزَّل غير موقّع بمفتاح Awan TV، فلم يُرسل إلى أي شاشة."; updWrongVersion = "الملف رقمه {0} لا {1}، فلم يُرسل."
         updOne = "يحدّث {0} ({1} من {2})…"; updDone = "حُدّثت إلى {0}"; updRetry = "أعد المحاولة لما فشل"
@@ -146,8 +146,8 @@ $Words = @{
         progDownload = "تنزيل Awan TV {0} من GitHub"; progLocal = "نسختك المبنية محليًا: Awan TV {0}"; progPct = "{0}% · {1} من {2} ميجابايت"; progRemain = " · بقي نحو {0}"
         progChecking = "التحقق من توقيع الملف…"; progLocalChecked = "موقّعة بمفتاح Awan TV"; progWait = "في الانتظار"; progStarting = "يبدأ…"
         progStep1 = "الخطوة 1 من 3: إرسال التطبيق إلى الشاشة وتثبيته… ({0})"; progStep2 = "الخطوة 2 من 3: الصلاحيات… ({0})"; progStep3 = "الخطوة 3 من 3: تشغيل خدمة Awan TV والتأكد منها… ({0})"
-        progTvDone = "حُدّثت إلى {0} · {1}"; progSkip = "لم تُحدَّث: أُوقف التحديث قبلها"; progStop = "إيقاف بعد هذه الشاشة"; progStopping = "يتوقف بعد الشاشة الجارية…"
-        progFoot = "الخطوات لكل شاشة: 1. إرسال التطبيق وتثبيته · 2. الصلاحيات · 3. تشغيل خدمة Awan TV والتأكد منها. لا يظهر شيء على الشاشات."; progSummary = "انتهى: حُدّثت {0} من {1}."
+        progTvDone = "حُدّثت إلى {0} · {1}"; progTvSetup = "أُعيد إعدادها، وعليها {0} كما هو (لم يُرسل الملف) · {1}"; progTvAgain = "أُعيد تثبيت {0} (ملف مختلف بالرقم نفسه) وإعدادها · {1}"; progSame = "عليها الملف نفسه، فلا يُرسل"; progSkip = "لم تُحدَّث: أُوقف التحديث قبلها"; progStop = "إيقاف بعد هذه الشاشة"; progStopping = "يتوقف بعد الشاشة الجارية…"
+        progFoot = "الخطوات لكل شاشة: 1. إرسال التطبيق وتثبيته (يُتخطّى إن كان عليها الملف نفسه) · 2. الصلاحيات · 3. تشغيل خدمة Awan TV والتأكد منها. لا يظهر شيء على الشاشات."; progSummary = "انتهى: حُدّثت {0} من {1}."; progSummaryDo = "انتهى: نجحت {0} من {1}."
     }
     en = @{
         title = "Awan TV · Settings editor"; source = "Source"; get = "Get from TV"; open = "Open file…"; refresh = "Refresh the TV list"
@@ -204,12 +204,12 @@ $Words = @{
         connFailed = "Could not connect ({0}). If the TV uses Wireless debugging, pair with it first:"
         pairTitle = "The TV asks to pair with this computer, once"; pairHow = "On the TV: Developer options > Wireless debugging > Pair device with pairing code. A window shows a six-digit code and a pairing port."
         pairPort = "Pairing port"; pairCode = "Code"; pairGo = "Pair and connect"; pairFailed = "Pairing did not work ({0}). Open the pairing window on the TV again: it shows a new code each time."
-        updTitle = "Update TVs"; updCheck = "⟳ Check the version"; updGo = "⤓ Update the ticked ({0})"; updChosenTitle = "Update the ticked ({0})"
+        updTitle = "Update TVs"; updCheck = "⟳ Check the version"; updGo = "⤓ Update the ticked ({0})"; updChosenTitle = "Update the ticked ({0})"; updGoDo = "⤓ Run on the ticked ({0})"; updChosenTitleDo = "On the ticked ({0})"
         updSource = "What is sent to the TVs"; updFromGithub = "Latest release: Awan TV {0} · from GitHub"; updChecked = "downloaded, checked as signed with Awan TV's key"
         updWillDownload = "downloaded at the update, its signature checked"; updNoGithub = "Could not ask GitHub just now ({0})"; updAsking = "Latest release: asking GitHub…"
         updFromLocal = "Your local build: Awan TV {0} · app\release\AwanTV.apk, Awan TV's key"; updTest = "test build"
         updSourceNote = "The second choice shows only when that file is there, signed with Awan TV's key. The editor keeps your choice for next time."
-        updPickOld = "Tick those needing an update"; updNote = "Tick what to update. The update asks the TV nothing; its settings and saved recitations stay."
+        updPickOld = "Tick those needing an update"; updNote = "Tick what to update, or an up-to-date TV to put it right. The TV is asked nothing; its settings and saved recitations stay."; updSameHint = "Ticked, it is set up again, or installed again if its file differs"
         updConnected = "Connected"; updLastKnown = "Not connected · last version seen: {0}"; updOlder = "Needs an update: {0} → {1}"; updSame = "Up to date: {0}"; updNewer = "Has {0}, newer than what is sent"
         updDownloading = "Downloading Awan TV {0} from GitHub…"; updNotOurs = "The downloaded file is not signed with Awan TV's key, so it was sent to no TV."; updWrongVersion = "The file is {0}, not {1}, so it was not sent."
         updOne = "Updating {0} ({1} of {2})…"; updDone = "updated to {0}"; updRetry = "Try again for those that failed"
@@ -218,8 +218,8 @@ $Words = @{
         progDownload = "Downloading Awan TV {0} from GitHub"; progLocal = "Your local build: Awan TV {0}"; progPct = "{0}% · {1} of {2} MB"; progRemain = " · about {0} left"
         progChecking = "Checking the file's signature…"; progLocalChecked = "Signed with Awan TV's key"; progWait = "Waiting"; progStarting = "Starting…"
         progStep1 = "Step 1 of 3: sending the app to the TV and installing it… ({0})"; progStep2 = "Step 2 of 3: permissions… ({0})"; progStep3 = "Step 3 of 3: starting Awan TV's service and checking it… ({0})"
-        progTvDone = "Updated to {0} · {1}"; progSkip = "Not updated: stopped before it"; progStop = "Stop after this TV"; progStopping = "Stopping after the TV in hand…"
-        progFoot = "Each TV: 1. the app sent and installed · 2. permissions · 3. Awan TV's service started and checked. Nothing shows on the TVs."; progSummary = "Finished: {0} of {1} updated."
+        progTvDone = "Updated to {0} · {1}"; progTvSetup = "Set up again; {0} stays as it was (the file not sent) · {1}"; progTvAgain = "{0} installed again (another file, same number) and set up · {1}"; progSame = "It has this very file, so nothing is sent"; progSkip = "Not updated: stopped before it"; progStop = "Stop after this TV"; progStopping = "Stopping after the TV in hand…"
+        progFoot = "Each TV: 1. the app sent and installed (skipped when it has this very file) · 2. permissions · 3. Awan TV's service started and checked. Nothing shows on the TVs."; progSummary = "Finished: {0} of {1} updated."; progSummaryDo = "Finished: {0} of {1} done."
     }
 }
 $EditorConfig = Join-Path $EditorDir "editor.json"
@@ -2094,16 +2094,32 @@ param($Job, $Adb, $ApkFns, $LogFile, $Pkg)
 function L([string]$t) { try { Add-Content -Path $LogFile -Value ("{0}  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $t) -Encoding UTF8 } catch { } }
 function A([string]$s, [string[]]$a) { $ErrorActionPreference = "Continue"; return (& $Adb -s $s @a 2>&1 | ForEach-Object { "$_" } | Out-String).Trim() }
 function Sh([string]$s, [string]$c) { return A $s @("shell", $c) }
-function Do-Tv($t, [string]$apk, [string]$want) {
+function Do-Tv($t, [string]$apk, [string]$want, [string]$hash) {
     $s = $t.Serial
     $t.Step = 1
-    $out = A $s @("install", "-r", $apk)
-    L "Update $($t.Id) to ${want}: $out"
-    if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") { return "otherKey" }
-    if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") { return "newerThere" }
-    if ($out -notmatch "Success") { return "failed:$out" }
-    # As AwanTV-install: Android may handle the update's force-stop a moment after the install answered.
-    Start-Sleep -Seconds 5
+    # The same version there (a ticked up-to-date TV): this very APK (by SHA-256, as AwanTV-install) is not sent again,
+    # only set up; another file with the same number (a local build) is installed again.
+    $onTv = [regex]::Match((Sh $s "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+    $t.Kind = "update"
+    if ($onTv -and $onTv -eq $want) {
+        $t.Kind = "reinstall"
+        $path = ((Sh $s "pm path $Pkg") -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -like "package:*" } | Select-Object -First 1) -replace "^package:", ""
+        if ($path -and $hash) {
+            $tvHash = ((Sh $s "sha256sum $path") -split "\s+")[0]
+            if ($tvHash -and $tvHash -eq $hash) { $t.Kind = "setup" }
+        }
+    }
+    if ($t.Kind -eq "setup") {
+        L "Set up $($t.Id) again: it has this very APK ($want)"
+    } else {
+        $out = A $s @("install", "-r", $apk)
+        L "$(if ($t.Kind -eq 'reinstall') { 'Install again' } else { 'Update' }) $($t.Id) to ${want}: $out"
+        if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") { return "otherKey" }
+        if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") { return "newerThere" }
+        if ($out -notmatch "Success") { return "failed:$out" }
+        # As AwanTV-install: Android may handle the update's force-stop a moment after the install answered.
+        Start-Sleep -Seconds 5
+    }
     $t.Step = 2
     $sdk = 0; [void][int]::TryParse((Sh $s "getprop ro.build.version.sdk"), [ref]$sdk)
     $storage = if ($sdk -ge 33) { @("READ_MEDIA_AUDIO") } elseif ($sdk -ge 30) { @("READ_EXTERNAL_STORAGE") } else { @("READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE") }
@@ -2156,11 +2172,14 @@ try {
     }
     $v = (Get-ApkVersion $path).Name
     if ($v -ne $Job.Want) { throw "wrongVersion:$v" }
+    $sha = [Security.Cryptography.SHA256]::Create()
+    $fs = [IO.File]::OpenRead($path)
+    try { $hash = -join ($sha.ComputeHash($fs) | ForEach-Object { $_.ToString("x2") }) } finally { $fs.Close(); $sha.Dispose() }
     $Job.Down = "done"
     foreach ($t in $Job.Tvs) {
         if ($Job.Stop) { $t.State = "skip"; continue }
         $t.State = "now"; $t.Started = [DateTime]::Now
-        try { $why = Do-Tv $t $path $Job.Want } catch { $why = "failed:" + $_.Exception.Message }
+        try { $why = Do-Tv $t $path $Job.Want $hash } catch { $why = "failed:" + $_.Exception.Message }
         $t.Seconds = [int]([DateTime]::Now - $t.Started).TotalSeconds
         if ($why) { $t.Why = $why; $t.State = "fail" } else { $t.State = "done" }
     }
@@ -2199,7 +2218,7 @@ function Show-Progress($job, [int]$count) {
     $dlg.Owner = $window; $dlg.WindowStartupLocation = "CenterOwner"
     try { $dlg.Icon = $window.Icon } catch { }
     $panel = New-Object Windows.Controls.StackPanel; $panel.Margin = "22,18"
-    $head = New-Object Windows.Controls.TextBlock; $head.Text = [string]::Format((W "updChosenTitle"), $count); $head.FontWeight = "SemiBold"; $head.FontSize = 16; $head.Margin = "0,0,0,8"
+    $head = New-Object Windows.Controls.TextBlock; $head.Text = [string]::Format((W $(if ($job.Fix) { "updChosenTitleDo" } else { "updChosenTitle" })), $count); $head.FontWeight = "SemiBold"; $head.FontSize = 16; $head.Margin = "0,0,0,8"
     [void]$panel.Children.Add($head)
     $mk = {
         param([string]$title)
@@ -2279,10 +2298,14 @@ function Fill-Progress {
             $sec = if ($t.Started) { [int]([DateTime]::Now - $t.Started).TotalSeconds } else { 0 }
             $key = @{ 1 = "progStep1"; 2 = "progStep2"; 3 = "progStep3" }[[int]$t.Step]
             $r.Sub.Text = if ($key) { [string]::Format((W $key), (Mmss $sec)) } else { W "progStarting" }
+            if ($t.Kind -eq "setup") { $r.Sub.Text = (W "progSame") + " · " + $r.Sub.Text }
         } else {
             $r.Bar.Visibility = "Collapsed"
             $r.Sub.Text = switch ($t.State) {
-                "done" { [string]::Format((W "progTvDone"), $j.Want, (Mmss $t.Seconds)) }
+                "done" {
+                    $doneKey = switch ([string]$t.Kind) { "setup" { "progTvSetup" } "reinstall" { "progTvAgain" } default { "progTvDone" } }
+                    [string]::Format((W $doneKey), $j.Want, (Mmss $t.Seconds))
+                }
                 "fail" { Upd-Why $t.Why }
                 "skip" { W "progSkip" }
                 default { W "progWait" }
@@ -2292,7 +2315,7 @@ function Fill-Progress {
     if ($j.Finished -and -not $p.Shown) {
         $p.Shown = $true
         $ok = @($p.Rows | Where-Object { $_.Tv.State -eq "done" }).Count
-        $p.Foot.Text = [string]::Format((W "progSummary"), $ok, $p.Rows.Count)
+        $p.Foot.Text = [string]::Format((W $(if ($j.Fix) { "progSummaryDo" } else { "progSummary" })), $ok, $p.Rows.Count)
         $p.Stop.Visibility = "Collapsed"; $p.Ok.Visibility = "Visible"; $p.Ok.IsDefault = $true; $p.Ok.IsCancel = $true
         if (@($p.Rows | Where-Object { $_.Tv.State -eq "fail" }).Count -gt 0) { $p.Retry.Visibility = "Visible" }
         Log "Update finished: $ok of $($p.Rows.Count)"
@@ -2310,9 +2333,9 @@ function Update-Chosen {
     $url = if ($local -or (Test-Path $path)) { $null } else { "https://github.com/OmarGHub/AwanTV/releases/download/v$want/AwanTV.apk" }
     New-Item -ItemType Directory -Force -Path $ApkDir | Out-Null
     $list = New-Object Collections.ArrayList
-    foreach ($tv in $tvs) { [void]$list.Add([hashtable]::Synchronized(@{ Id = $tv.Id; Name = (Name-Of $tv); Serial = $tv.Serial; State = "wait"; Step = 0; Started = $null; Seconds = 0; Why = $null })) }
+    foreach ($tv in $tvs) { [void]$list.Add([hashtable]::Synchronized(@{ Id = $tv.Id; Name = (Name-Of $tv); Serial = $tv.Serial; State = "wait"; Step = 0; Started = $null; Seconds = 0; Why = $null; Kind = $null })) }
     $job = [hashtable]::Synchronized(@{ Url = $url; Path = $path; Want = $want; Cert = $ReleaseCert; Local = $local; Down = "wait"; Done = [long]0; Total = [long]0
-        Started = [DateTime]::Now; Error = $null; Stop = $false; Finished = $false; Tvs = $list })
+        Started = [DateTime]::Now; Error = $null; Stop = $false; Finished = $false; Tvs = $list; Fix = (Upd-Fixing) })
     Log "Update $($tvs.Count) TV(s) to $want ($(if ($local) { 'local build' } else { 'GitHub' }))"
     $ps = [powershell]::Create()
     [void]$ps.AddScript($UpdWorker).AddArgument($job).AddArgument($script:Adb).AddArgument($ApkFns).AddArgument($LogFile).AddArgument($Pkg)
@@ -2329,6 +2352,11 @@ function Update-Chosen {
 }
 
 function Upd-Count { return @($script:Tvs | Where-Object { $_.Online -and $script:UpdChosen[$_.Id] }).Count }
+# Whether an up-to-date TV is among the ticked: the button and the window then say "Run on the ticked".
+function Upd-Fixing {
+    $w = Upd-Version
+    return [bool]@($script:Tvs | Where-Object { $_.Online -and $script:UpdChosen[$_.Id] -and $w -and $_.Version -eq $w }).Count
+}
 
 # Update TVs: what is sent (GitHub's release or the local build, the viewer's choice, kept), each TV's version, ticks.
 function Show-Update {
@@ -2341,7 +2369,7 @@ function Show-Update {
     $check.Add_Click({ Busy { Refresh-Tvs; Check-Release }; Show-Section $script:Section })
     $go = New-Object Windows.Controls.Button; $go.Style = $window.FindResource("Primary")
     $count = Upd-Count
-    $go.Content = [string]::Format((W "updGo"), $count); $go.IsEnabled = $count -gt 0 -and $null -ne (Upd-Version)
+    $go.Content = [string]::Format((W $(if (Upd-Fixing) { "updGoDo" } else { "updGo" })), $count); $go.IsEnabled = $count -gt 0 -and $null -ne (Upd-Version)
     $go.Add_Click({ Update-Chosen; Show-Section $script:Section })
     foreach ($b in @($connect, $check, $go)) { [void]$buttons.Children.Add($b) }
     [void]$top.Children.Add($buttons)
@@ -2400,8 +2428,11 @@ function Update-Card($tv, [string]$want) {
     $card.Padding = "16,10"; $card.Margin = "0,0,0,4"
     $dock = New-Object Windows.Controls.DockPanel
     $older = $tv.Online -and $tv.Version -and $want -and (Version-Less $tv.Version $want)
+    # Up to date: ticked, it is set up again (or installed again when its file differs). A newer one has no box: going
+    # back needs the app removed, which clears its settings (AwanTV-restore's job).
+    $same = $tv.Online -and $tv.Version -and $want -and $tv.Version -eq $want
     $cb = New-Object Windows.Controls.CheckBox; $cb.VerticalAlignment = "Center"; $cb.Margin = "0,0,14,0"; $cb.Tag = $tv
-    if ($older) {
+    if ($older -or $same) {
         $cb.IsChecked = [bool]$script:UpdChosen[$tv.Id]
         if ($cb.IsChecked) { $card.BorderBrush = Brush $Navy }
         $cb.Add_Click({ param($s, $e)
@@ -2427,6 +2458,10 @@ function Update-Card($tv, [string]$want) {
     elseif ($tv.Version -eq $want) { $l3.Text = [string]::Format((W "updSame"), $tv.Version); $color = "#1B6E3A" }
     else { $l3.Text = [string]::Format((W "updNewer"), $tv.Version) }
     $l3.Foreground = Brush $color
+    if ($same) {
+        $hint = New-Object Windows.Documents.Run ("  · " + (W "updSameHint")); $hint.Foreground = Brush "#5F5F5F"; $hint.FontSize = 12
+        $l3.Inlines.Add($hint)
+    }
     foreach ($l in @($l1, $l2, $l3)) { [void]$text.Children.Add($l) }
     [void]$dock.Children.Add($text)
     $card.Child = $dock
