@@ -6,7 +6,20 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Saved recitations from the settings editor: the export writes `awantv-library.json` beside the settings (storage,
+  saved and downloading recordings, the queue, the stations, the kept reciter list; no network), and a file sent may
+  carry "downloads" (each recording with its server, names and surahs, so a TV that never read the list takes it,
+  only from mp3quran.net's servers), queued as when picked on the TV. Nothing is deleted from the computer.
+- The station from the editor: any station this TV can play, a reciter channel in its list or a recording saved here
+  (or queued in the same file); otherwise it keeps its own and the answer says why. The answer to an import is now in
+  parts (" | "): settings changed, surahs queued, station kept.
+
 ### Tools
+- `AwanTV-editor` 1.1.0: a Saved recitations page after Radio (the source TV's storage, saved recordings, download and
+  queue; Add a recitation: reciter, recording, the whole Quran or chosen surahs, sent with Send) and the station as a
+  list by group (stations, reciter channels, the source TV's saved recordings, those added to download). A TV before
+  1.9.0 gets neither, and the result says so; "Save to file" carries no recordings and no saved station.
 - `AwanTV-editor` 1.0.1: a TV on a test build (1.8.0a) no longer stops the list of TVs with "Cannot convert value
   \"0a\" to type System.Int32"; such a version counts as older than its release, as in the app.
 

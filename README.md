@@ -184,6 +184,9 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Import -File
    أيضًا)، ولا يُكتب في الشاشات شيء منها.
 7. **لغة المحرر** لمستخدمه لا للشاشة: لغة Windows أول مرة، ثم مفتاح «ع / EN» أعلى النافذة (يُحفظ اختيارك)، وأسماء الإعدادات
    وشروحها تتبعه.
+8. **التلاوات المحفوظة والمحطة عن بعد** (من 1.9.0): صفحة «التلاوات المحفوظة» تعرض مساحة الشاشة وما حُفظ عليها وما يُحمَّل،
+   و«إضافة تلاوة» (القارئ، المصحف، القرآن كاملًا أو سور مختارة) تُرسل مع «إرسال» فتبدأ كل شاشة مختارة التحميل بنفسها.
+   والمحطة تُختار من قائمة الشاشة، والشاشة التي لا توجد عليها تبقي محطتها وتقول ذلك. الحذف من الشاشة نفسها فقط.
 
 **التراجع من الحاسب:**
 ```powershell
@@ -422,6 +425,10 @@ name on its own screen for 10 seconds. Names stay on the computer (`state\editor
 in Notepad); nothing is written to the TVs.
 The editor's language is its user's, not the TV's: Windows' display language at first, then the ع / EN switch at the
 top (kept); the settings' names and help follow it.
+Saved recitations and the station from the computer (1.9.0 on): the Saved recitations page shows the TV's storage, what
+it has and what it is downloading; Add a recitation (reciter, recording, the whole Quran or chosen surahs) goes with
+Send, and each TV chosen downloads it by itself. The station is picked from the TV's own list; a TV that doesn't have it
+keeps its own and says so. Deleting stays on the TV.
 Settings > About > Reset settings puts every setting back to a new install's (two confirmations: what goes and what
 stays, then OK held for three seconds) and starts from the location; saved recitations and the TV's earlier screensaver
 stay. The settings are kept on the TV first, one copy per reset (the last five; none when nothing but the location is

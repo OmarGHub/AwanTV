@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.0.1
+﻿# AwanTV-editor.ps1 - Version 1.1.0
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -21,7 +21,7 @@
 # describes them in both languages).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.0.1"
+$ScriptVersion = "1.1.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -90,6 +90,21 @@ $Words = @{
         connectFail = "تعذّر الاتصال بـ {0}. إن تغيّر عنوانها (التصحيح اللاسلكي يغيّر المنفذ)، صِلها بـ adb ثم اضغط تحديث."
         targetsNote = "◉ تعريف: يظهر اسمها على الشاشة نفسها 10 ثوانٍ · ✎ تسمية (تُحفظ في الحاسب)`nالاسم: تسميتك هنا، وإلا اسم الجهاز في إعدادات التلفاز، وإلا الطراز"
         tvsHeader = "شاشات Awan TV التي عرفها هذا الحاسب. ""name"" يُعدَّل هنا أو من المحرر (✎)؛ فارغ = اسم الجهاز في التلفاز أو طرازه. البقية يكتبها المحرر."
+        libTitle = "التلاوات المحفوظة"; storage = "المساحة على {0}"; storageLine = "فارغ {0} من {1} · يُترك {2} للتلفاز دائمًا"; gb = "{0} جيجابايت"
+        onTv = "على هذه الشاشة"; noneSaved = "لا تلاوات محفوظة عليها بعد"; complete = "كاملة: {0} سورة"; partial = "{0} سورة من {1}"; partialNoOf = "{0} سورة"
+        downloading = "يُحمَّل الآن: السورة {0}"; downloadingPct = "يُحمَّل الآن: السورة {0} ({1}%)"; queuedTag = "في قائمة التحميل: {0} سورة"; nowTag = "يُحمَّل"
+        waitingSpace = "التحميل متوقف: بقي في الشاشة أقل من {0} فارغة"; broken = "مدير التحميل في الشاشة رفض آخر تحميل (قد يكون مطفأً فيها)"
+        pendingHead = "يُرسل للتحميل مع «إرسال»"; pendingNote = "تبدأ كل شاشة مختارة في «إرسال إلى» التحميل بنفسها. الحذف من الشاشة نفسها: الإعدادات ← الإذاعة ← التلاوات المحفوظة."
+        addRec = "+ إضافة تلاوة…"; wholeQuran = "القرآن كاملًا: {0} سورة"; someSurahs = "{0} سورة: {1}"; noPending = "لا شيء بعد"
+        fileSource = "المصدر ملف: ما يُضاف هنا يُرسل مع «إرسال»، وقائمة القرّاء من آخر شاشة جُلبت منها الإعدادات."
+        noLibrary = "لا توجد قائمة قرّاء على هذا الحاسب بعد: اجلب الإعدادات من شاشة عليها Awan TV 1.9.0 أو أحدث."
+        noList = "قائمة القرّاء لم تُحفظ على الشاشة بعد، وهي تقرؤها الآن من mp3quran.net: اجلب الإعدادات مرة أخرى بعد دقيقة."
+        addTitle = "إضافة تلاوة"; stepReciter = "1. القارئ"; stepMoshaf = "2. المصحف"; stepWhat = "3. ما يُحمَّل"; allSurahs = "القرآن كاملًا: {0} سورة"; someChosen = "سور مختارة"
+        listFrom = "قائمة القرّاء من mp3quran.net كما تحفظها الشاشة"; addBtn = "إضافة"; pickSome = "اختر سورة واحدة على الأقل."; searchReciter = "ابحث عن قارئ"
+        gStations = "المحطات"; gReciters = "إذاعات القرّاء (mp3quran.net)"; gSaved = "التلاوات المحفوظة على {0}"; gComing = "تُرسل للتحميل الآن"; savedMark = "محفوظة"
+        noSettingChanged = "لم يتغيّر أي إعداد"; queuedSent = "أُضيف إلى قائمة التحميل: {0} سورة من {1} تلاوة"; queuedNone = "ما أُرسل محفوظ عليها أو في قائمة تحميلها من قبل"
+        keptSaved = "بقيت محطتها: «{0}» غير محفوظة عليها"; keptChannels = "بقيت محطتها: قائمة إذاعات القرّاء لم تُحفظ عليها بعد (تقرؤها الآن؛ أعد الإرسال بعد دقيقة)"; keptUnknown = "بقيت محطتها: «{0}» غير موجودة عليها"
+        olderNoLibrary = "على نسخة أقدم من 1.9.0: لم تُرسل إليها التلاوات ولا المحطة (حدّثها)"
     }
     en = @{
         title = "Awan TV · Settings editor"; source = "Source"; get = "Get from TV"; open = "Open file…"; refresh = "Refresh the TV list"
@@ -112,6 +127,21 @@ $Words = @{
         connectFail = "Could not connect to {0}. If its address changed (Wireless debugging changes the port), connect it with adb, then Refresh."
         targetsNote = "◉ Identify: its name on its own screen for 10 seconds · ✎ name it (kept on this computer)`nName: yours here, else the TV's device name, else its model"
         tvsHeader = "Awan TV's TVs this computer has met. Edit ""name"" here or in the editor (✎); empty = the TV's device name or model. The editor writes the rest."
+        libTitle = "Saved recitations"; storage = "Storage on {0}"; storageLine = "{0} free of {1} · {2} always left for the TV"; gb = "{0} GB"
+        onTv = "On this TV"; noneSaved = "No saved recitations on it yet"; complete = "Complete: {0} surahs"; partial = "{0} of {1} surahs"; partialNoOf = "{0} surahs"
+        downloading = "Downloading surah {0}"; downloadingPct = "Downloading surah {0} ({1}%)"; queuedTag = "Queued: {0} surahs"; nowTag = "Downloading"
+        waitingSpace = "Downloads paused: less than {0} left free on the TV"; broken = "The TV's download manager refused the last download (it may be turned off there)"
+        pendingHead = "To download with Send"; pendingNote = "Each TV chosen in Send to downloads them by itself. Deleting stays on the TV: Settings > Radio > Saved recitations."
+        addRec = "+ Add a recitation…"; wholeQuran = "The whole Quran: {0} surahs"; someSurahs = "{0} surahs: {1}"; noPending = "Nothing yet"
+        fileSource = "The source is a file: what you add here goes with Send, and the reciter list is the last TV's you got settings from."
+        noLibrary = "No reciter list on this computer yet: get the settings from a TV with Awan TV 1.9.0 or later."
+        noList = "The TV has no reciter list yet and is reading it from mp3quran.net now: get the settings again in a minute."
+        addTitle = "Add a recitation"; stepReciter = "1. Reciter"; stepMoshaf = "2. Recording"; stepWhat = "3. What to download"; allSurahs = "The whole Quran: {0} surahs"; someChosen = "Chosen surahs"
+        listFrom = "mp3quran.net's reciter list as the TV keeps it"; addBtn = "Add"; pickSome = "Choose at least one surah."; searchReciter = "Search for a reciter"
+        gStations = "Stations"; gReciters = "Reciter channels (mp3quran.net)"; gSaved = "Saved on {0}"; gComing = "Downloading with this Send"; savedMark = "saved"
+        noSettingChanged = "No setting changed"; queuedSent = "Queued {0} surah(s) of {1} recitation(s)"; queuedNone = "What was sent is already saved or queued there"
+        keptSaved = "Kept its station: {0} is not saved there"; keptChannels = "Kept its station: it has no reciter channel list yet (reading it now; send again in a minute)"; keptUnknown = "Kept its station: {0} is not there"
+        olderNoLibrary = "On a version before 1.9.0: recitations and the station were not sent (update it)"
     }
 }
 $EditorConfig = Join-Path $EditorDir "editor.json"
@@ -136,10 +166,23 @@ function Settings-Count([int]$n) {
 # The TV answers in English (its answers are also read in a terminal); the window shows the known ones in its own
 # language. Anything else (a refusal and its reasons) is shown as the TV said it.
 function Tv-Words([string]$answer) {
-    if ($answer -match '^Changed (\d+) setting\(s\)$') { return [string]::Format((W "changed"), (Settings-Count ([int]$Matches[1]))) }
-    if ($answer -like "Nothing to change*") { return (W "nothingToChange") }
-    if ($answer -eq "Shown on the TV") { return (W "shownOnTv") }
-    return $answer
+    # Since 1.9.0 an import answers in parts, " | " between them: each on its own line.
+    $parts = @($answer -split " \| ")
+    $out = foreach ($part in $parts) {
+        if ($part -match '^Changed (\d+) setting\(s\)$') { [string]::Format((W "changed"), (Settings-Count ([int]$Matches[1]))) }
+        elseif ($part -like "Nothing to change*") { W "nothingToChange" }
+        elseif ($part -eq "No setting changed") { W "noSettingChanged" }
+        elseif ($part -eq "Shown on the TV") { W "shownOnTv" }
+        elseif ($part -match '^Queued (\d+) surah\(s\) of (\d+) recitation\(s\)$') {
+            if ([int]$Matches[1] -eq 0) { W "queuedNone" } else { [string]::Format((W "queuedSent"), $Matches[1], $Matches[2]) }
+        }
+        elseif ($part -match '^Station kept: (saved|channels|unknown) (.+)$') {
+            $what = Station-Title $Matches[2]
+            switch ($Matches[1]) { "saved" { [string]::Format((W "keptSaved"), $what) } "channels" { W "keptChannels" } default { [string]::Format((W "keptUnknown"), $what) } }
+        }
+        else { $part }
+    }
+    return (@($out) -join "`n")
 }
 
 # ---------------------------------------------------------------- adb
@@ -314,7 +357,16 @@ function Export-Tv($tv, [string]$file) {
         [void](Adb $tv.Serial @("pull", $pair[1], $local))
         if ((Test-Path $local) -and -not $schema) { $schema = $local }
     }
-    return @{ File = $file; Schema = $schema }
+    # Its saved recitations and stations (1.9.0 on): kept per TV, for the Saved recitations page and the station list.
+    $library = $null
+    $remoteLib = "$Files/awantv-library.json"
+    if ((Shell $tv.Serial "test -f $remoteLib && echo yes") -eq "yes") {
+        $local = Join-Path $EditorDir ("library-$($tv.Id).json")
+        [void](Adb $tv.Serial @("pull", $remoteLib, $local))
+        [void](Shell $tv.Serial "rm -f $remoteLib")
+        if (Test-Path $local) { $library = $local }
+    }
+    return @{ File = $file; Schema = $schema; Library = $library }
 }
 
 # ---------------------------------------------------------------- files
@@ -388,6 +440,42 @@ $script:SourceVersion = $null
 $script:SourceText = ""
 $script:Views = @{ iqama = "days" }
 $script:Items = @{}          # key -> description item
+$script:Library = $null      # the source TV's awantv-library.json (1.9.0 on): stations, saved recitations, reciter list
+$script:LibraryLive = $false # read from the source TV just now (a file shows only the reciter list, from the last TV)
+$script:LibrarySource = ""   # the TV it came from, by name
+$script:Pending = New-Object Collections.ArrayList   # recordings to download with the next Send: @{ R = recording; Want = surahs or $null }
+
+function Read-Json([string]$path) { return ([IO.File]::ReadAllText($path, [Text.Encoding]::UTF8) | ConvertFrom-Json) }
+
+# A file opened: the reciter list (and stations) of the last TV got from, without its storage or saved ones.
+function Last-Library {
+    $f = @(Get-ChildItem $EditorDir -Filter "library-*.json" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1)
+    if ($f.Count -eq 0) { return $null }
+    try { return (Read-Json $f[0].FullName) } catch { return $null }
+}
+
+# Names in the window's language (English ones fall back to Arabic where mp3quran.net gives none).
+function Lang-Of($o, [string]$field) {
+    $en = [string]$o.("${field}_en"); $ar = [string]$o.("${field}_ar")
+    if ($field -eq "") { $en = [string]$o.en; $ar = [string]$o.ar }
+    if ($script:Lang -eq "en" -and $en) { return $en }
+    return $ar
+}
+function Rec-Title($r) {
+    $name = Lang-Of $r ""
+    $moshaf = Lang-Of $r "moshaf"
+    if ($moshaf) { return "$name · $moshaf" } else { return $name }
+}
+# A station id by its name, from the source TV's lists (the TV's answers name the id).
+function Station-Title([string]$id) {
+    if ($script:Library) {
+        foreach ($st in @($script:Library.stations)) { if ($st.id -eq $id) { return (Lang-Of $st "") } }
+    }
+    foreach ($p in $script:Pending) { if ("saved:$($p.R.key)" -eq $id) { return (Rec-Title $p.R) } }
+    return $id
+}
+function Gb([double]$bytes) { return [string]::Format((W "gb"), [Math]::Round($bytes / 1GB, 1).ToString("0.0")) }
+function Has-StationList { return ($script:Library -and @($script:Library.stations).Count -gt 0 -and $script:Items["station"] -and $script:Items["station"].kind -eq "station") }
 
 function Norm($item, $v) {
     if ($null -eq $v) { return $null }
@@ -422,6 +510,8 @@ function Use-Settings($fileObject, [string]$sourceText) {
     }
     $script:Orig = @{}
     foreach ($k in @($script:Values.Keys)) { $script:Orig[$k] = $script:Values[$k] }
+    # Recordings added for another source are not this one's.
+    $script:Pending.Clear()
     $script:SourceVersion = $version
     $script:SourceText = $sourceText
 }
@@ -430,11 +520,13 @@ function Changed-Count {
     $n = 0
     if (-not $script:Values) { return 0 }
     foreach ($k in @($script:Values.Keys)) { if (-not (Same $script:Values[$k] $script:Orig[$k])) { $n++ } }
-    return $n
+    return $n + $script:Pending.Count
 }
 
 # The file to send or save: the settings, a comment above each from the description, in the TV's order.
-function Build-File([string[]]$onlyKeys) {
+# $forFile: a saved recitation as the station stays out (it plays on its own TV only). $downloads: the recordings to
+# queue, sent to a TV only (Saved recitations).
+function Build-File([string[]]$onlyKeys, [bool]$forFile = $false, [object[]]$downloads = @()) {
     $lines = New-Object Collections.Generic.List[string]
     $lines.Add("// Awan TV settings · AwanTV-editor v$ScriptVersion · $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
     $lines.Add("{")
@@ -447,10 +539,21 @@ function Build-File([string[]]$onlyKeys) {
             if (-not $script:Values.Contains($it.key)) { continue }
             if ($onlyKeys -and ($onlyKeys -notcontains $it.key)) { continue }
             $v = $script:Values[$it.key]
+            if ($forFile -and $it.key -eq "station" -and "$v" -like "saved:*") { continue }
             $json = if ($it.kind -eq "list") { ConvertTo-Json -InputObject @($v) -Compress } else { ConvertTo-Json -InputObject $v -Compress -Depth 5 }
             $body.Add("  // $($it.label)")
             $body.Add("  ""$($it.key)"": $json")
         }
+    }
+    if ($downloads.Count -gt 0) {
+        $list = @(foreach ($d in $downloads) {
+            $o = [ordered]@{ id = [int]$d.R.id; moshaf = [int]$d.R.moshaf; ar = [string]$d.R.ar; en = [string]$d.R.en
+                moshaf_ar = [string]$d.R.moshaf_ar; moshaf_en = [string]$d.R.moshaf_en; server = [string]$d.R.server; surahs = @($d.R.surahs | ForEach-Object { [int]$_ }) }
+            if ($d.Want) { $o.want = @($d.Want | ForEach-Object { [int]$_ }) }
+            $o
+        })
+        $body.Add("  // $(W 'libTitle')")
+        $body.Add("  ""downloads"": " + (ConvertTo-Json -InputObject $list -Compress -Depth 5))
     }
     # Keys the description does not know ($script:Extra: a file from a newer version) are left out: the TV would
     # refuse the whole file for one setting it does not know.
@@ -927,7 +1030,8 @@ function Control-For($it) {
     $key = $it.key
     $v = $script:Values[$key]
     if ($null -eq $v) { $v = $it.default }
-    if ($it.readonly -or $it.kind -eq "city" -or $it.kind -eq "string") {
+    if ($it.kind -eq "station" -and (Has-StationList)) { return (Station-Control) }
+    if ($it.readonly -or $it.kind -eq "city" -or $it.kind -eq "string" -or $it.kind -eq "station") {
         $tb = New-Object Windows.Controls.TextBlock
         $shown = if ($it.kind -eq "city") { $v.name } else { "$v" }
         $tb.Text = "$shown  ·  $(W 'readonly')"; $tb.Foreground = Brush "#5F5F5F"
@@ -1040,12 +1144,245 @@ function List-Control($it, [string[]]$current) {
     return $panel
 }
 
+# The station, by group as Settings > Radio lists them, from the source TV (awantv-library.json); then the recordings
+# added to download with this Send. Each TV checks the one sent and keeps its own when it does not have it.
+function Station-Control {
+    $cur = $script:Values["station"]
+    if ($null -eq $cur) { $cur = [string]$script:Library.station }
+    $cb = New-Object Windows.Controls.ComboBox; $cb.MinWidth = 340; $cb.MaxDropDownHeight = 560
+    $add = {
+        param($text, $tag, [bool]$header)
+        $ci = New-Object Windows.Controls.ComboBoxItem; $ci.Content = $text; $ci.Tag = $tag
+        if ($header) { $ci.IsEnabled = $false; $ci.FontSize = 12; $ci.FontWeight = "SemiBold"; $ci.Foreground = Brush "#5F5F5F" }
+        [void]$cb.Items.Add($ci)
+        if (-not $header -and "$tag" -eq "$cur") { $cb.SelectedItem = $ci }
+    }
+    $groups = @(@("stations", (W "gStations")), @("reciters", (W "gReciters")), @("saved", [string]::Format((W "gSaved"), $script:LibrarySource)))
+    foreach ($g in $groups) {
+        # A file's source: another TV's saved recordings are not a choice here.
+        if ($g[0] -eq "saved" -and -not $script:LibraryLive) { continue }
+        $list = @($script:Library.stations | Where-Object { $_.group -eq $g[0] })
+        if ($list.Count -eq 0) { continue }
+        & $add $g[1] $null $true
+        foreach ($st in $list) {
+            $text = Lang-Of $st ""
+            if ($g[0] -eq "stations") { $where = Lang-Of $st "where"; if ($where) { $text = "$text · $where" } }
+            if ($g[0] -eq "saved") { $m = Lang-Of $st "moshaf"; if ($m) { $text = "$text · $m" }; $text = "$text ($(W 'savedMark'))" }
+            & $add $text $st.id $false
+        }
+    }
+    if ($script:Pending.Count -gt 0) {
+        & $add (W "gComing") $null $true
+        foreach ($p in $script:Pending) { & $add (Rec-Title $p.R) "saved:$($p.R.key)" $false }
+    }
+    # The current one when none of the lists has it (a channel gone from mp3quran.net): shown as it is.
+    if ($null -eq $cb.SelectedItem -and $cur) { & $add (Station-Title $cur) $cur $false }
+    $cb.Tag = "$cur"
+    $cb.Add_SelectionChanged({
+        param($s, $e)
+        if ($s.SelectedItem -and $s.SelectedItem.Tag -and "$($s.SelectedItem.Tag)" -ne $s.Tag) { Set-Value "station" ([string]$s.SelectedItem.Tag) }
+    })
+    return $cb
+}
+
+function Note-Line([string]$text, [string]$color = "#5F5F5F") {
+    $t = New-Object Windows.Controls.TextBlock; $t.Text = $text; $t.TextWrapping = "Wrap"; $t.Foreground = Brush $color; $t.FontSize = 12; $t.Margin = "4,2,4,8"
+    [void]$ui.Rows.Children.Add($t)
+}
+function Head-Line([string]$text, $control = $null) {
+    $d = New-Object Windows.Controls.DockPanel; $d.Margin = "0,14,0,6"
+    if ($control) { [Windows.Controls.DockPanel]::SetDock($control, "Right"); [void]$d.Children.Add($control) }
+    $t = New-Object Windows.Controls.TextBlock; $t.Text = $text; $t.FontWeight = "SemiBold"; $t.VerticalAlignment = "Center"
+    [void]$d.Children.Add($t)
+    [void]$ui.Rows.Children.Add($d)
+}
+function Tag-Text([string]$text, [string]$color = "#0C1B33", [string]$back = "#EEF2F8") {
+    $b = New-Object Windows.Controls.Border; $b.CornerRadius = 10; $b.Padding = "10,3"; $b.Background = Brush $back
+    $t = New-Object Windows.Controls.TextBlock; $t.Text = $text; $t.FontSize = 12; $t.Foreground = Brush $color
+    $b.Child = $t
+    return $b
+}
+
+# Saved recitations: the source TV's storage, what it has, downloads and queue; then what goes with the next Send.
+function Show-Library {
+    $L = $script:Library
+    $head = New-Object Windows.Controls.TextBlock; $head.Text = W "libTitle"; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.Margin = "0,0,0,12"
+    [void]$ui.Rows.Children.Add($head)
+    if (-not $L) { Note-Line (W "noLibrary"); return }
+    if ($script:LibraryLive) {
+        $bar = New-Object Windows.Controls.ProgressBar; $bar.Width = 260; $bar.Height = 8; $bar.Minimum = 0; $bar.Maximum = 100
+        $total = [double]$L.total; $free = [double]$L.free
+        if ($total -gt 0) { $bar.Value = [Math]::Round(100 * ($total - $free) / $total) }
+        $bar.Foreground = Brush $Navy
+        [void]$ui.Rows.Children.Add((Row ([string]::Format((W "storage"), $script:LibrarySource)) ([string]::Format((W "storageLine"), (Gb $free), (Gb $total), (Gb ([double]$L.reserve)))) $bar $false))
+        if ($L.waiting_space) { Note-Line ([string]::Format((W "waitingSpace"), (Gb ([double]$L.reserve)))) $Gold }
+        if ($L.broken) { Note-Line (W "broken") $Gold }
+        Head-Line (W "onTv")
+        $rows = 0
+        $queued = @{}
+        foreach ($q in @($L.queue)) { $queued[$q.key] = [int]$q.count }
+        $nowKey = if ($L.current) { [string]$L.current.key } else { "" }
+        foreach ($r in @($L.saved)) {
+            $tag = if ([int]$r.of -gt 0 -and [int]$r.count -ge [int]$r.of) { [string]::Format((W "complete"), $r.count) }
+                   elseif ([int]$r.of -gt 0) { [string]::Format((W "partial"), $r.count, $r.of) } else { [string]::Format((W "partialNoOf"), $r.count) }
+            $help = Lang-Of $r "moshaf"
+            $color = "#0C1B33"; $back = "#EEF2F8"
+            if ($r.key -eq $nowKey) {
+                $help = "$help · " + $(if ([int]$L.current.percent -ge 0) { [string]::Format((W "downloadingPct"), $L.current.surah, $L.current.percent) } else { [string]::Format((W "downloading"), $L.current.surah) })
+                $tag = W "nowTag"; $color = "#7A5A14"; $back = "#F6EEDC"
+            }
+            if ($queued.ContainsKey($r.key)) { $help = "$help · " + [string]::Format((W "queuedTag"), $queued[$r.key]); $queued.Remove($r.key) }
+            [void]$ui.Rows.Children.Add((Row (Lang-Of $r "") $help (Tag-Text $tag $color $back) $false)); $rows++
+        }
+        # Downloading or queued and nothing saved yet.
+        if ($L.current -and -not (@($L.saved | Where-Object { $_.key -eq $nowKey }).Count)) {
+            $help = (Lang-Of $L.current "moshaf") + " · " + $(if ([int]$L.current.percent -ge 0) { [string]::Format((W "downloadingPct"), $L.current.surah, $L.current.percent) } else { [string]::Format((W "downloading"), $L.current.surah) })
+            if ($queued.ContainsKey($nowKey)) { $help = "$help · " + [string]::Format((W "queuedTag"), $queued[$nowKey]); $queued.Remove($nowKey) }
+            [void]$ui.Rows.Children.Add((Row (Lang-Of $L.current "") $help (Tag-Text (W "nowTag") "#7A5A14" "#F6EEDC") $false)); $rows++
+        }
+        foreach ($q in @($L.queue)) {
+            if (-not $queued.ContainsKey($q.key)) { continue }
+            [void]$ui.Rows.Children.Add((Row (Lang-Of $q "") (Lang-Of $q "moshaf") (Tag-Text ([string]::Format((W "queuedTag"), $q.count))) $false)); $rows++
+        }
+        if ($rows -eq 0) { Note-Line (W "noneSaved") }
+    } else {
+        Note-Line (W "fileSource")
+    }
+    $addBtn = New-Object Windows.Controls.Button; $addBtn.Content = W "addRec"; $addBtn.Style = $window.FindResource("Primary")
+    $addBtn.IsEnabled = @($L.reciters).Count -gt 0
+    $addBtn.Add_Click({ $pick = Show-AddRecitation; if ($pick) { [void]$script:Pending.Add($pick); Show-Section $script:Section } })
+    Head-Line (W "pendingHead") $addBtn
+    Note-Line (W "pendingNote")
+    if (@($L.reciters).Count -eq 0) { Note-Line (W "noList") $Gold }
+    if ($script:Pending.Count -eq 0) { Note-Line (W "noPending") }
+    $names = if ($script:Lang -eq "en") { @($L.suwar_en) } else { @($L.suwar_ar) }
+    for ($i = 0; $i -lt $script:Pending.Count; $i++) {
+        $p = $script:Pending[$i]
+        if ($p.Want) {
+            $shown = @($p.Want | Select-Object -First 6 | ForEach-Object { if ($names[$_]) { $names[$_] } else { "$_" } }) -join "، "
+            if (@($p.Want).Count -gt 6) { $shown += "…" }
+            $what = [string]::Format((W "someSurahs"), @($p.Want).Count, $shown)
+        } else { $what = [string]::Format((W "wholeQuran"), @($p.R.surahs).Count) }
+        $x = New-Object Windows.Controls.Button; $x.Content = "✕"; $x.Style = $window.FindResource("Btn"); $x.Padding = "8,2"; $x.Tag = $i
+        $x.Add_Click({ param($s, $e) $script:Pending.RemoveAt([int]$s.Tag); Show-Section $script:Section })
+        [void]$ui.Rows.Children.Add((Row (Lang-Of $p.R "") ((Lang-Of $p.R "moshaf") + " · " + $what) $x $true))
+    }
+}
+
+# Add a recitation: reciter (searched), recording, the whole Quran or chosen surahs. Returns @{ R; Want } or $null.
+function Show-AddRecitation {
+    $L = $script:Library
+    $dlg = New-Object Windows.Window
+    $dlg.Title = "Awan TV · " + (W "addTitle"); $dlg.Width = 760; $dlg.Height = 760; $dlg.ShowInTaskbar = $false; $dlg.ResizeMode = "CanResizeWithGrip"
+    $dlg.Background = Brush "#F9F9F9"; $dlg.FontFamily = $window.FontFamily; $dlg.FontSize = 14; $dlg.FlowDirection = $window.FlowDirection
+    $dlg.Owner = $window; $dlg.WindowStartupLocation = "CenterOwner"
+    try { $dlg.Icon = $window.Icon } catch { }
+    $script:AddState = @{ Result = $null; Recs = @($L.reciters); Rec = $null; Names = $(if ($script:Lang -eq "en") { @($L.suwar_en) } else { @($L.suwar_ar) }) }
+    $root = New-Object Windows.Controls.DockPanel; $root.Margin = "20,16"
+    $bar = New-Object Windows.Controls.StackPanel; $bar.Orientation = "Horizontal"; $bar.HorizontalAlignment = "Right"; $bar.Margin = "0,12,0,0"
+    [Windows.Controls.DockPanel]::SetDock($bar, "Bottom")
+    $ok = New-Object Windows.Controls.Button; $ok.Content = W "addBtn"; $ok.Style = $window.FindResource("Primary"); $ok.IsDefault = $true; $ok.IsEnabled = $false
+    $cancel = New-Object Windows.Controls.Button; $cancel.Content = W "cancel"; $cancel.Style = $window.FindResource("Btn"); $cancel.IsCancel = $true
+    [void]$bar.Children.Add($ok); [void]$bar.Children.Add($cancel)
+    [void]$root.Children.Add($bar)
+    $body = New-Object Windows.Controls.Grid
+    foreach ($h in @("Auto", "Auto", "160", "Auto", "Auto", "Auto", "Auto", "Auto", "Auto", "*")) {
+        $rd = New-Object Windows.Controls.RowDefinition; $rd.Height = (New-Object Windows.GridLengthConverter).ConvertFromString($h); [void]$body.RowDefinitions.Add($rd)
+    }
+    $cell = { param($el, [int]$row) [Windows.Controls.Grid]::SetRow($el, $row); [void]$body.Children.Add($el) }
+    $label = { param($text) $t = New-Object Windows.Controls.TextBlock; $t.Text = $text; $t.FontWeight = "SemiBold"; $t.Margin = "0,10,0,4"; return $t }
+    & $cell (& $label (W "stepReciter")) 0
+    $search = New-Object Windows.Controls.TextBox; $search.Height = 30; $search.VerticalContentAlignment = "Center"; $search.Padding = "6,0"; $search.ToolTip = W "searchReciter"
+    & $cell $search 1
+    $people = New-Object Windows.Controls.ListBox; $people.Margin = "0,4,0,0"
+    & $cell $people 2
+    $from = New-Object Windows.Controls.TextBlock; $from.Text = W "listFrom"; $from.FontSize = 11; $from.Foreground = Brush "#5F5F5F"
+    & $cell $from 3
+    & $cell (& $label (W "stepMoshaf")) 4
+    $moshafs = New-Object Windows.Controls.StackPanel
+    & $cell $moshafs 5
+    & $cell (& $label (W "stepWhat")) 6
+    $whole = New-Object Windows.Controls.RadioButton; $whole.GroupName = "what"; $whole.IsChecked = $true; $whole.Margin = "0,2"
+    $some = New-Object Windows.Controls.RadioButton; $some.GroupName = "what"; $some.Content = W "someChosen"; $some.Margin = "0,2"
+    $whatPanel = New-Object Windows.Controls.StackPanel; [void]$whatPanel.Children.Add($whole); [void]$whatPanel.Children.Add($some)
+    & $cell $whatPanel 7
+    $surahScroll = New-Object Windows.Controls.ScrollViewer; $surahScroll.VerticalScrollBarVisibility = "Auto"; $surahScroll.Margin = "0,4,0,0"; $surahScroll.IsEnabled = $false
+    $surahGrid = New-Object Windows.Controls.Primitives.UniformGrid; $surahGrid.Columns = 3
+    $surahScroll.Content = $surahGrid
+    & $cell $surahScroll 9
+    [void]$root.Children.Add($body)
+    $dlg.Content = $root
+    $script:AddState.People = $people; $script:AddState.Moshafs = $moshafs; $script:AddState.Grid = $surahGrid; $script:AddState.Scroll = $surahScroll; $script:AddState.Whole = $whole; $script:AddState.Some = $some; $script:AddState.Ok = $ok; $script:AddState.Search = $search
+
+    # The reciters by name (one line each), filtered by the search. Handlers read $script:AddState: WPF calls them later.
+    $script:AddState.Fill = {
+        $script:AddState.People.Items.Clear()
+        $seen = @{}
+        $q = $script:AddState.Search.Text.Trim()
+        foreach ($r in $script:AddState.Recs) {
+            if ($seen.ContainsKey([string]$r.id)) { continue }
+            $name = Lang-Of $r ""
+            if ($q -and $name -notlike "*$q*" -and [string]$r.ar -notlike "*$q*" -and [string]$r.en -notlike "*$q*") { continue }
+            $seen[[string]$r.id] = $true
+            $li = New-Object Windows.Controls.ListBoxItem; $li.Content = $name; $li.Tag = [int]$r.id; $li.Padding = "8,4"
+            [void]$script:AddState.People.Items.Add($li)
+        }
+    }
+    # A recording chosen: its surahs as boxes, the whole Quran's count on the first choice.
+    $script:AddState.ShowRec = {
+        $script:AddState.Grid.Children.Clear()
+        $r = $script:AddState.Rec
+        $script:AddState.Ok.IsEnabled = $null -ne $r
+        if (-not $r) { $script:AddState.Whole.Content = [string]::Format((W "allSurahs"), 0); return }
+        $script:AddState.Whole.Content = [string]::Format((W "allSurahs"), @($r.surahs).Count)
+        foreach ($n in @($r.surahs)) {
+            $cb = New-Object Windows.Controls.CheckBox; $cb.Tag = [int]$n; $cb.Margin = "0,2"; $cb.FontSize = 13
+            $name = $script:AddState.Names[[int]$n]; $cb.Content = if ($name) { "$n. $name" } else { "$n" }
+            [void]$script:AddState.Grid.Children.Add($cb)
+        }
+    }
+    $search.Add_TextChanged({ & $script:AddState.Fill })
+    $people.Add_SelectionChanged({
+        $script:AddState.Moshafs.Children.Clear(); $script:AddState.Rec = $null
+        $li = $script:AddState.People.SelectedItem
+        if ($li) {
+            $first = $true
+            foreach ($r in @($script:AddState.Recs | Where-Object { [int]$_.id -eq [int]$li.Tag })) {
+                $rb = New-Object Windows.Controls.RadioButton; $rb.GroupName = "moshaf"; $rb.Margin = "0,2"; $rb.Tag = $r
+                $m = Lang-Of $r "moshaf"; $rb.Content = if ($m) { $m } else { [string]$r.key }
+                $rb.Add_Checked({ param($s, $e) $script:AddState.Rec = $s.Tag; & $script:AddState.ShowRec })
+                [void]$script:AddState.Moshafs.Children.Add($rb)
+                if ($first) { $rb.IsChecked = $true; $first = $false }
+            }
+        }
+        if (-not $script:AddState.Rec) { & $script:AddState.ShowRec }
+    })
+    $some.Add_Checked({ $script:AddState.Scroll.IsEnabled = $true })
+    $whole.Add_Checked({ $script:AddState.Scroll.IsEnabled = $false })
+    $ok.Add_Click({
+        $want = $null
+        if ($script:AddState.Some.IsChecked) {
+            $want = @($script:AddState.Grid.Children | Where-Object { $_.IsChecked } | ForEach-Object { [int]$_.Tag })
+            if ($want.Count -eq 0) { [void](Show-Dialog "Awan TV" @(@{ Text = (W "pickSome") }) "warn" @((W "okBtn"))); return }
+        }
+        $script:AddState.Result = @{ R = $script:AddState.Rec; Want = $want }
+        [Windows.Window]::GetWindow($this).Close()
+    })
+    & $script:AddState.Fill
+    & $script:AddState.ShowRec
+    [void]$dlg.ShowDialog()
+    return $script:AddState.Result
+}
+
 $script:Section = 0
+$script:NavMap = New-Object Collections.ArrayList   # each nav line: a section's index, or -1 for Saved recitations
 function Show-Section([int]$index) {
     $script:Section = $index
     $ui.Rows.Children.Clear()
     if (-not $script:Schema) { Update-Chrome; return }
-    $sec = $script:Schema.sections[$index]
+    $target = if ($index -ge 0 -and $index -lt $script:NavMap.Count) { [int]$script:NavMap[$index] } else { 0 }
+    if ($target -eq -1) { Show-Library; Update-Chrome; return }
+    $sec = $script:Schema.sections[$target]
     $head = New-Object Windows.Controls.TextBlock; $head.Text = $sec.label; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.Margin = "0,0,0,12"
     [void]$ui.Rows.Children.Add($head)
     $viewShown = @{}
@@ -1099,9 +1436,16 @@ Show-Section `$script:Section
 
 function Fill-Nav {
     $ui.Nav.Items.Clear()
-    foreach ($sec in $script:Schema.sections) {
-        $li = New-Object Windows.Controls.ListBoxItem; $li.Content = $sec.label; $li.Padding = "12,8"; $li.FontSize = 14
-        [void]$ui.Nav.Items.Add($li)
+    $script:NavMap.Clear()
+    $sections = @($script:Schema.sections)
+    for ($i = 0; $i -lt $sections.Count; $i++) {
+        $li = New-Object Windows.Controls.ListBoxItem; $li.Content = $sections[$i].label; $li.Padding = "12,8"; $li.FontSize = 14
+        [void]$ui.Nav.Items.Add($li); [void]$script:NavMap.Add($i)
+        # Saved recitations after Radio, as on the TV, for a source on 1.9.0 or later.
+        if ($sections[$i].id -eq "radio" -and $script:Items["station"] -and $script:Items["station"].kind -eq "station") {
+            $li = New-Object Windows.Controls.ListBoxItem; $li.Content = W "libTitle"; $li.Padding = "12,8"; $li.FontSize = 14
+            [void]$ui.Nav.Items.Add($li); [void]$script:NavMap.Add(-1)
+        }
     }
     $ui.Nav.SelectedIndex = [Math]::Min($script:Section, $ui.Nav.Items.Count - 1)
 }
@@ -1127,6 +1471,9 @@ $ui.GetBtn.Add_Click({
         $file = Join-Path $SettingsDir ("awantv-settings-$($tv.Id)-$(Stamp).jsonc")
         $got = Export-Tv $tv $file
         Use-Settings (Read-Settings $got.File) ("$(Name-Of $tv) · v$($tv.Version) · $(Get-Date -Format 'HH:mm')")
+        $script:Library = if ($got.Library) { Read-Json $got.Library } else { $null }
+        $script:LibraryLive = $null -ne $script:Library
+        $script:LibrarySource = Name-Of $tv
         Log "Got the settings from $($tv.Id) (v$($tv.Version)) into $file"
         Loaded
     }
@@ -1139,6 +1486,9 @@ function Open-From([string]$dir, [string]$filter) {
     if ($dlg.ShowDialog($window)) {
         Busy {
             Use-Settings (Read-Settings $dlg.FileName) ([IO.Path]::GetFileName($dlg.FileName))
+            $script:Library = Last-Library
+            $script:LibraryLive = $false
+            $script:LibrarySource = ""
             Log "Opened $($dlg.FileName)"
             Loaded
         }
@@ -1174,7 +1524,7 @@ $ui.SaveBtn.Add_Click({
     $dlg.Filter = "Awan TV (*.jsonc)|*.jsonc"
     if ($dlg.ShowDialog($window)) {
         Busy {
-            Write-Utf8 $dlg.FileName (Build-File $null)
+            Write-Utf8 $dlg.FileName (Build-File $null $true)
             foreach ($k in @($script:Values.Keys)) { $script:Orig[$k] = $script:Values[$k] }
             Log "Saved $($dlg.FileName)"
             Show-Section $script:Section
@@ -1194,18 +1544,22 @@ $ui.SendBtn.Add_Click({
                 $backup = Join-Path $SettingsDir ("awantv-backup-$($tv.Id)-$(Stamp).jsonc")
                 $got = Export-Tv $tv $backup
                 # A TV with an older version: only what it knows (its own description), the rest named as skipped.
-                $only = $null; $skipped = 0
+                $only = $null; $skipped = 0; $knows = $false
                 if ($got.Schema) {
                     $ts = [IO.File]::ReadAllText($got.Schema, [Text.Encoding]::UTF8) | ConvertFrom-Json
-                    $only = @(foreach ($sec in $ts.sections) { foreach ($it in $sec.items) { $it.key } })
-                    $skipped = @($script:Values.Keys | Where-Object { $only -notcontains $_ }).Count
+                    $only = @(foreach ($sec in $ts.sections) { foreach ($it in $sec.items) { $it.key; if ($it.key -eq "station" -and $it.kind -eq "station") { $knows = $true } } })
+                    # Before 1.9.0 a TV takes no recordings, and no station it has not got (it falls back to Cairo).
+                    if (-not $knows) { $only = @($only | Where-Object { $_ -ne "station" }) }
+                    $skipped = @($script:Values.Keys | Where-Object { $only -notcontains $_ -and $_ -ne "station" }).Count
                 }
+                $downloads = if ($knows) { @($script:Pending) } else { @() }
                 $payload = Join-Path $EditorDir "send.jsonc"
-                Write-Utf8 $payload (Build-File $only)
+                Write-Utf8 $payload (Build-File $only $false $downloads)
                 [void](Shell $tv.Serial "mkdir -p $Files")
                 [void](Adb $tv.Serial @("push", $payload, $Remote))
                 try { $answer = Tv-Words (Send-Action $tv.Serial "$Pkg.IMPORT") } finally { [void](Shell $tv.Serial "rm -f $Remote") }
                 if ($skipped -gt 0) { $answer += "`n" + [string]::Format((W "skipped"), $skipped) }
+                if (-not $knows -and ($script:Pending.Count -gt 0 -or -not (Same $script:Values["station"] $script:Orig["station"]))) { $answer += "`n" + (W "olderNoLibrary") }
                 $results += @{ Title = "$n. $name"; Text = $answer }
                 Log "Sent to $($tv.Id): $answer (backup $backup)"
             } catch {
@@ -1214,6 +1568,8 @@ $ui.SendBtn.Add_Click({
             }
         }
         foreach ($k in @($script:Values.Keys)) { $script:Orig[$k] = $script:Values[$k] }
+        # Sent: the recordings are each TV's to download now (Get from TV shows how far).
+        if ($n -gt 0) { $script:Pending.Clear() }
         Show-Section $script:Section
         [void](Show-Dialog (W "sent") $results "info" @((W "okBtn")))
     }

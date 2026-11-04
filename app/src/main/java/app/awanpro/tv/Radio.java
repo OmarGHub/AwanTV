@@ -126,6 +126,26 @@ final class Radio {
         return s != null ? s : STATIONS[0];
     }
 
+    /**
+     * Why this TV can't play a station sent from the settings editor, or null when it can: one of {@link #STATIONS},
+     * a reciter channel in its kept list, or a recording saved here or in {@code coming} (queued with it, played as
+     * its surahs arrive). "saved": not saved on this TV; "channels": the reciter channels' list is not kept here yet
+     * (a read starts); "unknown": none of these.
+     */
+    static String missing(Context c, String id, java.util.Set<String> coming) {
+        if (id.startsWith(SAVED)) {
+            String key = id.substring(SAVED.length());
+            return Library.savedSurahs(c, key).length > 0 || coming.contains(key) ? null : "saved";
+        }
+        for (Station s : STATIONS) if (s.id.equals(id)) return null;
+        if (Radios.find(c, id) != null) return null;
+        if (Radios.extra(c).isEmpty()) {
+            Radios.refresh(c);
+            return "channels";
+        }
+        return "unknown";
+    }
+
     /** Picks any station by its id (one of mp3quran.net's other reciter channels, say). */
     static void switchToId(Context c, String id) {
         savePlace();

@@ -61,7 +61,7 @@ final class SettingsFile {
          * rows: "iqama:days" or "iqama:ramadan"); one of a pair shown as one row ({@code combo}); read only there;
          * where it is on the TV when not in Settings.
          */
-        String whenKey, view, combo, note;
+        String whenKey, view, combo, note, kind;
         Object[] whenIn;
         boolean whenNot, readonly;
 
@@ -83,6 +83,8 @@ final class SettingsFile {
         Item view(String v) { view = v; return this; }
         Item combo(String g) { combo = g; return this; }
         Item readonly() { readonly = true; return this; }
+        /** The editor's own kind for it ("station": a list from the TV's awantv-library.json). */
+        Item kind(String k) { kind = k; return this; }
         Item note(String n) { note = n; return this; }
     }
 
@@ -181,8 +183,9 @@ final class SettingsFile {
         out.add(new Item("fast_reminder", BOOL, t.fastRow()).help(t.fastHelp()).def(true));
 
         // Radio
+        // The editor lists the TV's stations (LibraryRemote.state); each TV checks one sent to it (Radio.missing).
         Item station = new Item("station", STRING, t.stationRow()).help(t.stationFileHelp()).def("cairo").section("radio", t.sectionRadio())
-            .readonly();
+            .kind("station");
         out.add(station);
         out.add(new Item("radio_resume", BOOL, t.radioResumeRowFile()).choices(null, t.afterAdhanChoices()).def(true));
         out.add(new Item("radio_dark", INT_CHOICE, t.radioDarkRow())
@@ -354,7 +357,7 @@ final class SettingsFile {
             }
             JSONObject o = new JSONObject();
             o.put("key", it.key);
-            o.put("kind", new String[] {"bool", "choice", "choice", "range", "time", "list", "string", "city"}[it.type]);
+            o.put("kind", it.kind != null ? it.kind : new String[] {"bool", "choice", "choice", "range", "time", "list", "string", "city"}[it.type]);
             o.put("label", it.label);
             o.put("help", it.help);
             if (it.values != null) o.put("values", new JSONArray(Arrays.asList(it.values)));
@@ -514,7 +517,13 @@ final class SettingsFile {
      * Checks the whole file, then saves what differs from now in one commit. Returns how many settings changed;
      * throws with every mistake listed (" | " between them) and nothing saved when one is wrong.
      */
-    static int read(Context c, String text) throws java.io.IOException {
+    /** What an import did: settings changed, recordings queued, and what was kept as it was (a station not here). */
+    static final class Imported {
+        int changed, queued, recordings;
+        final List<String> notes = new ArrayList<>();
+    }
+
+    static Imported read(Context c, String text) throws java.io.IOException {
         JSONObject in;
         try {
             in = new JSONObject(strip(text));
@@ -532,10 +541,20 @@ final class SettingsFile {
         for (Item it : items(c, t)) table.put(it.key, it);
         List<String> errors = new ArrayList<>();
         SharedPreferences.Editor ed = p.edit();
+        Imported done = new Imported();
         int changed = 0;
+        // Recordings to download (the editor's Saved recitations, 1.9.0): checked first, so a station among them is known.
+        List<LibraryRemote.Download> downloads = new ArrayList<>();
+        try {
+            downloads = LibraryRemote.parse(in.optJSONArray("downloads"));
+        } catch (java.io.IOException e) {
+            errors.add(e.getMessage());
+        }
+        java.util.Set<String> coming = new java.util.HashSet<>();
+        for (LibraryRemote.Download d : downloads) coming.add(d.reciter.key());
         for (Iterator<String> keys = in.keys(); keys.hasNext(); ) {
             String key = keys.next();
-            if (key.equals("app") || key.equals("format") || key.equals("version")) continue;
+            if (key.equals("app") || key.equals("format") || key.equals("version") || key.equals("downloads")) continue;
             Item it = table.get(key);
             // Settings no longer kept (an older TV's file): passed over, not a mistake.
             if (it == null && RETIRED.contains(key)) continue;
@@ -551,12 +570,24 @@ final class SettingsFile {
             }
             Object v = normalise(it, raw);
             if (same(it, v, current(c, p, it))) continue;
+            if (key.equals("station")) {
+                String why = Radio.missing(c, (String) v, coming);
+                if (why != null) {
+                    done.notes.add("Station kept: " + why + " " + v);
+                    continue;
+                }
+            }
             put(ed, it, v);
             changed++;
         }
         if (!errors.isEmpty()) throw new java.io.IOException(errors.size() + " mistake(s), nothing changed | " + TextUtils.join(" | ", errors));
         if (changed > 0 && !ed.commit()) throw new java.io.IOException("The settings could not be saved");
-        return changed;
+        done.changed = changed;
+        if (!downloads.isEmpty()) {
+            done.recordings = downloads.size();
+            done.queued = LibraryRemote.enqueue(c, downloads);
+        }
+        return done;
     }
 
     /** Keys of settings since removed: New versions (1.5.0, the daily question is always asked). */
@@ -600,8 +631,8 @@ final class SettingsFile {
                 return null;
             }
             case STRING:
-                if (!(v instanceof String) || ((String) v).trim().isEmpty()) return "write a name in quotes";
-                return ((String) v).startsWith("saved:") ? "a saved recitation stays on its own TV" : null;
+                // A station this TV does not have is kept out by read() (Radio.missing), not refused.
+                return !(v instanceof String) || ((String) v).trim().isEmpty() ? "write a name in quotes" : null;
             case CITY: {
                 if (!(v instanceof JSONObject)) return "write it as the file gave it: { \"id\": ... }";
                 JSONObject o = (JSONObject) v;

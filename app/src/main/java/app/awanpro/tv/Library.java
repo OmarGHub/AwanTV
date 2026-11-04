@@ -117,6 +117,58 @@ final class Library {
         return parse(read(ar), english);
     }
 
+    /**
+     * The reciters as kept on the TV, without asking mp3quran.net (the settings editor's export runs on the main
+     * thread); empty when none was read yet, and then a read starts in the background for the next time.
+     */
+    static List<Reciter> cachedReciters(Context c) {
+        File ar = new File(dir(c, false), "reciters-ar.json"), en = new File(dir(c, false), "reciters-en.json");
+        if (!ar.exists() || System.currentTimeMillis() - ar.lastModified() > LIST_MAX_AGE) {
+            Context app = c.getApplicationContext();
+            new Thread(() -> {
+                try {
+                    reciters(app, false);
+                    surahNames(app, true);
+                    surahNames(app, false);
+                } catch (Exception e) {
+                    Log.i(TAG, "reciter list not read: " + e);
+                }
+            }, "awan-reciters").start();
+        }
+        if (!ar.exists()) return new ArrayList<>();
+        try {
+            Map<String, String[]> english = new LinkedHashMap<>();
+            if (en.exists()) for (Reciter r : parse(read(en), null)) english.put(r.key(), new String[] {r.ar, r.moshafAr});
+            return parse(read(ar), english);
+        } catch (Exception e) {
+            Log.i(TAG, "kept reciter list: " + e);
+            return new ArrayList<>();
+        }
+    }
+
+    /** When the kept reciter list was read (ms), 0 when there is none. */
+    static long recitersAt(Context c) {
+        return new File(dir(c, false), "reciters-ar.json").lastModified();
+    }
+
+    /** The surah names as kept on the TV (no network), index 1..114; null where not known. */
+    static String[] cachedSurahNames(Context c, boolean ar) {
+        File f = new File(dir(c, false), ar ? "suwar-ar.json" : "suwar-en.json");
+        String[] out = new String[115];
+        if (!f.exists()) return out;
+        try {
+            JSONArray list = new JSONObject(read(f)).getJSONArray("suwar");
+            for (int i = 0; i < list.length(); i++) {
+                JSONObject s = list.getJSONObject(i);
+                int n = s.getInt("id");
+                if (n >= 1 && n <= 114) out[n] = s.getString("name").trim();
+            }
+        } catch (Exception e) {
+            // Kept as none.
+        }
+        return out;
+    }
+
     /** The surah names from mp3quran.net (cached with the reciters), index 1..114; null where not known. */
     static String[] surahNames(Context c, boolean ar) {
         File f = new File(dir(c, false), ar ? "suwar-ar.json" : "suwar-en.json");
@@ -326,6 +378,17 @@ final class Library {
         if (d == null) return 0;
         try {
             return new StatFs(d.getPath()).getAvailableBytes();
+        } catch (IllegalArgumentException e) {
+            return 0;
+        }
+    }
+
+    /** Bytes on the TV's storage where the recitations go, free or not. */
+    static long totalBytes(Context c) {
+        File d = dir(c, true);
+        if (d == null) return 0;
+        try {
+            return new StatFs(d.getPath()).getTotalBytes();
         } catch (IllegalArgumentException e) {
             return 0;
         }
@@ -627,6 +690,11 @@ final class Library {
 
     static String name(Context c, String key, boolean ar) {
         return Prefs.of(c).getString((ar ? "lib_ar_" : "lib_en_") + key, key);
+    }
+
+    /** The recording's riwayah and style as kept with it ("حفص عن عاصم - مرتل"), "" when not kept. */
+    static String moshafName(Context c, String key, boolean ar) {
+        return Prefs.of(c).getString((ar ? "lib_mar_" : "lib_men_") + key, "");
     }
 
     // ---------------------------------------------------------------- the download manager's word

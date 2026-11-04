@@ -73,17 +73,28 @@ public class SettingsTransfer extends BroadcastReceiver {
                 try (OutputStream os = new FileOutputStream(new File(dir, SCHEMA_EN))) {
                     os.write(SettingsFile.schema(c, versionName(c), false).getBytes(StandardCharsets.UTF_8));
                 }
+                // This TV's saved recitations and stations, for the editor's Saved recitations page and station list.
+                try (OutputStream os = new FileOutputStream(new File(dir, LibraryRemote.FILE))) {
+                    os.write(LibraryRemote.state(c).getBytes(StandardCharsets.UTF_8));
+                }
                 result = "Exported to " + file.getAbsolutePath();
             } else if (IMPORT.equals(intent.getAction())) {
                 if (!file.isFile()) throw new IOException("No file " + file.getAbsolutePath() + " (push it first)");
-                int n = SettingsFile.read(c, readText(file));
+                SettingsFile.Imported done = SettingsFile.read(c, readText(file));
+                int n = done.changed;
                 // The TV in step with the new settings: its screensaver, Home's guard, the iqamah countdown.
                 Saver.apply(c);
                 if (RemoteKeys.guard != null) RemoteKeys.guard.refresh();
                 if (RemoteKeys.watch != null) RemoteKeys.watch.refreshCounter();
                 // The screen in front shows them now, not after leaving it.
                 if (n > 0) Screen.settingsChanged();
-                result = n == 0 ? "Nothing to change: the TV already has these settings" : "Changed " + n + " setting(s)";
+                // One line per part, " | " between them (the editor shows each in its own language).
+                boolean more = done.recordings > 0 || !done.notes.isEmpty();
+                StringBuilder r = new StringBuilder(n > 0 ? "Changed " + n + " setting(s)"
+                    : more ? "No setting changed" : "Nothing to change: the TV already has these settings");
+                if (done.recordings > 0) r.append(" | Queued ").append(done.queued).append(" surah(s) of ").append(done.recordings).append(" recitation(s)");
+                for (String note : done.notes) r.append(" | ").append(note);
+                result = r.toString();
             } else if (IDENTIFY.equals(intent.getAction())) {
                 if (RemoteKeys.watch == null) throw new IOException("The Awan TV service is not running on this TV");
                 String name = "";

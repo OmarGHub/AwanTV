@@ -392,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.9.0":
+                return ar ? new String[][] {
+                    {"التلاوات والمحطة من الحاسب", "من محرر الإعدادات على Windows: اختر تلاوات تحمّلها شاشة أو أكثر بنفسها، وغيّر المحطة، دون الذهاب إلى كل شاشة."}}
+                  : new String[][] {
+                    {"Recitations and the station from the computer", "From the settings editor on Windows: choose recitations for one or more TVs to download by themselves, and change the station, without going to each TV."}};
             case "1.8.0":
                 return ar ? new String[][] {
                     {"مواقيت المغرب كما تنشرها الوزارة", "طريقة وزارة الأوقاف والشؤون الإسلامية المغربية بجدول كل مدينة من مدنها الـ 191، وتختار الأقرب إلى موقعك من الإعدادات ← مواقيت الصلاة ← جدول الوزارة."}}
@@ -1101,7 +1106,7 @@ final class Text {
     String stationSavedFile() { return ar ? "تلاوة محفوظة على هذه الشاشة، فلا تُنقل؛ اخترها من التلفاز" : "a recitation saved on this TV, so not copied; pick it on the TV"; }
     String voiceHelpFile() { return ar ? "لكل الصلوات عدا الفجر" : "Every prayer but Fajr"; }
     String fajrLevelHelpFile() { return ar ? "نسبة من صوت التلفاز" : "A share of the TV's sound"; }
-    String stationFileHelp() { return ar ? "اسم المحطة كما حفظها التطبيق؛ يُفضَّل اختيارها من التلفاز" : "The station's name as the app keeps it; best picked on the TV"; }
+    String stationFileHelp() { return ar ? "تُرسل إلى الشاشات المختارة؛ الشاشة التي لا توجد عليها تبقى محطتها" : "Sent to the chosen TVs; a TV that doesn't have it keeps its own"; }
     String[] digitChoicesFile() { return ar ? new String[] {"حسب اللغة", "0123", "٠١٢٣"} : new String[] {"By language", "0123", "٠١٢٣"}; }
     String hadithRowFile() { return ar ? "حديث في وسط شاشة الاستراحة" : "A hadith in the screensaver's middle"; }
     String homeAppsFile() { return ar ? "تطبيقات الرئيسية والجهاز" : "Home's apps and the device"; }
