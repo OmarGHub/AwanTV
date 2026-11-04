@@ -6,6 +6,12 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.11.0]
+
+### Tools
+- `AwanTV-release` 1.2.0: refuses an installer whose version is not the app's (its own update compares that number,
+  and installerTestVersion in gradle.properties, for testing that update, must not reach a release).
+
 ### Phone installer
 - About (the "i" by the version at the top of the guide): the installer's version and the Awan TV it installs, its
   updates (Check now), Developed by OMAR A ALHWAIRTH with awanpro.app, the project and its releases, Afnon's installer

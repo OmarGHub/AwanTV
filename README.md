@@ -59,6 +59,8 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    والتلفاز على شبكة الواي فاي نفسها.
 2. افتح المثبّت، واختر شاشتك، ثم «ثبّت Awan TV». إن طلبت الشاشة السماح أو ظهر عليها رمز، فوافق أو اكتب الرمز في المثبّت.
    ويظهر أعلى المثبّت رقم Awan TV الذي سيثبّته.
+3. إن صدر مثبّت أحدث، يعرضه المثبّت بزر «حدّث المثبّت» فيحدّث نفسه (من 1.11.0). ومن ⓘ بجانب الرقم: «حول»، وفيها
+   التحقق من التحديث، وروابط المشروع، والتراخيص.
 
 <p align="center"><img src="docs/images/installer.webp" alt="المثبّت على الجوال" width="30%"></p>
 
@@ -316,6 +318,8 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
    Wi-Fi as the TV.
 2. Open it, choose your TV, then "Install Awan TV". If the TV asks to allow it or shows a code, accept or type the code
    in the installer. Its top shows the number of the Awan TV it installs.
+3. When a newer installer is out, it offers it with "Update the installer" and updates itself (from 1.11.0). The i by
+   the number opens About: checking for updates, the project's links and the licences.
 
 <p align="center"><img src="docs/images/installer-en.webp" alt="The phone installer" width="30%"></p>
 
