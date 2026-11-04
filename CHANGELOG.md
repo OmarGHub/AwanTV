@@ -6,6 +6,17 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Tools
+- `AwanTV-editor` 1.3.0: Update TVs, second in the list: each connected TV's Awan TV version against what is sent,
+  GitHub's latest release (its AwanTV.apk downloaded to state\editor\apk at the update) or the local build in
+  app\release (shown only when signed with the release key), the viewer's choice, kept in state\editor\update.json;
+  both checked as signed with the release key and of the version they say. None ticked at first; Update the ticked
+  installs over each TV, then the install tool's permissions, app ops and service (bound), without its screensaver
+  steps and without opening Awan TV on the TV; each TV's result and Try again for those that failed.
+- `AwanTV-editor` 1.3.0: Connect a TV (TVs now, Update TVs): its address (5555 when no port), "Allow" waited for on the
+  TV, and Wireless debugging's pairing (port and code) when it does not connect. A TV met before connects from its
+  card: its known address, else its new Wireless debugging port heard by adb mdns (the service name carries its serial).
+
 ## [1.12.0]
 
 ### Phone installer

@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.2.3
+﻿# AwanTV-editor.ps1 - Version 1.3.0
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -23,9 +23,13 @@
 # Play / Stop on the TVs ticked there (kept in state\editor\now.json, none at first: a TV someone else uses is never
 # played by surprise). Play uses the station chosen on that TV (changed on the Radio page, then Send), and does not
 # cut in on a TV playing sound from another app (Android gives sound to one: a video would stop) unless asked.
+# Update TVs (1.3.0, second in the list): each connected TV's Awan TV version against GitHub's latest release or the
+# local build in app\release (the viewer's choice, kept; signed with the release key, checked), tick and update, with
+# no question on the TVs. Connect a TV: its address, and Wireless debugging's pairing code when it asks for one; a TV
+# met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.2.3"
+$ScriptVersion = "1.3.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -59,7 +63,7 @@ if (-not $created) {
     exit
 }
 
-Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Xaml
+Add-Type -AssemblyName PresentationFramework, PresentationCore, WindowsBase, System.Xaml, System.IO.Compression, System.IO.Compression.FileSystem
 Log "AwanTV-editor v$ScriptVersion started"
 
 # No console to show an error in: any error that ends the script is logged and shown in a message box.
@@ -120,6 +124,24 @@ $Words = @{
         busyText = "يصدر منها صوت الآن من تطبيق آخر (فيديو أو موسيقى)، فلم تُشغَّل الإذاعة."; busyNote = "إن شغّلتها رغم ذلك، يتوقف ما يُعرض عليها بالصورة والصوت."
         playAnyway = "شغّل رغم ذلك"
         started = "بدأت الإذاعة ({0})"; alreadyOn = "تعمل من قبل"; stopped = "توقفت الإذاعة"; alreadyOff = "متوقفة من قبل"; busyShort = "يصدر منها صوت من تطبيق آخر، فلم تُشغَّل"
+        connNew = "+ اتصال بشاشة…"; connKnown = "اتصال"; connTitle = "اتصال بشاشة"
+        connIntro = "عنوان الشاشة كما يظهر فيها: الإعدادات ← الشبكة، أو في «التصحيح اللاسلكي» مع منفذه."; connAddress = "العنوان (والمنفذ إن كان ظاهرًا)"
+        connHint = "بلا منفذ يُجرَّب 5555. وإن احتاجت الشاشة اقترانًا بهذا الحاسب، يطلبه المحرر بعد ذلك."; connGo = "اتصال"; connWorking = "يتصل…"
+        connAllow = "على الشاشة: علّم «السماح دائمًا من هذا الحاسب» ثم اختر «السماح»."; connNotAllowed = "لم توافق الشاشة على هذا الحاسب. اضغط «اتصال» واختر «السماح» على الشاشة."
+        connFailed = "تعذّر الاتصال ({0}). إن كانت الشاشة على «التصحيح اللاسلكي» فاقترن بها أولًا:"
+        pairTitle = "الشاشة تطلب اقترانًا بهذا الحاسب، مرة واحدة"; pairHow = "على الشاشة: خيارات المطوّر ← التصحيح اللاسلكي ← «اقتران الجهاز برمز». تظهر نافذة فيها رمز من ستة أرقام ومنفذ للاقتران."
+        pairPort = "منفذ الاقتران"; pairCode = "الرمز"; pairGo = "اقتران واتصال"; pairFailed = "لم ينجح الاقتران ({0}). افتح نافذة الاقتران على الشاشة من جديد: تعطي رمزًا جديدًا كل مرة."
+        updTitle = "تحديث الشاشات"; updCheck = "⟳ تحقق من الإصدار"; updGo = "⤓ حدّث المحددة ({0})"; updChosenTitle = "تحديث المحددة ({0})"
+        updSource = "ما يُرسل إلى الشاشات"; updFromGithub = "آخر إصدار منشور: Awan TV {0} · من GitHub"; updChecked = "نُزّل وتحقّق المحرر أنه موقّع بمفتاح Awan TV"
+        updWillDownload = "يُنزَّل عند التحديث ويُتحقق من توقيعه"; updNoGithub = "تعذّر سؤال GitHub الآن ({0})"; updAsking = "آخر إصدار منشور: يسأل GitHub…"
+        updFromLocal = "نسختك المبنية محليًا: Awan TV {0} · app\release\AwanTV.apk، بمفتاح Awan TV"; updTest = "نسخة تجريبية"
+        updSourceNote = "يظهر الخيار الثاني فقط حين يوجد ذلك الملف وهو موقّع بمفتاح Awan TV. ويحفظ المحرر اختيارك للمرة القادمة."
+        updPickOld = "حدّد ما يحتاج تحديثًا"; updNote = "حدّد ما تريد تحديثه. التحديث لا يسأل الشاشة شيئًا، وتبقى إعداداتها وتلاواتها المحفوظة."
+        updConnected = "متصلة"; updLastKnown = "غير متصلة · آخر رقم عُرف: {0}"; updOlder = "تحتاج تحديثًا: {0} ← {1}"; updSame = "محدّثة: {0}"; updNewer = "عليها {0}، أحدث مما يُرسل"
+        updDownloading = "يُنزّل Awan TV {0} من GitHub…"; updNotOurs = "الملف المنزَّل غير موقّع بمفتاح Awan TV، فلم يُرسل إلى أي شاشة."; updWrongVersion = "الملف رقمه {0} لا {1}، فلم يُرسل."
+        updOne = "يحدّث {0} ({1} من {2})…"; updDone = "حُدّثت إلى {0}"; updRetry = "أعد المحاولة لما فشل"
+        updOtherKey = "Awan TV عليها بتوقيع آخر: انقل إعداداتها ثم أزله وثبّته من جديد (AwanTV-install)"; updNewerThere = "عليها إصدار أحدث مما يُرسل"
+        updFailed = "لم يكتمل ({0})"; updNoService = "حُدّثت، لكن خدمة Awan TV لم تعمل بعد: أعد تشغيل الشاشة"
     }
     en = @{
         title = "Awan TV · Settings editor"; source = "Source"; get = "Get from TV"; open = "Open file…"; refresh = "Refresh the TV list"
@@ -168,6 +190,24 @@ $Words = @{
         busyText = "Another app is playing sound on it now (a video or music), so the radio was not started."; busyNote = "Played anyway, what it is showing stops, picture and sound."
         playAnyway = "Play anyway"
         started = "Radio started ({0})"; alreadyOn = "Already playing"; stopped = "Radio stopped"; alreadyOff = "Already stopped"; busyShort = "Another app is playing sound, so it was not started"
+        connNew = "+ Connect a TV…"; connKnown = "Connect"; connTitle = "Connect a TV"
+        connIntro = "The TV's address as it shows it: Settings > Network, or in Wireless debugging with its port."; connAddress = "Address (and port, if shown)"
+        connHint = "Without a port, 5555 is tried. If the TV needs pairing with this computer, the editor asks for it next."; connGo = "Connect"; connWorking = "Connecting…"
+        connAllow = "On the TV: tick Always allow from this computer, then choose Allow."; connNotAllowed = "The TV did not allow this computer. Press Connect and choose Allow on the TV."
+        connFailed = "Could not connect ({0}). If the TV uses Wireless debugging, pair with it first:"
+        pairTitle = "The TV asks to pair with this computer, once"; pairHow = "On the TV: Developer options > Wireless debugging > Pair device with pairing code. A window shows a six-digit code and a pairing port."
+        pairPort = "Pairing port"; pairCode = "Code"; pairGo = "Pair and connect"; pairFailed = "Pairing did not work ({0}). Open the pairing window on the TV again: it shows a new code each time."
+        updTitle = "Update TVs"; updCheck = "⟳ Check the version"; updGo = "⤓ Update the ticked ({0})"; updChosenTitle = "Update the ticked ({0})"
+        updSource = "What is sent to the TVs"; updFromGithub = "Latest release: Awan TV {0} · from GitHub"; updChecked = "downloaded, checked as signed with Awan TV's key"
+        updWillDownload = "downloaded at the update, its signature checked"; updNoGithub = "Could not ask GitHub just now ({0})"; updAsking = "Latest release: asking GitHub…"
+        updFromLocal = "Your local build: Awan TV {0} · app\release\AwanTV.apk, Awan TV's key"; updTest = "test build"
+        updSourceNote = "The second choice shows only when that file is there, signed with Awan TV's key. The editor keeps your choice for next time."
+        updPickOld = "Tick those needing an update"; updNote = "Tick what to update. The update asks the TV nothing; its settings and saved recitations stay."
+        updConnected = "Connected"; updLastKnown = "Not connected · last version seen: {0}"; updOlder = "Needs an update: {0} → {1}"; updSame = "Up to date: {0}"; updNewer = "Has {0}, newer than what is sent"
+        updDownloading = "Downloading Awan TV {0} from GitHub…"; updNotOurs = "The downloaded file is not signed with Awan TV's key, so it was sent to no TV."; updWrongVersion = "The file is {0}, not {1}, so it was not sent."
+        updOne = "Updating {0} ({1} of {2})…"; updDone = "updated to {0}"; updRetry = "Try again for those that failed"
+        updOtherKey = "Awan TV there is signed with another key: copy its settings, remove it and install again (AwanTV-install)"; updNewerThere = "It has a newer version than what is sent"
+        updFailed = "Did not finish ({0})"; updNoService = "Updated, but Awan TV's service is not running yet: restart the TV"
     }
 }
 $EditorConfig = Join-Path $EditorDir "editor.json"
@@ -1645,6 +1685,11 @@ function Now-Card($tv, $st) {
         }
         [Windows.Controls.DockPanel]::SetDock($btn, "Right"); [void]$dock.Children.Add($btn)
     }
+    if (-not $tv.Online) {
+        $cn = New-Object Windows.Controls.Button; $cn.Content = W "connKnown"; $cn.Style = $window.FindResource("Btn"); $cn.Tag = $tv; $cn.VerticalAlignment = "Center"; $cn.Margin = "16,0,0,0"
+        $cn.Add_Click({ param($s, $e) Connect-Known $s.Tag })
+        [Windows.Controls.DockPanel]::SetDock($cn, "Right"); [void]$dock.Children.Add($cn)
+    }
     $text = New-Object Windows.Controls.StackPanel
     $l1 = New-Object Windows.Controls.TextBlock; $l1.Text = Name-Of $tv; $l1.FontWeight = "SemiBold"; $l1.TextWrapping = "Wrap"
     $l2 = New-Object Windows.Controls.TextBlock; $l2.FontSize = 12; $l2.Foreground = Brush "#5F5F5F"; $l2.Margin = "0,1,0,3"
@@ -1691,7 +1736,9 @@ function Show-Now {
     $script:NowPlay.Add_Click({ Busy { Radio-All "play" }; Show-Section $script:Section })
     $script:NowStop = New-Object Windows.Controls.Button; $script:NowStop.Style = $window.FindResource("Btn")
     $script:NowStop.Add_Click({ Busy { Radio-All "stop" }; Show-Section $script:Section })
-    foreach ($b in @($refresh, $script:NowPlay, $script:NowStop)) { [void]$buttons.Children.Add($b) }
+    $connect = New-Object Windows.Controls.Button; $connect.Content = W "connNew"; $connect.Style = $window.FindResource("Btn")
+    $connect.Add_Click({ Connect-New })
+    foreach ($b in @($connect, $refresh, $script:NowPlay, $script:NowStop)) { [void]$buttons.Children.Add($b) }
     Now-Counts
     [void]$top.Children.Add($buttons)
     $head = New-Object Windows.Controls.TextBlock; $head.Text = W "nowTitle"; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.VerticalAlignment = "Center"
@@ -1720,8 +1767,480 @@ function Show-Now {
     }
 }
 
-# Nav lines: 0 TVs now, 1 a line between, then the settings' sections from 2 (once a source is shown).
-$FirstSection = 2
+# ---------------------------------------------------------------- connecting a TV (1.3.0)
+
+function Adb-Text([string[]]$arguments) {
+    $old = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+    try { $out = & $script:Adb @arguments 2>&1 | Out-String } finally { $ErrorActionPreference = $old }
+    return $out.Trim()
+}
+
+# Wireless debugging's port changes with every restart of the TV: adb hears it on the network (mDNS), under a name
+# that carries the TV's serial. Returns "ip:port" for this TV, or $null.
+function Mdns-Address($tv) {
+    $ip = ([string]$tv.Address -split ":")[0]
+    foreach ($line in @((Adb-Text @("mdns", "services")) -split "`n")) {
+        if ($line -notmatch "_adb-tls-connect" -or $line -notmatch "(\d{1,3}(\.\d{1,3}){3}):(\d+)") { continue }
+        $at = "$($Matches[1]):$($Matches[3])"
+        if ($line -match [regex]::Escape([string]$tv.Id) -or $Matches[1] -eq $ip) { return $at }
+    }
+    return $null
+}
+
+# adb connect, then (classic debugging) the TV's "Allow?" answered within a minute; the window's top line says what
+# to do meanwhile. $dialog: a window to keep drawing, or $null. Returns @{ Ok; Out; NotAllowed }.
+function Connect-Address([string]$address, $dialog, $status) {
+    $out = Adb-Text @("connect", $address)
+    Log "adb connect ${address}: $out"
+    if ($out -notmatch "(^|\s)(connected|already connected)") { return @{ Ok = $false; Out = $out } }
+    $told = $false
+    for ($i = 0; $i -lt 60; $i++) {
+        $line = ((Adb-Text @("devices")) -split "`n" | Where-Object { $_ -like "$address*" } | Select-Object -First 1)
+        if ($line -match "\sdevice$") { return @{ Ok = $true; Out = $out } }
+        if ($line -match "unauthorized" -and -not $told) {
+            $told = $true
+            if ($status) { $status.Text = W "connAllow"; $status.Foreground = Brush $Gold }
+        }
+        if (-not $line) { return @{ Ok = $false; Out = $out } }
+        $d = if ($dialog) { $dialog } else { $window }
+        $d.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
+        Start-Sleep -Milliseconds 500
+    }
+    return @{ Ok = $false; Out = $out; NotAllowed = $true }
+}
+
+# Connect a TV: its address (5555 when no port), then, if it answers no or asks for pairing, Wireless debugging's
+# pairing code; true once connected. As AwanTV-install's Connect-Tv, in a window. State in $script:ConnState.
+function Show-Connect([string]$prefill = "") {
+    $dlg = New-Object Windows.Window
+    $dlg.Title = "Awan TV · " + (W "connTitle"); $dlg.SizeToContent = "WidthAndHeight"; $dlg.ResizeMode = "NoResize"; $dlg.ShowInTaskbar = $false
+    $dlg.Background = Brush "#F9F9F9"; $dlg.FontFamily = $window.FontFamily; $dlg.FontSize = 14; $dlg.FlowDirection = $window.FlowDirection
+    $dlg.Owner = $window; $dlg.WindowStartupLocation = "CenterOwner"
+    try { $dlg.Icon = $window.Icon } catch { }
+    $panel = New-Object Windows.Controls.StackPanel; $panel.Margin = "22,18"; $panel.Width = 560
+    $intro = New-Object Windows.Controls.TextBlock; $intro.Text = W "connIntro"; $intro.TextWrapping = "Wrap"
+    $box = { param($w) $t = New-Object Windows.Controls.TextBox; $t.Height = 32; $t.Width = $w; $t.VerticalContentAlignment = "Center"; $t.Padding = "6,0"; $t.FlowDirection = "LeftToRight"; $t.HorizontalAlignment = "Left"; return $t }
+    $label = { param($s) $t = New-Object Windows.Controls.TextBlock; $t.Text = $s; $t.Margin = "0,12,0,4"; return $t }
+    $addr = & $box 280; $addr.Text = $prefill
+    $hint = New-Object Windows.Controls.TextBlock; $hint.Text = W "connHint"; $hint.FontSize = 12; $hint.Foreground = Brush "#5F5F5F"; $hint.Margin = "0,6,0,0"; $hint.TextWrapping = "Wrap"
+    $pair = New-Object Windows.Controls.StackPanel; $pair.Visibility = "Collapsed"; $pair.Margin = "0,14,0,0"
+    $ph = New-Object Windows.Controls.TextBlock; $ph.Text = W "pairTitle"; $ph.FontWeight = "SemiBold"; $ph.TextWrapping = "Wrap"
+    $pb = New-Object Windows.Controls.TextBlock; $pb.Text = W "pairHow"; $pb.TextWrapping = "Wrap"; $pb.Margin = "0,6,0,0"
+    $row = New-Object Windows.Controls.StackPanel; $row.Orientation = "Horizontal"
+    $pPort = & $box 160; $pCode = & $box 160
+    $c1 = New-Object Windows.Controls.StackPanel; [void]$c1.Children.Add((& $label (W "pairPort"))); [void]$c1.Children.Add($pPort)
+    $c2 = New-Object Windows.Controls.StackPanel; $c2.Margin = "24,0,0,0"; [void]$c2.Children.Add((& $label (W "pairCode"))); [void]$c2.Children.Add($pCode)
+    [void]$row.Children.Add($c1); [void]$row.Children.Add($c2)
+    foreach ($c in @($ph, $pb, $row)) { [void]$pair.Children.Add($c) }
+    $status = New-Object Windows.Controls.TextBlock; $status.TextWrapping = "Wrap"; $status.Margin = "0,12,0,0"; $status.Foreground = Brush "#5F5F5F"
+    $bar = New-Object Windows.Controls.StackPanel; $bar.Orientation = "Horizontal"; $bar.HorizontalAlignment = "Right"; $bar.Margin = "0,16,0,0"
+    $go = New-Object Windows.Controls.Button; $go.Content = W "connGo"; $go.Style = $window.FindResource("Primary"); $go.IsDefault = $true
+    $cancel = New-Object Windows.Controls.Button; $cancel.Content = W "cancel"; $cancel.Style = $window.FindResource("Btn"); $cancel.IsCancel = $true
+    [void]$bar.Children.Add($go); [void]$bar.Children.Add($cancel)
+    foreach ($c in @($intro, (& $label (W "connAddress")), $addr, $hint, $pair, $status, $bar)) { [void]$panel.Children.Add($c) }
+    $dlg.Content = $panel
+    $script:ConnState = @{ Ok = $false; Pairing = $false; Addr = $addr; Port = $pPort; Code = $pCode; Pair = $pair; Status = $status; Go = $go; Dlg = $dlg }
+    # Through $script:ConnState: WPF calls the handler later.
+    $go.Add_Click({
+        $s = $script:ConnState
+        $address = $s.Addr.Text.Trim()
+        if (-not $address) { return }
+        if ($address -notmatch ":\d+$") { $address += ":5555" }
+        $s.Dlg.Cursor = [Windows.Input.Cursors]::Wait; $s.Go.IsEnabled = $false
+        $s.Status.Foreground = Brush "#5F5F5F"; $s.Status.Text = W "connWorking"
+        $s.Dlg.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
+        try {
+            if ($s.Pairing) {
+                $ip = ($address -split ":")[0]
+                $code = $s.Code.Text -replace "\s", ""
+                $out = Adb-Text @("pair", "${ip}:$($s.Port.Text.Trim())", $code)
+                Log "adb pair ${ip}: $out"
+                if ($out -notmatch "Successfully paired") { $s.Status.Foreground = Brush $Gold; $s.Status.Text = [string]::Format((W "pairFailed"), $out); return }
+            }
+            $r = Connect-Address $address $s.Dlg $s.Status
+            if ($r.Ok) { $s.Ok = $true; $s.Dlg.Close(); return }
+            $s.Status.Foreground = Brush $Gold
+            if ($r.NotAllowed) { $s.Status.Text = W "connNotAllowed"; return }
+            # No: Wireless debugging may want this computer paired first.
+            $s.Status.Text = [string]::Format((W "connFailed"), $r.Out)
+            if (-not $s.Pairing) { $s.Pairing = $true; $s.Pair.Visibility = "Visible"; $s.Go.Content = W "pairGo" }
+        } finally { $s.Dlg.Cursor = $null; $s.Go.IsEnabled = $true }
+    })
+    $dlg.Add_ContentRendered({ [void]$script:ConnState.Addr.Focus(); $script:ConnState.Addr.SelectAll() })
+    [void]$dlg.ShowDialog()
+    return $script:ConnState.Ok
+}
+
+# Connect…: the dialog; connected, the TV list read again and the page shown again.
+function Connect-New([string]$prefill = "") {
+    if (-not $script:Adb) { [void](Show-Dialog "Awan TV" @(@{ Text = (W "noAdb") }) "warn" @((W "okBtn"))); return }
+    if (Show-Connect $prefill) {
+        Busy { Refresh-Tvs; if ((Page-Of $script:Section) -eq -2) { Query-Now } }
+        Show-Section $script:Section
+    }
+}
+
+# A TV met before, not connected: its known address first; Wireless debugging's new port heard on the network;
+# else the dialog with its address filled in.
+function Connect-Known($tv) {
+    $done = $false
+    Busy {
+        $addr = [string]$tv.Address
+        if ($addr -match "^\d{1,3}(\.\d{1,3}){3}:\d+$") { $done = (Connect-Address $addr $null $null).Ok }
+        if (-not $done) {
+            $heard = Mdns-Address $tv
+            if ($heard) { $done = (Connect-Address $heard $null $null).Ok }
+        }
+        if ($done) { Refresh-Tvs; if ((Page-Of $script:Section) -eq -2) { Query-Now } }
+    }
+    if ($done) { Show-Section $script:Section; return }
+    $ip = ([string]$tv.Address -split ":")[0]
+    $prefill = if ($ip -match "^\d{1,3}(\.\d{1,3}){3}$") { $(if ([string]$tv.Address -like "*:5555") { $tv.Address } else { "${ip}:" }) } else { "" }
+    Connect-New $prefill
+}
+
+function Page-Of([int]$index) {
+    if ($index -ge 0 -and $index -lt $script:NavMap.Count) { return [int]$script:NavMap[$index] }
+    return 0
+}
+
+# ---------------------------------------------------------------- updating TVs (1.3.0)
+
+$ReleaseCert = "b445fc840602ca363c3ad83b60db22da1d04737633a47622d2405e97a3b50ed3"
+$ApkDir = Join-Path $EditorDir "apk"
+$LocalApk = Join-Path $Root "app\release\AwanTV.apk"
+$UpdateFile = Join-Path $EditorDir "update.json"
+$script:UpdSource = "github"
+try { if (Test-Path $UpdateFile) { $u = Read-Json $UpdateFile; if (@("github", "local") -contains $u.source) { $script:UpdSource = $u.source } } } catch { }
+$script:Release = $null      # @{ Version; Path (downloaded and checked) } from GitHub, or @{ Error }
+$script:Local = $null        # @{ Version; Path } for app\release\AwanTV.apk signed with the release key
+$script:UpdChosen = @{}      # TV id -> $true, none at first
+
+# The signing certificate and the version of an APK, as tools\AwanTV-release.ps1 reads them (no Android tools needed).
+# The first signer's certificate in the APK Signing Block (v3, else v2): the SHA-256 that apksigner prints.
+function Get-ApkCert([string]$Path) {
+    $b = [IO.File]::ReadAllBytes($Path)
+    $eocd = -1
+    for ($i = $b.Length - 22; $i -ge [Math]::Max(0, $b.Length - 65557); $i--) {
+        if ([BitConverter]::ToUInt32($b, $i) -eq 0x06054b50) { $eocd = $i; break }
+    }
+    if ($eocd -lt 0) { throw "$Path is not a zip file." }
+    $cd = [int][BitConverter]::ToUInt32($b, $eocd + 16)
+    if ($cd -lt 32 -or [Text.Encoding]::ASCII.GetString($b, $cd - 16, 16) -ne "APK Sig Block 42") {
+        throw "$Path has no v2/v3 signature (Build > Generate Signed App Bundle or APK)."
+    }
+    $start = $cd - [int][BitConverter]::ToUInt64($b, $cd - 24) - 8
+    $found = @{}
+    $p = $start + 8
+    while ($p -lt $cd - 24) {
+        $len = [int][BitConverter]::ToUInt64($b, $p)
+        $id = [BitConverter]::ToUInt32($b, $p + 8)
+        $found[$id] = $p + 12
+        $p += 8 + $len
+    }
+    $at = $null
+    # 0xf05368c0 (v3) and 0x7109871a (v2), written in decimal: PowerShell reads 0xf05368c0 as a negative Int32.
+    foreach ($id in @([uint32]4031998144, [uint32]1896449818)) { if ($found.ContainsKey($id)) { $at = $found[$id]; break } }
+    if ($null -eq $at) { throw "$Path has no v2/v3 signature (Build > Generate Signed App Bundle or APK)." }
+    # signers > first signer > signed data > (digests, then) certificates > first certificate
+    $q = $at + 4 + 4 + 4
+    $q += 4 + [int][BitConverter]::ToUInt32($b, $q)
+    $q += 4
+    $certLen = [int][BitConverter]::ToUInt32($b, $q)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try { return -join ($sha.ComputeHash($b, $q + 4, $certLen) | ForEach-Object { $_.ToString("x2") }) } finally { $sha.Dispose() }
+}
+
+# versionCode and versionName from the APK's binary AndroidManifest.xml (the <manifest> element's attributes).
+function Get-ApkVersion([string]$Path) {
+    $zip = [IO.Compression.ZipFile]::OpenRead($Path)
+    try {
+        $entry = $zip.GetEntry("AndroidManifest.xml")
+        if (-not $entry) { throw "$Path has no AndroidManifest.xml." }
+        $ms = New-Object IO.MemoryStream
+        $s = $entry.Open()
+        try { $s.CopyTo($ms) } finally { $s.Dispose() }
+        $b = $ms.ToArray()
+    } finally { $zip.Dispose() }
+    $strings = @(); $ids = @(); $code = $null; $name = $null
+    $p = 8
+    while ($p -lt $b.Length) {
+        $type = [BitConverter]::ToUInt16($b, $p)
+        $size = [int][BitConverter]::ToUInt32($b, $p + 4)
+        if ($type -eq 0x0001) {
+            $count = [int][BitConverter]::ToUInt32($b, $p + 8)
+            $utf8 = ([BitConverter]::ToUInt32($b, $p + 16) -band 0x100) -ne 0
+            $data = $p + [int][BitConverter]::ToUInt32($b, $p + 20)
+            $hs = [int][BitConverter]::ToUInt16($b, $p + 2)
+            $strings = for ($i = 0; $i -lt $count; $i++) {
+                $o = $data + [int][BitConverter]::ToUInt32($b, $p + $hs + 4 * $i)
+                if ($utf8) {
+                    if ($b[$o] -band 0x80) { $o += 2 } else { $o += 1 }
+                    $n = $b[$o]; $o += 1
+                    if ($n -band 0x80) { $n = (($n -band 0x7f) -shl 8) -bor $b[$o]; $o += 1 }
+                    [Text.Encoding]::UTF8.GetString($b, $o, $n)
+                } else {
+                    $n = [int][BitConverter]::ToUInt16($b, $o); $o += 2
+                    if ($n -band 0x8000) { $n = (($n -band 0x7fff) -shl 16) -bor [BitConverter]::ToUInt16($b, $o); $o += 2 }
+                    [Text.Encoding]::Unicode.GetString($b, $o, 2 * $n)
+                }
+            }
+        } elseif ($type -eq 0x0180) {
+            $ids = for ($i = $p + 8; $i -lt $p + $size; $i += 4) { [BitConverter]::ToUInt32($b, $i) }
+        } elseif ($type -eq 0x0102) {
+            $ext = $p + 16
+            $attrStart = [int][BitConverter]::ToUInt16($b, $ext + 8)
+            $attrSize = [int][BitConverter]::ToUInt16($b, $ext + 10)
+            $attrCount = [int][BitConverter]::ToUInt16($b, $ext + 12)
+            for ($i = 0; $i -lt $attrCount; $i++) {
+                $a = $ext + $attrStart + $i * $attrSize
+                $n = [int][BitConverter]::ToUInt32($b, $a + 4)
+                $raw = [BitConverter]::ToUInt32($b, $a + 8)
+                $kind = $b[$a + 15]
+                $val = [BitConverter]::ToUInt32($b, $a + 16)
+                $res = if ($n -lt $ids.Count) { $ids[$n] } else { 0 }
+                $attr = if ($n -lt $strings.Count) { $strings[$n] } else { "" }
+                if ($res -eq 0x0101021b -or $attr -eq "versionCode") { $code = [long]$val }
+                if ($res -eq 0x0101021c -or $attr -eq "versionName") {
+                    $idx = if ($raw -ne [uint32]::MaxValue) { $raw } elseif ($kind -eq 3) { $val } else { $null }
+                    if ($null -ne $idx) { $name = $strings[[int]$idx] }
+                }
+            }
+            break
+        }
+        if ($size -le 0) { break }
+        $p += $size
+    }
+    return [pscustomobject]@{ Code = $code; Name = $name }
+}
+
+
+# What GitHub's latest release is, and the local build when it is signed with the release key. Opening the page and
+# Check the version ask; the APK itself is downloaded only to update.
+function Check-Release {
+    try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+        $tag = ((Invoke-RestMethod -Uri "https://api.github.com/repos/OmarGHub/AwanTV/releases/latest" -Headers @{ "User-Agent" = "AwanTV-editor" } -TimeoutSec 15).tag_name) -replace "^[vV]", ""
+        $path = Join-Path $ApkDir "AwanTV-$tag.apk"
+        $script:Release = @{ Version = $tag; Path = $(if (Test-Path $path) { $path } else { $null }) }
+    } catch {
+        $script:Release = @{ Error = $_.Exception.Message }
+        Log "GitHub latest release: $($_.Exception.Message)"
+    }
+    $script:Local = $null
+    if (Test-Path $LocalApk) {
+        try {
+            if ((Get-ApkCert $LocalApk) -eq $ReleaseCert) { $script:Local = @{ Version = (Get-ApkVersion $LocalApk).Name; Path = $LocalApk } }
+        } catch { Log "Local APK: $($_.Exception.Message)" }
+    }
+    if ($script:UpdSource -eq "local" -and -not $script:Local) { $script:UpdSource = "github" }
+}
+
+# The version being sent: the chosen source's, or $null when it is not known.
+function Upd-Version {
+    if ($script:UpdSource -eq "local" -and $script:Local) { return $script:Local.Version }
+    if ($script:Release -and $script:Release.Version) { return $script:Release.Version }
+    return $null
+}
+
+# The APK for the chosen source, downloaded if need be, and checked: the release key and the version it says.
+function Upd-Apk {
+    if ($script:UpdSource -eq "local" -and $script:Local) { $path = $script:Local.Path; $want = $script:Local.Version }
+    else {
+        $want = $script:Release.Version
+        $path = Join-Path $ApkDir "AwanTV-$want.apk"
+        if (-not (Test-Path $path)) {
+            New-Item -ItemType Directory -Force -Path $ApkDir | Out-Null
+            $ui.ShownText.Text = [string]::Format((W "updDownloading"), $want)
+            $window.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
+            $part = "$path.part"
+            $old = $ProgressPreference; $ProgressPreference = "SilentlyContinue"
+            try { Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/OmarGHub/AwanTV/releases/download/v$want/AwanTV.apk" -OutFile $part -Headers @{ "User-Agent" = "AwanTV-editor" } -TimeoutSec 300 }
+            finally { $ProgressPreference = $old }
+            Move-Item -Force $part $path
+        }
+    }
+    if ((Get-ApkCert $path) -ne $ReleaseCert) { Remove-Item -Force $path -ErrorAction SilentlyContinue; throw (W "updNotOurs") }
+    $v = (Get-ApkVersion $path).Name
+    if ($v -ne $want) { throw ([string]::Format((W "updWrongVersion"), $v, $want)) }
+    if ($script:UpdSource -ne "local") { $script:Release.Path = $path }
+    return $path
+}
+
+# One TV, quietly: install over it, then what AwanTV-install does after an install (permissions, app ops, the
+# service listed and bound), without the screensaver steps (already set) and without opening Awan TV on the TV.
+# Returns "" when done, else why not.
+function Update-Tv($tv, [string]$apk, [string]$want) {
+    $s = $tv.Serial
+    $out = Adb $s @("install", "-r", $apk)
+    Log "Update $($tv.Id) to ${want}: $out"
+    if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") { return W "updOtherKey" }
+    if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") { return W "updNewerThere" }
+    if ($out -notmatch "Success") { return [string]::Format((W "updFailed"), $out) }
+    Start-Sleep -Seconds 5
+    $sdk = 0; [void][int]::TryParse((Shell $s "getprop ro.build.version.sdk"), [ref]$sdk)
+    $storage = if ($sdk -ge 33) { @("READ_MEDIA_AUDIO") } elseif ($sdk -ge 30) { @("READ_EXTERNAL_STORAGE") } else { @("READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE") }
+    foreach ($p in @("RECORD_AUDIO", "WRITE_SECURE_SETTINGS", "ACCESS_FINE_LOCATION") + $storage) { [void](Shell $s "pm grant $Pkg android.permission.$p") }
+    foreach ($op in @("APP_AUTO_START", "APP_ASSOC_START", "AUTO_START")) { [void](Shell $s "cmd appops set $Pkg $op allow 2>/dev/null") }
+    [void](Shell $s "cmd appops set $Pkg REQUEST_INSTALL_PACKAGES allow")
+    $service = "$Pkg/app.awanpro.tv.RemoteKeys"
+    $bound = $false
+    for ($try = 1; $try -le 3 -and -not $bound; $try++) {
+        $now = Shell $s "settings get secure enabled_accessibility_services"
+        $listed = $now -match "(^|:)$([regex]::Escape($Pkg))/($([regex]::Escape($Pkg)))?\.RemoteKeys(:|$)"
+        $others = @($now -split ":" | Where-Object { $_ -and $_ -ne "null" -and $_ -notlike "$Pkg/*" })
+        if ($try -gt 1 -and $listed) { [void](Shell $s "settings delete secure enabled_accessibility_services"); Start-Sleep -Seconds 1 }
+        if ($try -eq 1 -or -not $listed) { [void](Shell $s ("settings put secure enabled_accessibility_services " + ((@($others) + @($service)) -join ":"))) }
+        [void](Shell $s "settings put secure accessibility_enabled 1")
+        Start-Sleep -Seconds 3
+        $bound = (Shell $s "dumpsys accessibility") -match "Bound services:\{[^}]*label=Awan TV"
+    }
+    $v = Version-Of $s
+    if ($v -ne $want) { return [string]::Format((W "updFailed"), "v$v") }
+    if (-not $bound) { return W "updNoService" }
+    return ""
+}
+
+# Update the ticked TVs one after another; then each one's result, and Try again for those that failed.
+function Update-Chosen {
+    $tvs = @($script:Tvs | Where-Object { $_.Online -and $script:UpdChosen[$_.Id] })
+    if ($tvs.Count -eq 0) { return }
+    $results = @(); $failed = @()
+    $apk = $null; $want = Upd-Version
+    try { $apk = Upd-Apk } catch {
+        [void](Show-Dialog (W "updTitle") @(@{ Text = $_.Exception.Message }) "warn" @((W "okBtn")))
+        return
+    }
+    $n = 0
+    foreach ($tv in $tvs) {
+        $n++
+        $ui.ShownText.Text = [string]::Format((W "updOne"), (Name-Of $tv), $n, $tvs.Count)
+        $window.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
+        try { $why = Update-Tv $tv $apk $want } catch { $why = $_.Exception.Message }
+        if ($why) { $failed += $tv; $results += @{ Text = "! $(Name-Of $tv): $why" } }
+        else { $results += @{ Text = "✓ $(Name-Of $tv): " + [string]::Format((W "updDone"), $want) } }
+    }
+    $script:UpdChosen = @{}
+    Refresh-Tvs
+    Wait-Free
+    $title = [string]::Format((W "updChosenTitle"), $tvs.Count)
+    if ($failed.Count -eq 0) { [void](Show-Dialog $title $results "info" @((W "okBtn"))); return }
+    # A question: Enter keeps OK.
+    if ((Show-Dialog $title $results "ask" @((W "updRetry"), (W "okBtn"))) -eq 0) {
+        foreach ($t in $failed) { $script:UpdChosen[$t.Id] = $true }
+        Wait-Busy
+        Update-Chosen
+    }
+}
+
+function Upd-Count { return @($script:Tvs | Where-Object { $_.Online -and $script:UpdChosen[$_.Id] }).Count }
+
+# Update TVs: what is sent (GitHub's release or the local build, the viewer's choice, kept), each TV's version, ticks.
+function Show-Update {
+    $top = New-Object Windows.Controls.DockPanel; $top.Margin = "0,0,0,8"
+    $buttons = New-Object Windows.Controls.StackPanel; $buttons.Orientation = "Horizontal"
+    [Windows.Controls.DockPanel]::SetDock($buttons, "Right")
+    $connect = New-Object Windows.Controls.Button; $connect.Content = W "connNew"; $connect.Style = $window.FindResource("Btn")
+    $connect.Add_Click({ Connect-New })
+    $check = New-Object Windows.Controls.Button; $check.Content = W "updCheck"; $check.Style = $window.FindResource("Btn")
+    $check.Add_Click({ Busy { Refresh-Tvs; Check-Release }; Show-Section $script:Section })
+    $go = New-Object Windows.Controls.Button; $go.Style = $window.FindResource("Primary")
+    $count = Upd-Count
+    $go.Content = [string]::Format((W "updGo"), $count); $go.IsEnabled = $count -gt 0 -and $null -ne (Upd-Version)
+    $go.Add_Click({ Busy { Update-Chosen }; Show-Section $script:Section })
+    foreach ($b in @($connect, $check, $go)) { [void]$buttons.Children.Add($b) }
+    [void]$top.Children.Add($buttons)
+    $head = New-Object Windows.Controls.TextBlock; $head.Text = W "updTitle"; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.VerticalAlignment = "Center"
+    [void]$top.Children.Add($head)
+    [void]$ui.Rows.Children.Add($top)
+    # What is sent.
+    $src = New-Object Windows.Controls.StackPanel
+    $st = New-Object Windows.Controls.TextBlock; $st.Text = W "updSource"; $st.FontWeight = "SemiBold"; $st.Margin = "0,0,0,6"
+    [void]$src.Children.Add($st)
+    $gh = New-Object Windows.Controls.RadioButton; $gh.GroupName = "updsrc"; $gh.Margin = "0,4"; $gh.Tag = "github"
+    $gh.Content = if ($script:Release -and $script:Release.Version) { [string]::Format((W "updFromGithub"), $script:Release.Version) + $(if ($script:Release.Path) { " · " + (W "updChecked") } else { " · " + (W "updWillDownload") }) }
+                  elseif ($script:Release -and $script:Release.Error) { [string]::Format((W "updNoGithub"), $script:Release.Error) } else { W "updAsking" }
+    $gh.IsChecked = $script:UpdSource -eq "github"
+    [void]$src.Children.Add($gh)
+    if ($script:Local) {
+        $lo = New-Object Windows.Controls.RadioButton; $lo.GroupName = "updsrc"; $lo.Margin = "0,4"; $lo.Tag = "local"
+        $lo.Content = [string]::Format((W "updFromLocal"), $script:Local.Version) + $(if ($script:Local.Version -match "[a-z]$") { " · " + (W "updTest") } else { "" })
+        $lo.IsChecked = $script:UpdSource -eq "local"
+        [void]$src.Children.Add($lo)
+    }
+    foreach ($r in @($src.Children | Where-Object { $_ -is [Windows.Controls.RadioButton] })) {
+        $r.Add_Checked({ param($s, $e)
+            if ($script:UpdSource -eq $s.Tag) { return }
+            $script:UpdSource = [string]$s.Tag
+            Write-Utf8 $UpdateFile (@{ source = $script:UpdSource } | ConvertTo-Json)
+            $script:UpdChosen = @{}
+            Show-Section $script:Section })
+    }
+    $sn = New-Object Windows.Controls.TextBlock; $sn.Text = W "updSourceNote"; $sn.FontSize = 12; $sn.Foreground = Brush "#5F5F5F"; $sn.TextWrapping = "Wrap"; $sn.Margin = "0,6,0,0"
+    [void]$src.Children.Add($sn)
+    $card = New-Object Windows.Controls.Border; $card.Background = Brush "#FFFFFF"; $card.BorderBrush = Brush "#E5E5E5"; $card.BorderThickness = 1; $card.CornerRadius = 6; $card.Padding = "16,10"; $card.Margin = "0,0,0,8"
+    $card.Child = $src
+    [void]$ui.Rows.Children.Add($card)
+    $want = Upd-Version
+    $pick = New-Object Windows.Controls.DockPanel; $pick.Margin = "4,0,4,8"
+    [void]$pick.Children.Add((Link-Text (W "updPickOld") {
+        $w = Upd-Version
+        foreach ($t in @($script:Tvs | Where-Object { $_.Online -and $_.Version -and $w -and (Version-Less $_.Version $w) })) { $script:UpdChosen[$t.Id] = $true }
+        Show-Section $script:Section
+    }))
+    $pn = New-Object Windows.Controls.TextBlock; $pn.Text = W "updNote"; $pn.TextWrapping = "Wrap"; $pn.FontSize = 12; $pn.Foreground = Brush "#5F5F5F"; $pn.VerticalAlignment = "Center"
+    [void]$pick.Children.Add($pn)
+    [void]$ui.Rows.Children.Add($pick)
+    if (@($script:Tvs | Where-Object { $_.Online }).Count -eq 0) { Note-Line $(if ($script:Adb) { W "noTv" } else { W "noAdb" }) $Gold }
+    $headed = $false
+    foreach ($tv in $script:Tvs) {
+        if (-not $tv.Online -and -not $headed) { $headed = $true; Head-Line (W "offlineGroup") }
+        Update-Card $tv $want
+    }
+}
+
+function Update-Card($tv, [string]$want) {
+    $card = New-Object Windows.Controls.Border
+    $card.Background = Brush "#FFFFFF"; $card.BorderBrush = Brush "#E5E5E5"; $card.BorderThickness = 1; $card.CornerRadius = 6
+    $card.Padding = "16,10"; $card.Margin = "0,0,0,4"
+    $dock = New-Object Windows.Controls.DockPanel
+    $older = $tv.Online -and $tv.Version -and $want -and (Version-Less $tv.Version $want)
+    $cb = New-Object Windows.Controls.CheckBox; $cb.VerticalAlignment = "Center"; $cb.Margin = "0,0,14,0"; $cb.Tag = $tv
+    if ($older) {
+        $cb.IsChecked = [bool]$script:UpdChosen[$tv.Id]
+        if ($cb.IsChecked) { $card.BorderBrush = Brush $Navy }
+        $cb.Add_Click({ param($s, $e)
+            if ($s.IsChecked) { $script:UpdChosen[$s.Tag.Id] = $true } else { $script:UpdChosen.Remove($s.Tag.Id) }
+            Show-Section $script:Section })
+    } else { $cb.Visibility = "Hidden" }
+    [Windows.Controls.DockPanel]::SetDock($cb, "Left"); [void]$dock.Children.Add($cb)
+    if (-not $tv.Online) {
+        $btn = New-Object Windows.Controls.Button; $btn.Content = W "connKnown"; $btn.Style = $window.FindResource("Btn"); $btn.Tag = $tv; $btn.VerticalAlignment = "Center"; $btn.Margin = "16,0,0,0"
+        $btn.Add_Click({ param($s, $e) Connect-Known $s.Tag })
+        [Windows.Controls.DockPanel]::SetDock($btn, "Right"); [void]$dock.Children.Add($btn)
+    }
+    $text = New-Object Windows.Controls.StackPanel
+    $l1 = New-Object Windows.Controls.TextBlock; $l1.Text = Name-Of $tv; $l1.FontWeight = "SemiBold"; $l1.TextWrapping = "Wrap"
+    $l2 = New-Object Windows.Controls.TextBlock; $l2.FontSize = 12; $l2.Foreground = Brush "#5F5F5F"; $l2.Margin = "0,1,0,3"
+    $l2.Text = if ($tv.Online) { W "updConnected" } else { [string]::Format((W "lastSeen"), $tv.Seen) }
+    $l3 = New-Object Windows.Controls.TextBlock; $l3.TextWrapping = "Wrap"; $l3.FontSize = 13
+    $color = "#5F5F5F"
+    if (-not $tv.Online) { $l3.Text = if ($tv.Version) { [string]::Format((W "updLastKnown"), $tv.Version) } else { W "offline" } }
+    elseif (-not $tv.Version) { $l3.Text = W "noAwan" }
+    elseif (-not $want) { $l3.Text = "v$($tv.Version)" }
+    elseif ($older) { $l3.Text = [string]::Format((W "updOlder"), $tv.Version, $want); $color = "#7A5A14" }
+    elseif ($tv.Version -eq $want) { $l3.Text = [string]::Format((W "updSame"), $tv.Version); $color = "#1B6E3A" }
+    else { $l3.Text = [string]::Format((W "updNewer"), $tv.Version) }
+    $l3.Foreground = Brush $color
+    foreach ($l in @($l1, $l2, $l3)) { [void]$text.Children.Add($l) }
+    [void]$dock.Children.Add($text)
+    $card.Child = $dock
+    if (-not $tv.Online) { $card.Opacity = 0.55 }
+    [void]$ui.Rows.Children.Add($card)
+}
+
+# Nav lines: 0 TVs now, 1 Update TVs, 2 a line between, then the settings' sections from 3 (once a source is shown).
+$FirstSection = 3
 $script:Section = $FirstSection
 $script:NavMap = New-Object Collections.ArrayList   # each nav line: a section's index, -1 Saved recitations, -2 TVs now, -3 the line
 $script:FillingNav = $false
@@ -1730,6 +2249,7 @@ function Show-Section([int]$index) {
     $ui.Rows.Children.Clear()
     $target = if ($index -ge 0 -and $index -lt $script:NavMap.Count) { [int]$script:NavMap[$index] } else { 0 }
     if ($target -eq -2) { Show-Now; Update-Chrome; return }
+    if ($target -eq -4) { Show-Update; Update-Chrome; return }
     if (-not $script:Schema -or $target -lt -1) { Update-Chrome; return }
     if ($target -eq -1) { Show-Library; Update-Chrome; return }
     $sec = $script:Schema.sections[$target]
@@ -1795,8 +2315,10 @@ function Fill-NavLines {
     # TVs now first: it needs no settings shown, only connected TVs.
     $li = New-Object Windows.Controls.ListBoxItem; $li.Content = W "nowTitle"; $li.Padding = "12,8"; $li.FontSize = 14; $li.FontWeight = "SemiBold"
     [void]$ui.Nav.Items.Add($li); [void]$script:NavMap.Add(-2)
+    $li = New-Object Windows.Controls.ListBoxItem; $li.Content = W "updTitle"; $li.Padding = "12,8"; $li.FontSize = 14; $li.FontWeight = "SemiBold"
+    [void]$ui.Nav.Items.Add($li); [void]$script:NavMap.Add(-4)
     if (-not $script:Schema) {
-        $ui.Nav.SelectedIndex = if ($script:Section -eq 0) { 0 } else { -1 }
+        $ui.Nav.SelectedIndex = if ($script:Section -le 1) { $script:Section } else { -1 }
         return
     }
     $line = New-Object Windows.Controls.ListBoxItem; $line.IsEnabled = $false; $line.Focusable = $false; $line.Padding = "12,6"
@@ -1813,7 +2335,7 @@ function Fill-NavLines {
             [void]$ui.Nav.Items.Add($li); [void]$script:NavMap.Add(-1)
         }
     }
-    if ($script:Section -eq 1) { $script:Section = $FirstSection }
+    if ($script:Section -eq 2) { $script:Section = $FirstSection }
     $ui.Nav.SelectedIndex = [Math]::Min($script:Section, $ui.Nav.Items.Count - 1)
 }
 
@@ -1836,11 +2358,13 @@ $ui.Nav.Add_SelectionChanged({
     $i = $ui.Nav.SelectedIndex
     # TVs now asks each TV when opened, so what it shows is now.
     if ([int]$script:NavMap[$i] -eq -2) { $script:Section = $i; Busy { Query-Now } }
+    # Update TVs asks GitHub for its latest release when opened.
+    if ([int]$script:NavMap[$i] -eq -4) { $script:Section = $i; Busy { Check-Release } }
     Show-Section $i
 })
 $ui.RefreshBtn.Add_Click({
     Busy { Refresh-Tvs; if ($script:Section -lt $script:NavMap.Count -and [int]$script:NavMap[$script:Section] -eq -2) { Query-Now } }
-    if ($script:Section -lt $script:NavMap.Count -and [int]$script:NavMap[$script:Section] -eq -2) { Show-Section $script:Section }
+    if (@(-2, -4) -contains (Page-Of $script:Section)) { Show-Section $script:Section }
 })
 $ui.SourceBox.Add_SelectionChanged({ Update-Chrome })
 

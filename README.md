@@ -203,6 +203,10 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Import -File
    من تطبيق آخر)، و«تشغيل» أو «إيقاف» بجانب كل شاشة، و«تشغيل في المحددة» و«إيقاف في المحددة» للشاشات التي تحددها (يُحفظ
    تحديدك في الحاسب، ولا شاشة محددة أول مرة، فلا تُشغَّل شاشة يستخدمها غيرك). الإذاعة تعمل بمحطة الشاشة نفسها، ولا تقاطع
    شاشة يصدر منها صوت تطبيق آخر إلا إن اخترت «شغّل رغم ذلك» لها.
+10. **تحديث الشاشات والاتصال بها** (المحرر 1.3.0): صفحة «تحديث الشاشات» تعرض رقم Awan TV على كل شاشة، وتحدّث ما تحدده منها
+   دون أي سؤال على الشاشات، بآخر إصدار من GitHub أو بنسختك المبنية في `app\release` (تختار أنت، وكلاهما يُتحقق أنه موقّع
+   بمفتاح Awan TV). و«+ اتصال بشاشة…» يتصل بشاشة بعنوانها، ويقترن بها إن طلبت ذلك (التصحيح اللاسلكي)، والشاشة التي عرفها
+   المحرر من قبل يتصل بها زر «اتصال» على بطاقتها.
 
 **التراجع من الحاسب:**
 ```powershell
@@ -460,6 +464,10 @@ TVs now (1.10.0 on; first in the list, no settings needed): what each connected 
 another app's sound), Play or Stop beside each, and Play / Stop on the TVs you tick (kept on the computer, none at first,
 so a TV someone else uses is never started). The radio plays the TV's own station, and never cuts in on another app's
 sound unless you choose Play anyway for that TV.
+Update TVs and Connect (editor 1.3.0): Update TVs shows Awan TV's version on each TV and updates the ones you tick,
+with no question on the TVs, from GitHub's latest release or your own build in `app\release` (your choice; both checked
+as signed with Awan TV's key). "+ Connect a TV…" connects a TV by its address and pairs with it when it asks (Wireless
+debugging); a TV the editor met before connects with Connect on its card.
 Settings > About > Reset settings puts every setting back to a new install's (two confirmations: what goes and what
 stays, then OK held for three seconds) and starts from the location; saved recitations and the TV's earlier screensaver
 stay. The settings are kept on the TV first, one copy per reset (the last five; none when nothing but the location is
