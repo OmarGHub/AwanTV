@@ -210,6 +210,8 @@
                 <action android:name="app.awanpro.tv.IMPORT" />
                 <action android:name="app.awanpro.tv.IDENTIFY" />
                 <action android:name="app.awanpro.tv.TEST_UPDATE" />
+                <action android:name="app.awanpro.tv.STATUS" />
+                <action android:name="app.awanpro.tv.RADIO" />
             </intent-filter>
         </receiver>
 

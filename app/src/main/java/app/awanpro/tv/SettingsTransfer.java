@@ -42,6 +42,14 @@ public class SettingsTransfer extends BroadcastReceiver {
      * (a version, "1.6.0"), make Update now download that real release instead. A release answers Unknown action.
      */
     static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
+    /**
+     * The editor's TVs now (1.10.0): STATUS answers "radio=on|off station=<id> sound=yes|no name=<Base64 of the
+     * station's Arabic name, a new line, its English one>" (sound: something plays on the TV now, Awan TV's radio
+     * aside). RADIO with --es do play|stop starts or stops the radio at its chosen station; play does not take the
+     * sound from another app playing (a video stops when the radio starts: Android gives sound to one) unless
+     * --ez force true, and then answers "Busy: ...".
+     */
+    static final String STATUS = "app.awanpro.tv.STATUS", RADIO = "app.awanpro.tv.RADIO";
     static final String FILE = "awantv-settings.jsonc";
     /**
      * Written beside {@link #FILE} on export, for tools/AwanTV-editor.ps1 (SettingsFile.schema): the description in
@@ -104,6 +112,30 @@ public class SettingsTransfer extends BroadcastReceiver {
                 }
                 RemoteKeys.watch.showIdentify(name, intent.getStringExtra("id"), versionName(c));
                 result = "Shown on the TV";
+            } else if (STATUS.equals(intent.getAction())) {
+                result = status(c);
+            } else if (RADIO.equals(intent.getAction())) {
+                String what = intent.getStringExtra("do");
+                if ("stop".equals(what)) {
+                    if (Radio.on()) {
+                        Radio.stop();
+                        result = "Stopped";
+                    } else {
+                        result = "Already stopped";
+                    }
+                } else if ("play".equals(what)) {
+                    if (Radio.on()) {
+                        result = "Already playing";
+                    } else if (otherSound(c) && !intent.getBooleanExtra("force", false)) {
+                        result = "Busy: another app is playing sound";
+                    } else {
+                        Radio.start(c);
+                        result = "Playing";
+                    }
+                } else {
+                    throw new IOException("Give --es do play or --es do stop");
+                }
+                result += " | " + status(c);
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
                 int days = intent.getIntExtra("days_ago", -1);
                 String download = intent.getStringExtra("download");
@@ -137,6 +169,26 @@ public class SettingsTransfer extends BroadcastReceiver {
         }
         android.util.Log.i("AwanSettings", result);
         setResult(ok ? 1 : 0, result, null);
+    }
+
+    /** Whether something plays on the TV now other than Awan TV's radio (a video, music in another app). */
+    private static boolean otherSound(Context c) {
+        android.media.AudioManager am = c.getSystemService(android.media.AudioManager.class);
+        return am != null && am.isMusicActive() && !Radio.on();
+    }
+
+    /** STATUS's answer: the radio, its station (id and names) and whether another app plays sound. */
+    private static String status(Context c) {
+        Radio.Station st = Radio.station(c);
+        String names = st.ar + "\n" + st.en;
+        if (st.savedKey() != null) {
+            String m = Library.moshafName(c, st.savedKey(), true), me = Library.moshafName(c, st.savedKey(), false);
+            names = st.ar + (m.isEmpty() ? "" : " · " + m) + "\n" + st.en + (me.isEmpty() ? "" : " · " + me);
+        } else if (!st.reciter) {
+            names = st.ar + " · " + st.whereAr + "\n" + st.en + " · " + st.whereEn;
+        }
+        String b64 = android.util.Base64.encodeToString(names.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+        return "radio=" + (Radio.on() ? "on" : "off") + " station=" + st.id + " sound=" + (otherSound(c) ? "yes" : "no") + " name=" + b64;
     }
 
     /**

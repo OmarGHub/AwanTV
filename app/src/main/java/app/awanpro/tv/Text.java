@@ -392,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.10.0":
+                return ar ? new String[][] {
+                    {"الإذاعة على شاشاتك من الحاسب", "من محرر الإعدادات: ترى ما تبثه كل شاشة الآن، وتشغّل الإذاعة أو توقفها على شاشة أو على كل الشاشات. ولا تُقطع شاشة يُسمع عليها شيء آخر إلا إن اخترت ذلك."}}
+                  : new String[][] {
+                    {"The radio on your TVs from the computer", "From the settings editor: see what each TV is playing now, and start or stop the radio on one TV or on all of them. A TV playing something else is not cut off unless you choose to."}};
             case "1.9.0":
                 return ar ? new String[][] {
                     {"التلاوات والمحطة من الحاسب", "من محرر الإعدادات على Windows: اختر تلاوات تحمّلها شاشة أو أكثر بنفسها، وغيّر المحطة، دون الذهاب إلى كل شاشة."}}

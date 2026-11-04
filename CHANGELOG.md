@@ -6,6 +6,16 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- The editor's TVs now: `SettingsTransfer` answers STATUS (the radio on or off, its station's id and names, whether
+  another app plays sound now) and RADIO (`--es do play|stop`). Play starts the radio at its chosen station, but not
+  over sound from another app (Android gives sound to one, so a video would stop) unless `--ez force true`; then it
+  answers "Busy". Both over adb only, as the settings.
+
+### Settings editor 1.2.0
+- TVs now, first in the list: each TV's radio (playing, stopped, other sound, or a version before 1.10.0), Play or
+  Stop beside it, and Play all / Stop all. A TV playing something else asks first (Play anyway).
+
 ## [1.9.0]
 
 ### The app
