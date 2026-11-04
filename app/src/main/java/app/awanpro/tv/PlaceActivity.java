@@ -106,12 +106,8 @@ public class PlaceActivity extends Screen {
         placeEnd(lng, in, 452, half, 72);
         method = text(ui400, 22, Tokens.GOLD_400);
         method.setSingleLine(true);
-        // A long method name with its hint ("· check it after saving") shrinks to fit, never cut (Morocco's ministry).
-        method.setIncludeFontPadding(false);
-        method.setGravity(android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.START);
-        method.setAutoSizeTextTypeUniformWithConfiguration(Math.max(1, Math.round(Ui.px(22 * 0.7f))),
-            Math.max(2, Math.round(Ui.px(22))), 1, android.util.TypedValue.COMPLEX_UNIT_PX);
-        placeEnd(method, in, 548, inW, 34);
+        methodWidth = inW;
+        placeEnd(method, in, 552, inW, ViewGroup.LayoutParams.WRAP_CONTENT);
         iqama = text(ui400, 20, Tokens.MIST_400);
         placeEnd(iqama, in, 590, inW, ViewGroup.LayoutParams.WRAP_CONTENT);
         FocusTile save = button(t.placeSave(), true);
@@ -271,14 +267,33 @@ public class PlaceActivity extends Screen {
         }
     };
 
+    /** The method line's width (design px): its text shrinks to fit it (setMethod). */
+    private float methodWidth;
+
+    /**
+     * A long method name with its hint ("· check it after saving": Morocco's ministry) at a smaller size, down to 70%,
+     * so it is never cut. Measured here: a single line's TextView never shrinks by itself (setSingleLine scrolls).
+     */
+    private void setMethod(String line) {
+        float full = Ui.px(22), size = full, room = Ui.px(methodWidth);
+        android.graphics.Paint p = new android.graphics.Paint(method.getPaint());
+        p.setTextSize(size);
+        while (size > full * 0.7f && p.measureText(line) > room) {
+            size -= 1;
+            p.setTextSize(size);
+        }
+        method.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+        method.setText(line);
+    }
+
     /** The method line: the country's, or today's when the country is not known. And the iqamah, where it has one. */
     private void showMethod(String cc) {
         Method m = Places.method(cc);
         String country = Prefs.countryName(cc, t.ar);
         if (m != null) {
-            method.setText(t.placeMethod(t.methodName(m), country));
+            setMethod(t.placeMethod(t.methodName(m), country));
         } else {
-            method.setText(t.placeMethod(t.methodName(Prefs.method(this)), null));
+            setMethod(t.placeMethod(t.methodName(Prefs.method(this)), null));
         }
         boolean preset = cc != null && Iqama.presetFor(Prefs.countryName(cc, false)) != null;
         iqama.setText(preset ? t.placeIqama(country) : "");
