@@ -6,6 +6,10 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Phone installer
+- Its version on every screen, at the top opposite the language button: "Awan TV 1.10.1" is both the installer's
+  version and the Awan TV it installs (the two are built with one number). Before, it showed only after connecting.
+
 ## [1.10.1]
 
 ### The app

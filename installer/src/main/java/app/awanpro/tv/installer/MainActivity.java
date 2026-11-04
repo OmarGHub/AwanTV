@@ -139,6 +139,17 @@ public final class MainActivity extends Activity {
         langButton.setCompoundDrawablePadding(dp(7));
         langButton.setGravity(Gravity.CENTER_VERTICAL);
         langButton.setOnClickListener(v -> switchLanguage());
+        // Which Awan TV this installer carries (its own version is the same number), on every screen at the other
+        // end from the language button, which hides once connected.
+        String own = ownVersion();
+        android.text.SpannableStringBuilder name = new android.text.SpannableStringBuilder("Awan TV ");
+        int at = name.length();
+        name.append(own);
+        name.setSpan(new android.text.style.ForegroundColorSpan(Ui.GOLD_400), at, name.length(), 0);
+        TextView version = Ui.text(this, own.isEmpty() ? "" : name, Ui.MIST, 12, Ui.medium());
+        version.setTextDirection(View.TEXT_DIRECTION_LTR);
+        version.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        bar.addView(version, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         bar.addView(langButton);
         return bar;
     }
