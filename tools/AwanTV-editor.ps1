@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.3.1
+﻿# AwanTV-editor.ps1 - Version 1.3.2
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.3.1"
+$ScriptVersion = "1.3.2"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -143,6 +143,11 @@ $Words = @{
         updOne = "يحدّث {0} ({1} من {2})…"; updDone = "حُدّثت إلى {0}"; updRetry = "أعد المحاولة لما فشل"
         updOtherKey = "Awan TV عليها بتوقيع آخر: انقل إعداداتها ثم أزله وثبّته من جديد (AwanTV-install)"; updNewerThere = "عليها إصدار أحدث مما يُرسل"
         updFailed = "لم يكتمل ({0})"; updNoService = "حُدّثت، لكن خدمة Awan TV لم تعمل بعد: أعد تشغيل الشاشة"
+        progDownload = "تنزيل Awan TV {0} من GitHub"; progLocal = "نسختك المبنية محليًا: Awan TV {0}"; progPct = "{0}% · {1} من {2} ميجابايت"; progRemain = " · بقي نحو {0}"
+        progChecking = "التحقق من توقيع الملف…"; progLocalChecked = "موقّعة بمفتاح Awan TV"; progWait = "في الانتظار"; progStarting = "يبدأ…"
+        progStep1 = "الخطوة 1 من 3: إرسال التطبيق إلى الشاشة وتثبيته… ({0})"; progStep2 = "الخطوة 2 من 3: الصلاحيات… ({0})"; progStep3 = "الخطوة 3 من 3: تشغيل خدمة Awan TV والتأكد منها… ({0})"
+        progTvDone = "حُدّثت إلى {0} · {1}"; progSkip = "لم تُحدَّث: أُوقف التحديث قبلها"; progStop = "إيقاف بعد هذه الشاشة"; progStopping = "يتوقف بعد الشاشة الجارية…"
+        progFoot = "الخطوات لكل شاشة: 1. إرسال التطبيق وتثبيته · 2. الصلاحيات · 3. تشغيل خدمة Awan TV والتأكد منها. لا يظهر شيء على الشاشات."; progSummary = "انتهى: حُدّثت {0} من {1}."
     }
     en = @{
         title = "Awan TV · Settings editor"; source = "Source"; get = "Get from TV"; open = "Open file…"; refresh = "Refresh the TV list"
@@ -210,6 +215,11 @@ $Words = @{
         updOne = "Updating {0} ({1} of {2})…"; updDone = "updated to {0}"; updRetry = "Try again for those that failed"
         updOtherKey = "Awan TV there is signed with another key: copy its settings, remove it and install again (AwanTV-install)"; updNewerThere = "It has a newer version than what is sent"
         updFailed = "Did not finish ({0})"; updNoService = "Updated, but Awan TV's service is not running yet: restart the TV"
+        progDownload = "Downloading Awan TV {0} from GitHub"; progLocal = "Your local build: Awan TV {0}"; progPct = "{0}% · {1} of {2} MB"; progRemain = " · about {0} left"
+        progChecking = "Checking the file's signature…"; progLocalChecked = "Signed with Awan TV's key"; progWait = "Waiting"; progStarting = "Starting…"
+        progStep1 = "Step 1 of 3: sending the app to the TV and installing it… ({0})"; progStep2 = "Step 2 of 3: permissions… ({0})"; progStep3 = "Step 3 of 3: starting Awan TV's service and checking it… ({0})"
+        progTvDone = "Updated to {0} · {1}"; progSkip = "Not updated: stopped before it"; progStop = "Stop after this TV"; progStopping = "Stopping after the TV in hand…"
+        progFoot = "Each TV: 1. the app sent and installed · 2. permissions · 3. Awan TV's service started and checked. Nothing shows on the TVs."; progSummary = "Finished: {0} of {1} updated."
     }
 }
 $EditorConfig = Join-Path $EditorDir "editor.json"
@@ -1927,6 +1937,8 @@ $script:Local = $null        # @{ Version; Path } for app\release\AwanTV.apk sig
 $script:UpdChosen = @{}      # TV id -> $true, none at first
 
 # The signing certificate and the version of an APK, as tools\AwanTV-release.ps1 reads them (no Android tools needed).
+# Kept as text, so the update's worker (its own runspace) defines the very same functions.
+$ApkFns = @'
 # The first signer's certificate in the APK Signing Block (v3, else v2): the SHA-256 that apksigner prints.
 function Get-ApkCert([string]$Path) {
     $b = [IO.File]::ReadAllBytes($Path)
@@ -2023,7 +2035,8 @@ function Get-ApkVersion([string]$Path) {
     }
     return [pscustomobject]@{ Code = $code; Name = $name }
 }
-
+'@
+. ([scriptblock]::Create($ApkFns))
 
 # What GitHub's latest release is, and the local build when it is signed with the release key. Opening the page and
 # Check the version ask; the APK itself is downloaded only to update.
@@ -2053,92 +2066,244 @@ function Upd-Version {
     return $null
 }
 
-# The APK for the chosen source, downloaded if need be, and checked: the release key and the version it says.
-function Upd-Apk {
-    if ($script:UpdSource -eq "local" -and $script:Local) { $path = $script:Local.Path; $want = $script:Local.Version }
-    else {
-        $want = $script:Release.Version
-        $path = Join-Path $ApkDir "AwanTV-$want.apk"
-        if (-not (Test-Path $path)) {
-            New-Item -ItemType Directory -Force -Path $ApkDir | Out-Null
-            $ui.ShownText.Text = [string]::Format((W "updDownloading"), $want)
-            $window.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
-            $part = "$path.part"
-            $old = $ProgressPreference; $ProgressPreference = "SilentlyContinue"
-            try { Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/OmarGHub/AwanTV/releases/download/v$want/AwanTV.apk" -OutFile $part -Headers @{ "User-Agent" = "AwanTV-editor" } -TimeoutSec 300 }
-            finally { $ProgressPreference = $old }
-            Move-Item -Force $part $path
-        }
-    }
-    if ((Get-ApkCert $path) -ne $ReleaseCert) { Remove-Item -Force $path -ErrorAction SilentlyContinue; throw (W "updNotOurs") }
-    $v = (Get-ApkVersion $path).Name
-    if ($v -ne $want) { throw ([string]::Format((W "updWrongVersion"), $v, $want)) }
-    if ($script:UpdSource -ne "local") { $script:Release.Path = $path }
-    return $path
-}
-
-# One TV, quietly: install over it, then what AwanTV-install does after an install (permissions, app ops, the
-# service listed and bound), without the screensaver steps (already set) and without opening Awan TV on the TV.
-# Returns "" when done, else why not.
-function Update-Tv($tv, [string]$apk, [string]$want) {
-    $s = $tv.Serial
-    $out = Adb $s @("install", "-r", $apk)
-    Log "Update $($tv.Id) to ${want}: $out"
-    if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") { return W "updOtherKey" }
-    if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") { return W "updNewerThere" }
-    if ($out -notmatch "Success") { return [string]::Format((W "updFailed"), $out) }
+# The work itself runs in its own runspace, so the window keeps drawing: the APK (downloaded with its bytes counted,
+# then checked), then each TV in turn with its step. It writes only into $Job (synchronized); Show-Progress reads it.
+$UpdWorker = @'
+param($Job, $Adb, $ApkFns, $LogFile, $Pkg)
+. ([scriptblock]::Create($ApkFns))
+function L([string]$t) { try { Add-Content -Path $LogFile -Value ("{0}  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $t) -Encoding UTF8 } catch { } }
+function A([string]$s, [string[]]$a) { $ErrorActionPreference = "Continue"; return (& $Adb -s $s @a 2>&1 | Out-String).Trim() }
+function Sh([string]$s, [string]$c) { return A $s @("shell", $c) }
+function Do-Tv($t, [string]$apk, [string]$want) {
+    $s = $t.Serial
+    $t.Step = 1
+    $out = A $s @("install", "-r", $apk)
+    L "Update $($t.Id) to ${want}: $out"
+    if ($out -match "INSTALL_FAILED_UPDATE_INCOMPATIBLE") { return "otherKey" }
+    if ($out -match "INSTALL_FAILED_VERSION_DOWNGRADE") { return "newerThere" }
+    if ($out -notmatch "Success") { return "failed:$out" }
+    # As AwanTV-install: Android may handle the update's force-stop a moment after the install answered.
     Start-Sleep -Seconds 5
-    $sdk = 0; [void][int]::TryParse((Shell $s "getprop ro.build.version.sdk"), [ref]$sdk)
+    $t.Step = 2
+    $sdk = 0; [void][int]::TryParse((Sh $s "getprop ro.build.version.sdk"), [ref]$sdk)
     $storage = if ($sdk -ge 33) { @("READ_MEDIA_AUDIO") } elseif ($sdk -ge 30) { @("READ_EXTERNAL_STORAGE") } else { @("READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE") }
-    foreach ($p in @("RECORD_AUDIO", "WRITE_SECURE_SETTINGS", "ACCESS_FINE_LOCATION") + $storage) { [void](Shell $s "pm grant $Pkg android.permission.$p") }
-    foreach ($op in @("APP_AUTO_START", "APP_ASSOC_START", "AUTO_START")) { [void](Shell $s "cmd appops set $Pkg $op allow 2>/dev/null") }
-    [void](Shell $s "cmd appops set $Pkg REQUEST_INSTALL_PACKAGES allow")
+    foreach ($p in @("RECORD_AUDIO", "WRITE_SECURE_SETTINGS", "ACCESS_FINE_LOCATION") + $storage) { [void](Sh $s "pm grant $Pkg android.permission.$p") }
+    foreach ($op in @("APP_AUTO_START", "APP_ASSOC_START", "AUTO_START")) { [void](Sh $s "cmd appops set $Pkg $op allow 2>/dev/null") }
+    [void](Sh $s "cmd appops set $Pkg REQUEST_INSTALL_PACKAGES allow")
+    $t.Step = 3
     $service = "$Pkg/app.awanpro.tv.RemoteKeys"
     $bound = $false
     for ($try = 1; $try -le 3 -and -not $bound; $try++) {
-        $now = Shell $s "settings get secure enabled_accessibility_services"
+        $now = Sh $s "settings get secure enabled_accessibility_services"
         $listed = $now -match "(^|:)$([regex]::Escape($Pkg))/($([regex]::Escape($Pkg)))?\.RemoteKeys(:|$)"
         $others = @($now -split ":" | Where-Object { $_ -and $_ -ne "null" -and $_ -notlike "$Pkg/*" })
-        if ($try -gt 1 -and $listed) { [void](Shell $s "settings delete secure enabled_accessibility_services"); Start-Sleep -Seconds 1 }
-        if ($try -eq 1 -or -not $listed) { [void](Shell $s ("settings put secure enabled_accessibility_services " + ((@($others) + @($service)) -join ":"))) }
-        [void](Shell $s "settings put secure accessibility_enabled 1")
+        if ($try -gt 1 -and $listed) { [void](Sh $s "settings delete secure enabled_accessibility_services"); Start-Sleep -Seconds 1 }
+        if ($try -eq 1 -or -not $listed) { [void](Sh $s ("settings put secure enabled_accessibility_services " + ((@($others) + @($service)) -join ":"))) }
+        [void](Sh $s "settings put secure accessibility_enabled 1")
         Start-Sleep -Seconds 3
-        $bound = (Shell $s "dumpsys accessibility") -match "Bound services:\{[^}]*label=Awan TV"
+        $bound = (Sh $s "dumpsys accessibility") -match "Bound services:\{[^}]*label=Awan TV"
     }
-    $v = Version-Of $s
-    if ($v -ne $want) { return [string]::Format((W "updFailed"), "v$v") }
-    if (-not $bound) { return W "updNoService" }
+    $v = [regex]::Match((Sh $s "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+    if ($v -ne $want) { return "failed:v$v" }
+    if (-not $bound) { return "noService" }
     return ""
 }
+try {
+    $path = $Job.Path
+    if ($Job.Url) {
+        $Job.Down = "now"
+        [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+        $req = [Net.HttpWebRequest]::Create($Job.Url)
+        $req.UserAgent = "AwanTV-editor"; $req.Timeout = 30000; $req.ReadWriteTimeout = 60000; $req.AllowAutoRedirect = $true
+        $res = $req.GetResponse()
+        $Job.Total = [long]$res.ContentLength
+        $part = "$path.part"
+        $in = $res.GetResponseStream(); $out = [IO.File]::Create($part)
+        try {
+            $buf = New-Object byte[] 65536
+            while (($n = $in.Read($buf, 0, $buf.Length)) -gt 0) {
+                if ($Job.Stop) { throw "stopped" }
+                $out.Write($buf, 0, $n); $Job.Done = [long]$Job.Done + $n
+            }
+        } finally { $out.Close(); $in.Close(); $res.Close() }
+        if ($Job.Total -gt 0 -and $Job.Done -ne $Job.Total) { throw "The download was cut short." }
+        Move-Item -Force $part $path
+    }
+    $Job.Down = "check"
+    if ((Get-ApkCert $path) -ne $Job.Cert) {
+        if ($Job.Url) { Remove-Item -Force $path -ErrorAction SilentlyContinue }
+        throw "notOurs"
+    }
+    $v = (Get-ApkVersion $path).Name
+    if ($v -ne $Job.Want) { throw "wrongVersion:$v" }
+    $Job.Down = "done"
+    foreach ($t in $Job.Tvs) {
+        if ($Job.Stop) { $t.State = "skip"; continue }
+        $t.State = "now"; $t.Started = [DateTime]::Now
+        try { $why = Do-Tv $t $path $Job.Want } catch { $why = "failed:" + $_.Exception.Message }
+        $t.Seconds = [int]([DateTime]::Now - $t.Started).TotalSeconds
+        if ($why) { $t.Why = $why; $t.State = "fail" } else { $t.State = "done" }
+    }
+} catch {
+    $m = $_.Exception.Message
+    if ($m -eq "stopped") { foreach ($t in $Job.Tvs) { $t.State = "skip" } }
+    else {
+        $Job.Error = $(if ($m -eq "notOurs" -or $m -like "wrongVersion:*") { $m } else { "failed:$m" })
+        $Job.Down = "fail"
+        foreach ($t in $Job.Tvs) { if ($t.State -eq "wait") { $t.State = "skip" } }
+        L "Update: $m"
+    }
+} finally { $Job.Finished = $true }
+'@
 
-# Update the ticked TVs one after another; then each one's result, and Try again for those that failed.
+# A worker's code in the window's words.
+function Upd-Why([string]$code) {
+    if (-not $code) { return "" }
+    if ($code -eq "otherKey") { return W "updOtherKey" }
+    if ($code -eq "newerThere") { return W "updNewerThere" }
+    if ($code -eq "noService") { return W "updNoService" }
+    if ($code -eq "notOurs") { return W "updNotOurs" }
+    if ($code -like "wrongVersion:*") { return [string]::Format((W "updWrongVersion"), $code.Substring(13), (Upd-Version)) }
+    if ($code -like "failed:*") { return [string]::Format((W "updFailed"), $code.Substring(7)) }
+    return $code
+}
+function Mmss([int]$s) { return "{0}:{1:00}" -f [Math]::Floor($s / 60), ($s % 60) }
+
+# The progress window: the APK's line (a real percentage while it downloads), then each TV's (its step and the time
+# it has taken, a moving bar: adb tells no percentage while it installs), redrawn four times a second from $Job.
+# Closing it while it works stops after the TV in hand. Returns the ids to try again (Try again for those that failed).
+function Show-Progress($job, [int]$count) {
+    $dlg = New-Object Windows.Window
+    $dlg.Title = "Awan TV · " + (W "updTitle"); $dlg.SizeToContent = "Height"; $dlg.Width = 640; $dlg.ResizeMode = "NoResize"; $dlg.ShowInTaskbar = $false
+    $dlg.Background = Brush "#F9F9F9"; $dlg.FontFamily = $window.FontFamily; $dlg.FontSize = 14; $dlg.FlowDirection = $window.FlowDirection
+    $dlg.Owner = $window; $dlg.WindowStartupLocation = "CenterOwner"
+    try { $dlg.Icon = $window.Icon } catch { }
+    $panel = New-Object Windows.Controls.StackPanel; $panel.Margin = "22,18"
+    $head = New-Object Windows.Controls.TextBlock; $head.Text = [string]::Format((W "updChosenTitle"), $count); $head.FontWeight = "SemiBold"; $head.FontSize = 16; $head.Margin = "0,0,0,8"
+    [void]$panel.Children.Add($head)
+    $mk = {
+        param([string]$title)
+        $row = New-Object Windows.Controls.DockPanel; $row.Margin = "0,6"
+        $icon = New-Object Windows.Controls.TextBlock; $icon.Width = 22; $icon.FontSize = 15; $icon.VerticalAlignment = "Top"
+        [Windows.Controls.DockPanel]::SetDock($icon, "Left"); [void]$row.Children.Add($icon)
+        $col = New-Object Windows.Controls.StackPanel
+        $t = New-Object Windows.Controls.TextBlock; $t.Text = $title; $t.TextWrapping = "Wrap"
+        $sub = New-Object Windows.Controls.TextBlock; $sub.FontSize = 12; $sub.Foreground = Brush "#5F5F5F"; $sub.TextWrapping = "Wrap"; $sub.Margin = "0,2,0,0"
+        $bar = New-Object Windows.Controls.ProgressBar; $bar.Height = 8; $bar.Width = 440; $bar.HorizontalAlignment = "Left"; $bar.Margin = "0,6,0,0"; $bar.Foreground = Brush $Navy; $bar.Visibility = "Collapsed"
+        foreach ($c in @($t, $sub, $bar)) { [void]$col.Children.Add($c) }
+        [void]$row.Children.Add($col)
+        return @{ Row = $row; Icon = $icon; Title = $t; Sub = $sub; Bar = $bar }
+    }
+    $apkTitle = if ($job.Local) { [string]::Format((W "progLocal"), $job.Want) } else { [string]::Format((W "progDownload"), $job.Want) }
+    $down = & $mk $apkTitle
+    [void]$panel.Children.Add($down.Row)
+    $rows = @()
+    foreach ($t in $job.Tvs) { $r = & $mk $t.Name; $r.Tv = $t; $rows += $r; [void]$panel.Children.Add($r.Row) }
+    $foot = New-Object Windows.Controls.TextBlock; $foot.Text = W "progFoot"; $foot.FontSize = 12; $foot.Foreground = Brush "#5F5F5F"; $foot.TextWrapping = "Wrap"; $foot.Margin = "0,12,0,0"
+    [void]$panel.Children.Add($foot)
+    $bar = New-Object Windows.Controls.StackPanel; $bar.Orientation = "Horizontal"; $bar.HorizontalAlignment = "Right"; $bar.Margin = "0,16,0,0"
+    $stop = New-Object Windows.Controls.Button; $stop.Content = W "progStop"; $stop.Style = $window.FindResource("Btn")
+    $retry = New-Object Windows.Controls.Button; $retry.Content = W "updRetry"; $retry.Style = $window.FindResource("Btn"); $retry.Visibility = "Collapsed"
+    $ok = New-Object Windows.Controls.Button; $ok.Content = W "okBtn"; $ok.Style = $window.FindResource("Primary"); $ok.Visibility = "Collapsed"
+    foreach ($b in @($retry, $ok, $stop)) { [void]$bar.Children.Add($b) }
+    [void]$panel.Children.Add($bar)
+    $dlg.Content = $panel
+    # Through $script:Prog: WPF calls these later.
+    $script:Prog = @{ Job = $job; Down = $down; Rows = $rows; Foot = $foot; Stop = $stop; Retry = $retry; Ok = $ok; Dlg = $dlg; Again = @(); Shown = $false }
+    $stop.Add_Click({ $script:Prog.Job.Stop = $true; $script:Prog.Stop.IsEnabled = $false; $script:Prog.Foot.Text = W "progStopping" })
+    $ok.Add_Click({ $script:Prog.Dlg.Close() })
+    $retry.Add_Click({ $script:Prog.Again = @($script:Prog.Rows | Where-Object { $_.Tv.State -eq "fail" } | ForEach-Object { $_.Tv.Id }); $script:Prog.Dlg.Close() })
+    $dlg.Add_Closing({ param($s, $e)
+        if (-not $script:Prog.Job.Finished) { $e.Cancel = $true; $script:Prog.Job.Stop = $true; $script:Prog.Stop.IsEnabled = $false; $script:Prog.Foot.Text = W "progStopping" } })
+    $timer = New-Object Windows.Threading.DispatcherTimer
+    $timer.Interval = [TimeSpan]::FromMilliseconds(250)
+    $timer.Add_Tick({ Fill-Progress })
+    $script:Prog.Timer = $timer
+    Fill-Progress
+    $timer.Start()
+    [void]$dlg.ShowDialog()
+    $timer.Stop()
+    return @($script:Prog.Again)
+}
+
+function Set-Icon($r, [string]$state) {
+    $look = @{ wait = @("○", "#AAAAAA"); now = @("●", "#7A5A14"); done = @("✓", "#1B6E3A"); fail = @("✗", "#B3261E"); skip = @("–", "#AAAAAA") }[$state]
+    $r.Icon.Text = $look[0]; $r.Icon.Foreground = Brush $look[1]
+    $r.Title.FontWeight = if ($state -eq "now") { "SemiBold" } else { "Normal" }
+    $r.Title.Foreground = Brush $(if ($state -eq "wait" -or $state -eq "skip") { "#888888" } else { "#1B1B1B" })
+}
+
+function Fill-Progress {
+    $p = $script:Prog; $j = $p.Job; $d = $p.Down
+    switch ($j.Down) {
+        "now" {
+            Set-Icon $d "now"; $d.Bar.Visibility = "Visible"
+            $total = [double]$j.Total; $done = [double]$j.Done
+            if ($total -gt 0) {
+                $d.Bar.IsIndeterminate = $false; $d.Bar.Value = [Math]::Round(100 * $done / $total)
+                $sec = ([DateTime]::Now - $j.Started).TotalSeconds
+                $left = if ($done -gt 0 -and $sec -gt 2) { [string]::Format((W "progRemain"), (Mmss ([int](($total - $done) / ($done / $sec))))) } else { "" }
+                $d.Sub.Text = [string]::Format((W "progPct"), [Math]::Round(100 * $done / $total), ($done / 1MB).ToString("0.0"), ($total / 1MB).ToString("0.0")) + $left
+            } else { $d.Bar.IsIndeterminate = $true; $d.Sub.Text = ($done / 1MB).ToString("0.0") + " MB" }
+        }
+        "check" { Set-Icon $d "now"; $d.Bar.Visibility = "Visible"; $d.Bar.IsIndeterminate = $true; $d.Sub.Text = W "progChecking" }
+        "done" { Set-Icon $d "done"; $d.Bar.Visibility = "Collapsed"; $d.Sub.Text = if ($j.Local) { W "progLocalChecked" } else { W "updChecked" } }
+        "fail" { Set-Icon $d "fail"; $d.Bar.Visibility = "Collapsed"; $d.Sub.Text = Upd-Why $j.Error }
+        default { Set-Icon $d "wait"; $d.Sub.Text = W "progWait" }
+    }
+    foreach ($r in $p.Rows) {
+        $t = $r.Tv
+        Set-Icon $r $t.State
+        if ($t.State -eq "now") {
+            $r.Bar.Visibility = "Visible"; $r.Bar.IsIndeterminate = $true
+            $sec = if ($t.Started) { [int]([DateTime]::Now - $t.Started).TotalSeconds } else { 0 }
+            $key = @{ 1 = "progStep1"; 2 = "progStep2"; 3 = "progStep3" }[[int]$t.Step]
+            $r.Sub.Text = if ($key) { [string]::Format((W $key), (Mmss $sec)) } else { W "progStarting" }
+        } else {
+            $r.Bar.Visibility = "Collapsed"
+            $r.Sub.Text = switch ($t.State) {
+                "done" { [string]::Format((W "progTvDone"), $j.Want, (Mmss $t.Seconds)) }
+                "fail" { Upd-Why $t.Why }
+                "skip" { W "progSkip" }
+                default { W "progWait" }
+            }
+        }
+    }
+    if ($j.Finished -and -not $p.Shown) {
+        $p.Shown = $true
+        $ok = @($p.Rows | Where-Object { $_.Tv.State -eq "done" }).Count
+        $p.Foot.Text = [string]::Format((W "progSummary"), $ok, $p.Rows.Count)
+        $p.Stop.Visibility = "Collapsed"; $p.Ok.Visibility = "Visible"; $p.Ok.IsDefault = $true; $p.Ok.IsCancel = $true
+        if (@($p.Rows | Where-Object { $_.Tv.State -eq "fail" }).Count -gt 0) { $p.Retry.Visibility = "Visible" }
+        Log "Update finished: $ok of $($p.Rows.Count)"
+    }
+}
+
+# Update the ticked TVs: the worker started, the progress window shown; then the TVs read again. Try again for those
+# that failed runs it once more for them.
 function Update-Chosen {
     $tvs = @($script:Tvs | Where-Object { $_.Online -and $script:UpdChosen[$_.Id] })
-    if ($tvs.Count -eq 0) { return }
-    $results = @(); $failed = @()
-    $apk = $null; $want = Upd-Version
-    try { $apk = Upd-Apk } catch {
-        [void](Show-Dialog (W "updTitle") @(@{ Text = $_.Exception.Message }) "warn" @((W "okBtn")))
-        return
-    }
-    $n = 0
-    foreach ($tv in $tvs) {
-        $n++
-        $ui.ShownText.Text = [string]::Format((W "updOne"), (Name-Of $tv), $n, $tvs.Count)
-        $window.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
-        try { $why = Update-Tv $tv $apk $want } catch { $why = $_.Exception.Message }
-        if ($why) { $failed += $tv; $results += @{ Text = "! $(Name-Of $tv): $why" } }
-        else { $results += @{ Text = "✓ $(Name-Of $tv): " + [string]::Format((W "updDone"), $want) } }
-    }
+    $want = Upd-Version
+    if ($tvs.Count -eq 0 -or -not $want) { return }
+    $local = [bool]($script:UpdSource -eq "local" -and $script:Local)
+    $path = if ($local) { $script:Local.Path } else { Join-Path $ApkDir "AwanTV-$want.apk" }
+    $url = if ($local -or (Test-Path $path)) { $null } else { "https://github.com/OmarGHub/AwanTV/releases/download/v$want/AwanTV.apk" }
+    New-Item -ItemType Directory -Force -Path $ApkDir | Out-Null
+    $list = New-Object Collections.ArrayList
+    foreach ($tv in $tvs) { [void]$list.Add([hashtable]::Synchronized(@{ Id = $tv.Id; Name = (Name-Of $tv); Serial = $tv.Serial; State = "wait"; Step = 0; Started = $null; Seconds = 0; Why = $null })) }
+    $job = [hashtable]::Synchronized(@{ Url = $url; Path = $path; Want = $want; Cert = $ReleaseCert; Local = $local; Down = "wait"; Done = [long]0; Total = [long]0
+        Started = [DateTime]::Now; Error = $null; Stop = $false; Finished = $false; Tvs = $list })
+    Log "Update $($tvs.Count) TV(s) to $want ($(if ($local) { 'local build' } else { 'GitHub' }))"
+    $ps = [powershell]::Create()
+    [void]$ps.AddScript($UpdWorker).AddArgument($job).AddArgument($script:Adb).AddArgument($ApkFns).AddArgument($LogFile).AddArgument($Pkg)
+    $handle = $ps.BeginInvoke()
+    $again = @(Show-Progress $job $tvs.Count)
+    try { [void]$ps.EndInvoke($handle) } catch { Log "Update worker: $($_.Exception.Message)" } finally { $ps.Dispose() }
     $script:UpdChosen = @{}
-    Refresh-Tvs
-    Wait-Free
-    $title = [string]::Format((W "updChosenTitle"), $tvs.Count)
-    if ($failed.Count -eq 0) { [void](Show-Dialog $title $results "info" @((W "okBtn"))); return }
-    # A question: Enter keeps OK.
-    if ((Show-Dialog $title $results "ask" @((W "updRetry"), (W "okBtn"))) -eq 0) {
-        foreach ($t in $failed) { $script:UpdChosen[$t.Id] = $true }
-        Wait-Busy
+    if (-not $local -and (Test-Path $path)) { $script:Release.Path = $path }
+    Busy { Refresh-Tvs }
+    if ($again.Count -gt 0) {
+        foreach ($id in $again) { $script:UpdChosen[$id] = $true }
         Update-Chosen
     }
 }
@@ -2157,7 +2322,7 @@ function Show-Update {
     $go = New-Object Windows.Controls.Button; $go.Style = $window.FindResource("Primary")
     $count = Upd-Count
     $go.Content = [string]::Format((W "updGo"), $count); $go.IsEnabled = $count -gt 0 -and $null -ne (Upd-Version)
-    $go.Add_Click({ Busy { Update-Chosen }; Show-Section $script:Section })
+    $go.Add_Click({ Update-Chosen; Show-Section $script:Section })
     foreach ($b in @($connect, $check, $go)) { [void]$buttons.Children.Add($b) }
     [void]$top.Children.Add($buttons)
     $head = New-Object Windows.Controls.TextBlock; $head.Text = W "updTitle"; $head.FontSize = 20; $head.FontWeight = "SemiBold"; $head.VerticalAlignment = "Center"

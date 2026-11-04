@@ -7,6 +7,10 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.3.2: Update the ticked shows its progress in a window that keeps moving: the download with its
+  percentage, megabytes and time left, the signature check, then each TV with its step of three (install, permissions,
+  the service) and the time taken, ✓ or ✗ with why; Stop after this TV; the result in the same window, with Try again
+  for those that failed. The work runs in its own runspace, so the editor no longer looks frozen.
 - `AwanTV-editor` 1.3.1: Connect waits a full minute for Allow on the TV, and tells a TV that took the connection but
   stays "offline" (unplug it for a minute) from one that was not allowed; the connection left half-open is closed.
 - `AwanTV-editor` 1.3.0: Update TVs, second in the list: each connected TV's Awan TV version against what is sent,
