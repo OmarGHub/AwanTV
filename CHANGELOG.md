@@ -7,6 +7,9 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.3.3: a TV that went offline while being read no longer gets adb's error text ("device offline",
+  PowerShell's NativeCommandError) saved as its model or name: it shows as not connected, what was saved of it stays,
+  and text an older editor saved that way is cleared from state\editor\tvs.jsonc on start.
 - `AwanTV-editor` 1.3.2: Update the ticked shows its progress in a window that keeps moving: the download with its
   percentage, megabytes and time left, the signature check, then each TV with its step of three (install, permissions,
   the service) and the time taken, ✓ or ✗ with why; Stop after this TV; the result in the same window, with Try again

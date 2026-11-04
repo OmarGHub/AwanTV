@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.3.2
+﻿# AwanTV-editor.ps1 - Version 1.3.3
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.3.2"
+$ScriptVersion = "1.3.3"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -286,8 +286,15 @@ if ($script:Adb) { Start-AdbServer $script:Adb }
 function Adb([string]$serial, [string[]]$arguments) {
     $old = $ErrorActionPreference
     $ErrorActionPreference = "Continue"   # adb writes its progress on stderr
-    try { $out = & $script:Adb -s $serial @arguments 2>&1 | Out-String } finally { $ErrorActionPreference = $old }
+    # Each line as its own text: piped whole, a line adb wrote on stderr ("adb.exe: device offline") came out as
+    # PowerShell's full error record (At ... char ... NativeCommandError), which was then saved as a TV's name.
+    try { $out = & $script:Adb -s $serial @arguments 2>&1 | ForEach-Object { "$_" } | Out-String } finally { $ErrorActionPreference = $old }
     return $out.Trim()
+}
+
+# An answer that is adb's complaint, not the TV's: the TV went offline or away while being read.
+function Adb-Failed([string]$text) {
+    return ($text -match "[\r\n]") -or ($text -match "^adb(\.exe)?\s*:|^error:|device offline|device '.*' not found|no devices|NativeCommandError")
 }
 function Shell([string]$serial, [string]$command) { return Adb $serial @("shell", $command) }
 
@@ -324,15 +331,20 @@ $script:Registry = $null     # id -> @{ name; model; deviceName; address; versio
 
 function Load-Registry {
     $script:Registry = [ordered]@{}
+    $dirty = $false
     if (Test-Path $TvsFile) {
         try {
             $o = Strip-Jsonc ([IO.File]::ReadAllText($TvsFile, [Text.Encoding]::UTF8)) | ConvertFrom-Json
             foreach ($p in $o.PSObject.Properties) {
                 $e = [ordered]@{ name = ""; model = ""; deviceName = ""; address = ""; version = ""; seen = "" }
                 foreach ($f in @($e.Keys)) { if ($null -ne $p.Value.$f) { $e[$f] = [string]$p.Value.$f } }
+                # Editor 1.3.2 and older could save adb's error text as a model or device name: cleared, read again
+                # the next time the TV answers.
+                foreach ($f in @("model", "deviceName", "version")) { if ($e[$f] -and (Adb-Failed $e[$f])) { $e[$f] = ""; $dirty = $true } }
                 $script:Registry[$p.Name] = $e
             }
         } catch { Log "tvs.jsonc unreadable: $($_.Exception.Message)" }
+        if ($dirty) { Log "tvs.jsonc: adb error text cleared"; Save-Registry }
     }
 }
 
@@ -367,18 +379,26 @@ function Get-Tvs {
         foreach ($line in $lines) {
             if ($line -notmatch "^(\S.*?)\s+device$") { continue }
             $serial = $Matches[1]
-            $id = (Shell $serial "getprop ro.serialno") -replace "[^A-Za-z0-9._-]", "_"
+            $sn = Shell $serial "getprop ro.serialno"
+            if (Adb-Failed $sn) { Log "$serial stopped answering: $sn"; continue }
+            $id = $sn -replace "[^A-Za-z0-9._-]", "_"
             if (-not $id) { $id = $serial -replace "[^A-Za-z0-9._-]", "_" }
             if ($online.ContainsKey($id)) { continue }
+            # Read everything first: a TV that stops answering on the way is not online now, and what was saved of
+            # it stays as it was.
+            $model = Shell $serial "getprop ro.product.model"
+            $dn = Shell $serial "settings get global device_name"
+            $vo = Shell $serial "dumpsys package $Pkg | grep versionName"
+            if ((Adb-Failed $model) -or (Adb-Failed $dn) -or (($vo -notmatch "versionName=") -and (Adb-Failed $vo))) {
+                Log "$serial stopped answering while read"; continue
+            }
             $online[$id] = $serial
             $e = $script:Registry[$id]
             if (-not $e) { $e = [ordered]@{ name = ""; model = ""; deviceName = ""; address = ""; version = ""; seen = "" }; $script:Registry[$id] = $e }
-            $e.model = Shell $serial "getprop ro.product.model"
-            $dn = Shell $serial "settings get global device_name"
+            $e.model = $model
             $e.deviceName = if ($dn -and $dn -ne "null") { $dn } else { "" }
             $e.address = $serial
-            $v = Version-Of $serial
-            $e.version = if ($v) { $v } else { "" }
+            $e.version = if ($vo -match "versionName=(\S+)") { $Matches[1] } else { "" }
             $e.seen = Get-Date -Format "yyyy-MM-dd HH:mm"
         }
         Save-Registry
@@ -984,7 +1004,7 @@ function Fill-Targets {
                     $tv = $s.Tag
                     Busy {
                         $old = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-                        $out = & $script:Adb connect $tv.Address 2>&1 | Out-String
+                        $out = & $script:Adb connect $tv.Address 2>&1 | ForEach-Object { "$_" } | Out-String
                         $ErrorActionPreference = $old
                         Log "adb connect $($tv.Address): $($out.Trim())"
                         Refresh-Tvs
@@ -1783,7 +1803,7 @@ function Show-Now {
 
 function Adb-Text([string[]]$arguments) {
     $old = $ErrorActionPreference; $ErrorActionPreference = "Continue"
-    try { $out = & $script:Adb @arguments 2>&1 | Out-String } finally { $ErrorActionPreference = $old }
+    try { $out = & $script:Adb @arguments 2>&1 | ForEach-Object { "$_" } | Out-String } finally { $ErrorActionPreference = $old }
     return $out.Trim()
 }
 
@@ -2072,7 +2092,7 @@ $UpdWorker = @'
 param($Job, $Adb, $ApkFns, $LogFile, $Pkg)
 . ([scriptblock]::Create($ApkFns))
 function L([string]$t) { try { Add-Content -Path $LogFile -Value ("{0}  {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $t) -Encoding UTF8 } catch { } }
-function A([string]$s, [string[]]$a) { $ErrorActionPreference = "Continue"; return (& $Adb -s $s @a 2>&1 | Out-String).Trim() }
+function A([string]$s, [string[]]$a) { $ErrorActionPreference = "Continue"; return (& $Adb -s $s @a 2>&1 | ForEach-Object { "$_" } | Out-String).Trim() }
 function Sh([string]$s, [string]$c) { return A $s @("shell", $c) }
 function Do-Tv($t, [string]$apk, [string]$want) {
     $s = $t.Serial
