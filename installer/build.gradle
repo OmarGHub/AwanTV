@@ -17,9 +17,13 @@ android {
         applicationId 'app.awanpro.tv.installer'
         minSdk 26
         targetSdk 34
-        // Both from awanVersion in gradle.properties: change the version there only.
-        versionName awanVersion
-        versionCode rootProject.ext.awanVersionCode.call(awanVersion)
+        // Both from awanVersion in gradle.properties: change the version there only. For a test of "Update the
+        // installer" alone, installerTestVersion in gradle.properties (a version below the published one, e.g.
+        // 1.10.0z) makes this build offer the published installer and install it over itself; never in a release
+        // (AwanTV-release refuses an installer whose version is not the app's).
+        def v = project.findProperty('installerTestVersion') ?: awanVersion
+        versionName v
+        versionCode rootProject.ext.awanVersionCode.call(v)
     }
 
     // No encrypted dependency list in the APK: only Google Play reads it, and F-Droid and IzzyOnDroid flag it.

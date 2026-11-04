@@ -159,6 +159,22 @@ final class Ui {
         return b;
     }
 
+    /** A small rounded button inside a card: gold (the action) or outlined (the way out). */
+    static TextView pill(Context c, CharSequence s, boolean gold, View.OnClickListener click) {
+        TextView b = text(c, s, gold ? LAPIS_900 : PLASTER, 14, semibold);
+        b.setGravity(Gravity.CENTER);
+        b.setPadding(dp(c, 18), dp(c, 9), dp(c, 18), dp(c, 9));
+        GradientDrawable bg = round(gold ? GOLD_400 : 0x00000000, 99, c);
+        if (!gold) bg.setStroke(dp(c, 1), LINE_SOFT);
+        pressable(b, bg, gold ? 0x400c1b33 : 0x33efe7d6);
+        b.setOnClickListener(click);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.setMarginEnd(dp(c, 8));
+        b.setLayoutParams(lp);
+        return b;
+    }
+
     static void enabled(TextView primary, boolean on) {
         primary.setEnabled(on);
         primary.setAlpha(on ? 1f : 0.4f);

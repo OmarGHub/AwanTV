@@ -73,7 +73,7 @@
     <string name="same_title">Awan TV is up to date on it</string>
     <string name="same_lead">It has %1$s, the version this installer carries. Set up again puts the service, permissions and screensaver right in seconds, without installing again.</string>
     <string name="newer_installer_title">A newer installer is out: %1$s</string>
-    <string name="newer_installer_body">This one carries Awan TV %1$s. To install the newest, get the newer installer: %2$s</string>
+    <string name="newer_installer_body">This one carries Awan TV %1$s. Update it to install the newest on your TVs.</string>
     <string name="same_chip">Awan TV %1$s · the same version</string>
     <string name="setup_button">Set up again</string>
     <string name="reinstall_button">Install it again</string>
@@ -133,4 +133,35 @@
     <string name="state_was_set">Already in place on the TV</string>
     <string name="state_not_here">Not on this TV</string>
     <string name="state_failed">Set, but the TV doesn’t show it</string>
+
+    <!-- The installer's own update (SelfUpdate) and About -->
+    <string name="upd_button">Update the installer</string>
+    <string name="upd_downloading">Downloading the installer %1$s</string>
+    <string name="upd_progress">%1$s%% · %2$s of %3$s MB</string>
+    <string name="upd_installing_title">Installing the new installer</string>
+    <string name="upd_installing">Accept “Update” in Android’s window. Then open the new installer from its icon.</string>
+    <string name="upd_continue">Continue installing</string>
+    <string name="upd_failed_title">The installer could not be updated</string>
+    <string name="upd_failed">Try again, or download the new installer from: %1$s</string>
+    <string name="upd_retry">Try again</string>
+    <string name="upd_perm_title">Let the installer update itself</string>
+    <string name="upd_perm_body">The first time only: Android opens “Install unknown apps” for this app; turn it on and come back. After that, Android asks “Do you want to update this app?” at each update.</string>
+    <string name="upd_perm_open">Open the setting</string>
+    <string name="upd_later">Later</string>
+    <string name="about_lead">Phone installer %1$s · installs Awan TV %2$s</string>
+    <string name="about_updates">Updates</string>
+    <string name="about_latest">You have the newest installer</string>
+    <string name="about_checking">Asking GitHub…</string>
+    <string name="about_offline">Could not ask GitHub just now</string>
+    <string name="about_check">Check now</string>
+    <string name="about_by">Developed by OMAR A ALHWAIRTH</string>
+    <string name="about_project">The project and its source</string>
+    <string name="about_releases">Releases</string>
+    <string name="about_releases_detail">Every version, its files and checksums: github.com/OmarGHub/AwanTV/releases</string>
+    <string name="about_based">Built on Afnon’s installer</string>
+    <string name="about_based_detail">With libadb-android and Conscrypt</string>
+    <string name="about_licences">Sources and licences</string>
+    <string name="about_licences_detail">The licence texts in full</string>
+    <string name="licences_lead">The licences of the installer and what it is built from, in their own words.</string>
+    <string name="licence_open">Open the text</string>
 </resources>

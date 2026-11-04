@@ -97,16 +97,9 @@ public final class MainActivity extends Activity {
         root.addView(footer, Ui.wide(this, 0));
         setContentView(root);
 
-        // A newer installer than this one? Asked once, shown on the guide (where everyone starts).
-        work.execute(() -> {
-            String latest = Setup.latest();
-            String own = ownVersion();
-            if (latest == null || own.isEmpty() || Setup.compare(latest, own) <= 0) return;
-            runOnUiThread(() -> {
-                newerInstaller = latest;
-                if (newerSlot != null && newerSlot.isAttachedToWindow()) fillNewer(newerSlot);
-            });
-        });
+        // A newer installer than this one? Asked once, shown on the guide (where everyone starts) and in About.
+        checkLatest();
+        SelfUpdate.listen(this::fillUpdate);
         hero = new Hero(this);
         finder = new Finder(this, tvs -> runOnUiThread(() -> showTvs(tvs)));
 
@@ -120,6 +113,13 @@ public final class MainActivity extends Activity {
 
     private static final String PREFS = "installer", LANG = "lang";
     private TextView langButton;
+    /** "Awan TV 1.10.2" at the top on every screen; on the guide it opens About (the "i" beside it). */
+    private TextView versionView;
+
+    private void versionOpensAbout(boolean on) {
+        versionView.setClickable(on);
+        versionView.setCompoundDrawablesRelativeWithIntrinsicBounds(on ? R.drawable.ic_info : 0, 0, 0, 0);
+    }
 
     /**
      * Arabic or English whatever the phone's language: the button names the other one. Android 13+ keeps the choice
@@ -146,10 +146,17 @@ public final class MainActivity extends Activity {
         int at = name.length();
         name.append(own);
         name.setSpan(new android.text.style.ForegroundColorSpan(Ui.GOLD_400), at, name.length(), 0);
-        TextView version = Ui.text(this, own.isEmpty() ? "" : name, Ui.MIST, 12, Ui.medium());
-        version.setTextDirection(View.TEXT_DIRECTION_LTR);
-        version.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-        bar.addView(version, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        versionView = Ui.text(this, own.isEmpty() ? "" : name, Ui.MIST, 12, Ui.medium());
+        versionView.setTextDirection(View.TEXT_DIRECTION_LTR);
+        versionView.setCompoundDrawablePadding(dp(6));
+        versionView.setGravity(Gravity.CENTER_VERTICAL);
+        versionView.setPadding(0, dp(6), dp(6), dp(6));
+        versionView.setOnClickListener(v -> {
+            if (versionView.isClickable()) go(this::showAbout);
+        });
+        LinearLayout.LayoutParams vp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        bar.addView(versionView, vp);
+        bar.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1f));
         bar.addView(langButton);
         return bar;
     }
@@ -185,7 +192,22 @@ public final class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Back from Android's "Install unknown apps" for this app: the update goes on if it was allowed.
+        if (updateAfterPermission) {
+            updateAfterPermission = false;
+            if (SelfUpdate.allowed(this) && newerInstaller != null) {
+                askingPermission = false;
+                SelfUpdate.start(this, newerInstaller);
+            }
+            fillUpdate();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
+        SelfUpdate.listen(null);
         stopFinders();
         work.shutdownNow();
         if (adb != null) {
@@ -197,36 +219,260 @@ public final class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    // Prepare
+    // The installer's own update
 
     /** A newer installer than this one on GitHub ("1.3.0"), once the question at start-up has an answer; else null. */
     private String newerInstaller;
-    /** The guide's place for that notice (empty until there is one). */
-    private LinearLayout newerSlot;
+    /** GitHub's answer about the newest release: 0 asking, 1 answered, -1 no answer (offline). */
+    private int latestState;
+    /** The place for the installer's update on the screen shown (the guide's notice, About's card), or null. */
+    private LinearLayout updateSlot;
+    /** About's card says "you have the newest" too; the guide's shows only a newer one. */
+    private boolean updateInAbout;
+    /** Update pressed without "Install unknown apps": the card explains it, then Android's setting. */
+    private boolean askingPermission, updateAfterPermission;
+    /** The guide's "Find my TV", off while the installer is being replaced. */
+    private TextView findButton;
 
-    /** The notice: which version, and where to get the newer installer (a link this phone's browser opens). */
-    private void fillNewer(LinearLayout slot) {
+    /** Asks GitHub for the newest release (once at start, again from About's Check now). */
+    private void checkLatest() {
+        latestState = 0;
+        fillUpdate();
+        work.execute(() -> {
+            String latest = Setup.latest();
+            String own = ownVersion();
+            runOnUiThread(() -> {
+                latestState = latest == null ? -1 : 1;
+                if (latest != null) {
+                    newerInstaller = !own.isEmpty() && Setup.compare(latest, own) > 0 ? latest : null;
+                }
+                fillUpdate();
+            });
+        });
+    }
+
+    /** "1.10.2", kept left to right inside Arabic. */
+    private static String iso(String v) {
+        return "\u2066" + v + "\u2069";
+    }
+
+    /** The installer's update, as it stands: newer one out, permission, downloading, installing, failed, or (About) up to date. */
+    private void fillUpdate() {
+        if (findButton != null) Ui.enabled(findButton, !SelfUpdate.busy());
+        LinearLayout slot = updateSlot;
+        if (slot == null) return;
         slot.removeAllViews();
+        int st = SelfUpdate.state();
+        boolean newer = newerInstaller != null;
+        if (!newer && st == SelfUpdate.IDLE && !updateInAbout) return;
         LinearLayout card = Ui.card(this);
         GradientDrawable bg = Ui.round(Ui.LAPIS_800, 18, this);
-        bg.setStroke(dp(1), 0x99d8b46a);
+        bg.setStroke(dp(1), newer || st != SelfUpdate.IDLE ? 0x99d8b46a : Ui.LINE_SOFT);
         card.setBackground(bg);
-        TextView title = Ui.label(this, getString(R.string.newer_installer_title, "\u2066" + newerInstaller + "\u2069"));
-        title.setTextColor(Ui.GOLD_400);
-        card.addView(title);
-        TextView body = Ui.small(this, getString(R.string.newer_installer_body, "\u2066" + ownVersion() + "\u2069",
-                Setup.LATEST_INSTALLER));
-        Ui.links(body);
-        card.addView(body, Ui.wide(this, 6));
+        LinearLayout buttons = Ui.row(this);
+        if (st == SelfUpdate.DOWNLOADING) {
+            card.addView(gold(getString(R.string.upd_downloading, iso(SelfUpdate.version()))));
+            card.addView(bar(SelfUpdate.percent()), Ui.wide(this, 12));
+            String of = SelfUpdate.total() > 0 ? getString(R.string.upd_progress, number(SelfUpdate.percent()),
+                    mb(SelfUpdate.done()), mb(SelfUpdate.total())) : number(SelfUpdate.percent()) + "%";
+            card.addView(Ui.latin(Ui.small(this, of)), Ui.wide(this, 8));
+            buttons.addView(Ui.pill(this, getString(R.string.cancel), false, v -> SelfUpdate.cancel()));
+        } else if (st == SelfUpdate.INSTALLING) {
+            card.addView(gold(getString(R.string.upd_installing_title)));
+            card.addView(Ui.small(this, getString(R.string.upd_installing)), Ui.wide(this, 6));
+            if (SelfUpdate.confirmWaiting()) {
+                buttons.addView(Ui.pill(this, getString(R.string.upd_continue), true, v -> SelfUpdate.confirm(this)));
+            }
+        } else if (st == SelfUpdate.FAILED) {
+            card.addView(gold(getString(R.string.upd_failed_title)));
+            TextView body = Ui.small(this, getString(R.string.upd_failed, Setup.LATEST_INSTALLER));
+            Ui.links(body);
+            card.addView(body, Ui.wide(this, 6));
+            buttons.addView(Ui.pill(this, getString(R.string.upd_retry), true, v -> {
+                SelfUpdate.reset();
+                pressUpdate();
+            }));
+        } else if (askingPermission && newer) {
+            card.addView(gold(getString(R.string.upd_perm_title)));
+            card.addView(Ui.small(this, getString(R.string.upd_perm_body)), Ui.wide(this, 6));
+            buttons.addView(Ui.pill(this, getString(R.string.upd_perm_open), true, v -> openInstallPermission()));
+            buttons.addView(Ui.pill(this, getString(R.string.upd_later), false, v -> {
+                askingPermission = false;
+                fillUpdate();
+            }));
+        } else if (newer) {
+            card.addView(gold(getString(R.string.newer_installer_title, iso(newerInstaller))));
+            card.addView(Ui.small(this, getString(R.string.newer_installer_body, iso(ownVersion()))), Ui.wide(this, 6));
+            buttons.addView(Ui.pill(this, getString(R.string.upd_button), true, v -> pressUpdate()));
+        } else {
+            // About, nothing newer: what GitHub said, and Check now.
+            LinearLayout row = Ui.row(this);
+            LinearLayout words = Ui.column(this);
+            words.addView(Ui.label(this, getString(R.string.about_updates)));
+            int said = latestState == 0 ? R.string.about_checking : latestState > 0 ? R.string.about_latest : R.string.about_offline;
+            words.addView(Ui.small(this, getString(said)), Ui.wide(this, 3));
+            row.addView(words, Ui.fill(this));
+            TextView check = Ui.pill(this, getString(R.string.about_check), false, v -> checkLatest());
+            Ui.enabled(check, latestState != 0);
+            row.addView(check);
+            card.addView(row);
+        }
+        if (buttons.getChildCount() > 0) card.addView(buttons, Ui.wide(this, 12));
         slot.addView(card, Ui.wide(this, 0));
     }
+
+    private TextView gold(String s) {
+        TextView t = Ui.label(this, s);
+        t.setTextColor(Ui.GOLD_400);
+        return t;
+    }
+
+    /** The download's bar: gold over lapis-700, its share of the width. */
+    private View bar(int percent) {
+        LinearLayout track = Ui.row(this);
+        track.setBackground(Ui.round(Ui.LAPIS_700, 4, this));
+        track.setClipToOutline(true);
+        View fill = new View(this);
+        fill.setBackground(Ui.round(Ui.GOLD_400, 4, this));
+        track.addView(fill, new LinearLayout.LayoutParams(0, dp(8), Math.max(percent, 0)));
+        track.addView(new View(this), new LinearLayout.LayoutParams(0, dp(8), Math.max(100 - percent, 0)));
+        return track;
+    }
+
+    private void pressUpdate() {
+        if (newerInstaller == null || SelfUpdate.busy()) return;
+        if (!SelfUpdate.allowed(this)) {
+            askingPermission = true;
+            fillUpdate();
+            return;
+        }
+        askingPermission = false;
+        SelfUpdate.start(this, newerInstaller);
+    }
+
+    /** Android's "Install unknown apps" for this app; onResume goes on when the user comes back. */
+    private void openInstallPermission() {
+        updateAfterPermission = true;
+        try {
+            startActivity(new android.content.Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                    android.net.Uri.parse("package:" + getPackageName())));
+        } catch (RuntimeException e) {
+            updateAfterPermission = false;
+        }
+    }
+
+    // About
+
+    /** About (the "i" by the version at the top, on the guide): the version, its update, who made it, links, licences. */
+    private void showAbout() {
+        String own = ownVersion();
+        frame(PREPARE, Hero.Mode.TV, "Awan TV", getString(R.string.about_lead, iso(own), iso(own)));
+        aboutChrome();
+        updateSlot = Ui.column(this);
+        updateInAbout = true;
+        add(updateSlot, 16);
+        if (latestState < 0) checkLatest(); else fillUpdate();
+        LinearLayout links = Ui.card(this);
+        aboutRow(links, getString(R.string.about_by), "awanpro.app", null);
+        aboutRow(links, getString(R.string.about_project), "github.com/OmarGHub/AwanTV", null);
+        aboutRow(links, getString(R.string.about_releases), getString(R.string.about_releases_detail), null);
+        aboutRow(links, getString(R.string.about_based), getString(R.string.about_based_detail), null);
+        aboutRow(links, getString(R.string.about_licences), getString(R.string.about_licences_detail), v -> go(this::showLicences));
+        add(links, 12);
+        foot(Ui.secondary(this, getString(R.string.back), v -> go(this::showGuide)));
+        back = () -> go(this::showGuide);
+    }
+
+    /** The screens off the steps (About, licences): no stage bar, no language button, the version not a button. */
+    private void aboutChrome() {
+        stages.setVisibility(View.GONE);
+        langButton.setVisibility(View.INVISIBLE);
+        versionOpensAbout(false);
+    }
+
+    private void aboutRow(LinearLayout card, String title, String detail, View.OnClickListener click) {
+        if (card.getChildCount() > 0) {
+            View line = new View(this);
+            line.setBackgroundColor(Ui.LINE_SOFT);
+            card.addView(line, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+        }
+        LinearLayout row = Ui.column(this);
+        row.setPadding(0, dp(10), 0, dp(10));
+        row.addView(Ui.label(this, title));
+        TextView d = Ui.small(this, click != null ? detail + "  ›" : detail);
+        row.addView(d, Ui.wide(this, 3));
+        if (click != null) {
+            Ui.pressable(row, Ui.round(0x00000000, 8, this), 0x33efe7d6);
+            row.setOnClickListener(click);
+        }
+        card.addView(row, Ui.wide(this, 0));
+    }
+
+    /** The licence texts carried in assets/licenses: README.txt first, then each file by name. */
+    private void showLicences() {
+        frame(PREPARE, Hero.Mode.TV, getString(R.string.about_licences), getString(R.string.licences_lead));
+        aboutChrome();
+        hero.setVisibility(View.GONE);
+        String[] names;
+        try {
+            names = getAssets().list("licenses");
+        } catch (IOException e) {
+            names = new String[0];
+        }
+        if (names == null) names = new String[0];
+        Arrays.sort(names);
+        add(licenceText(asset("licenses/README.txt")), 16);
+        LinearLayout files = Ui.card(this);
+        for (String n : names) {
+            if (n.equals("README.txt")) continue;
+            aboutRow(files, n, getString(R.string.licence_open), v -> go(() -> showLicence(n)));
+        }
+        add(files, 12);
+        foot(Ui.secondary(this, getString(R.string.back), v -> go(this::showAbout)));
+        back = () -> go(this::showAbout);
+    }
+
+    private void showLicence(String name) {
+        frame(PREPARE, Hero.Mode.TV, name, "");
+        aboutChrome();
+        hero.setVisibility(View.GONE);
+        add(licenceText(asset("licenses/" + name)), 12);
+        foot(Ui.secondary(this, getString(R.string.back), v -> go(this::showLicences)));
+        back = () -> go(this::showLicences);
+    }
+
+    /** A licence as written (English, left to right), small. */
+    private View licenceText(String text) {
+        LinearLayout card = Ui.card(this);
+        TextView t = Ui.text(this, text, Ui.PLASTER, 12, Ui.medium());
+        t.setTextDirection(View.TEXT_DIRECTION_LTR);
+        t.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        t.setTextIsSelectable(true);
+        card.addView(t);
+        return card;
+    }
+
+    private String asset(String path) {
+        try (java.io.InputStream in = getAssets().open(path)) {
+            java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+            return out.toString("UTF-8");
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    // Prepare
 
     private void showGuide() {
         stopFinders();
         frame(PREPARE, Hero.Mode.TV, getString(R.string.guide_title), getString(R.string.guide_lead));
-        newerSlot = Ui.column(this);
-        if (newerInstaller != null) fillNewer(newerSlot);
-        add(newerSlot, 12);
+        versionOpensAbout(true);
+        updateSlot = Ui.column(this);
+        updateInAbout = false;
+        add(updateSlot, 12);
         TextView both = Ui.chip(this, getString(R.string.guide_both), false);
         // Whole, on two lines if it must: cut short it said nothing.
         both.setSingleLine(false);
@@ -246,7 +492,11 @@ public final class MainActivity extends Activity {
                 Ui.small(this, getString(R.string.g3_wireless)),
                 Ui.tvText(this, R.string.tv_wireless_en, R.string.tv_wireless_ar)), 10);
         add(step(4, R.string.g4_title, R.string.g4_body), 10);
-        foot(Ui.primary(this, getString(R.string.guide_ready), v -> go(this::showFind)));
+        findButton = Ui.primary(this, getString(R.string.guide_ready), v -> {
+            if (!SelfUpdate.busy()) go(this::showFind);
+        });
+        foot(findButton);
+        fillUpdate();
         back = this::finish;
     }
 
@@ -1039,7 +1289,7 @@ public final class MainActivity extends Activity {
     }
 
     // Debug builds only: one screen with sample data, for screenshots and checking layouts without a TV.
-    // adb shell am start -n app.awanpro.tv.installer/.MainActivity --es screen find|allow|pair|confirm|install|done|partly|problem
+    // adb shell am start -n app.awanpro.tv.installer/.MainActivity --es screen find|about|licences|allow|pair|confirm|install|done|partly|problem
 
     /** For the sample screens: the installer's own version, which is always the Awan TV version it carries. */
     private String ownVersion() {
@@ -1068,6 +1318,12 @@ public final class MainActivity extends Activity {
                 showTvs(Arrays.asList(wireless, classic));
                 break;
             }
+            case "about":
+                showAbout();
+                break;
+            case "licences":
+                showLicences();
+                break;
             case "allow":
                 showAllow();
                 back = () -> go(this::showFind);
@@ -1140,7 +1396,13 @@ public final class MainActivity extends Activity {
         footer.removeAllViews();
         footer.setVisibility(View.GONE);
         stages(stageNow);
+        stages.setVisibility(View.VISIBLE);
+        hero.setVisibility(View.VISIBLE);
         hero.set(mode);
+        // Only the guide makes the version a button to About; each screen sets its own slot and button.
+        versionOpensAbout(false);
+        updateSlot = null;
+        findButton = null;
         content.addView(hero, Ui.wide(this, 8));
         titleView = Ui.title(this, title);
         content.addView(titleView, Ui.wide(this, 18));

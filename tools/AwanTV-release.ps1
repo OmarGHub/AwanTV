@@ -1,4 +1,4 @@
-# AwanTV-release.ps1 - Version 1.1.0
+﻿# AwanTV-release.ps1 - Version 1.2.0
 # Gathers the files of a GitHub release into release\ (ignored by git). Their names stay the same in every
 # version, so the guide's .../releases/latest/download/<name> links keep working:
 #   AwanTV.apk           the TV app (app\release\AwanTV.apk)
@@ -11,12 +11,14 @@
 # gathered: the file named AwanTV.apk on a tag v<X.Y.Z> (SelfUpdate's download address), the same release key
 # (Android refuses another), a versionName and versionCode that match awanVersion (a stale APK would tell the TVs of a
 # version they then never get), and a version above the one published (Android refuses an older versionCode).
+# The phone installer's own update (1.11.0) downloads AwanTVInstaller.apk from the same tag: the installer must have the
+# app's very version (checked here) and keep that file name.
 # Build both first: Build > Generate Signed App Bundle or APK > APK > app > release, then the same for installer.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-release.ps1
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.1.0"
+$ScriptVersion = "1.2.0"
 # The release key's certificate (README): TVs take an update only when it is signed with the same key.
 $ReleaseCert = "b445fc840602ca363c3ad83b60db22da1d04737633a47622d2405e97a3b50ed3"
 $Latest = "https://api.github.com/repos/OmarGHub/AwanTV/releases/latest"
@@ -162,6 +164,12 @@ if ($v.Name -ne $version -or $v.Code -ne $wantCode) {
     throw "app\release\AwanTV.apk is $($v.Name) (versionCode $($v.Code)), not $version ($wantCode): an older build. Build the app and the installer again."
 }
 Write-Host "AwanTV.apk: $($v.Name), versionCode $($v.Code): OK"
+# The installer has the app's number (it shows it, and its own update compares it with the release's).
+$vi = Get-ApkVersion $Installer
+if ($vi.Name -ne $v.Name -or $vi.Code -ne $v.Code) {
+    throw "installer\release\AwanTVInstaller.apk is $($vi.Name) (versionCode $($vi.Code)), not $($v.Name): remove installerTestVersion from gradle.properties if it is there, then build the installer again."
+}
+Write-Host "AwanTVInstaller.apk: $($vi.Name): OK"
 try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     $published = ((Invoke-RestMethod -Uri $Latest -Headers @{ "User-Agent" = "AwanTV-release" } -TimeoutSec 15).tag_name) -replace "^[vV]", ""
@@ -227,7 +235,7 @@ try {
 
 Write-Host "Awan TV $version, ready to upload from $Out"
 Write-Host "Upload the three files with these names unchanged, on the tag v$version (Update now downloads"
-Write-Host "  releases/download/v$version/AwanTV.apk on every TV)."
+Write-Host "  releases/download/v$version/AwanTV.apk on every TV, and the installer its own AwanTVInstaller.apk)."
 Write-Host "SHA-256:"
 Get-ChildItem $Out | Sort-Object Name | ForEach-Object {
     Write-Host ("  {0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name)

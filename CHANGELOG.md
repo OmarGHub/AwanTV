@@ -7,6 +7,12 @@ history is in its repository.
 ## [Unreleased]
 
 ### Phone installer
+- About (the "i" by the version at the top of the guide): the installer's version and the Awan TV it installs, its
+  updates (Check now), Developed by OMAR A ALHWAIRTH with awanpro.app, the project and its releases, Afnon's installer
+  it is built on, and the licence texts it carries (assets/licenses), each readable.
+- Update the installer: a newer installer on GitHub is offered with a button, not only a link. It downloads that
+  release's AwanTVInstaller.apk into an Android install session (as Awan TV's Update now), asking once for "Install
+  unknown apps" for this app, then Android's own "Update this app?". Find my TV waits while it downloads.
 - Its version on every screen, at the top opposite the language button: "Awan TV 1.10.1" is both the installer's
   version and the Awan TV it installs (the two are built with one number). Before, it showed only after connecting.
 

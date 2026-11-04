@@ -71,7 +71,7 @@
     <string name="same_title">Awan TV محدّث عليه</string>
     <string name="same_lead">عليه %1$s، الإصدار نفسه الذي يحمله المثبّت. «أعد الإعداد» يصلح الخدمة والصلاحيات وشاشة الاستراحة في ثوانٍ، دون إعادة التثبيت.</string>
     <string name="newer_installer_title">صدر مثبّت أحدث: %1$s</string>
-    <string name="newer_installer_body">هذا المثبّت يحمل Awan TV %1$s. لتثبيت الأحدث، نزّل المثبّت الجديد: %2$s</string>
+    <string name="newer_installer_body">هذا المثبّت يحمل Awan TV %1$s. حدّثه ليثبّت الأحدث على شاشاتك.</string>
     <string name="same_chip">Awan TV %1$s · الإصدار نفسه</string>
     <string name="setup_button">أعد الإعداد</string>
     <string name="reinstall_button">أعد التثبيت</string>
@@ -131,4 +131,35 @@
     <string name="state_was_set">مضبوط على التلفاز من قبل</string>
     <string name="state_not_here">غير متاح في هذا التلفاز</string>
     <string name="state_failed">ضُبط، لكن التلفاز لا يُظهره</string>
+
+    <!-- The installer's own update (SelfUpdate) and About -->
+    <string name="upd_button">حدّث المثبّت</string>
+    <string name="upd_downloading">يُنزَّل المثبّت %1$s</string>
+    <string name="upd_progress">%1$s%% · %2$s من %3$s ميجابايت</string>
+    <string name="upd_installing_title">يُثبَّت المثبّت الجديد</string>
+    <string name="upd_installing">وافق على «تحديث» في نافذة أندرويد. بعدها يُفتح المثبّت الجديد من أيقونته.</string>
+    <string name="upd_continue">متابعة التثبيت</string>
+    <string name="upd_failed_title">تعذّر تحديث المثبّت</string>
+    <string name="upd_failed">جرّب مرة أخرى، أو نزّل المثبّت الجديد من: %1$s</string>
+    <string name="upd_retry">أعد المحاولة</string>
+    <string name="upd_perm_title">اسمح للمثبّت بتحديث نفسه</string>
+    <string name="upd_perm_body">أول مرة فقط: يفتح أندرويد إعداد «تثبيت التطبيقات غير المعروفة» لهذا التطبيق، ففعّله ثم ارجع. بعدها يسألك أندرويد «هل تريد تحديث هذا التطبيق؟» عند كل تحديث.</string>
+    <string name="upd_perm_open">افتح الإعداد</string>
+    <string name="upd_later">لاحقًا</string>
+    <string name="about_lead">المثبّت على الجوال %1$s · يثبّت Awan TV %2$s</string>
+    <string name="about_updates">التحديثات</string>
+    <string name="about_latest">لديك أحدث مثبّت</string>
+    <string name="about_checking">يسأل GitHub…</string>
+    <string name="about_offline">تعذّر سؤال GitHub الآن</string>
+    <string name="about_check">تحقّق الآن</string>
+    <string name="about_by">تطوير عمر أحمد الحويرث</string>
+    <string name="about_project">المشروع ومصدره</string>
+    <string name="about_releases">صفحة الإصدارات</string>
+    <string name="about_releases_detail">كل إصدار وملفاته وبصماته: github.com/OmarGHub/AwanTV/releases</string>
+    <string name="about_based">مبني على مثبّت أفنون</string>
+    <string name="about_based_detail">وعلى libadb-android وConscrypt</string>
+    <string name="about_licences">المصادر والتراخيص</string>
+    <string name="about_licences_detail">نصوص التراخيص كاملة</string>
+    <string name="licences_lead">تراخيص المثبّت وما بُني منه، بنصوصها الأصلية بالإنجليزية.</string>
+    <string name="licence_open">افتح النص</string>
 </resources>
