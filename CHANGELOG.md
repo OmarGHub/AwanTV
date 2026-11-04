@@ -7,6 +7,8 @@ history is in its repository.
 ## [Unreleased]
 
 ### Tools
+- `AwanTV-editor` 1.3.1: Connect waits a full minute for Allow on the TV, and tells a TV that took the connection but
+  stays "offline" (unplug it for a minute) from one that was not allowed; the connection left half-open is closed.
 - `AwanTV-editor` 1.3.0: Update TVs, second in the list: each connected TV's Awan TV version against what is sent,
   GitHub's latest release (its AwanTV.apk downloaded to state\editor\apk at the update) or the local build in
   app\release (shown only when signed with the release key), the viewer's choice, kept in state\editor\update.json;

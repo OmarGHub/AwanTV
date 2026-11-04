@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.3.0
+﻿# AwanTV-editor.ps1 - Version 1.3.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.3.0"
+$ScriptVersion = "1.3.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -128,6 +128,7 @@ $Words = @{
         connIntro = "عنوان الشاشة كما يظهر فيها: الإعدادات ← الشبكة، أو في «التصحيح اللاسلكي» مع منفذه."; connAddress = "العنوان (والمنفذ إن كان ظاهرًا)"
         connHint = "بلا منفذ يُجرَّب 5555. وإن احتاجت الشاشة اقترانًا بهذا الحاسب، يطلبه المحرر بعد ذلك."; connGo = "اتصال"; connWorking = "يتصل…"
         connAllow = "على الشاشة: علّم «السماح دائمًا من هذا الحاسب» ثم اختر «السماح»."; connNotAllowed = "لم توافق الشاشة على هذا الحاسب. اضغط «اتصال» واختر «السماح» على الشاشة."
+        connOffline = "الشاشة قبلت الاتصال لكنها لا ترد (offline). أطفئ التصحيح فيها وشغّله، وإن بقيت كذلك فافصلها عن الكهرباء دقيقة، ثم اضغط «اتصال»."
         connFailed = "تعذّر الاتصال ({0}). إن كانت الشاشة على «التصحيح اللاسلكي» فاقترن بها أولًا:"
         pairTitle = "الشاشة تطلب اقترانًا بهذا الحاسب، مرة واحدة"; pairHow = "على الشاشة: خيارات المطوّر ← التصحيح اللاسلكي ← «اقتران الجهاز برمز». تظهر نافذة فيها رمز من ستة أرقام ومنفذ للاقتران."
         pairPort = "منفذ الاقتران"; pairCode = "الرمز"; pairGo = "اقتران واتصال"; pairFailed = "لم ينجح الاقتران ({0}). افتح نافذة الاقتران على الشاشة من جديد: تعطي رمزًا جديدًا كل مرة."
@@ -194,6 +195,7 @@ $Words = @{
         connIntro = "The TV's address as it shows it: Settings > Network, or in Wireless debugging with its port."; connAddress = "Address (and port, if shown)"
         connHint = "Without a port, 5555 is tried. If the TV needs pairing with this computer, the editor asks for it next."; connGo = "Connect"; connWorking = "Connecting…"
         connAllow = "On the TV: tick Always allow from this computer, then choose Allow."; connNotAllowed = "The TV did not allow this computer. Press Connect and choose Allow on the TV."
+        connOffline = "The TV took the connection but does not answer (offline). Turn its debugging off and on; if it stays so, unplug it for a minute, then press Connect."
         connFailed = "Could not connect ({0}). If the TV uses Wireless debugging, pair with it first:"
         pairTitle = "The TV asks to pair with this computer, once"; pairHow = "On the TV: Developer options > Wireless debugging > Pair device with pairing code. A window shows a six-digit code and a pairing port."
         pairPort = "Pairing port"; pairCode = "Code"; pairGo = "Pair and connect"; pairFailed = "Pairing did not work ({0}). Open the pairing window on the TV again: it shows a new code each time."
@@ -1788,15 +1790,19 @@ function Mdns-Address($tv) {
 }
 
 # adb connect, then (classic debugging) the TV's "Allow?" answered within a minute; the window's top line says what
-# to do meanwhile. $dialog: a window to keep drawing, or $null. Returns @{ Ok; Out; NotAllowed }.
+# to do meanwhile. $dialog: a window to keep drawing, or $null. Returns @{ Ok; Out; NotAllowed; Offline }: a TV still
+# "unauthorized" at the end was not allowed; one "offline" answered the connection but not adb itself (a TCL
+# BeyondTV stuck that way until unplugged for a minute).
 function Connect-Address([string]$address, $dialog, $status) {
     $out = Adb-Text @("connect", $address)
     Log "adb connect ${address}: $out"
     if ($out -notmatch "(^|\s)(connected|already connected)") { return @{ Ok = $false; Out = $out } }
     $told = $false
-    for ($i = 0; $i -lt 60; $i++) {
+    $last = ""
+    for ($i = 0; $i -lt 120; $i++) {
         $line = ((Adb-Text @("devices")) -split "`n" | Where-Object { $_ -like "$address*" } | Select-Object -First 1)
         if ($line -match "\sdevice$") { return @{ Ok = $true; Out = $out } }
+        if ($line -match "\s(\S+)$") { $last = $Matches[1] }
         if ($line -match "unauthorized" -and -not $told) {
             $told = $true
             if ($status) { $status.Text = W "connAllow"; $status.Foreground = Brush $Gold }
@@ -1806,6 +1812,9 @@ function Connect-Address([string]$address, $dialog, $status) {
         $d.Dispatcher.Invoke([Action]{}, [Windows.Threading.DispatcherPriority]::Background)
         Start-Sleep -Milliseconds 500
     }
+    Log "adb devices for ${address}: $last"
+    [void](Adb-Text @("disconnect", $address))
+    if ($last -eq "offline") { return @{ Ok = $false; Out = $out; Offline = $true } }
     return @{ Ok = $false; Out = $out; NotAllowed = $true }
 }
 
@@ -1861,6 +1870,7 @@ function Show-Connect([string]$prefill = "") {
             if ($r.Ok) { $s.Ok = $true; $s.Dlg.Close(); return }
             $s.Status.Foreground = Brush $Gold
             if ($r.NotAllowed) { $s.Status.Text = W "connNotAllowed"; return }
+            if ($r.Offline) { $s.Status.Text = W "connOffline"; return }
             # No: Wireless debugging may want this computer paired first.
             $s.Status.Text = [string]::Format((W "connFailed"), $r.Out)
             if (-not $s.Pairing) { $s.Pairing = $true; $s.Pair.Visibility = "Visible"; $s.Go.Content = W "pairGo" }
