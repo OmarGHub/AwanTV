@@ -550,6 +550,7 @@ final class SettingsFile {
         } catch (java.io.IOException e) {
             errors.add(e.getMessage());
         }
+        String station = null;
         java.util.Set<String> coming = new java.util.HashSet<>();
         for (LibraryRemote.Download d : downloads) coming.add(d.reciter.key());
         for (Iterator<String> keys = in.keys(); keys.hasNext(); ) {
@@ -576,12 +577,17 @@ final class SettingsFile {
                     done.notes.add("Station kept: " + why + " " + v);
                     continue;
                 }
+                // Switched after the others are saved, as on the TV: a playing radio moves to it at once.
+                station = (String) v;
+                changed++;
+                continue;
             }
             put(ed, it, v);
             changed++;
         }
         if (!errors.isEmpty()) throw new java.io.IOException(errors.size() + " mistake(s), nothing changed | " + TextUtils.join(" | ", errors));
         if (changed > 0 && !ed.commit()) throw new java.io.IOException("The settings could not be saved");
+        if (station != null) Radio.switchToId(c, station);
         done.changed = changed;
         if (!downloads.isEmpty()) {
             done.recordings = downloads.size();

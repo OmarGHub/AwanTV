@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.1.0
+﻿# AwanTV-editor.ps1 - Version 1.1.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -21,7 +21,7 @@
 # describes them in both languages).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.1.0"
+$ScriptVersion = "1.1.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -101,7 +101,7 @@ $Words = @{
         noList = "قائمة القرّاء لم تُحفظ على الشاشة بعد، وهي تقرؤها الآن من mp3quran.net: اجلب الإعدادات مرة أخرى بعد دقيقة."
         addTitle = "إضافة تلاوة"; stepReciter = "1. القارئ"; stepMoshaf = "2. المصحف"; stepWhat = "3. ما يُحمَّل"; allSurahs = "القرآن كاملًا: {0} سورة"; someChosen = "سور مختارة"
         listFrom = "قائمة القرّاء من mp3quran.net كما تحفظها الشاشة"; addBtn = "إضافة"; pickSome = "اختر سورة واحدة على الأقل."; searchReciter = "ابحث عن قارئ"
-        gStations = "المحطات"; gReciters = "إذاعات القرّاء (mp3quran.net)"; gSaved = "التلاوات المحفوظة على {0}"; gComing = "تُرسل للتحميل الآن"; savedMark = "محفوظة"
+        gStations = "المحطات"; gReciters = "إذاعات القرّاء (mp3quran.net)"; gSaved = "التلاوات المحفوظة على {0}"; gComing = "تُرسل للتحميل الآن"; savedMark = "محفوظة"; gSavedShort = "المحفوظة"; gRecitersShort = "إذاعات القرّاء"; comingMark = "تُحمَّل مع الإرسال"
         noSettingChanged = "لم يتغيّر أي إعداد"; queuedSent = "أُضيف إلى قائمة التحميل: {0} سورة من {1} تلاوة"; queuedNone = "ما أُرسل محفوظ عليها أو في قائمة تحميلها من قبل"
         keptSaved = "بقيت محطتها: «{0}» غير محفوظة عليها"; keptChannels = "بقيت محطتها: قائمة إذاعات القرّاء لم تُحفظ عليها بعد (تقرؤها الآن؛ أعد الإرسال بعد دقيقة)"; keptUnknown = "بقيت محطتها: «{0}» غير موجودة عليها"
         olderNoLibrary = "على نسخة أقدم من 1.9.0: لم تُرسل إليها التلاوات ولا المحطة (حدّثها)"
@@ -138,7 +138,7 @@ $Words = @{
         noList = "The TV has no reciter list yet and is reading it from mp3quran.net now: get the settings again in a minute."
         addTitle = "Add a recitation"; stepReciter = "1. Reciter"; stepMoshaf = "2. Recording"; stepWhat = "3. What to download"; allSurahs = "The whole Quran: {0} surahs"; someChosen = "Chosen surahs"
         listFrom = "mp3quran.net's reciter list as the TV keeps it"; addBtn = "Add"; pickSome = "Choose at least one surah."; searchReciter = "Search for a reciter"
-        gStations = "Stations"; gReciters = "Reciter channels (mp3quran.net)"; gSaved = "Saved on {0}"; gComing = "Downloading with this Send"; savedMark = "saved"
+        gStations = "Stations"; gReciters = "Reciter channels (mp3quran.net)"; gSaved = "Saved on {0}"; gComing = "Downloading with this Send"; savedMark = "saved"; gSavedShort = "Saved"; gRecitersShort = "Reciters"; comingMark = "downloads with Send"
         noSettingChanged = "No setting changed"; queuedSent = "Queued {0} surah(s) of {1} recitation(s)"; queuedNone = "What was sent is already saved or queued there"
         keptSaved = "Kept its station: {0} is not saved there"; keptChannels = "Kept its station: it has no reciter channel list yet (reading it now; send again in a minute)"; keptUnknown = "Kept its station: {0} is not there"
         olderNoLibrary = "On a version before 1.9.0: recitations and the station were not sent (update it)"
@@ -1144,45 +1144,65 @@ function List-Control($it, [string[]]$current) {
     return $panel
 }
 
-# The station, by group as Settings > Radio lists them, from the source TV (awantv-library.json); then the recordings
-# added to download with this Send. Each TV checks the one sent and keeps its own when it does not have it.
+# The station as Settings > Radio > Station picks it: first its group (stations, reciter channels, saved), then one of
+# that group, from the source TV (awantv-library.json); the recordings added to download with this Send join the saved
+# ones. Each TV checks the one sent and keeps its own when it does not have it.
+$script:StationGroup = $null   # the group shown, while choosing; $null = the current station's
 function Station-Control {
     $cur = $script:Values["station"]
     if ($null -eq $cur) { $cur = [string]$script:Library.station }
-    $cb = New-Object Windows.Controls.ComboBox; $cb.MinWidth = 340; $cb.MaxDropDownHeight = 560
-    $add = {
-        param($text, $tag, [bool]$header)
-        $ci = New-Object Windows.Controls.ComboBoxItem; $ci.Content = $text; $ci.Tag = $tag
-        if ($header) { $ci.IsEnabled = $false; $ci.FontSize = 12; $ci.FontWeight = "SemiBold"; $ci.Foreground = Brush "#5F5F5F" }
-        [void]$cb.Items.Add($ci)
-        if (-not $header -and "$tag" -eq "$cur") { $cb.SelectedItem = $ci }
-    }
-    $groups = @(@("stations", (W "gStations")), @("reciters", (W "gReciters")), @("saved", [string]::Format((W "gSaved"), $script:LibrarySource)))
-    foreach ($g in $groups) {
+    $groups = New-Object Collections.ArrayList
+    foreach ($g in @(@("stations", (W "gStations")), @("reciters", (W "gRecitersShort")), @("saved", (W "gSavedShort")))) {
+        $items = New-Object Collections.ArrayList
         # A file's source: another TV's saved recordings are not a choice here.
-        if ($g[0] -eq "saved" -and -not $script:LibraryLive) { continue }
-        $list = @($script:Library.stations | Where-Object { $_.group -eq $g[0] })
-        if ($list.Count -eq 0) { continue }
-        & $add $g[1] $null $true
-        foreach ($st in $list) {
-            $text = Lang-Of $st ""
-            if ($g[0] -eq "stations") { $where = Lang-Of $st "where"; if ($where) { $text = "$text · $where" } }
-            if ($g[0] -eq "saved") { $m = Lang-Of $st "moshaf"; if ($m) { $text = "$text · $m" }; $text = "$text ($(W 'savedMark'))" }
-            & $add $text $st.id $false
+        if ($g[0] -ne "saved" -or $script:LibraryLive) {
+            foreach ($st in @($script:Library.stations | Where-Object { $_.group -eq $g[0] })) {
+                $text = Lang-Of $st ""
+                if ($g[0] -eq "stations") { $where = Lang-Of $st "where"; if ($where) { $text = "$text · $where" } }
+                if ($g[0] -eq "saved") { $m = Lang-Of $st "moshaf"; if ($m) { $text = "$text · $m" } }
+                [void]$items.Add(@{ Text = $text; Tag = [string]$st.id })
+            }
+        }
+        if ($g[0] -eq "saved") {
+            foreach ($p in $script:Pending) {
+                $tag = "saved:$($p.R.key)"
+                if (@($items | Where-Object { $_.Tag -eq $tag }).Count) { continue }
+                [void]$items.Add(@{ Text = (Rec-Title $p.R) + " · " + (W "comingMark"); Tag = $tag })
+            }
+        }
+        if ($items.Count -gt 0) { [void]$groups.Add(@{ Id = $g[0]; Label = $g[1]; Items = $items }) }
+    }
+    $shown = $script:StationGroup
+    if (-not $shown) {
+        foreach ($g in $groups) { if (@($g.Items | Where-Object { $_.Tag -eq "$cur" }).Count) { $shown = $g.Id } }
+        if (-not $shown -and $groups.Count) { $shown = $groups[0].Id }
+    }
+    $panel = New-Object Windows.Controls.StackPanel; $panel.Orientation = "Horizontal"
+    $ids = @($groups | ForEach-Object { $_.Id }); $labels = @($groups | ForEach-Object { $_.Label })
+    $seg = Choice-Control $ids $labels $shown ([scriptblock]::Create("param(`$x) `$script:StationGroup = `$x; Show-Section `$script:Section"))
+    $seg.Margin = "0,0,10,0"
+    [void]$panel.Children.Add($seg)
+    $cb = New-Object Windows.Controls.ComboBox; $cb.MinWidth = 300; $cb.MaxDropDownHeight = 520
+    $group = @($groups | Where-Object { $_.Id -eq $shown })
+    if ($group.Count) {
+        foreach ($it in $group[0].Items) {
+            $ci = New-Object Windows.Controls.ComboBoxItem; $ci.Content = $it.Text; $ci.Tag = $it.Tag
+            [void]$cb.Items.Add($ci)
+            if ($it.Tag -eq "$cur") { $cb.SelectedItem = $ci }
         }
     }
-    if ($script:Pending.Count -gt 0) {
-        & $add (W "gComing") $null $true
-        foreach ($p in $script:Pending) { & $add (Rec-Title $p.R) "saved:$($p.R.key)" $false }
+    # The current one in none of the lists (a channel gone from mp3quran.net): shown as it is, in its own group.
+    if ($null -eq $cb.SelectedItem -and $cur -and -not $script:StationGroup -and -not (@($groups | ForEach-Object { $_.Items } | Where-Object { $_.Tag -eq "$cur" }).Count)) {
+        $ci = New-Object Windows.Controls.ComboBoxItem; $ci.Content = Station-Title $cur; $ci.Tag = $cur
+        [void]$cb.Items.Insert(0, $ci); $cb.SelectedItem = $ci
     }
-    # The current one when none of the lists has it (a channel gone from mp3quran.net): shown as it is.
-    if ($null -eq $cb.SelectedItem -and $cur) { & $add (Station-Title $cur) $cur $false }
     $cb.Tag = "$cur"
     $cb.Add_SelectionChanged({
         param($s, $e)
         if ($s.SelectedItem -and $s.SelectedItem.Tag -and "$($s.SelectedItem.Tag)" -ne $s.Tag) { Set-Value "station" ([string]$s.SelectedItem.Tag) }
     })
-    return $cb
+    [void]$panel.Children.Add($cb)
+    return $panel
 }
 
 function Note-Line([string]$text, [string]$color = "#5F5F5F") {
@@ -1452,6 +1472,7 @@ function Fill-Nav {
 
 function Loaded {
     $script:Views = @{ iqama = "days" }
+    $script:StationGroup = $null
     # New settings shown: no TV chosen to send to, so nothing is sent by mistake; the viewer chooses each time.
     foreach ($t in $script:Tvs) { $t.Selected = $false }
     Fill-Nav

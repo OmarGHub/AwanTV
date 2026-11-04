@@ -14,8 +14,11 @@ history is in its repository.
 - The station from the editor: any station this TV can play, a reciter channel in its list or a recording saved here
   (or queued in the same file); otherwise it keeps its own and the answer says why. The answer to an import is now in
   parts (" | "): settings changed, surahs queued, station kept.
+  A station sent while the radio plays switches it at once, as when picked on the TV (1.9.0a only renamed it).
 
 ### Tools
+- `AwanTV-editor` 1.1.1: the station picked as on the TV, its group first (Stations, Reciters, Saved), then one of that
+  group: the reciter channels' long list no longer keeps the saved recordings out of reach.
 - `AwanTV-editor` 1.1.0: a Saved recitations page after Radio (the source TV's storage, saved recordings, download and
   queue; Add a recitation: reciter, recording, the whole Quran or chosen surahs, sent with Send) and the station as a
   list by group (stations, reciter channels, the source TV's saved recordings, those added to download). A TV before
