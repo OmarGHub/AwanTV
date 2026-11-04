@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.2.2
+﻿# AwanTV-editor.ps1 - Version 1.2.3
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -25,7 +25,7 @@
 # cut in on a TV playing sound from another app (Android gives sound to one: a video would stop) unless asked.
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.2.2"
+$ScriptVersion = "1.2.3"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -1443,10 +1443,11 @@ function Parse-Status([string]$text) {
     return $st
 }
 
-function Now-Station($st) {
+# The station's name; on the cards a saved recitation says so, in the answers (already in brackets) it does not.
+function Now-Station($st, [bool]$mark = $true) {
     $name = if ($script:Lang -eq "en") { $st.En } else { $st.Ar }
     if (-not $name) { $name = $st.Station }
-    if ($st.Station -like "saved:*") { $name += " (" + (W "savedMark") + ")" }
+    if ($mark -and $st.Station -like "saved:*") { $name += " (" + (W "savedMark") + ")" }
     return $name
 }
 
@@ -1480,7 +1481,7 @@ function Radio-Do($tv, [string]$what, [bool]$force = $false) {
 function Radio-Words($tv, [string]$head) {
     if ($head -eq "Playing") {
         $st = $script:NowStatus[$tv.Id]
-        return [string]::Format((W "started"), $(if ($st) { Now-Station $st } else { "" }))
+        return [string]::Format((W "started"), $(if ($st) { Now-Station $st $false } else { "" }))
     }
     if ($head -eq "Already playing") { return W "alreadyOn" }
     if ($head -eq "Stopped") { return W "stopped" }
