@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.9.0]
+
 ### The app
 - Saved recitations from the settings editor: the export writes `awantv-library.json` beside the settings (storage,
   saved and downloading recordings, the queue, the stations, the kept reciter list; no network), and a file sent may
