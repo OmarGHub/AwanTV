@@ -62,7 +62,8 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. إن صدر مثبّت أحدث، يعرضه المثبّت بزر «حدّث المثبّت» فيحدّث نفسه (من 1.11.0). ومن ⓘ بجانب الرقم: «حول»، وفيها
    التحقق من التحديث، وروابط المشروع، والتراخيص.
 4. **شاشاتي** (من 1.12.0): الشاشات التي ثبّت عليها هذا الجوال Awan TV، برقم الإصدار على كل منها. حدّد ما يحتاج تحديثًا
-   واضغط «حدّث المحددة»، فتُحدَّث واحدة بعد أخرى دون أي سؤال على الشاشات. يحتاج التصحيح مفعّلًا عليها.
+   واضغط «حدّث المحددة»، فتُحدَّث واحدة بعد أخرى دون أي سؤال على الشاشات. يحتاج التصحيح مفعّلًا عليها. ومن 1.13.0 تُحدَّد
+   الشاشة المحدّثة أيضًا لإصلاحها: إن كان عليها الملف نفسه يُعاد إعدادها دون إرساله.
 
 <p align="center"><img src="docs/images/installer.webp" alt="المثبّت على الجوال" width="30%"></p>
 
@@ -110,7 +111,9 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    وفي رمضان رقم اليوم ونهاية السحور (أو الإمساك)، و«الإفطار بعد» قبل المغرب و«السحور ينتهي بعد» في الليل.
    **وعدّاد الإقامة فوق التطبيقات** (اختياري، الإقامة): بطاقة صغيرة في زاوية الشاشة من بعد الأذان حتى الإقامة.
    **ومستوى أذان الفجر** (التنبيهات والأذان ← أذان الفجر): كامل أو 75% أو 50% أو 25% من صوت التلفاز، والبقية كاملة.
-   **وحالة التطبيق** (حول التطبيق): هل الخدمة وشاشة الاستراحة تعمل، وآخر أذان شُغّل ومتى، والصلاحية والطقس والنسخة.
+   **وحالة التطبيق** (حول التطبيق): هل الخدمة وشاشة الاستراحة تعمل، وآخر أذان شُغّل ومتى، والصلاحية والطقس والنسخة، وآخر توقف للتطبيق.
+   **وشاشة أمان** (من 1.13.0): إن توقف التطبيق على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية، مع تفاصيل
+   للإبلاغ. وإن تكرر التوقف خلال دقيقتين يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل.
 8. **الطقس** بجانب الساعة: الحرارة الآن وأيقونة للحالة (صافٍ، غائم، مطر...)، من Open-Meteo للمكان المختار، ويختفي دون إنترنت. يُوقف أو يُختار °م / °ف من الإعدادات.
 9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة.
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها.
@@ -206,7 +209,8 @@ powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Import -File
 10. **تحديث الشاشات والاتصال بها** (المحرر 1.3.0): صفحة «تحديث الشاشات» تعرض رقم Awan TV على كل شاشة، وتحدّث ما تحدده منها
    دون أي سؤال على الشاشات، بآخر إصدار من GitHub أو بنسختك المبنية في `app\release` (تختار أنت، وكلاهما يُتحقق أنه موقّع
    بمفتاح Awan TV). و«+ اتصال بشاشة…» يتصل بشاشة بعنوانها، ويقترن بها إن طلبت ذلك (التصحيح اللاسلكي)، والشاشة التي عرفها
-   المحرر من قبل يتصل بها زر «اتصال» على بطاقتها.
+   المحرر من قبل يتصل بها زر «اتصال» على بطاقتها. نافذة تعرض التنزيل بنسبته ثم كل شاشة بخطوتها، والشاشة المحدّثة تُحدَّد
+   لإصلاحها: إن كان عليها الملف نفسه يُعاد إعدادها دون إرساله (المحرر 1.4.0).
 
 **التراجع من الحاسب:**
 ```powershell
@@ -328,6 +332,8 @@ Three ways; choose one. Every file is on the [releases page](../../releases/late
    the number opens About: checking for updates, the project's links and the licences.
 4. **My TVs** (from 1.12.0): the TVs this phone installed Awan TV on, each with its version. Tick those needing an update
    and press "Update the ticked": they update one after another, with no question on the TVs. Debugging must be on.
+   From 1.13.0 an up-to-date TV can be ticked too, to put it right: with the very same file on it, it is set up again
+   without sending it.
 
 <p align="center"><img src="docs/images/installer-en.webp" alt="The phone installer" width="30%"></p>
 
@@ -382,7 +388,9 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    Maghrib and "Suhoor ends in" at night. **The iqamah countdown over apps** (optional, Iqamah): a small card in a
    corner from the adhan until the iqamah. **Fajr's adhan level** (Reminders > Fajr adhan): full, 75%, 50% or 25% of
    the TV's sound, the others full. **App status** (About): whether the service and the screensaver work, the last
-   adhan played and when, the permission, the weather and the version.
+   adhan played and when, the permission, the weather, the version and the last time the app stopped. **A safety
+   screen** (from 1.13.0): if the app stops unexpectedly, a screen restarts it or opens the TV's own home, with details
+   to report; if it stops again within two minutes, the TV runs on its own home for half an hour, so it stays usable.
 7. **Weather** by the clock: the temperature and an icon for the sky, from Open-Meteo for the chosen place; hidden
    when offline; off, °C or °F in Settings.
 8. **Any location in the world**: on the first start the app suggests the TV's own location from its location
@@ -467,7 +475,9 @@ sound unless you choose Play anyway for that TV.
 Update TVs and Connect (editor 1.3.0): Update TVs shows Awan TV's version on each TV and updates the ones you tick,
 with no question on the TVs, from GitHub's latest release or your own build in `app\release` (your choice; both checked
 as signed with Awan TV's key). "+ Connect a TV…" connects a TV by its address and pairs with it when it asks (Wireless
-debugging); a TV the editor met before connects with Connect on its card.
+debugging); a TV the editor met before connects with Connect on its card. A window shows the download with its
+percentage, then each TV with its step; an up-to-date TV can be ticked to put it right: with the very same file on it,
+it is set up again without sending it (editor 1.4.0).
 Settings > About > Reset settings puts every setting back to a new install's (two confirmations: what goes and what
 stays, then OK held for three seconds) and starts from the location; saved recitations and the TV's earlier screensaver
 stay. The settings are kept on the TV first, one copy per reset (the last five; none when nothing but the location is
