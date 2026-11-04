@@ -882,6 +882,8 @@ final class Text {
     String placeMethod(String method, String country) {
         if (country == null) return ar ? "طريقة الحساب: " + method + " · راجعها بعد الحفظ"
                                        : "Method: " + method + " · check it after saving";
+        // A ministry's name already says its country (Oman, Morocco): the line stays one line.
+        if (method.contains(country)) return (ar ? "طريقة الحساب: " : "Method: ") + method;
         return ar ? "طريقة الحساب: " + method + " · المتبعة في " + country : "Method: " + method + " · as in " + country;
     }
     String placeIqama(String country) {

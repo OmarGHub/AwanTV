@@ -19,6 +19,8 @@ history is in its repository.
   it near by, else the nearest: Settings > Prayer times > Ministry table (shown only then) lists the ten nearest, with
   their distance, to follow another. Chosen by hand elsewhere, it computes at the place itself with the ministry's
   coastal horizon, so Maghrib never comes before the ministry's would.
+- Another place: a method whose name says its country (Oman's, Morocco's) no longer adds "as in <country>", which ran
+  Morocco's line past its box.
 - Calculation methods are Awan TV's own `Method` (after Afnon 0.8's), not adhan-java's list, so a method adhan-java
   lacks needs no stand-in; saved choices keep their names (OMAN_AWQAF too).
 
