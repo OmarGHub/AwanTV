@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.2.1
+﻿# AwanTV-editor.ps1 - Version 1.2.2
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -25,7 +25,7 @@
 # cut in on a TV playing sound from another app (Android gives sound to one: a video would stop) unless asked.
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.2.1"
+$ScriptVersion = "1.2.2"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -1504,6 +1504,8 @@ function Can-Control($tv) {
     $st = $script:NowStatus[$tv.Id]
     return ($tv.Online -and $st -and @("on", "off", "sound") -contains $st.State)
 }
+# A function hands back one TV as itself, not in a list, and Windows PowerShell 5.1 gives such an object no Count:
+# callers wrap it, @(Chosen-Tvs).
 function Chosen-Tvs { return @($script:Tvs | Where-Object { $script:NowChosen[$_.Id] -and (Can-Control $_) }) }
 
 # While a question waits for the viewer: the window as usual, not "Working…"; then busy again for what follows.
@@ -1575,7 +1577,7 @@ function Ask-Busy([string]$title, [object[]]$results, [object[]]$busy) {
 # Play or Stop on the chosen TVs, then their answers in one window; Play: the ones playing another app's sound are
 # offered to play anyway, each ticked by the viewer.
 function Radio-All([string]$what) {
-    $tvs = Chosen-Tvs
+    $tvs = @(Chosen-Tvs)
     $title = [string]::Format((W $(if ($what -eq "play") { "playChosenTitle" } else { "stopChosenTitle" })), $tvs.Count)
     $results = @(); $busy = @()
     foreach ($tv in $tvs) {
@@ -1606,7 +1608,7 @@ function Radio-All([string]$what) {
 
 # The two buttons' counts, after a box is ticked (the page is not built again).
 function Now-Counts {
-    $n = (Chosen-Tvs).Count
+    $n = @(Chosen-Tvs).Count
     if ($script:NowPlay) { $script:NowPlay.Content = [string]::Format((W "playChosen"), $n); $script:NowPlay.IsEnabled = $n -gt 0 }
     if ($script:NowStop) { $script:NowStop.Content = [string]::Format((W "stopChosen"), $n); $script:NowStop.IsEnabled = $n -gt 0 }
 }
