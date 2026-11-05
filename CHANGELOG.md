@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.14.2]
+
 ### The app
 - Saved recitations keep their names after a reinstall: the names were kept only in the app's data, which Android
   wipes with the app, while the recordings stay in Music/Awan TV, so Station > Saved on the TV showed their keys
