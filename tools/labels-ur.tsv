@@ -1,0 +1,33 @@
+# The counts and references around the adhkar and hadiths in Urdu (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Urdu. AwanTV-apply-labels.py writes them as countUr / refUr.
+Once	ایک بار
+Three times	تین بار
+Four times	چار بار
+Seven times	سات بار
+Ten times or once when lazy	دس بار، یا سستی ہو تو ایک بار
+Ten times	دس بار
+One hundred times	سو بار
+One hundred times a day	دن میں سو بار
+3 times	3 بار
+33 times	33 بار
+To make it 100	سو پورا کرنے کے لیے
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	روایت: حاکم، نسائی اور طبرانی
+Reported by Al-Bukhari and Muslim	روایت: بخاری و مسلم
+Reported by Abu Dawud and At-Tirmidhi	روایت: ابو داؤد و ترمذی
+Reported by Muslim	روایت: مسلم
+Reported by At-Tirmidhi	روایت: ترمذی
+Reported by Al-Bukhari	روایت: بخاری
+Reported by Abu Dawud and An-Nasa'i	روایت: ابو داؤد و نسائی
+Reported by Abu Dawud and Ahmad	روایت: ابو داؤد و احمد
+Reported by Ibn as-Sunni and Abu Dawud	روایت: ابن السنی و ابو داؤد
+Reported by Abu Dawud and Ibn Majah	روایت: ابو داؤد و ابن ماجہ
+Reported by At-Tirmidhi and Abu Dawud	روایت: ترمذی و ابو داؤد
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	روایت: ابو داؤد، ترمذی اور ابن ماجہ
+Reported by Ahmad and An-Nasa'i	روایت: احمد و نسائی
+Reported by Al-Hakim	روایت: حاکم
+Reported by Abu Dawud	روایت: ابو داؤد
+Reported by Ahmad and Ibn as-Sunni	روایت: احمد و ابن السنی
+Reported by Ibn as-Sunni and Ibn Majah	روایت: ابن السنی و ابن ماجہ
+Reported by At-Tabarani	روایت: طبرانی
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	روایت: نسائی، عمل الیوم واللیلہ
+Abu Dawud and an-Nasa'i	روایت: ابو داؤد و نسائی

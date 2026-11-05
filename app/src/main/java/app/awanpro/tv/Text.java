@@ -268,7 +268,7 @@ final class Text {
         return s(R.string.libraryIntro);
     }
     /** The Arabic line puts its digits through d(), the English one never did. */
-    String reserveNote() { String v = s(R.string.reserveNote); return ar ? d(v) : v; }
+    String reserveNote() { String v = s(R.string.reserveNote); return arabicScript() ? d(v) : v; }
     String savedSize(String s) { return (s(R.string.savedSize)) + s; }
     String freeSize(String s) { return (s(R.string.freeSize)) + s; }
     String searchReciter() { return s(R.string.searchReciter); }
@@ -297,7 +297,7 @@ final class Text {
     String waitingSpace() {
         // The Arabic line puts its digits through d(), the English one never did.
         String v = s(R.string.waitingSpace);
-        return ar ? d(v) : v;
+        return arabicScript() ? d(v) : v;
     }
     String noStorage() { return s(R.string.noStorage); }
     String downloadingNow(String surah, int pct, int waiting) {
@@ -330,7 +330,7 @@ final class Text {
         double gb = b / (1024.0 * 1024 * 1024);
         if (gb >= 1) {
             String v = String.format(java.util.Locale.US, "%.1f", gb);
-            return d(s(R.string.bytesGb, ar ? decimal(v) : v));
+            return d(s(R.string.bytesGb, arabicScript() ? decimal(v) : v));
         }
         long mb = Math.round(b / (1024.0 * 1024));
         return d(s(R.string.bytes, mb));
@@ -1016,7 +1016,7 @@ final class Text {
     String population(long n) {
         if (n >= 1_000_000) {
             String m = String.format(java.util.Locale.US, "%.1f", n / 1_000_000.0).replace(".0", "");
-            return d(s(R.string.populationMillion, ar ? decimal(m) : m));
+            return d(s(R.string.populationMillion, arabicScript() ? decimal(m) : m));
         }
         long k = Math.max(1, Math.round(n / 1000.0));
         return d(s(R.string.population, k));

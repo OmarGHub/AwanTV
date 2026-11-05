@@ -7,6 +7,13 @@ history is in its repository.
 ## [Unreleased]
 
 ### The app
+- Urdu (اردو), the first language after Arabic and English (languages plan, phase 4; test builds from 1.18.0d):
+  every screen's words (res/values-ur), right to left in the app's fonts, with Urdu's own digits (۰۱۲۳) when Eastern
+  digits are chosen (Western by default); a TV in Urdu set to "TV" shows Urdu. Reciters, riwayahs, surahs and
+  reciter channels are named by mp3quran.net in Urdu (its code "ur"); the counts and references around the adhkar
+  and hadiths are in Urdu (`tools/labels-ur.tsv`); cities, Afnon's stations and the adhan voices in English. The
+  settings file and the editor stay Arabic or English; What's new of earlier versions in English. The Arabic digit
+  paths (the decimal sign, the 2 GB note, the waiting line) follow the Arabic script, Urdu too.
 - Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
   12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
   temperature's figures alone smaller, only as far as needed (Omar's idea).
@@ -28,6 +35,8 @@ history is in its repository.
 
 ### Tools
 - `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.
+- `AwanTV-apply-labels.py` 1.0.0: the counts and references around the adhkar and hadiths in each other language
+  (tools/labels-<lang>.tsv); `AwanTV-build-hadith` 1.1.0 runs it after building.
 - `AwanTV-texts-sheet.py` 1.0.0: the side-by-side sheet of a language (number, key, where it shows, Arabic,
   English, the language, notes), from the texts the release carries.
 

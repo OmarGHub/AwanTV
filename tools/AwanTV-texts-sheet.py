@@ -177,9 +177,16 @@ for n, (key, w, ar, en, xx) in enumerate(rows, 1):
     parts = sorted(set(re.findall(r"%\d+\$s", en)))
     if parts:
         note.append("parts: " + " ".join(parts))
-    if has_lang and not xx:
+    if has_lang and not xx and en.strip():
         note.append("missing")
         missing += 1
+    elif has_lang and xx == en and re.search(r"[A-Za-z]{3}", en):
+        if w.startswith("Settings file, editor"):
+            note.append("English: the settings file is Arabic or English only")
+        elif key.startswith("news_"):
+            note.append("English: What's new of an earlier version")
+        else:
+            note.append("same as English")
     ws.append([n, key, w, ar, en, xx, "; ".join(note)])
 widths = {"A": 7, "B": 30, "C": 26, "D": 55, "E": 55, "F": 55, "G": 22}
 for col, wdt in widths.items():

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# AwanTV-build-hadith.py - Version 1.0.0
+# AwanTV-build-hadith.py - Version 1.1.0
 # Builds app/src/main/assets/hadith/hadith.json (Hadith.java) from tools/hadith-list.txt and the Arabic Sahih
 # al-Bukhari and Sahih Muslim of github.com/fawazahmed0/hadith-api (The Unlicense, public domain):
 # editions/ara-bukhari.json and editions/ara-muslim.json from its branch "1". Three lists: the screensaver's
@@ -18,7 +18,7 @@
 # Usage: python3 tools/AwanTV-build-hadith.py <folder with ara-bukhari.json and ara-muslim.json>
 import json, os, re, sys
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIST = os.path.join(ROOT, "tools", "hadith-list.txt")
 OUT = os.path.join(ROOT, "app", "src", "main", "assets", "hadith", "hadith.json")
@@ -124,3 +124,6 @@ json.dump({'source': 'fawazahmed0/hadith-api (The Unlicense, public domain): ara
           open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('%d hadiths, %d after the adhan, %d after the prayer written to %s'
       % (len(lists['hadiths']), len(lists['after_adhan']), len(lists['after_prayer']), os.path.relpath(OUT, ROOT)))
+# 1.1.0: the counts and references in the screens' other languages (tools/labels-<lang>.tsv) again.
+import runpy
+runpy.run_path(os.path.join(ROOT, 'tools', 'AwanTV-apply-labels.py'), run_name='__main__')
