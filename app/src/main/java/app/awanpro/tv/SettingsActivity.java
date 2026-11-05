@@ -447,6 +447,8 @@ public class SettingsActivity extends Screen {
         b.setFocusScale(1.04f);
         TextView v = text(ui400, 26, Tokens.MIST_400);
         v.setText(sectionName(i));
+        // The screen's direction, not the word's: Urdu's "Awan TV" stood at the left of a right-to-left menu.
+        v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         v.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         v.setPadding(Ui.ipx(24), 0, Ui.ipx(24), 0);
         v.setSingleLine(true);
@@ -2860,6 +2862,8 @@ public class SettingsActivity extends Screen {
     private TextView resetLine(String s, int color, float size, String mark) {
         TextView v = text(ui400, size, color);
         v.setText(mark == null ? s : mark + s);
+        // A line that starts with "Awan TV" still reads from the screen's start (Urdu: its ✓ went to the end).
+        v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         v.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
         lineHeight(v, 1.55f);
         return v;

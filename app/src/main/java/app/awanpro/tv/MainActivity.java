@@ -551,6 +551,9 @@ public class MainActivity extends Screen {
             }
             cellTime[i].setFontFeatureSettings("tnum");
             cellTime[i].setSingleLine(true);
+            // One line, smaller where a name is wide for its cell (Urdu's "طلوعِ آفتاب" took two lines).
+            cellName[i].setSingleLine(true);
+            fitWidth(cellName[i], 0.8f);
             v.addView(cellTag[i], new LinearLayout.LayoutParams(-1, 0, 1));
             v.addView(cellName[i], new LinearLayout.LayoutParams(-1, -2));
             v.addView(cellTime[i], new LinearLayout.LayoutParams(-1, -2));

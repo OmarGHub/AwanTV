@@ -16,6 +16,9 @@ history is in its repository.
   paths (the decimal sign, the 2 GB note, the waiting line) follow the Arabic script, Urdu too.
   Home's prayer times in Urdu with a 12-hour clock as small as English's (they write AM/PM too: 1.18.0d's crop
   check found "12:07 PM" 10 px too wide).
+  From the Urdu screens (1.18.0f): Home's prayer names keep one line, smaller where wide ("طلوعِ آفتاب" took two);
+  Settings' menu and its windows' lines read from the screen's start even when they begin with "Awan TV" (the
+  menu's "Awan TV" stood at the left, the reset window's ✓ at the line's end). Arabic and English look the same.
 - Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
   12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
   temperature's figures alone smaller, only as far as needed (Omar's idea).
