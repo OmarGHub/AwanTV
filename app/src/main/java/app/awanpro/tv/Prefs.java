@@ -519,9 +519,13 @@ final class Prefs {
         of(c).edit().putInt("fajr_level", percent).apply();
     }
 
-    /** The iqamah countdown over other apps, from the call until the iqamah; off by default. */
+    /**
+     * The iqamah countdown over other apps, from the call until the iqamah. On by default since 1.14.0 (Omar: off,
+     * hardly anyone would find it; on, anyone can turn it off), so a TV that never chose gets it with the update; one
+     * turned off stays off. Its first {@link PrayerWatch#HINT_TIMES} times say where it is turned off.
+     */
     static boolean iqamaCounter(Context c) {
-        return of(c).getBoolean("iqama_counter", false);
+        return of(c).getBoolean("iqama_counter", true);
     }
 
     static void setIqamaCounter(Context c, boolean on) {

@@ -241,13 +241,31 @@ final class PrayerWatch {
 
     /**
      * From the call until the iqamah, a small card in the banner's corner over other apps
-     * (Settings > Iqamah > Iqamah countdown over apps, off by default). Not over Awan TV's own screens, which show
+     * (Settings > Iqamah > Iqamah countdown over apps, on by default since 1.14.0). Not over Awan TV's own screens, which show
      * the iqamah themselves, the call screen or the reminder. Updated with the 15 s check; no timer of its own.
      */
     private View counter;
     private TextView counterTitle;
     /** "prayer:iqamah time" the shown card is for. */
     private String counterKey;
+    /**
+     * The card's first times (a prayer each, however often it hides and comes back for it) carry where it is turned
+     * off: five, a whole day, so a few missed by chance still leave some seen. Counted in "counter_hints" (LOCAL), the
+     * last prayer counted in "counter_hint_at".
+     */
+    static final int HINT_TIMES = 5;
+
+    /** Whether this prayer's card says where it is turned off; counts the prayer the first time it is shown. */
+    private boolean hintFor(String key) {
+        android.content.SharedPreferences p = Prefs.of(service);
+        int seen = p.getInt("counter_hints", 0);
+        if (!key.equals(p.getString("counter_hint_at", ""))) {
+            if (seen >= HINT_TIMES) return false;
+            seen++;
+            p.edit().putInt("counter_hints", seen).putString("counter_hint_at", key).apply();
+        }
+        return seen <= HINT_TIMES;
+    }
 
     /** Settings, Home, the call or the screensaver came or went: show or hide the countdown now. */
     void refreshCounter() {
@@ -313,6 +331,12 @@ final class PrayerWatch {
         counterTitle.setSingleLine(true);
         words.addView(counterTitle);
         Screen.lineHeight(counterTitle, 1.2f);
+        if (hintFor(prayer + ":" + at.getTime())) {
+            TextView off = text(ui, 18, Tokens.MIST_400, t.iqamaCounterOff());
+            LinearLayout.LayoutParams olp = new LinearLayout.LayoutParams(-2, -2);
+            olp.topMargin = Ui.ipx(6);
+            words.addView(off, olp);
+        }
         LinearLayout.LayoutParams wlp = new LinearLayout.LayoutParams(-2, -2);
         wlp.setMarginStart(Ui.ipx(18));
         card.addView(words, wlp);

@@ -392,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.14.0":
+                return ar ? new String[][] {
+                    {"عدّاد الإقامة فوق التطبيقات", "من الأذان حتى الإقامة تظهر بطاقة صغيرة في زاوية الشاشة فوق أي تطبيق: كم بقي على الإقامة. تُطفأ من الإعدادات ← الإقامة."}}
+                  : new String[][] {
+                    {"The iqamah countdown over apps", "From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."}};
             case "1.13.0":
                 return ar ? new String[][] {
                     {"شاشة أمان إن توقف", "إن توقف Awan TV على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية. وإن تكرر التوقف يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل."},
@@ -1069,6 +1074,8 @@ final class Text {
     String fajrLevelTitle() { return ar ? "مستوى أذان الفجر" : "Fajr adhan level"; }
     String fajrLevelHelp() { return ar ? "نسبة من صوت التلفاز · يُسمع وأنت تتنقل" : "A share of the TV's sound · heard as you move"; }
     String iqamaCounterRow() { return ar ? "عدّاد الإقامة فوق التطبيقات" : "Iqamah countdown over apps"; }
+    /** Under the countdown card its first times (PrayerWatch.HINT_TIMES): where it is turned off. */
+    String iqamaCounterOff() { return ar ? "تُطفأ من الإعدادات ← الإقامة" : "Turn it off in Settings › Iqamah"; }
     String iqamaCounterHelp() { return ar ? "بعد الأذان، في زاوية الشاشة حتى الإقامة" : "After the adhan, in a corner of the screen until the iqamah"; }
     /** "الإقامة بعد 8 د" / "Iqamah in 8 min"; under a minute "الإقامة الآن". */
     String iqamaInMinutes(long minutes) {

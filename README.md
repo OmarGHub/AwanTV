@@ -109,7 +109,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
    أو عند الظهر، أو موعد ثابت. **والإمساك في رمضان**: بلا افتراضيًا (السحور ينتهي عند الفجر)، أو 5 إلى 20 دقيقة قبله.
    وفي شاشة الاستراحة سطر ذهبي تحت العد التنازلي: من مغرب الخميس إلى مغرب الجمعة «سورة الكهف · الصلاة على النبي ﷺ»،
    وفي رمضان رقم اليوم ونهاية السحور (أو الإمساك)، و«الإفطار بعد» قبل المغرب و«السحور ينتهي بعد» في الليل.
-   **وعدّاد الإقامة فوق التطبيقات** (اختياري، الإقامة): بطاقة صغيرة في زاوية الشاشة من بعد الأذان حتى الإقامة.
+   **وعدّاد الإقامة فوق التطبيقات** (يعمل افتراضيًا، ويُطفأ من الإعدادات ← الإقامة): بطاقة صغيرة في زاوية الشاشة من بعد الأذان حتى الإقامة.
    **ومستوى أذان الفجر** (التنبيهات والأذان ← أذان الفجر): كامل أو 75% أو 50% أو 25% من صوت التلفاز، والبقية كاملة.
    **وحالة التطبيق** (حول التطبيق): هل الخدمة وشاشة الاستراحة تعمل، وآخر أذان شُغّل ومتى، والصلاحية والطقس والنسخة، وآخر توقف للتطبيق.
    **وشاشة أمان** (من 1.13.0): إن توقف التطبيق على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية، مع تفاصيل
@@ -385,7 +385,7 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    circular), at Dhuhr, or a fixed time. **Imsak in Ramadan**: none by default (suhoor ends at Fajr), or 5 to 20
    minutes before it. On the screensaver a gold line under the countdown: from Thursday's Maghrib to Friday's "Surat
    Al-Kahf · Salawat on the Prophet ﷺ"; in Ramadan the day and when suhoor (or the imsak) ends, "Iftar in" before
-   Maghrib and "Suhoor ends in" at night. **The iqamah countdown over apps** (optional, Iqamah): a small card in a
+   Maghrib and "Suhoor ends in" at night. **The iqamah countdown over apps** (on by default; off in Settings › Iqamah): a small card in a
    corner from the adhan until the iqamah. **Fajr's adhan level** (Reminders > Fajr adhan): full, 75%, 50% or 25% of
    the TV's sound, the others full. **App status** (About): whether the service and the screensaver work, the last
    adhan played and when, the permission, the weather, the version and the last time the app stopped. **A safety

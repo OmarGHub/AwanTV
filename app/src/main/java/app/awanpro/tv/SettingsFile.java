@@ -152,7 +152,7 @@ final class SettingsFile {
             out.add(new Item("iqama_ramadan_" + p, INT_RANGE, t.iqamaRamadanRow(names[p])).help(t.iqamaRamadanHelp()).range(-1, 60).def(-1)
                 .whenNot("iqama_mode", Iqama.OFF).view("iqama:ramadan"));
         }
-        out.add(new Item("iqama_counter", BOOL, t.iqamaCounterRow()).help(t.iqamaCounterHelp()).def(false).whenNot("iqama_mode", Iqama.OFF));
+        out.add(new Item("iqama_counter", BOOL, t.iqamaCounterRow()).help(t.iqamaCounterHelp()).def(true).whenNot("iqama_mode", Iqama.OFF));
 
         // Reminders and adhan
         Item remind = new Item("remind", INT_CHOICE, t.remind()).help(t.remindHelp())
