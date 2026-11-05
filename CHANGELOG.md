@@ -42,7 +42,7 @@ history is in its repository.
 - `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.
 - `AwanTV-textdump` 1.3.0: the editor's description and the settings file (numbered by place) are matched by their
   text, so a line added near the top no longer lists every one after it (1.18.0d against 1.18.0c: 620 changed lines
-  became the 10 that changed and 4 new).
+  became the 10 that changed and 4 new). 1.3.1: `-Crops` with nothing cut says so plainly.
 - `AwanTV-apply-labels.py` 1.0.0: the counts and references around the adhkar and hadiths in each other language
   (tools/labels-<lang>.tsv); `AwanTV-build-hadith` 1.1.0 runs it after building.
 - `AwanTV-texts-sheet.py` 1.0.0: the side-by-side sheet of a language (number, key, where it shows, Arabic,

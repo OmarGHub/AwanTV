@@ -1,4 +1,4 @@
-# AwanTV-textdump.ps1 - Version 1.3.0
+# AwanTV-textdump.ps1 - Version 1.3.1
 # The languages plan's safety net (claude/awan-languages-plan.md, phase 0). A test build of Awan TV (a version ending
 # in a letter) writes every text it shows, in Arabic and English with both kinds of digits (TextDump.java); this tool
 # asks the TV for that file, keeps it in state\textdump\<version>.txt, and compares it with a golden one.
@@ -27,7 +27,7 @@
 param([string]$Device = "", [string]$Golden = "", [string]$File = "", [switch]$Crops, [switch]$Clear)
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.3.0"
+$ScriptVersion = "1.3.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Remote = "/sdcard/Android/data/$Pkg/files/text-dump.txt"
@@ -234,7 +234,8 @@ try {
         Remove-Item -Force $dest -ErrorAction SilentlyContinue
         Adb pull $RemoteCrops $dest 2>&1 | Out-Null
         if (-not (Test-Path $dest)) {
-            Write-Host "No text cut so far (no list on the TV). Go through the screens, then run this again."
+            # The TV writes the list only when it finds a cut text (1.3.1: the words said nothing was looked at).
+            Write-Host "No text cut on the screens shown since the list was last cleared (the TV keeps no list when all fit)."
             exit 0
         }
         # Once each (the TV writes a finding again after Awan TV restarts), sorted by screen and language.
