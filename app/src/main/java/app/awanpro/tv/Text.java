@@ -392,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.14.2":
+                return ar ? new String[][] {
+                    {"أسماء التلاوات المحفوظة لا تضيع", "بعد حذف التطبيق وإعادة تثبيته تعود التلاوات المحفوظة بأسماء قرّائها ومصاحفها، ولو دون إنترنت."}}
+                  : new String[][] {
+                    {"Saved recitations keep their names", "After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."}};
             case "1.14.1":
                 return ar ? new String[][] {
                     {"الألوان تتبع الوقت", "لازوردي في النهار وفحمي بعد المغرب، أخف على العين في الليل. ولون واحد طوال اليوم من الإعدادات ← العرض واللغة ← ألوان الواجهة."}}

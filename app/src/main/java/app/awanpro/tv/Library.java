@@ -27,6 +27,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,10 @@ import java.util.Map;
  * <p>From mp3quran.net, whose rights notice lets any developer use any of its material or links
  * (mp3quran.net/ar/privacy); the recitations remain their reciters'. The reciter list is its API
  * (mp3quran.net/api/v3/reciters, in Arabic and English, kept for a week); each surah is the reciter's server plus
- * the three-digit surah number and ".mp3".
+ * the three-digit surah number and ".mp3". The app carries its own copy of the lists (assets/mp3quran, read again for
+ * every release build by app/build.gradle), used until the TV reads them: a recording's names, kept in the app's data,
+ * are found again by its key after a reinstall without internet (Android wipes the data, the files in Music stay, and
+ * Music takes no file but audio to keep them in).
  *
  * <p>Downloads go through Android's own download manager (it resumes after a dropped connection or a restart),
  * one surah at a time, in the order asked, as ".part" into the app's own folder, then moved once complete into
@@ -58,6 +62,8 @@ final class Library {
     static final long RESERVE = 2L * 1024 * 1024 * 1024;
     private static final String API = "https://mp3quran.net/api/v3/";
     private static final long LIST_MAX_AGE = 7L * 24 * 3600_000;
+    /** The app's own copy of mp3quran.net's lists, in its assets. */
+    private static final String BUNDLED = "mp3quran/";
     private static final int TIMEOUT_MS = 15_000;
 
     /** One reciter's recording (a reciter can have several: other riwayat, murattal or mujawwad). */
@@ -105,24 +111,49 @@ final class Library {
             try {
                 save(ar, get(API + "reciters?language=ar"));
                 save(en, get(API + "reciters?language=eng"));
+                synchronized (KNOWN_LOCK) {
+                    known = null;
+                }
             } catch (IOException e) {
-                // Offline: the list kept from before, if any.
-                if (!ar.exists()) throw e;
+                // Offline: the list kept from before, else the app's own copy (both() throws when there is neither).
+                Log.i(TAG, "reciter list not read: " + e);
             }
         }
+        return both(c);
+    }
+
+    /** The kept lists, Arabic with the English names; throws when there is no list at all. */
+    private static List<Reciter> both(Context c) throws Exception {
+        String arText = listText(c, "reciters-ar.json"), enText = listText(c, "reciters-en.json");
+        if (arText == null) throw new IOException("no reciter list");
         Map<String, String[]> english = new LinkedHashMap<>();
-        if (en.exists()) {
-            for (Reciter r : parse(read(en), null)) english.put(r.key(), new String[] {r.ar, r.moshafAr});
+        if (enText != null) for (Reciter r : parse(enText, null)) english.put(r.key(), new String[] {r.ar, r.moshafAr});
+        return parse(arText, english);
+    }
+
+    /** A list as the TV last read it, else the app's own copy; null when there is neither. */
+    private static String listText(Context c, String name) {
+        File f = new File(dir(c, false), name);
+        if (f.exists()) {
+            try {
+                return read(f);
+            } catch (IOException e) {
+                Log.i(TAG, "kept " + name + ": " + e);
+            }
         }
-        return parse(read(ar), english);
+        try (InputStream in = c.getAssets().open(BUNDLED + name)) {
+            return readAll(in);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     /**
-     * The reciters as kept on the TV, without asking mp3quran.net (the settings editor's export runs on the main
-     * thread); empty when none was read yet, and then a read starts in the background for the next time.
+     * The reciters as kept on the TV, else the app's own copy, without asking mp3quran.net (the settings editor's
+     * export runs on the main thread); when the TV has read none yet, a read starts in the background for next time.
      */
     static List<Reciter> cachedReciters(Context c) {
-        File ar = new File(dir(c, false), "reciters-ar.json"), en = new File(dir(c, false), "reciters-en.json");
+        File ar = new File(dir(c, false), "reciters-ar.json");
         if (!ar.exists() || System.currentTimeMillis() - ar.lastModified() > LIST_MAX_AGE) {
             Context app = c.getApplicationContext();
             new Thread(() -> {
@@ -135,11 +166,8 @@ final class Library {
                 }
             }, "awan-reciters").start();
         }
-        if (!ar.exists()) return new ArrayList<>();
         try {
-            Map<String, String[]> english = new LinkedHashMap<>();
-            if (en.exists()) for (Reciter r : parse(read(en), null)) english.put(r.key(), new String[] {r.ar, r.moshafAr});
-            return parse(read(ar), english);
+            return both(c);
         } catch (Exception e) {
             Log.i(TAG, "kept reciter list: " + e);
             return new ArrayList<>();
@@ -151,13 +179,13 @@ final class Library {
         return new File(dir(c, false), "reciters-ar.json").lastModified();
     }
 
-    /** The surah names as kept on the TV (no network), index 1..114; null where not known. */
+    /** The surah names as kept on the TV, else the app's own copy (no network), index 1..114; null where not known. */
     static String[] cachedSurahNames(Context c, boolean ar) {
-        File f = new File(dir(c, false), ar ? "suwar-ar.json" : "suwar-en.json");
+        String text = listText(c, ar ? "suwar-ar.json" : "suwar-en.json");
         String[] out = new String[115];
-        if (!f.exists()) return out;
+        if (text == null) return out;
         try {
-            JSONArray list = new JSONObject(read(f)).getJSONArray("suwar");
+            JSONArray list = new JSONObject(text).getJSONArray("suwar");
             for (int i = 0; i < list.length(); i++) {
                 JSONObject s = list.getJSONObject(i);
                 int n = s.getInt("id");
@@ -169,22 +197,15 @@ final class Library {
         return out;
     }
 
-    /** The surah names from mp3quran.net (cached with the reciters), index 1..114; null where not known. */
+    /** The surah names from mp3quran.net (cached with the reciters; offline, the app's own copy), index 1..114. */
     static String[] surahNames(Context c, boolean ar) {
         File f = new File(dir(c, false), ar ? "suwar-ar.json" : "suwar-en.json");
         try {
             if (!f.exists()) save(f, get(API + "suwar?language=" + (ar ? "ar" : "eng")));
-            JSONArray list = new JSONObject(read(f)).getJSONArray("suwar");
-            String[] out = new String[115];
-            for (int i = 0; i < list.length(); i++) {
-                JSONObject s = list.getJSONObject(i);
-                int n = s.getInt("id");
-                if (n >= 1 && n <= 114) out[n] = s.getString("name").trim();
-            }
-            return out;
-        } catch (Exception e) {
-            return new String[115];
+        } catch (IOException e) {
+            // Offline: the app's own copy.
         }
+        return cachedSurahNames(c, ar);
     }
 
     private static List<Reciter> parse(String json, Map<String, String[]> english) throws Exception {
@@ -257,12 +278,16 @@ final class Library {
 
     private static String read(File f) throws IOException {
         try (InputStream in = new java.io.FileInputStream(f)) {
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            byte[] buf = new byte[16384];
-            int n;
-            while ((n = in.read(buf)) > 0) b.write(buf, 0, n);
-            return b.toString("UTF-8");
+            return readAll(in);
         }
+    }
+
+    private static String readAll(InputStream in) throws IOException {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        byte[] buf = new byte[16384];
+        int n;
+        while ((n = in.read(buf)) > 0) b.write(buf, 0, n);
+        return b.toString("UTF-8");
     }
 
     // ---------------------------------------------------------------- files
@@ -688,13 +713,46 @@ final class Library {
             .putString("lib_mar_" + r.key(), r.moshafAr).putString("lib_men_" + r.key(), r.moshafEn).apply();
     }
 
+    /** The recording's reciter as kept with it, else as the lists have it, else its key ("r30-m30"). */
     static String name(Context c, String key, boolean ar) {
-        return Prefs.of(c).getString((ar ? "lib_ar_" : "lib_en_") + key, key);
+        String s = Prefs.of(c).getString((ar ? "lib_ar_" : "lib_en_") + key, null);
+        if (s != null) return s;
+        Reciter r = known(c, key);
+        return r == null ? key : ar || r.en.isEmpty() ? r.ar : r.en;
     }
 
-    /** The recording's riwayah and style as kept with it ("حفص عن عاصم - مرتل"), "" when not kept. */
+    /** The recording's riwayah and style as kept with it ("حفص عن عاصم - مرتل"), else as the lists have it, else "". */
     static String moshafName(Context c, String key, boolean ar) {
-        return Prefs.of(c).getString((ar ? "lib_mar_" : "lib_men_") + key, "");
+        String s = Prefs.of(c).getString((ar ? "lib_mar_" : "lib_men_") + key, null);
+        if (s != null) return s;
+        Reciter r = known(c, key);
+        return r == null ? "" : ar ? r.moshafAr : r.moshafEn;
+    }
+
+    private static final Object KNOWN_LOCK = new Object();
+    /** The lists by key, read once when a name was not kept; null until then and after the TV reads the lists again. */
+    private static Map<String, Reciter> known;
+
+    /**
+     * A recording whose names were not kept (the app removed and installed again: Android wipes its data, the files in
+     * Music stay), found by its key in the lists and kept again; null when no list has it.
+     */
+    private static Reciter known(Context c, String key) {
+        Map<String, Reciter> m;
+        synchronized (KNOWN_LOCK) {
+            if (known == null) {
+                known = new HashMap<>();
+                try {
+                    for (Reciter r : both(c)) known.put(r.key(), r);
+                } catch (Exception e) {
+                    Log.i(TAG, "no reciter list for the names: " + e);
+                }
+            }
+            m = known;
+        }
+        Reciter r = m.get(key);
+        if (r != null) remember(c, r);
+        return r;
     }
 
     // ---------------------------------------------------------------- the download manager's word

@@ -6,6 +6,22 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Saved recitations keep their names after a reinstall: the names were kept only in the app's data, which Android
+  wipes with the app, while the recordings stay in Music/Awan TV, so Station > Saved on the TV showed their keys
+  ("r30-m30"). A name not kept is now found by its key in mp3quran.net's lists and kept again. The app carries its own
+  copy of the lists (assets/mp3quran), used until the TV reads them, so this works without internet too; Music takes
+  no file but audio, and a file in Documents left by an old install cannot be read after a reinstall. Without
+  internet, the recitations screen also shows the reciters and the surah names from that copy.
+
+### Build
+- Every release build reads mp3quran.net's lists again into `app/src/main/assets/mp3quran` and says what changed
+  (`app/build.gradle`, `readMp3quran`); without internet, or with an odd answer, the copy stays and the build goes on.
+  A debug build reads them only when there is no copy yet.
+
+### Tools
+- `AwanTV-release` 1.3.0: refuses an AwanTV.apk without the lists.
+
 ## [1.14.1]
 
 ### The app

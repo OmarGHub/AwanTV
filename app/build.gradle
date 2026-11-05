@@ -36,6 +36,66 @@ android {
     }
 }
 
+// mp3quran.net's reciter and surah lists, carried in the app (assets/mp3quran) so a saved recitation keeps its names
+// after a reinstall without internet (Library.listText). Every release build reads them again and replaces the copy
+// when they changed (git then shows it); without internet, or with an odd answer, the copy stays and the build goes on.
+// A debug build reads them only when there is no copy yet.
+def mp3quranDir = file('src/main/assets/mp3quran')
+def mp3quranLists = ['reciters-ar.json': 'reciters?language=ar', 'reciters-en.json': 'reciters?language=eng',
+                     'suwar-ar.json': 'suwar?language=ar', 'suwar-en.json': 'suwar?language=eng']
+def mp3quranRead = { boolean onlyMissing ->
+    def api = project.findProperty('mp3quranApi') ?: 'https://mp3quran.net/api/v3/'
+    def slurper = new groovy.json.JsonSlurper()
+    def keys = { json -> (json.reciters ?: []).collectMany { r -> (r.moshaf ?: []).collect { m -> "r${r.id}-m${m.id}".toString() } } as Set }
+    mp3quranDir.mkdirs()
+    mp3quranLists.each { name, path ->
+        def f = new File(mp3quranDir, name)
+        if (onlyMissing && f.exists()) return
+        def got, json
+        try {
+            def con = new URL(api + path).openConnection()
+            con.connectTimeout = 15000
+            con.readTimeout = 60000
+            con.setRequestProperty('User-Agent', 'AwanTV-build')
+            got = con.inputStream.getText('UTF-8')
+            json = slurper.parseText(got)
+            def items = name.startsWith('suwar') ? json.suwar : json.reciters
+            if (!(items instanceof List) || items.size() < (name.startsWith('suwar') ? 114 : 50)) {
+                throw new IOException('not the list expected')
+            }
+        } catch (Exception e) {
+            logger.warn("mp3quran ${name}: not read (${e.class.simpleName}: ${e.message?.readLines()?.find { it.trim() } ?: ''}); " + (f.exists() ? 'the copy in the app stays' : 'the app has no copy'))
+            return
+        }
+        def old = null
+        if (f.exists()) {
+            try { old = slurper.parseText(f.getText('UTF-8')) } catch (Exception ignored) { }
+        }
+        if (old == json) {
+            logger.lifecycle("mp3quran ${name}: unchanged")
+            return
+        }
+        def tmp = new File(mp3quranDir, name + '.tmp')
+        tmp.write(got, 'UTF-8')
+        f.delete()
+        if (!tmp.renameTo(f)) throw new GradleException("Could not write ${f}")
+        if (name.startsWith('suwar')) {
+            logger.lifecycle("mp3quran ${name}: " + (old == null ? 'added' : 'updated'))
+        } else {
+            Set before = old == null ? ([] as Set) : keys(old)
+            Set now = keys(json)
+            logger.lifecycle("mp3quran ${name}: " + (old == null ? "added, ${now.size()} recordings"
+                : "updated, ${(now - before).size()} added, ${(before - now).size()} removed, ${now.size()} recordings"))
+        }
+    }
+}
+tasks.register('readMp3quran') { doLast { mp3quranRead(false) } }
+tasks.register('readMp3quranIfMissing') { doLast { mp3quranRead(true) } }
+tasks.configureEach { t ->
+    if (t.name == 'preReleaseBuild') t.dependsOn 'readMp3quran'
+    if (t.name == 'preDebugBuild') t.dependsOn 'readMp3quranIfMissing'
+}
+
 dependencies {
     // Offline prayer-time calculation (no network, no transitive dependencies).
     implementation 'com.batoulapps.adhan:adhan:1.2.1'

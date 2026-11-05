@@ -1,11 +1,13 @@
-﻿# AwanTV-release.ps1 - Version 1.2.0
+﻿# AwanTV-release.ps1 - Version 1.3.0
 # Gathers the files of a GitHub release into release\ (ignored by git). Their names stay the same in every
 # version, so the guide's .../releases/latest/download/<name> links keep working:
 #   AwanTV.apk           the TV app (app\release\AwanTV.apk)
 #   AwanTVInstaller.apk  the phone installer (installer\release\AwanTVInstaller.apk), which carries AwanTV.apk
 #   AwanTV-Windows.zip   AwanTV\ with AwanTV.apk, AwanTV-install.cmd/.ps1, AwanTV-restore.cmd/.ps1 and README.txt
-# It checks that the installer carries this very AwanTV.apk and that the app carries no spoken reminders (their
-# Microsoft voice is not ours to distribute), and prints each file's SHA-256 for the release notes.
+# It checks that the installer carries this very AwanTV.apk, that the app carries no spoken reminders (their
+# Microsoft voice is not ours to distribute) and does carry mp3quran.net's lists (1.3.0: the names of saved
+# recitations after a reinstall without internet; the release build reads them), and prints each file's SHA-256 for
+# the release notes.
 #
 # Update now (1.7.0) on every TV already out depends for good on four things, checked here before anything is
 # gathered: the file named AwanTV.apk on a tag v<X.Y.Z> (SelfUpdate's download address), the same release key
@@ -18,7 +20,7 @@
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-release.ps1
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.2.0"
+$ScriptVersion = "1.3.0"
 # The release key's certificate (README): TVs take an update only when it is signed with the same key.
 $ReleaseCert = "b445fc840602ca363c3ad83b60db22da1d04737633a47622d2405e97a3b50ed3"
 $Latest = "https://api.github.com/repos/OmarGHub/AwanTV/releases/latest"
@@ -188,9 +190,16 @@ if ($published) {
 $zip = [IO.Compression.ZipFile]::OpenRead($App)
 try {
     $voiced = @($zip.Entries | Where-Object { $_.FullName -like "assets/announce/*" }).Count
+    $lists = @("reciters-ar.json", "reciters-en.json", "suwar-ar.json", "suwar-en.json") |
+        Where-Object { -not $zip.GetEntry("assets/mp3quran/$_") }
 } finally { $zip.Dispose() }
 if ($voiced -gt 0) {
     throw "AwanTV.apk carries $voiced spoken reminder(s), a Microsoft voice not ours to distribute. Delete app\src\main\assets\announce\*.mp3, then build the app and the installer again."
+}
+# The release build reads mp3quran.net's lists into app\src\main\assets\mp3quran (app\build.gradle); without internet
+# it keeps the copy there, so only a first build offline lacks them.
+if ($lists.Count -gt 0) {
+    throw "AwanTV.apk lacks mp3quran.net's list(s): $($lists -join ', '). Build the app again with internet (the build reads them), then the installer."
 }
 
 # The installer carries the app as it was when the installer was built: a later app build is not in it.
