@@ -1,4 +1,4 @@
-# AwanTV-textdump.ps1 - Version 1.1.0
+# AwanTV-textdump.ps1 - Version 1.2.0
 # The languages plan's safety net (claude/awan-languages-plan.md, phase 0). A test build of Awan TV (a version ending
 # in a letter) writes every text it shows, in Arabic and English with both kinds of digits (TextDump.java); this tool
 # asks the TV for that file, keeps it in state\textdump\<version>.txt, and compares it with a golden one.
@@ -15,15 +15,20 @@
 #   powershell -ExecutionPolicy Bypass -File tools\AwanTV-textdump.ps1 -Golden <file> -File <file>
 #       compares two dumps already on the computer
 # The full comparison is written beside the new dump as <new>-vs-<golden>.txt (UTF-8): numbered, golden then new.
+#   powershell -ExecutionPolicy Bypass -File tools\AwanTV-textdump.ps1 [-Device <serial>] -Crops [-Clear]
+#       (1.2.0) copies the TV's list of texts that do not fit their place (CropCheck.java, test builds: each screen
+#       looks every two seconds while it is in front) to state\textdump\crops-<version>.txt; -Clear then empties
+#       it on the TV, to start a new round of screens
 # Exit code: 0 the same, 1 a golden line changed or is missing, 2 the dump failed.
 
-param([string]$Device = "", [string]$Golden = "", [string]$File = "")
+param([string]$Device = "", [string]$Golden = "", [string]$File = "", [switch]$Crops, [switch]$Clear)
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.1.0"
+$ScriptVersion = "1.2.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Remote = "/sdcard/Android/data/$Pkg/files/text-dump.txt"
+$RemoteCrops = "/sdcard/Android/data/$Pkg/files/crop.txt"
 $Root = Split-Path -Parent $PSScriptRoot
 $Dir = Join-Path (Join-Path $Root "state") "textdump"
 $Sep = "`t=>`t"
@@ -154,6 +159,27 @@ try {
     $version = ((Adb shell "dumpsys package $Pkg" | Select-String -Pattern "versionName=(\S+)" | Select-Object -First 1).Matches.Groups[1].Value)
     if (-not $version) { throw "Awan TV is not installed on this TV." }
     if ($version -notmatch '\d[a-z]+$') { throw "Awan TV $version is a release: the dump is in test builds only (a version ending in a letter)." }
+
+    if ($Crops) {
+        New-Item -ItemType Directory -Force -Path $Dir | Out-Null
+        $dest = Join-Path $Dir "crops-$version.txt"
+        Remove-Item -Force $dest -ErrorAction SilentlyContinue
+        Adb pull $RemoteCrops $dest 2>&1 | Out-Null
+        if (-not (Test-Path $dest)) {
+            Write-Host "No text cut so far (no list on the TV). Go through the screens, then run this again."
+            exit 0
+        }
+        # Once each (the TV writes a finding again after Awan TV restarts), sorted by screen and language.
+        $unique = @([IO.File]::ReadAllLines($dest, [Text.Encoding]::UTF8) | Where-Object { $_ } | Sort-Object -Unique)
+        [IO.File]::WriteAllLines($dest, [string[]]$unique, (New-Object Text.UTF8Encoding($true)))
+        Write-Host "Texts that do not fit: $($unique.Count) (the texts are in the file; the terminal breaks Arabic)"
+        Write-Host "Saved: $dest"
+        if ($Clear) {
+            Adb shell rm -f $RemoteCrops | Out-Null
+            Write-Host "Cleared on the TV."
+        }
+        exit 0
+    }
 
     Write-Host "Awan TV ${version}: writing the dump on the TV (a few seconds; leave the remote alone)..."
     Adb shell rm -f $Remote | Out-Null

@@ -16,6 +16,14 @@ history is in its repository.
   Android's "in" read as "id"); countries by Android in another language with Palestine ours (`Places.country(cc,
   t)`, `Prefs.countryOf`); the adhkar's and hadiths' count and reference in any language written in their files
   ("countUr", "refUr"), else English (`Languages.fields`, `pick`). The text dump: every line the same.
+- Before a language is announced (1.18.0b): the build stops when a language's texts use a letter missing from the
+  app's fonts (`checkFonts`, beside `checkTexts`); test builds list every text that does not fit its place
+  (`CropCheck`: "...", lines or width past the view, cut by its box) for `AwanTV-textdump -Crops`.
+
+### Tools
+- `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.
+- `AwanTV-texts-sheet.py` 1.0.0: the side-by-side sheet of a language (number, key, where it shows, Arabic,
+  English, the language, notes), from the texts the release carries.
 
 ## [1.17.0]
 

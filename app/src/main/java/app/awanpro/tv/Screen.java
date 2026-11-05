@@ -63,6 +63,8 @@ abstract class Screen extends Activity {
             }
             onTick();
             long now = System.currentTimeMillis();
+            // Test builds: any text cut on this screen, every two seconds (CropCheck).
+            if ((now / 1000) % 2 == 0 && t != null) CropCheck.scan(Screen.this, getWindow().getDecorView(), getClass().getSimpleName(), t.lang);
             tick.postDelayed(this, 1000 - (now % 1000) + 5);
         }
     };

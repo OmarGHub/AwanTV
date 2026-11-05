@@ -154,6 +154,49 @@ tasks.register('checkTexts') {
 }
 tasks.named('preBuild') { dependsOn 'checkTexts' }
 
+// The fonts have every letter a language's texts use (languages plan, phase 4): each character of a values-xx/texts.xml
+// that the Arabic and English texts do not already use (those show today) must be in every font of res/font
+// (Alexandria for the words, Amiri for the titles and numbers), or Android draws it in another font or as a box.
+// Spaces and Unicode's format marks (direction marks, joiners) are left out. A language not yet announced
+// (unannouncedTexts) is checked as a warning only.
+tasks.register('checkFonts') {
+    def resDir = file('src/main/res')
+    inputs.files(fileTree(resDir) { include 'values*/texts.xml'; include 'font/*.ttf' })
+    doLast {
+        def chars = { File f ->
+            def raw = f.getText('UTF-8')
+            def out = new TreeSet<Integer>()
+            (raw =~ /(?s)<(?:string|item)\b[^>]*>(.*?)<\/(?:string|item)>/).each { m ->
+                def v = m[1].replace('&lt;', '<').replace('&gt;', '>').replace('&quot;', '"').replace('&apos;', "'").replace('&amp;', '&')
+                v = v.replaceAll(/\\u([0-9a-fA-F]{4})/) { all, hex -> new String(Character.toChars(Integer.parseInt(hex, 16))) }
+                v = v.replaceAll(/\\[nt]/, ' ').replaceAll(/\\(.)/, '$1')
+                if (v.length() >= 2 && v.startsWith('"') && v.endsWith('"')) v = v.substring(1, v.length() - 1)
+                v.codePoints().each { int cp ->
+                    if (!Character.isWhitespace(cp) && Character.getType(cp) != Character.FORMAT && !Character.isISOControl(cp)) out << cp
+                }
+            }
+            out
+        }
+        def shown = chars(new File(resDir, 'values/texts.xml')) + chars(new File(resDir, 'values-ar/texts.xml'))
+        def fonts = new File(resDir, 'font').listFiles().findAll { it.name.endsWith('.ttf') }.sort().collect { f ->
+            [name: f.name, font: java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, f)]
+        }
+        def errors = [], warnings = []
+        resDir.listFiles().findAll { it.isDirectory() && it.name.startsWith('values-') && it.name != 'values-ar' && new File(it, 'texts.xml').exists() }.sort().each { dir ->
+            def found = []
+            (chars(new File(dir, 'texts.xml')) - shown).each { int cp ->
+                def missing = fonts.findAll { !it.font.canDisplay(cp) }.collect { it.name }
+                if (missing) found << String.format('%s: U+%04X %s not in %s', dir.name, cp, new String(Character.toChars(cp)), missing.join(', '))
+            }
+            if (textsUnannounced.contains(dir.name)) warnings.addAll(found) else errors.addAll(found)
+        }
+        warnings.each { logger.warn("fonts (not announced): ${it}") }
+        if (errors) throw new GradleException("The fonts lack ${errors.size()} character(s):\n  " + errors.join('\n  '))
+        logger.lifecycle("fonts: ${fonts.size()} fonts checked")
+    }
+}
+tasks.named('preBuild') { dependsOn 'checkFonts' }
+
 dependencies {
     // Offline prayer-time calculation (no network, no transitive dependencies).
     implementation 'com.batoulapps.adhan:adhan:1.2.1'

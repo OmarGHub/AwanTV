@@ -121,6 +121,8 @@ final class SaverScreen {
             render();
             long now = System.currentTimeMillis();
             if (now - lastShift >= SHIFT_EVERY_MS) shift();
+            // Test builds: any text cut on the screensaver, every two seconds (CropCheck).
+            if ((now / 1000) % 2 == 0) CropCheck.scan(c, root, "Screensaver", t.lang);
             tick.postDelayed(this, 1000 - (now % 1000) + 5);
         }
     };
