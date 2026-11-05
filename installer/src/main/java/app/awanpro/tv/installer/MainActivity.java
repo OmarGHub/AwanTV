@@ -1598,7 +1598,7 @@ public final class MainActivity extends Activity {
      * again at the end only then; another app the viewer is in is left alone (1.13.1, as the editor and AwanTV-install).
      */
     private static boolean awanInFront(Adb a) throws IOException, InterruptedException {
-        String front = a.shell("dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'").out;
+        String front = a.shell("dumpsys activity activities 2>/dev/null | grep -m1 -E 'topResumedActivity|mResumedActivity'").out;
         return front.contains(Setup.PACKAGE + "/") || front.contains("DreamActivity");
     }
 

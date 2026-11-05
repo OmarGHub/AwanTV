@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.4.3
+﻿# AwanTV-editor.ps1 - Version 1.4.4
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.4.3"
+$ScriptVersion = "1.4.4"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -2129,7 +2129,7 @@ function Do-Tv($t, [string]$apk, [string]$want, [string]$hash) {
     }
     # What the TV shows now: the install stops Awan TV, so its Home (or its screensaver) in front now is opened again
     # at the end; another app the viewer is in is left alone.
-    $front = Sh $s "dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'"
+    $front = Sh $s "dumpsys activity activities 2>/dev/null | grep -m1 -E 'topResumedActivity|mResumedActivity'"
     $t.Reopen = ($front -match ([regex]::Escape($Pkg) + "/")) -or ($front -match "DreamActivity")
     if ($t.Kind -eq "setup") {
         L "Set up $($t.Id) again: it has this very APK ($want)"

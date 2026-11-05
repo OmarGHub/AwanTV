@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.13.1]
+
 ### The app
 - Home opens again after any update of the app when it was in front as the update stopped it (the editor, the phone
   installer, AwanTV-install or adb alike): Home keeps whether it is in front (`home_front`, on the TV only), and the
@@ -23,6 +25,8 @@ history is in its repository.
 - "الهاتف" for the phone throughout the Arabic texts (it was "الجوال" in four).
 
 ### Tools
+- `AwanTV-editor` 1.4.4: dumpsys's "Broken pipe" note when reading what the TV shows is quieted (as AwanTV-install
+  1.2.0 and the phone installer).
 - `AwanTV-install` 1.2.0: an update opens Awan TV at the end only when it (its Home or its screensaver) was in front
   before it; another app the viewer is in is left alone, and the very same APK (nothing installed) leaves the TV as it
   is. A first install hands the replaced screensaver over and opens it, as before.

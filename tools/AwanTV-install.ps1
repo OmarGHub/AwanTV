@@ -195,7 +195,7 @@ if (-not $have -and $current -and $current -ne "null" -and $current -notlike "$P
 $onTv = [regex]::Match((Shell "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
 # What the TV shows now: an update stops Awan TV, so at the end it is opened again only when it (its Home or its
 # screensaver) was in front; another app the viewer is in is left alone.
-$front = Shell "dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'"
+$front = Shell "dumpsys activity activities 2>/dev/null | grep -m1 -E 'topResumedActivity|mResumedActivity'"
 $wasFront = ($front -match ([regex]::Escape($Pkg) + "/")) -or ($front -match "DreamActivity")
 $same = $false
 if ($onTv) {
