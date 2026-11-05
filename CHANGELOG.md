@@ -11,6 +11,8 @@ history is in its repository.
   installer, AwanTV-install or adb alike): Home keeps whether it is in front (`home_front`, on the TV only), and the
   service, bound again within a minute of the update, opens it; another app the viewer was in is left alone. The TV's
   own home came up meanwhile with no event to say so (the 1.10.1 fix covers a boot only, and Update now has its own).
+- The safety net's half hour without Home ends with an update of the app (a new version may fix what stopped the old
+  one), and Home's button taken on a source box opens the TV's own home while it lasts: it did nothing before.
 
 ### Phone installer
 - The newer-installer card says before the press that the installer app will close after the update and to open it

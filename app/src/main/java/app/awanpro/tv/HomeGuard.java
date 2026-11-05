@@ -221,8 +221,9 @@ final class HomeGuard {
             dream.wakeUp();
             return;
         }
-        if (bypass) {
-            Log.i(TAG, "Home, the TV's own home chosen: opening it");
+        if (bypass || Crash.holding(service)) {
+            // The TV's own home chosen, or held after Awan TV stopped (Crash): Android's own Home, not nothing.
+            Log.i(TAG, "Home, the TV's own home chosen or held: opening it");
             openStock(service);
             return;
         }
@@ -303,7 +304,13 @@ final class HomeGuard {
      * the viewer was in had paused Home, so it is left alone.
      */
     void afterAnyUpdate() {
-        if (!active() || MainActivity.shown || !ServiceCheck.justUpdated(service)) return;
+        if (!ServiceCheck.justUpdated(service)) return;
+        // A new version may well fix what stopped the old one: Home held off after stops (Crash) is let go.
+        if (Crash.holding(service)) {
+            Log.i(TAG, "just updated: Home no longer held after the old version's stops");
+            Crash.release(service);
+        }
+        if (!active() || MainActivity.shown) return;
         if (!Prefs.of(service).getBoolean(FRONT, false)) return;
         Log.i(TAG, "just updated with Home in front: opening it again");
         open();
