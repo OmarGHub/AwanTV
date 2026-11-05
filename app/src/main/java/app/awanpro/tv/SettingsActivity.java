@@ -212,7 +212,7 @@ public class SettingsActivity extends Screen {
         }
         locating = false;
         String name = Places.km(lat, lng, near.lat, near.lng) <= 15 ? near.name(t) : t.near(near.name(t));
-        String country = Prefs.countryName(near.cc, t.ar);
+        String country = Prefs.countryName(near.cc, t);
         firstShown = country.isEmpty() ? name : t.place(name, country);
         firstSave = () -> Prefs.setCustom(this, name, lat, lng, near.cc);
         reopenFirstChooser();
@@ -223,7 +223,7 @@ public class SettingsActivity extends Screen {
         locating = false;
         int i = Math.max(0, Prefs.cityIndex(this));
         Prefs.City city = Prefs.CITIES[i];
-        firstShown = t.ar ? t.place(city.ar, city.countryAr) : t.place(city.en, city.countryEn);
+        firstShown = t.place(t.ar ? city.ar : city.en, Prefs.countryOf(city, t));
         firstSave = () -> Prefs.setCity(this, i);
         reopenFirstChooser();
     }
@@ -728,7 +728,7 @@ public class SettingsActivity extends Screen {
                         // A place by its coordinates has only the name the viewer gave it (and its country,
                         // when it came from the world list).
                         if (Prefs.CUSTOM.equals(city.id) && city.countryEn.isEmpty()) return city.ar;
-                        return t.ar ? t.place(city.ar, city.countryAr) : t.place(city.en, city.countryEn);
+                        return t.place(t.ar ? city.ar : city.en, Prefs.countryOf(city, t));
                     }
                     void open() {
                         // After the six regions, any other place by its coordinates (PlaceActivity).
@@ -920,7 +920,7 @@ public class SettingsActivity extends Screen {
                 },
                 new Row(SEG) {
                     String label() { return t.digits(); }
-                    String[] segs() { return new String[] {"0123", "٠١٢٣"}; }
+                    String[] segs() { return new String[] {"0123", Languages.easternDigits(t.lang)}; }
                     int selected() { return t.eastern ? 1 : 0; }
                     void select(int i) { prefs().edit().putString("digits", i == 1 ? "eastern" : "western").apply(); relaunch(); }
                 },
@@ -1244,7 +1244,7 @@ public class SettingsActivity extends Screen {
             String label() { return t.iqamaRow(); }
             String help() {
                 Prefs.City city = Prefs.city(c);
-                return t.iqamaModeHelp(Iqama.mode(c), t.ar ? city.countryAr : city.countryEn, Iqama.preset(c) != null);
+                return t.iqamaModeHelp(Iqama.mode(c), Prefs.countryOf(city, t), Iqama.preset(c) != null);
             }
             String[] segs() { return t.iqamaModes(); }
             int selected() { return Iqama.mode(c); }
@@ -1404,7 +1404,7 @@ public class SettingsActivity extends Screen {
             String help() {
                 int preset = Jumuah.presetMinutes(c);
                 Prefs.City city = Prefs.city(c);
-                return t.fridayHelp(Prefs.fridayMode(c), preset < 0 ? null : clockOf(preset), t.ar ? city.countryAr : city.countryEn);
+                return t.fridayHelp(Prefs.fridayMode(c), preset < 0 ? null : clockOf(preset), Prefs.countryOf(city, t));
             }
             String[] segs() { return t.fridayChoices(); }
             int selected() { return Prefs.fridayMode(c); }
@@ -2017,13 +2017,13 @@ public class SettingsActivity extends Screen {
         List<String> countries = new ArrayList<>();
         for (String en : Prefs.REGIONS[region]) {
             for (Prefs.City city : Prefs.CITIES) {
-                if (city.countryEn.equals(en)) { countries.add(t.ar ? city.countryAr : city.countryEn); break; }
+                if (city.countryEn.equals(en)) { countries.add(Prefs.countryOf(city, t)); break; }
             }
         }
         java.text.Collator order = Apps.collator(t);
         Collections.sort(countries, (a, b) -> order.compare(a.replaceFirst("^ال", ""), b.replaceFirst("^ال", "")));
         Prefs.City now = Prefs.city(this);
-        int sel = countries.indexOf(t.ar ? now.countryAr : now.countryEn);
+        int sel = countries.indexOf(Prefs.countryOf(now, t));
         Runnable self = () -> openCountries(region, back);
         openChooser(t.regions()[region], countries.toArray(new String[0]), sel,
             i -> root.post(() -> openCities(countries.get(i), self)));
@@ -2035,7 +2035,7 @@ public class SettingsActivity extends Screen {
         List<Integer> found = new ArrayList<>();
         for (int i = 0; i < Prefs.CITIES.length; i++) {
             Prefs.City city = Prefs.CITIES[i];
-            if ((t.ar ? city.countryAr : city.countryEn).equals(country)) found.add(i);
+            if (Prefs.countryOf(city, t).equals(country)) found.add(i);
         }
         if (found.size() == 1) {
             Prefs.setCity(this, found.get(0));

@@ -27,17 +27,17 @@ final class Hadith {
     static final long EVERY_MS = 10 * 60_000L;
 
     static final class Item {
-        final String text, countAr, countEn, refAr, refEn;
+        final String text;
+        /** How many times, and where it is reported, in each language it is written in (Languages.fields). */
+        final java.util.Map<String, String> counts, refs;
         final int bukhari, muslim;
 
         Item(JSONObject o) {
             text = o.optString("text");
             bukhari = o.optInt("bukhari");
             muslim = o.optInt("muslim");
-            countAr = o.optString("countAr");
-            countEn = o.optString("countEn");
-            refAr = o.optString("refAr");
-            refEn = o.optString("refEn");
+            counts = Languages.fields(o, "count");
+            refs = Languages.fields(o, "ref");
         }
 
         /** Seconds on screen after the prayer: as a dhikr (Adhkar), never under 15 s or over 90. */

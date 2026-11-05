@@ -6,6 +6,17 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
+  12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
+  temperature's figures alone smaller, only as far as needed (Omar's idea).
+- Languages plan, phase 3 (no change on screen in Arabic and English): `Text` takes any language (`Text.of(c, tag,
+  eastern)`): direction, script, dates and order by language (`Languages.rtl`, `arabicScript`); Urdu's own Eastern
+  digits (۰۱۲۳, `Languages.easternZero`); "TV" = the TV's language when Awan TV has it (`Screen.languageTag`,
+  Android's "in" read as "id"); countries by Android in another language with Palestine ours (`Places.country(cc,
+  t)`, `Prefs.countryOf`); the adhkar's and hadiths' count and reference in any language written in their files
+  ("countUr", "refUr"), else English (`Languages.fields`, `pick`). The text dump: every line the same.
+
 ## [1.17.0]
 
 ### The app

@@ -192,7 +192,10 @@ abstract class Screen extends Activity {
      * before 1.16.0 it read as English.
      */
     static String languageTag(String locale, String tvLanguage) {
-        return Languages.known(locale) ? locale : "ar".equals(tvLanguage) ? "ar" : "en";
+        if (Languages.known(locale)) return locale;
+        // "TV": the TV's language when Awan TV has it (phase 3: any announced language), else English.
+        String tv = Languages.fromAndroid(tvLanguage);
+        return Languages.known(tv) ? tv : "en";
     }
 
     /** The TV's own language now (its first locale's language code). */
@@ -208,12 +211,12 @@ abstract class Screen extends Activity {
     /** The saved language and digits, for screens and for the screensaver, which is not an Activity. */
     static Text loadText(Context c) {
         SharedPreferences p = Prefs.of(c);
-        boolean[] lang = language(p.getString("locale", "system"),
-            c.getResources().getConfiguration().getLocales().get(0).getLanguage(), p.getString("digits", ""));
-        boolean ar = lang[0];
-        Text t = Text.of(c, ar, lang[1]);
+        String locale = p.getString("locale", "system");
+        String tv = c.getResources().getConfiguration().getLocales().get(0).getLanguage();
+        boolean[] lang = language(locale, tv, p.getString("digits", ""));
+        Text t = Text.of(c, languageTag(locale, tv), lang[1]);
         Prefs.City city = Prefs.city(c);
-        t.cityName = ar ? city.ar : city.en;
+        t.cityName = t.ar ? city.ar : city.en;
         return t;
     }
 

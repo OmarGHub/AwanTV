@@ -304,6 +304,33 @@ final class Prefs {
         return Places.country(cc, ar);
     }
 
+    /** A country in the screen's language: the list's names in Arabic and English, Android's in any other. */
+    static String countryName(String cc, Text t) {
+        if (t.ar || "en".equals(t.lang)) return countryName(cc, t.ar);
+        return Places.country(cc, t);
+    }
+
+    /** A listed or saved city's country in the screen's language (any other language: by its code, else English). */
+    static String countryOf(City city, Text t) {
+        if (t.ar) return city.countryAr;
+        if ("en".equals(t.lang)) return city.countryEn;
+        String cc = codeOf(city.countryEn);
+        return cc == null ? city.countryEn : Places.country(cc, t);
+    }
+
+    private static volatile java.util.Map<String, String> codes;
+
+    /** The code of a country as the city list names it in English ("UAE": AE); null when none matches. */
+    private static String codeOf(String countryEn) {
+        java.util.Map<String, String> m = codes;
+        if (m == null) {
+            m = new java.util.HashMap<>();
+            for (String cc : java.util.Locale.getISOCountries()) m.put(listCountry(cc), cc);
+            codes = m;
+        }
+        return m.get(countryEn);
+    }
+
     static City city(Context c) {
         int i = cityIndex(c);
         return i >= 0 ? CITIES[i] : custom(c);

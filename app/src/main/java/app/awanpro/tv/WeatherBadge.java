@@ -22,6 +22,9 @@ final class WeatherBadge extends LinearLayout {
     private final Text t;
     private final Sky icon;
     private final TextView temp;
+    /** The temperature's own size, and the room the rest takes (line, gaps, icon), in screen pixels: fitWithin. */
+    private final float tempSize;
+    private int fixedWidth;
 
     /**
      * @param iconSize  the icon's side in design pixels
@@ -56,6 +59,9 @@ final class WeatherBadge extends LinearLayout {
         LayoutParams tlp = new LayoutParams(-2, -2);
         tlp.setMarginStart(Ui.ipx(textSize * 0.18f));
         addView(temp, tlp);
+        tempSize = Ui.px(textSize);
+        fixedWidth = Ui.ipx(iconSize) + Ui.ipx(textSize * 0.18f);
+        if (lineColor != 0) fixedWidth += llp.width + 2 * Ui.ipx(gap);
         setVisibility(GONE);
     }
 
@@ -72,6 +78,23 @@ final class WeatherBadge extends LinearLayout {
         temp.setText(Weather.temperature(c, t, n));
         setContentDescription(t.sky(n.sky) + " " + temp.getText());
         setVisibility(VISIBLE);
+    }
+
+    /**
+     * Keeps the whole badge within maxWidth screen pixels (Home: the clock's line ends before the radio button):
+     * the temperature's figures alone grow smaller, as far as 70%, only for a reading too wide ("-12°", "113°" beside
+     * a 12-hour clock); otherwise their own size.
+     */
+    void fitWithin(int maxWidth) {
+        android.graphics.Paint p = new android.graphics.Paint(temp.getPaint());
+        p.setTextSize(tempSize);
+        float full = p.measureText(String.valueOf(temp.getText()));
+        float size = tempSize;
+        if (full > 0 && fixedWidth + full > maxWidth) {
+            float scale = Math.max(0.7f, Math.min(1f, (maxWidth - fixedWidth) / full));
+            size = tempSize * scale;
+        }
+        if (Math.abs(temp.getTextSize() - size) > 0.5f) temp.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
     }
 
     /** The sky as a stroke icon on a 24px grid, like {@link Icon}: sun or moon, cloud, rain, snow, fog, storm. */

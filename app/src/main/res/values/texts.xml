@@ -394,6 +394,7 @@
     <string name="otherLocation" formatted="false">"Another location"</string>
     <string name="otherPlace" formatted="false">"Any place in the world (search or coordinates)"</string>
     <string name="packagesHelp" formatted="false">"Ones not installed on this TV are skipped"</string>
+    <string name="palestine" formatted="false">"Palestine"</string>
     <string name="passed" formatted="false">"passed"</string>
     <string name="passedSunrise" formatted="false">"passed"</string>
     <string name="percent" formatted="false">"%1$s%%"</string>

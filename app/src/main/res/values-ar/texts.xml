@@ -394,6 +394,7 @@
     <string name="otherLocation" formatted="false">"موقع آخر"</string>
     <string name="otherPlace" formatted="false">"أي مكان في العالم (بحث أو إحداثيات)"</string>
     <string name="packagesHelp" formatted="false">"غير المثبَّت منها على هذه الشاشة يُتجاهل"</string>
+    <string name="palestine" formatted="false">"فلسطين"</string>
     <string name="passed" formatted="false">"مضت"</string>
     <string name="passedSunrise" formatted="false">"مضى"</string>
     <string name="percent" formatted="false">"%1$s٪"</string>

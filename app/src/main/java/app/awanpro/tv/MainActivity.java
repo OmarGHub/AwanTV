@@ -78,7 +78,10 @@ public class MainActivity extends Screen {
     private TextView clock, gdate, hdate, cityLine;
     /** The weather beside the clock. */
     private WeatherBadge weather;
-    private final Runnable onWeather = () -> { if (weather != null) weather.update(); };
+    private final Runnable onWeather = () -> {
+        if (weather != null) weather.update();
+        fitWeather();
+    };
     /**
      * The last key on Home, and whether Awan TV opens its own screensaver after idle minutes here (its
      * screensaver is on, and the TV's own is not Awan TV's); looked up each minute.
@@ -107,6 +110,8 @@ public class MainActivity extends Screen {
     private TextView cardTitle;
     /** The Station list over Home (its groups, then a group's stations); null when closed. */
     private ListLayer stations;
+    /** Radio and Wi-Fi at the top, for fitWeather. */
+    private View topPills;
     /** The language list over Home (the globe); null when closed. */
     private ListLayer languages;
     /** Home's buttons that were focusable when the list opened: none under it takes focus (Up from its first item). */
@@ -489,7 +494,8 @@ public class MainActivity extends Screen {
         clockRow.setGravity(Gravity.CENTER_VERTICAL);
         clockRow.setClipChildren(false);
         clockRow.addView(clock);
-        weather = new WeatherBadge(this, t, sacred, 72, 80, 32, Tokens.GOLD_400, Tokens.PLASTER_100, Tokens.LINE_SOFT);
+        // 16 each side of the line (32 before 1.18.0): with a 12-hour clock "28°" ran under the radio button.
+        weather = new WeatherBadge(this, t, sacred, 72, 80, 16, Tokens.GOLD_400, Tokens.PLASTER_100, Tokens.LINE_SOFT);
         clockRow.addView(weather);
         when.addView(clockRow);
         lineHeight(clock, 1f);
@@ -523,6 +529,7 @@ public class MainActivity extends Screen {
         plp.setMarginEnd(Ui.ipx(1920 - (Tokens.COURT_X + Tokens.COURT_W) + 3 * (72 + 20) - reach));
         plp.topMargin = Ui.ipx(56 - reach);
         root.addView(pills, plp);
+        topPills = pills;
         nodes[SETTINGS] = settingsButton();
         nodes[LANG] = languageButton();
         nodes[SAVER] = saverButton();
@@ -981,6 +988,7 @@ public class MainActivity extends Screen {
         hdate.setText(hijri(day));
         cityLine.setText(t.city() + t.sep() + new SimpleDateFormat("EEEE", dateLocale).format(now));
         if (weather != null) weather.update();
+        fitWeather();
 
         String[] names = t.prayerNames();
         if (day.friday) names[PrayerDay.DHUHR] = t.jumuah();
@@ -1174,6 +1182,7 @@ public class MainActivity extends Screen {
     /** Puts the pill and the open card in step with the radio. */
     private void styleRadio() {
         if (radioLabel == null || nodes[RADIO] == null) return;
+        fitWeather();
         int state = Radio.state();
         boolean on = Radio.on(), playing = state == Radio.PLAYING;
         boolean focused = nodes[RADIO].isFocused();
@@ -1359,6 +1368,24 @@ public class MainActivity extends Screen {
             Radio.switchToSaved(this, keys.get(k));
             stationPicked();
         }, this::openStationGroups);
+    }
+
+    /**
+     * The weather stops 12 px before the radio button, once laid out (the clock's width changes with the minute and
+     * the 12-hour marker, the radio button's with the radio): WeatherBadge.fitWithin.
+     */
+    private void fitWeather() {
+        if (root == null) return;
+        root.post(() -> {
+            if (weather == null || topPills == null || weather.getVisibility() != View.VISIBLE) return;
+            int[] w = new int[2], pl = new int[2];
+            weather.getLocationOnScreen(w);
+            topPills.getLocationOnScreen(pl);
+            // From the badge's start to the radio button's ring-free edge (the pills' row reaches past it by REACH).
+            int reach = Ui.ipx(FocusTile.REACH);
+            int room = rtl ? w[0] + weather.getWidth() - (pl[0] + topPills.getWidth() - reach) : pl[0] + reach - w[0];
+            weather.fitWithin(room - Ui.ipx(12));
+        });
     }
 
     // ---------------------------------------------------------------- the language list

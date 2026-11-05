@@ -13,7 +13,10 @@ import com.batoulapps.adhan.Madhab;
  * it must open even when the resources cannot be read, so `new Text(ar, eastern)` (no resources) serves it alone.
  */
 final class Text {
-    /** The language: "ar" or "en" (Languages.TAGS), the resources' folder values-ar or values. */
+    /**
+     * The language (Languages.TAGS): its resources' folder (values-ar, values for English), direction, script,
+     * dates, order and digits (languages plan, phase 3: any language, not Arabic and English only).
+     */
     final String lang;
     /**
      * Arabic itself. Besides the Arabic counting forms kept in code, it chooses the Arabic side of what is written in
@@ -21,7 +24,7 @@ final class Text {
      * any other language takes the English side. Direction and script are rtl() and arabicScript(), not this.
      */
     final boolean ar;
-    /** Eastern Arabic digits (٠١٢٣). Its own setting; defaults to on in Arabic. */
+    /** Eastern digits (Arabic's ٠١٢٣, Urdu's ۰۱۲۳). Its own setting; defaults to on in Arabic. */
     final boolean eastern;
     private final Res res;
 
@@ -37,30 +40,41 @@ final class Text {
     }
 
     Text(Res res, boolean ar, boolean eastern) {
+        this(res, ar ? "ar" : "en", eastern);
+    }
+
+    Text(Res res, String lang, boolean eastern) {
         this.res = res;
-        this.ar = ar;
-        this.lang = ar ? "ar" : "en";
+        this.lang = lang;
+        this.ar = "ar".equals(lang);
         this.eastern = eastern;
     }
 
     /** Written right to left: the screen's layout and its text direction. */
     boolean rtl() {
-        return ar;
+        return Languages.rtl(lang);
     }
 
     /** Written in the Arabic script: Amiri's bold for names; no capitals, no letter spacing, the Arabic comma. */
     boolean arabicScript() {
-        return ar;
+        return Languages.arabicScript(lang);
     }
 
-    /** Month and day names in the screen's language, Western digits (d() decides the digits). */
+    /**
+     * Month and day names in the screen's language, Western digits (d() decides the digits). Arabic and English as
+     * before 1.18.0 (other Arabic regions name the months otherwise); any other language its own, Latin digits.
+     */
     java.util.Locale dateLocale() {
-        return ar ? java.util.Locale.forLanguageTag("ar-EG-u-nu-latn") : java.util.Locale.UK;
+        if (ar) return java.util.Locale.forLanguageTag("ar-EG-u-nu-latn");
+        if ("en".equals(lang)) return java.util.Locale.UK;
+        return java.util.Locale.forLanguageTag(lang + "-u-nu-latn");
     }
 
     /** The order of names in the screen's language (apps, countries). */
     java.util.Locale sortLocale() {
-        return ar ? new java.util.Locale("ar") : java.util.Locale.ENGLISH;
+        if (ar) return new java.util.Locale("ar");
+        if ("en".equals(lang)) return java.util.Locale.ENGLISH;
+        return new java.util.Locale(lang);
     }
 
     private static final java.util.Map<String, Res> RES = new java.util.concurrent.ConcurrentHashMap<>();
@@ -71,7 +85,11 @@ final class Text {
      * ask from different threads). Words only: no size, image or font is read through it.
      */
     static Text of(android.content.Context c, boolean ar, boolean eastern) {
-        String tag = ar ? "ar" : "en";
+        return of(c, ar ? "ar" : "en", eastern);
+    }
+
+    /** The texts in one language (Languages.TAGS); a missing text is English's (values). */
+    static Text of(android.content.Context c, String tag, boolean eastern) {
         Res r = RES.get(tag);
         if (r == null) {
             android.content.Context app = c.getApplicationContext() != null ? c.getApplicationContext() : c;
@@ -84,7 +102,7 @@ final class Text {
             };
             RES.put(tag, r);
         }
-        return new Text(r, ar, eastern);
+        return new Text(r, tag, eastern);
     }
 
     /** A text: %% in it is a percent sign (every string is written for fill). */
@@ -140,10 +158,12 @@ final class Text {
         // English with Eastern digits takes the Latin comma ("Cairo, Friday", not "Cairo، Friday").
         // Punctuation of the script, not a word: in code, so the crash screen's fallback (no resources) has it too.
         s = s.replace(" · ", arabicScript() ? "، " : ", ");
+        // The language's own Eastern digits: Arabic's ٠١٢٣, Urdu's ۰۱۲۳ (Languages.easternZero).
+        char zero = Languages.easternZero(lang);
         StringBuilder b = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            b.append(c >= '0' && c <= '9' ? (char) ('٠' + (c - '0')) : c);
+            b.append(c >= '0' && c <= '9' ? (char) (zero + (c - '0')) : c);
         }
         return b.toString();
     }
@@ -482,6 +502,8 @@ final class Text {
         return d(String.format(java.util.Locale.US, "%.2f° %s · %.2f° %s", Math.abs(lat), ns, Math.abs(lng), ew));
     }
     String place(String city, String country) { return city + (s(R.string.place)) + country; }
+    /** Palestine in a language whose country names come from Android (Places.country): ours, as in Arabic and English. */
+    String palestine() { return s(R.string.palestine); }
     String method() { return s(R.string.method); }
     String asrSchool() { return s(R.string.asrSchool); }
     String asrSchoolHelp() { return s(R.string.asrSchoolHelp); }

@@ -49,7 +49,7 @@ final class Places {
         }
 
         String country(Text t) {
-            return Places.country(cc, t.ar);
+            return Places.country(cc, t);
         }
     }
 
@@ -168,6 +168,17 @@ final class Places {
         String name = new Locale("", cc).getDisplayCountry(ar ? new Locale("ar") : Locale.ENGLISH);
         if ("PS".equals(cc)) return ar ? "فلسطين" : "Palestine";
         return name;
+    }
+
+    /**
+     * A country in the screen's language: Arabic and English as above; any other language Android's own name in it
+     * (languages plan, phase 3), Palestine ours (t.palestine()).
+     */
+    static String country(String cc, Text t) {
+        if (t.ar || "en".equals(t.lang)) return country(cc, t.ar);
+        if (cc == null || cc.isEmpty()) return "";
+        if ("PS".equals(cc)) return t.palestine();
+        return new Locale("", cc).getDisplayCountry(new Locale(t.lang));
     }
 
     // ---------------------------------------------------------------- the calculation a country's mosques follow

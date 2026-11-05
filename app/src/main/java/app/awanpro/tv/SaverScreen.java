@@ -544,8 +544,8 @@ final class SaverScreen {
                 // and source under it.
                 hadithText.setText(h.text);
                 StringBuilder meta = new StringBuilder(t.afterPrayerLabel());
-                String count = t.ar ? h.countAr : h.countEn;
-                String ref = h.bukhari > 0 || h.muslim > 0 ? t.hadithSource(h.bukhari, h.muslim) : (t.ar ? h.refAr : h.refEn);
+                String count = Languages.pick(h.counts, t);
+                String ref = h.bukhari > 0 || h.muslim > 0 ? t.hadithSource(h.bukhari, h.muslim) : Languages.pick(h.refs, t);
                 if (!count.isEmpty()) meta.append(t.sep()).append(count);
                 if (!ref.isEmpty()) meta.append(t.sep()).append(ref);
                 hadithSource.setText(meta.toString());
@@ -629,8 +629,8 @@ final class SaverScreen {
         shownAt = System.currentTimeMillis();
         Runnable set = () -> {
             dhikrText.setText(d.text);
-            String count = t.ar ? d.countAr : d.countEn;
-            String ref = t.ar ? d.refAr : d.refEn;
+            String count = Languages.pick(d.counts, t);
+            String ref = Languages.pick(d.refs, t);
             dhikrMeta.setText(ref.isEmpty() ? count : count + t.sep() + ref);
         };
         if (!fade) {

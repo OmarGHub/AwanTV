@@ -201,7 +201,7 @@ public class PlaceActivity extends Screen {
             Places.Place p = found.get(i);
             resultName[i].setText(p.name(t));
             String sub = t.population(p.population);
-            String country = Prefs.countryName(p.cc, t.ar);
+            String country = Prefs.countryName(p.cc, t);
             if (!country.isEmpty()) sub = country + t.sep() + sub;
             // The Latin name too, when the line above is Arabic.
             if (t.ar && !p.ar.isEmpty()) sub = p.name + t.sep() + sub;
@@ -289,7 +289,7 @@ public class PlaceActivity extends Screen {
     /** The method line: the country's, or today's when the country is not known. And the iqamah, where it has one. */
     private void showMethod(String cc) {
         Method m = Places.method(cc);
-        String country = Prefs.countryName(cc, t.ar);
+        String country = Prefs.countryName(cc, t);
         if (m != null) {
             setMethod(t.placeMethod(t.methodName(m), country));
         } else {

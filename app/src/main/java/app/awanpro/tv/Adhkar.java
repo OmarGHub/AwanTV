@@ -31,7 +31,9 @@ final class Adhkar {
     /** One dhikr. */
     static final class Dhikr {
         final int order, type, count;
-        final String text, countAr, countEn, refAr, refEn;
+        final String text;
+        /** How many times, and where it is reported, in each language it is written in (Languages.fields). */
+        final java.util.Map<String, String> counts, refs;
         final boolean night;
 
         Dhikr(JSONObject o) {
@@ -39,10 +41,8 @@ final class Adhkar {
             type = o.optInt("type");
             count = o.optInt("count", 1);
             text = o.optString("text");
-            countAr = o.optString("countAr");
-            countEn = o.optString("countEn");
-            refAr = o.optString("refAr");
-            refEn = o.optString("refEn");
+            counts = Languages.fields(o, "count");
+            refs = Languages.fields(o, "ref");
             night = o.optBoolean("night");
         }
 
