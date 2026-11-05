@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.13.0]
+
 ### The app
 - A safety net (`Crash`, `CrashActivity`): an error nothing caught is written down (files\crash.txt) and, when one
   of Awan TV's screens was in front, a screen of its own opens in place of Android's "keeps stopping", in its own

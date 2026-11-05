@@ -115,7 +115,8 @@ public class CrashActivity extends Activity {
         words.addView(titleView(t.crashDetailsTitle()));
         words.addView(line(t.crashDetailsLead(), Tokens.PLASTER_100, 24, 10));
         TextView lines = new TextView(this);
-        lines.setText(last == null ? "-" : last[1]);
+        // "at" kept with its frame: a long frame wraps itself, not after "at".
+        lines.setText(last == null ? "-" : last[1].replace("  at ", "\u00A0\u00A0at\u00A0"));
         lines.setTypeface(Typeface.MONOSPACE);
         lines.setTextSize(TypedValue.COMPLEX_UNIT_PX, Ui.px(18));
         lines.setTextColor(Tokens.PLASTER_100);
