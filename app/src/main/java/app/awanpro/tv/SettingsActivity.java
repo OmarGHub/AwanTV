@@ -909,13 +909,14 @@ public class SettingsActivity extends Screen {
                     void select(int i) { Prefs.setRadioScreenOff(c, minutes[i]); }
                 });
             case DISPLAY: return Arrays.asList(
-                new Row(SEG) {
+                // The language: the same list as Home's language button, then Keep or Go back (Screen.chooseLanguage).
+                new Row(VALUE) {
                     final String[] values = Languages.values();
-                    String label() { return t.language(); }
+                    String label() { return t.languageBoth(); }
                     String help() { return t.languageHelp(); }
-                    String[] segs() { return t.languages(); }
                     int selected() { return Math.max(0, Arrays.asList(values).indexOf(prefs().getString("locale", "system"))); }
-                    void select(int i) { prefs().edit().putString("locale", values[i]).apply(); relaunch(); }
+                    String value() { return languageItems()[selected()]; }
+                    void open() { openLanguages(i -> chooseLanguage(values[i])); }
                 },
                 new Row(SEG) {
                     String label() { return t.digits(); }
@@ -1626,6 +1627,48 @@ public class SettingsActivity extends Screen {
         return out;
     }
 
+    /** "TV (its language now)", then each language by its own name (Languages). */
+    private String[] languageItems() {
+        String[] items = new String[Languages.NAMES.length + 1];
+        items[0] = t.languageTv(Languages.name(languageTag("system", tvLanguage())));
+        System.arraycopy(Languages.NAMES, 0, items, 1, Languages.NAMES.length);
+        return items;
+    }
+
+    /** Home's language list (Screen.languageList) as this screen's chooser: Back closes it as any other. */
+    private void openLanguages(IntConsumer pick) {
+        ListLayer l = languageList(i -> {
+            closeChooser();
+            root.post(() -> pick.accept(i));
+        });
+        chooser = l.layer;
+        setRowsFocusable(false);
+        root.addView(chooser, new FrameLayout.LayoutParams(-1, -1));
+        hints.bringToFront();
+        if (l.start != null) root.post(l.start::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintMove());
+        h.add(t.hintChoose());
+        h.add(t.hintBackCancel());
+        setHints(hints, h);
+    }
+
+    @Override
+    boolean asksKeep() {
+        return true;
+    }
+
+    @Override
+    LinearLayout hintsView() {
+        return hints;
+    }
+
+    /** Back on the language row (the screen was built again where it was, or the question just closed). */
+    @Override
+    void languageSettled() {
+        if (chooser == null && !rows.isEmpty() && rowIndex < rows.size()) focusRow(rowIndex);
+    }
+
     /** Language or digits changed: every string on the screen changes, so rebuild it where it was. */
     private void relaunch() {
         loadSettings(null);
@@ -1854,6 +1897,7 @@ public class SettingsActivity extends Screen {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
+        if (keepKey(e)) return true;
         int k = e.getKeyCode();
         boolean down = e.getAction() == KeyEvent.ACTION_DOWN;
         if (resetStage != 0) return resetKey(e);

@@ -196,6 +196,7 @@
     <string name="hintBackMenu" formatted="false">"Back  Menu"</string>
     <string name="hintBackPrayer" formatted="false">"Back  Prayer times"</string>
     <string name="hintBackSettings" formatted="false">"Back  Settings"</string>
+    <string name="hintBackUndo" formatted="false">"Back  Go back"</string>
     <string name="hintCancel" formatted="false">"Back  Cancel"</string>
     <string name="hintChange" formatted="false">"◀▶  Change value"</string>
     <string name="hintChoose" formatted="false">"OK  Choose"</string>
@@ -283,7 +284,12 @@
     <string name="khutbahAt" formatted="false">"Khutbah "</string>
     <string name="khutbahIn" formatted="false">"Khutbah in"</string>
     <string name="language" formatted="false">"Language"</string>
+    <string name="languageGoesBack" formatted="false">"Back to %2$s in %1$s s"</string>
     <string name="languageHelp" formatted="false">"“TV” follows the TV's language"</string>
+    <string name="languageKeep" formatted="false">"Keep"</string>
+    <string name="languageKeepTitle" formatted="false">"Keep this language?"</string>
+    <string name="languageTv" formatted="false">"TV (%1$s now)"</string>
+    <string name="languageUndo" formatted="false">"Go back"</string>
     <string name="languages" formatted="false">"TV"</string>
     <string name="lastAdhanRow" formatted="false">"Last adhan"</string>
     <string name="lastCrashRow" formatted="false">"Last time the app stopped"</string>

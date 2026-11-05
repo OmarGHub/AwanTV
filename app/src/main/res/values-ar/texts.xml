@@ -196,6 +196,7 @@
     <string name="hintBackMenu" formatted="false">"رجوع  القائمة"</string>
     <string name="hintBackPrayer" formatted="false">"رجوع  مواقيت الصلاة"</string>
     <string name="hintBackSettings" formatted="false">"رجوع  الإعدادات"</string>
+    <string name="hintBackUndo" formatted="false">"رجوع  تراجع"</string>
     <string name="hintCancel" formatted="false">"رجوع  إلغاء"</string>
     <string name="hintChange" formatted="false">"◀▶  تغيير القيمة"</string>
     <string name="hintChoose" formatted="false">"OK  اختيار"</string>
@@ -283,7 +284,12 @@
     <string name="khutbahAt" formatted="false">"الخطبة "</string>
     <string name="khutbahIn" formatted="false">"الخطبة بعد"</string>
     <string name="language" formatted="false">"اللغة"</string>
+    <string name="languageGoesBack" formatted="false">"تعود إلى %2$s خلال %1$s ث"</string>
     <string name="languageHelp" formatted="false">"«التلفاز» يتبع لغة التلفاز"</string>
+    <string name="languageKeep" formatted="false">"إبقاء"</string>
+    <string name="languageKeepTitle" formatted="false">"إبقاء هذه اللغة؟"</string>
+    <string name="languageTv" formatted="false">"التلفاز (%1$s الآن)"</string>
+    <string name="languageUndo" formatted="false">"تراجع"</string>
     <string name="languages" formatted="false">"التلفاز"</string>
     <string name="lastAdhanRow" formatted="false">"آخر أذان"</string>
     <string name="lastCrashRow" formatted="false">"آخر توقف للتطبيق"</string>

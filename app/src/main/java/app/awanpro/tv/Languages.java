@@ -23,6 +23,12 @@ final class Languages {
         return out;
     }
 
+    /** A language's own name (NAMES); the tag itself for one this version does not know. */
+    static String name(String tag) {
+        for (int i = 0; i < TAGS.length; i++) if (TAGS[i].equals(tag)) return NAMES[i];
+        return tag;
+    }
+
     static boolean known(String tag) {
         for (String t : TAGS) if (t.equals(tag)) return true;
         return false;

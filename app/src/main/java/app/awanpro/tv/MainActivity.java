@@ -58,9 +58,9 @@ public class MainActivity extends Screen {
     private static final float FAV_Y = 504, MORE_Y = 742, STRIP_Y = 270, DATES_Y = 176;
     private static final int FAVS = 6, MORES = 6;
 
-    // Awan TV adds SAVER: "Screensaver now", between Wi-Fi and Settings.
+    // Awan TV adds SAVER: "Screensaver now", between Wi-Fi and Settings; and LANG, the language, between it and Settings.
     private static final int ARCH = 0, WIFI = 1, SETTINGS = 2, F0 = 3, M0 = F0 + FAVS, ALL = M0 + MORES, RADIO = ALL + 1,
-        SAVER = RADIO + 1, NODES = SAVER + 1;
+        SAVER = RADIO + 1, LANG = SAVER + 1, NODES = LANG + 1;
 
     private final View[] nodes = new View[NODES];
     private final TextView[] cellTag = new TextView[6], cellName = new TextView[6], cellTime = new TextView[6];
@@ -107,6 +107,10 @@ public class MainActivity extends Screen {
     private TextView cardTitle;
     /** The Station list over Home (its groups, then a group's stations); null when closed. */
     private ListLayer stations;
+    /** The language list over Home (the globe); null when closed. */
+    private ListLayer languages;
+    /** Home's buttons that were focusable when the list opened: none under it takes focus (Up from its first item). */
+    private final List<View> underLanguages = new ArrayList<>();
     /** Back in the Station list: to its groups from a group, else null (closes it, focus on Station). */
     private Runnable stationsBack;
     private final Radio.Listener onRadio = state -> styleRadio();
@@ -457,6 +461,8 @@ public class MainActivity extends Screen {
         radioCard = null;
         stations = null;
         stationsBack = null;
+        languages = null;
+        underLanguages.clear();
         // The short arch and the month's calendar instead of Afnon's tall arch.
         buildShortArch();
         buildCalendar();
@@ -513,11 +519,12 @@ public class MainActivity extends Screen {
         wlp.setMarginStart(Ui.ipx(20 - 2 * reach));
         pills.addView(nodes[WIFI], wlp);
         FrameLayout.LayoutParams plp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.END);
-        // One more round button (Screensaver now) before Settings.
-        plp.setMarginEnd(Ui.ipx(1920 - (Tokens.COURT_X + Tokens.COURT_W) + 2 * (72 + 20) - reach));
+        // Two more round buttons (Language, Screensaver now) before Settings.
+        plp.setMarginEnd(Ui.ipx(1920 - (Tokens.COURT_X + Tokens.COURT_W) + 3 * (72 + 20) - reach));
         plp.topMargin = Ui.ipx(56 - reach);
         root.addView(pills, plp);
         nodes[SETTINGS] = settingsButton();
+        nodes[LANG] = languageButton();
         nodes[SAVER] = saverButton();
 
         // The prayer strip: information only, never focusable.
@@ -692,7 +699,24 @@ public class MainActivity extends Screen {
         return b;
     }
 
-    /** "Screensaver now", a round button like Settings, just before it. */
+    /**
+     * The language, a round button like Settings, just before it: the list of languages, each by its own name, so one
+     * who opened Awan TV in a language they cannot read finds theirs (the globe needs no words).
+     */
+    private View languageButton() {
+        FocusTile b = new FocusTile(this, 36);
+        b.setRest(Tokens.LAPIS_800, Tokens.GOLD_400_60, 2);  // Soft gold, as the column's edges
+        Icon icon = new Icon(this, Icon.GLOBE, 1.8f);
+        b.addView(icon, new FrameLayout.LayoutParams(Ui.ipx(34), Ui.ipx(34), Gravity.CENTER));
+        b.setContentDescription(t.languageBoth());
+        b.setLook(f -> icon.setColor(f ? Tokens.LAPIS_900 : Tokens.PLASTER_100));
+        b.setOnClickListener(v -> openLanguages());
+        nodeLabel[LANG] = t.languageBoth();
+        placeEnd(b, 1920 - (Tokens.COURT_X + Tokens.COURT_W) + 72 + 20, 56, 72, 72);
+        return b;
+    }
+
+    /** "Screensaver now", a round button like Settings, just before Language. */
     private View saverButton() {
         FocusTile b = new FocusTile(this, 36);
         b.setRest(Tokens.LAPIS_800, Tokens.GOLD_400_60, 2);  // Soft gold, as the column's edges
@@ -702,7 +726,7 @@ public class MainActivity extends Screen {
         b.setLook(f -> icon.setColor(f ? Tokens.LAPIS_900 : Tokens.PLASTER_100));
         b.setOnClickListener(v -> startSafely(SaverActivity.now(this)));
         nodeLabel[SAVER] = t.saverNowRow();
-        placeEnd(b, 1920 - (Tokens.COURT_X + Tokens.COURT_W) + 72 + 20, 56, 72, 72);
+        placeEnd(b, 1920 - (Tokens.COURT_X + Tokens.COURT_W) + 2 * (72 + 20), 56, 72, 72);
         return b;
     }
 
@@ -1337,6 +1361,61 @@ public class MainActivity extends Screen {
         }, this::openStationGroups);
     }
 
+    // ---------------------------------------------------------------- the language list
+
+    /** The language list (Screen.languageList) over Home. OK picks, Back closes. */
+    private void openLanguages() {
+        String[] values = Languages.values();
+        closeLanguages(false);
+        languages = languageList(i -> root.post(() -> {
+            closeLanguages(false);
+            chooseLanguage(values[i]);
+        }));
+        root.addView(languages.layer, new FrameLayout.LayoutParams(-1, -1));
+        hints.bringToFront();
+        underLanguages.clear();
+        for (View n : nodes) {
+            if (n != null && n.isFocusable()) {
+                underLanguages.add(n);
+                n.setFocusable(false);
+            }
+        }
+        if (languages.start != null) root.post(languages.start::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintMove());
+        h.add(t.hintChoose());
+        h.add(t.hintBackCancel());
+        setHints(hints, h);
+    }
+
+    private void closeLanguages(boolean focusButton) {
+        if (languages == null) return;
+        root.removeView(languages.layer);
+        languages = null;
+        for (View n : underLanguages) n.setFocusable(true);
+        underLanguages.clear();
+        if (focusButton) languageSettled();
+    }
+
+    @Override
+    boolean asksKeep() {
+        return true;
+    }
+
+    @Override
+    LinearLayout hintsView() {
+        return hints;
+    }
+
+    /** Back on the language button, its hints with it. */
+    @Override
+    void languageSettled() {
+        View b = nodes[LANG];
+        if (b == null) return;
+        if (b.isFocused()) onNodeFocused(LANG);
+        else b.requestFocus();
+    }
+
     /** One step of the list over Home and the card: the card's buttons wait under it. */
     private void showStations(String title, String[] items, int selected, java.util.function.IntConsumer pick, Runnable back) {
         closeStations(false);
@@ -1477,6 +1556,7 @@ public class MainActivity extends Screen {
     public boolean dispatchKeyEvent(KeyEvent e) {
         int k = e.getKeyCode();
         lastKey = System.currentTimeMillis();
+        if (keepKey(e)) return true;
         if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
         if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false), t.rtl())) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
@@ -1492,6 +1572,14 @@ public class MainActivity extends Screen {
                 }
                 return true;
             }
+        }
+        if (languages != null) {
+            if (k == KeyEvent.KEYCODE_BACK) {
+                if (e.getAction() == KeyEvent.ACTION_UP) closeLanguages(true);
+                return true;
+            }
+            if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) return true;
+            return super.dispatchKeyEvent(e);
         }
         if (stations != null) {
             if (k == KeyEvent.KEYCODE_BACK) {
@@ -1566,8 +1654,9 @@ public class MainActivity extends Screen {
             // Six favourites under the header, each going up to what is above it.
             case RADIO: to = left ? ARCH : right ? WIFI : down ? F0 + 3 : -1; break;
             case WIFI: to = left ? RADIO : right ? SAVER : down ? F0 + 4 : -1; break;
-            case SAVER: to = left ? WIFI : right ? SETTINGS : down ? F0 + 5 : -1; break;
-            case SETTINGS: to = left ? SAVER : down ? F0 + 5 : -1; break;
+            case SAVER: to = left ? WIFI : right ? LANG : down ? F0 + 5 : -1; break;
+            case LANG: to = left ? SAVER : right ? SETTINGS : down ? F0 + 5 : -1; break;
+            case SETTINGS: to = left ? LANG : down ? F0 + 5 : -1; break;
             default:
                 if (from >= F0 && from < M0) {
                     int i = from - F0;

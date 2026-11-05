@@ -17,6 +17,8 @@ final class Icon extends View {
     static final int ETHERNET = 13, NET_OFF = 14;
     /** A map pin: Home's "Set your location" while none is set. */
     static final int PIN = 15;
+    /** A globe: Home's language button. */
+    static final int GLOBE = 16;
 
     private int kind;
     private final float strokeOn24;
@@ -156,6 +158,13 @@ final class Icon extends View {
             path.cubicTo(18.5f * k, 15 * k, 12 * k, 21.5f * k, 12 * k, 21.5f * k);
             c.drawPath(path, p);
             c.drawCircle(12 * k, 9.5f * k, 2.4f * k, p);
+        } else if (kind == GLOBE) {
+            // A circle r9 at 12,12; the meridian as an oval 8..16; two parallels at y 9 and 15.
+            c.drawCircle(12 * k, 12 * k, 9 * k, p);
+            r.set(8 * k, 3 * k, 16 * k, 21 * k);
+            c.drawOval(r, p);
+            c.drawLine(3.5f * k, 9 * k, 20.5f * k, 9 * k, p);
+            c.drawLine(3.5f * k, 15 * k, 20.5f * k, 15 * k, p);
         } else if (kind == SEARCH) {
             c.drawCircle(10.5f * k, 10.5f * k, 6.5f * k, p);
             c.drawLine(15.5f * k, 15.5f * k, 21 * k, 21 * k, p);

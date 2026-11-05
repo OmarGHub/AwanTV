@@ -17,6 +17,7 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -99,12 +100,16 @@ abstract class Screen extends Activity {
         rebuildIfChanged();
         tick.removeCallbacks(everySecond);
         everySecond.run();
+        // A language chosen on another screen, still waiting for Keep: its question here, or it goes back now. Or the
+        // question this screen showed was answered on another meanwhile: it goes.
+        if (undoChosen != null || keepLayer != null) keepStep();
     }
 
     @Override
     protected void onPause() {
         if (front == this) front = null;
         tick.removeCallbacks(everySecond);
+        tick.removeCallbacks(keepCount);
         super.onPause();
     }
 
@@ -175,12 +180,24 @@ abstract class Screen extends Activity {
      * Kept apart from the Context so the text dump (TextDump) checks it for every combination.
      */
     static boolean[] language(String locale, String tvLanguage, String digits) {
-        // A value this version does not know (a language from a newer one, or written by adb) counts as the TV's, as
-        // Settings shows it ("TV"); before 1.16.0 it read as English. Digits likewise: unknown = by language.
-        String lang = Languages.known(locale) ? locale : "ar".equals(tvLanguage) ? "ar" : "en";
-        boolean ar = "ar".equals(lang);
+        // Digits as the language unless set; unknown = by language, too.
+        boolean ar = "ar".equals(languageTag(locale, tvLanguage));
         boolean eastern = "eastern".equals(digits) || (!"western".equals(digits) && ar);
         return new boolean[] {ar, eastern};
+    }
+
+    /**
+     * The screens' language (Languages.TAGS) for the setting "locale" and the TV's language. A value this version
+     * does not know (a language from a newer one, or written by adb) counts as the TV's, as Settings shows it ("TV");
+     * before 1.16.0 it read as English.
+     */
+    static String languageTag(String locale, String tvLanguage) {
+        return Languages.known(locale) ? locale : "ar".equals(tvLanguage) ? "ar" : "en";
+    }
+
+    /** The TV's own language now (its first locale's language code). */
+    String tvLanguage() {
+        return getResources().getConfiguration().getLocales().get(0).getLanguage();
     }
 
     /** The locale of Gregorian dates: month and day names in the screen's language, Western digits (t.d() decides). */
@@ -388,7 +405,282 @@ abstract class Screen extends Activity {
         }
     }
 
+    // ---------------------------------------------------------------- a language chosen: keep it or go back
+
+    /** How long the question waits before the language goes back by itself. */
+    static final long KEEP_LANGUAGE_MS = 10_000;
+    /**
+     * A language just chosen (Home's language button, Settings) and waiting for Keep: the setting before it, the one
+     * chosen, and when it goes back (uptime). In memory only: should Awan TV restart in between, the chosen one
+     * stays, so nothing saved can bring a language back later.
+     */
+    private static String undoLocale, undoChosen;
+    private static long undoAt;
+    private FrameLayout keepLayer;
+    private TextView keepLine;
+    private FocusTile keepYes, keepNo;
+    private int keepSeconds = -1;
+    /** The key pressed down while the question is up: only its release answers (not the pick's own release). */
+    private int keepDown = -1;
+    private final Runnable keepCount = this::keepStep;
+
+    /** Whether this screen asks Keep or Go back over itself (Home and Settings); others let the time run out. */
+    boolean asksKeep() {
+        return false;
+    }
+
+    /** The screen's key hints, for the question's own; null for none. */
+    LinearLayout hintsView() {
+        return null;
+    }
+
+    /** After the question (kept, or gone back) and after a pick that left the language as it was: focus back. */
+    void languageSettled() {
+    }
+
+    /**
+     * The language list, Home's and Settings': the globe, the word and "Language" at its head; "TV (its language
+     * now)", then each language by its own name, all at the screen's start edge; the setting marked ✓. pick gets the
+     * index in Languages.values().
+     */
+    ListLayer languageList(java.util.function.IntConsumer pick) {
+        String[] values = Languages.values();
+        CharSequence[] items = new CharSequence[values.length];
+        String tv = t.languageTv(Languages.name(languageTag("system", tvLanguage())));
+        // "(English now)" a little smaller and softer than "TV", as an aside.
+        int open = tv.indexOf('(');
+        if (open > 0) {
+            SpannableString sp = new SpannableString(tv);
+            sp.setSpan(new RelativeSizeSpan(22f / 26), open, tv.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sp.setSpan(new android.text.style.ForegroundColorSpan(Tokens.MIST_400), open, tv.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            items[0] = sp;
+        } else {
+            items[0] = tv;
+        }
+        System.arraycopy(Languages.NAMES, 0, items, 1, Languages.NAMES.length);
+        int sel = java.util.Arrays.asList(values).indexOf(prefs().getString("locale", "system"));
+        if (sel < 0) sel = 0;   // a language this version does not know reads as the TV's (languageTag)
+
+        LinearLayout head = new LinearLayout(this);
+        head.setGravity(Gravity.CENTER_VERTICAL);
+        Icon globe = new Icon(this, Icon.GLOBE, 1.5f);
+        globe.setColor(Tokens.GOLD_400);
+        head.addView(globe, new LinearLayout.LayoutParams(Ui.ipx(40), Ui.ipx(40)));
+        TextView word = text(displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
+        word.setText(t.language());
+        LinearLayout.LayoutParams wlp = new LinearLayout.LayoutParams(-2, -2);
+        wlp.setMarginStart(Ui.ipx(16));
+        word.setLayoutParams(wlp);
+        head.addView(word);
+        lineHeight(word, 1.2f);
+        String both = t.languageBoth(), own = t.language();
+        if (!both.equals(own)) {
+            TextView en = text(ui400, 30, Tokens.MIST_400);
+            en.setText(both.substring(own.length()).trim());
+            LinearLayout.LayoutParams elp = new LinearLayout.LayoutParams(-2, -2);
+            elp.setMarginStart(Ui.ipx(12));
+            head.addView(en, elp);
+        }
+        ListLayer l = new ListLayer(this, head, items, sel, true, 760, pick);
+        alignToScreen(l.layer);
+        return l;
+    }
+
+    /**
+     * Saves the language picked (a Languages.values() value) and builds the screen in it. When the screen's language
+     * changed, asks whether to keep it: one who picked a language they cannot read is back in theirs in ten seconds
+     * without reading a word.
+     */
+    void chooseLanguage(String value) {
+        SharedPreferences p = prefs();
+        String was = p.getString("locale", "system");
+        if (value.equals(was)) {
+            languageSettled();
+            return;
+        }
+        String tv = tvLanguage();
+        boolean differs = !languageTag(was, tv).equals(languageTag(value, tv));
+        p.edit().putString("locale", value).apply();
+        if (differs) {
+            undoLocale = was;
+            undoChosen = value;
+            undoAt = android.os.SystemClock.uptimeMillis() + KEEP_LANGUAGE_MS;
+        }
+        loadSettings(null);
+        build();
+        if (differs) keepStep();
+        else languageSettled();
+    }
+
+    /** Once a second (on the second of the countdown) while a choice waits: the question, its seconds, the time out. */
+    private void keepStep() {
+        tick.removeCallbacks(keepCount);
+        if (undoChosen == null) {
+            if (keepLayer != null) {
+                closeKeep();
+                languageSettled();
+            }
+            return;
+        }
+        long left = undoAt - android.os.SystemClock.uptimeMillis();
+        if (left <= 0) {
+            undoLanguage();
+            return;
+        }
+        // Built again meanwhile (an import, the theme turning): the question again over the new root.
+        if (asksKeep() && (keepLayer == null || keepLayer.getParent() != root)) showKeep();
+        int seconds = (int) ((left + 999) / 1000);
+        if (keepLine != null && seconds != keepSeconds) {
+            keepSeconds = seconds;
+            keepLine.setText(t.languageGoesBack(seconds, Languages.name(languageTag(undoLocale, tvLanguage()))));
+        }
+        tick.postDelayed(keepCount, (left - 1) % 1000 + 1);
+    }
+
+    /** The question: a card as Settings' confirmations, Keep focused, the seconds counting down under the title. */
+    private void showKeep() {
+        if (keepLayer != null && keepLayer.getParent() != null) ((ViewGroup) keepLayer.getParent()).removeView(keepLayer);
+        LinearLayout card = new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(Ui.ipx(48), Ui.ipx(40), Ui.ipx(48), Ui.ipx(36));
+        android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+        bg.setColor(Tokens.LAPIS_800);
+        bg.setCornerRadius(Ui.px(24));
+        bg.setStroke(Ui.ipx(2), Tokens.GOLD_400_60);
+        card.setBackground(bg);
+        card.setClipChildren(false);
+        card.setClipToPadding(false);
+
+        TextView title = text(displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
+        title.setText(t.languageKeepTitle());
+        title.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
+        lineHeight(title, 1.2f);
+        card.addView(title);
+        keepLine = text(ui400, 22, Tokens.MIST_400);
+        keepLine.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
+        lineHeight(keepLine, 1.55f);
+        card.addView(keepLine);
+        keepSeconds = -1;
+
+        LinearLayout buttons = new LinearLayout(this);
+        float r = FocusTile.REACH;
+        keepYes = keepButton(t.languageKeep());
+        keepNo = keepButton(t.languageUndo());
+        LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+        LinearLayout.LayoutParams b = new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1);
+        b.setMarginStart(Ui.ipx(24));
+        buttons.addView(keepYes, a);
+        buttons.addView(keepNo, b);
+        LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, -2);
+        blp.topMargin = Ui.ipx(30 - r);
+        blp.setMarginStart(-Ui.ipx(r));
+        blp.setMarginEnd(-Ui.ipx(r));
+        buttons.setClipChildren(false);
+        buttons.setClipToPadding(false);
+        card.addView(buttons, blp);
+
+        keepLayer = new FrameLayout(this);
+        keepLayer.setBackgroundColor(Tokens.SCRIM_MENU);
+        keepLayer.setClickable(true);
+        keepLayer.setClipChildren(false);
+        keepLayer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(760), -2, Gravity.CENTER));
+        root.addView(keepLayer, new FrameLayout.LayoutParams(-1, -1));
+        keepDown = -1;
+        LinearLayout hints = hintsView();
+        if (hints != null) {
+            List<String> h = new java.util.ArrayList<>();
+            h.add(t.hintChoose());
+            h.add(t.hintBackUndo());
+            setHints(hints, h);
+            hints.bringToFront();
+        }
+        FocusTile first = keepYes;
+        root.post(() -> { if (keepYes == first) first.requestFocus(); });
+    }
+
+    private FocusTile keepButton(String label) {
+        FocusTile b = new FocusTile(this, 14);
+        b.setRest(Tokens.LAPIS_700, 0, 0);
+        TextView v = text(ui500, 26, Tokens.PLASTER_100);
+        v.setText(label);
+        v.setGravity(Gravity.CENTER);
+        b.addView(v, new FrameLayout.LayoutParams(-1, -1));
+        b.setLook(f -> v.setTextColor(f ? Tokens.LAPIS_900 : Tokens.PLASTER_100));
+        b.setFocusable(true);
+        return b;
+    }
+
+    private void closeKeep() {
+        tick.removeCallbacks(keepCount);
+        if (keepLayer != null && keepLayer.getParent() != null) ((ViewGroup) keepLayer.getParent()).removeView(keepLayer);
+        keepLayer = null;
+        keepLine = null;
+        keepYes = null;
+        keepNo = null;
+    }
+
+    private void keepLanguage() {
+        undoLocale = null;
+        undoChosen = null;
+        closeKeep();
+        languageSettled();
+    }
+
+    /** Back to the language before; unless the setting changed again meanwhile (an import), which then stays. */
+    private void undoLanguage() {
+        String back = undoLocale, chosen = undoChosen;
+        undoLocale = null;
+        undoChosen = null;
+        closeKeep();
+        SharedPreferences p = prefs();
+        if (chosen != null && chosen.equals(p.getString("locale", "system"))) p.edit().putString("locale", back).apply();
+        loadSettings(null);
+        build();
+        languageSettled();
+    }
+
+    /**
+     * Keys while the question is up, first in the screen's dispatchKeyEvent: true when taken. ◀▶ between the two,
+     * OK answers, Back goes back; the volume stays the TV's, and every other key waits for the answer.
+     */
+    boolean keepKey(KeyEvent e) {
+        if (undoChosen == null || !asksKeep()) return false;
+        if (keepLayer == null || keepLayer.getParent() != root) keepStep();
+        if (keepLayer == null) return false;
+        int k = e.getKeyCode();
+        if (k == KeyEvent.KEYCODE_VOLUME_UP || k == KeyEvent.KEYCODE_VOLUME_DOWN || k == KeyEvent.KEYCODE_VOLUME_MUTE) return false;
+        boolean down = e.getAction() == KeyEvent.ACTION_DOWN;
+        boolean ok = k == KeyEvent.KEYCODE_DPAD_CENTER || k == KeyEvent.KEYCODE_ENTER || k == KeyEvent.KEYCODE_NUMPAD_ENTER;
+        if (k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            if (down) (keepYes.isFocused() ? keepNo : keepYes).requestFocus();
+            return true;
+        }
+        if (ok || k == KeyEvent.KEYCODE_BACK) {
+            if (down) {
+                if (e.getRepeatCount() == 0) keepDown = k;
+            } else if (keepDown == k && !e.isCanceled()) {
+                keepDown = -1;
+                if (ok && !keepNo.isFocused()) keepLanguage();
+                else undoLanguage();
+            }
+        }
+        return true;
+    }
+
     // ---------------------------------------------------------------- helpers
+
+    /**
+     * Every text in a list at the screen's start edge, whatever its own script: a list of languages mixes them, and
+     * each would otherwise sit at its own script's start ("العربية" at the right of an English list).
+     */
+    static void alignToScreen(View v) {
+        if (v instanceof TextView) v.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        if (v instanceof ViewGroup) {
+            ViewGroup g = (ViewGroup) v;
+            for (int i = 0; i < g.getChildCount(); i++) alignToScreen(g.getChildAt(i));
+        }
+    }
 
     TextView text(Typeface tf, float sizeDesignPx, int color) {
         TextView v = new TextView(this);

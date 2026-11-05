@@ -2,6 +2,7 @@ package app.awanpro.tv;
 
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -12,7 +13,8 @@ import java.util.function.IntConsumer;
 /**
  * A list over a screen that has no chooser of its own (Home's radio card: Station), drawn as Settings' chooser is:
  * a dimmed layer, a lapis card with its gold title, items 68 high that scroll by whole items, the chosen one marked.
- * The screen adds {@link #layer} to its root, focuses {@link #start}, and handles Back itself.
+ * The screen adds {@link #layer} to its root, focuses {@link #start}, and handles Back itself. The language list
+ * (Screen.languageList) has its own head (the globe, the word and "Language") and a ✓ at the chosen item's end.
  */
 final class ListLayer {
     final FrameLayout layer;
@@ -20,6 +22,16 @@ final class ListLayer {
     FocusTile start;
 
     ListLayer(Screen s, String title, String[] items, int selected, IntConsumer pick) {
+        this(s, null, title, items, selected, false, 900, pick);
+    }
+
+    /** With a head of its own (in place of the title), the chosen item marked ✓ when mark, width in design px. */
+    ListLayer(Screen s, View head, CharSequence[] items, int selected, boolean mark, int width, IntConsumer pick) {
+        this(s, head, null, items, selected, mark, width, pick);
+    }
+
+    private ListLayer(Screen s, View ownHead, String title, CharSequence[] items, int selected, boolean mark, int width,
+            IntConsumer pick) {
         layer = new FrameLayout(s);
         layer.setBackgroundColor(Tokens.SCRIM_MENU);
         layer.setClickable(true);
@@ -34,10 +46,14 @@ final class ListLayer {
         card.setBackground(bg);
         card.setClipChildren(true);
 
-        TextView head = s.text(s.displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
-        head.setText(title);
-        card.addView(head);
-        s.lineHeight(head, 1.2f);
+        if (ownHead != null) {
+            card.addView(ownHead);
+        } else {
+            TextView head = s.text(s.displayBold, Tokens.FONT_SIZE_DISPLAY_S, Tokens.GOLD_400);
+            head.setText(title);
+            card.addView(head);
+            s.lineHeight(head, 1.2f);
+        }
 
         ScrollView scroll = new ScrollView(s);
         scroll.setVerticalScrollBarEnabled(false);
@@ -62,8 +78,25 @@ final class ListLayer {
             v.setSingleLine(true);
             v.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             v.setPadding(Ui.ipx(24), 0, Ui.ipx(24), 0);
-            item.addView(v, new FrameLayout.LayoutParams(-1, -1));
-            item.setLook(f -> v.setTextColor(f ? Tokens.LAPIS_900 : (chosen ? Tokens.GOLD_400 : Tokens.PLASTER_100)));
+            TextView tick = null;
+            if (mark && chosen) {
+                LinearLayout line = new LinearLayout(s);
+                line.setGravity(Gravity.CENTER_VERTICAL);
+                line.addView(v, new LinearLayout.LayoutParams(0, -1, 1));
+                tick = s.text(s.ui500, 26, Tokens.GOLD_400);
+                tick.setText("✓");
+                LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(-2, -2);
+                tlp.setMarginEnd(Ui.ipx(24));
+                line.addView(tick, tlp);
+                item.addView(line, new FrameLayout.LayoutParams(-1, -1));
+            } else {
+                item.addView(v, new FrameLayout.LayoutParams(-1, -1));
+            }
+            TextView ticked = tick;
+            item.setLook(f -> {
+                v.setTextColor(f ? Tokens.LAPIS_900 : (chosen ? Tokens.GOLD_400 : Tokens.PLASTER_100));
+                if (ticked != null) ticked.setTextColor(f ? Tokens.LAPIS_900 : Tokens.GOLD_400);
+            });
             item.setOnClickListener(x -> pick.accept(index));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, itemH);
             if (i > 0) lp.topMargin = gap;
@@ -78,6 +111,6 @@ final class ListLayer {
         slp.setMarginEnd(-reach);
         card.addView(scroll, slp);
 
-        layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(900), -2, Gravity.CENTER));
+        layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(width), -2, Gravity.CENTER));
     }
 }

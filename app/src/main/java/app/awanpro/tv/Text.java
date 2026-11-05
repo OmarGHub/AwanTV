@@ -643,6 +643,22 @@ final class Text {
         System.arraycopy(Languages.NAMES, 0, out, 1, Languages.NAMES.length);
         return out;
     }
+    /**
+     * The language button's and chooser's name: the word in the screen's language, then "Language", so one who
+     * cannot read the screen's language still finds it ("اللغة · Language"); English says it once.
+     */
+    String languageBoth() {
+        String w = language();
+        return "Language".equals(w) ? w : w + " · Language";
+    }
+    /** The chooser's first item: the TV's language, named by its own name ("TV (English now)"). */
+    String languageTv(String name) { return s(R.string.languageTv, name); }
+    String languageKeepTitle() { return s(R.string.languageKeepTitle); }
+    String languageKeep() { return s(R.string.languageKeep); }
+    String languageUndo() { return s(R.string.languageUndo); }
+    /** "Back to العربية in 7 s": the language before, by its own name, and the seconds left. */
+    String languageGoesBack(int seconds, String name) { return s(R.string.languageGoesBack, d(String.valueOf(seconds)), name); }
+    String hintBackUndo() { return s(R.string.hintBackUndo); }
     String digits() { return s(R.string.digits); }
     String clockRow() { return s(R.string.clockRow); }
     String clockHelp() { return s(R.string.clockHelp); }
