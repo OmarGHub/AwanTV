@@ -19,6 +19,9 @@ history is in its repository.
   leaves them out of what it sends.
 
 ### Tools
+- `AwanTV-editor` 1.5.0: Save to file keeps the remote's buttons (with their TV's mark, from a TV from 1.14.0), so the
+  file is the whole of the settings shown; they are never in what is sent to TVs. After Get from the TV, the line under
+  the source says a full copy is saved in state\settings (each Get keeps the TV's whole file there).
 - `AwanTV-settings` 1.1.0: its notes say the buttons come back to their own TV only.
 
 ## [1.13.1]

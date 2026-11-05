@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.4.4
+﻿# AwanTV-editor.ps1 - Version 1.5.0
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.4.4"
+$ScriptVersion = "1.5.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -79,7 +79,7 @@ trap {
 $Words = @{
     ar = @{
         title = "Awan TV · محرر الإعدادات"; source = "المصدر"; get = "جلب من الشاشة"; open = "فتح ملف…"; refresh = "تحديث قائمة الشاشات"
-        shown = "المعروض: {0}"; nothing = "اجلب الإعدادات من شاشة متصلة، أو افتح ملف إعدادات."
+        shown = "المعروض: {0}"; savedCopy = "حُفظت نسخة كاملة في state\settings"; buttonsLine = "أزرار الريموت (لهذه الشاشة وحدها)"; nothing = "اجلب الإعدادات من شاشة متصلة، أو افتح ملف إعدادات."
         sendTo = "إرسال إلى"; send = "إرسال"; save = "حفظ في ملف…"; restore = "استعادة نسخة…"
         targets = "{0} مختارة من {1} متصلة"; noTargets = "لا شاشة مختارة"; search = "بحث بالاسم أو الرقم"
         all = "تحديد الكل"; none = "لا شيء"; rename = "تسمية"; renameAsk = "اسم هذه الشاشة (يُحفظ في هذا الحاسب):"; renameHint = "اترك الحقل فارغًا واضغط «حفظ» لمسح الاسم."; saveName = "حفظ"; cancel = "إلغاء"
@@ -152,7 +152,7 @@ $Words = @{
     en = @{
         title = "Awan TV · Settings editor"; source = "Source"; get = "Get from TV"; open = "Open file…"; refresh = "Refresh the TV list"
         shown = "Shown: {0}"; nothing = "Get the settings from a connected TV, or open a settings file."
-        sendTo = "Send to"; send = "Send"; save = "Save to file…"; restore = "Restore a copy…"
+        savedCopy = "A full copy is saved in state\settings"; buttonsLine = "Remote buttons (this TV only)"; sendTo = "Send to"; send = "Send"; save = "Save to file…"; restore = "Restore a copy…"
         targets = "{0} of {1} connected TVs"; noTargets = "No TV chosen"; search = "Search by name or number"
         all = "All"; none = "None"; rename = "Name"; renameAsk = "This TV's name (kept on this computer):"; renameHint = "Leave it empty and Save to clear the name."; saveName = "Save"; cancel = "Cancel"
         offline = "not connected"; older = "older than the source: what it does not know is skipped"
@@ -552,6 +552,7 @@ $script:Schema = $null       # the description (sections, items, views, combos, 
 $script:Values = $null       # key -> value as the file writes it
 $script:Orig = @{}           # key -> value when got or opened, for the changed marks
 $script:Extra = $null        # keys in the file the description does not know: not sent (see Build-File)
+$script:SavedCopy = $false   # the shown settings came from Get from the TV, whose whole file is kept
 $script:SourceVersion = $null
 $script:SourceText = ""
 $script:Views = @{ iqama = "days" }
@@ -630,6 +631,8 @@ function Use-Settings($fileObject, [string]$sourceText) {
     $script:Pending.Clear()
     $script:SourceVersion = $version
     $script:SourceText = $sourceText
+    # Set again by Get from the TV, which keeps the TV's own whole file.
+    $script:SavedCopy = $false
 }
 
 function Changed-Count {
@@ -671,7 +674,13 @@ function Build-File([string[]]$onlyKeys, [bool]$forFile = $false, [object[]]$dow
         $body.Add("  // $(W 'libTitle')")
         $body.Add("  ""downloads"": " + (ConvertTo-Json -InputObject $list -Compress -Depth 5))
     }
-    # Keys the description does not know ($script:Extra: a file from a newer version) are left out: the TV would
+    # Save to file keeps the remote's buttons too (TVs from 1.14.0), marked with their TV as it gave them: that TV
+    # takes them back, another passes them over. Never in what is sent to TVs (a TV older than 1.14.0 refuses them).
+    if ($forFile -and $script:Extra -and $script:Extra.Contains("buttons")) {
+        $body.Add("  // $(W 'buttonsLine')")
+        $body.Add("  ""buttons"": " + (ConvertTo-Json -InputObject $script:Extra["buttons"] -Compress -Depth 6))
+    }
+    # Other keys the description does not know ($script:Extra: a file from a newer version) are left out: the TV would
     # refuse the whole file for one setting it does not know.
     # Commas after every value line but the last.
     $valueLines = @(for ($i = 0; $i -lt $body.Count; $i++) { if ($body[$i] -notmatch "^\s*//") { $i } })
@@ -833,7 +842,7 @@ function Update-Chrome {
     $ui.LangBtn.Content = if ($script:Lang -eq "ar") { "EN" } else { "ع" }
     $ui.LangBtn.ToolTip = if ($script:Lang -eq "ar") { "English" } else { "العربية" }
     $ui.TargetsNote.Text = W "targetsNote"
-    $ui.ShownText.Text = if ($script:Notice) { $script:Notice } elseif ($script:SourceText) { [string]::Format((W "shown"), $script:SourceText) } else { W "nothing" }
+    $ui.ShownText.Text = if ($script:Notice) { $script:Notice } elseif ($script:SourceText) { [string]::Format((W "shown"), $script:SourceText) + $(if ($script:SavedCopy) { " · " + (W "savedCopy") } else { "" }) } else { W "nothing" }
     $n = Changed-Count
     $ui.ChangesText.Text = if ($n -gt 0) { [string]::Format((W "changes"), $n) } else { "" }
     $online = @($script:Tvs | Where-Object { $_.Online })
@@ -2633,6 +2642,7 @@ $ui.GetBtn.Add_Click({
         $file = Join-Path $SettingsDir ("awantv-settings-$($tv.Id)-$(Stamp).jsonc")
         $got = Export-Tv $tv $file
         Use-Settings (Read-Settings $got.File) ("$(Name-Of $tv) · v$($tv.Version) · $(Get-Date -Format 'HH:mm')")
+        $script:SavedCopy = $true
         $script:Library = if ($got.Library) { Read-Json $got.Library } else { $null }
         $script:LibraryLive = $null -ne $script:Library
         $script:LibrarySource = Name-Of $tv
