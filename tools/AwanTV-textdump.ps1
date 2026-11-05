@@ -1,12 +1,13 @@
-# AwanTV-textdump.ps1 - Version 1.0.0
+# AwanTV-textdump.ps1 - Version 1.1.0
 # The languages plan's safety net (claude/awan-languages-plan.md, phase 0). A test build of Awan TV (a version ending
 # in a letter) writes every text it shows, in Arabic and English with both kinds of digits (TextDump.java); this tool
 # asks the TV for that file, keeps it in state\textdump\<version>.txt, and compares it with a golden one.
 #
 # The golden file comes from a test build with nothing but the dump in it (the app as it was). Every later test build
 # must give each golden line unchanged: a changed or missing line stops the release; a new line is only listed, to
-# be looked at. Keep the TV's settings and language as they were between two dumps: the "file|" lines are this TV's
-# own settings file.
+# be looked at. The "file|" lines are this TV's own settings file, in its language and with its values: they change
+# with the TV's settings, so (1.1.0) they are listed apart and never stop the release (their texts are the editor's
+# descriptions, the "schema|" lines, which do).
 #
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File tools\AwanTV-textdump.ps1 [-Device <serial>] [-Golden <file>]
@@ -19,7 +20,7 @@
 param([string]$Device = "", [string]$Golden = "", [string]$File = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.1.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Remote = "/sdcard/Android/data/$Pkg/files/text-dump.txt"
@@ -80,11 +81,14 @@ function Compare-Dumps([string]$goldenPath, [string]$newPath) {
     $changed = New-Object System.Collections.Generic.List[string]
     $missing = New-Object System.Collections.Generic.List[string]
     $added = New-Object System.Collections.Generic.List[string]
+    $fileDiff = New-Object System.Collections.Generic.List[string]
     foreach ($k in $g.Keys) {
-        if (-not $n.ContainsKey($k)) { $missing.Add($k) }
-        elseif ($n[$k] -cne $g[$k]) { $changed.Add($k) }
+        $isFile = $k.StartsWith("file|")
+        if (-not $n.ContainsKey($k)) { if ($isFile) { $fileDiff.Add($k) } else { $missing.Add($k) } }
+        elseif ($n[$k] -cne $g[$k]) { if ($isFile) { $fileDiff.Add($k) } else { $changed.Add($k) } }
     }
-    foreach ($k in $n.Keys) { if (-not $g.ContainsKey($k)) { $added.Add($k) } }
+    foreach ($k in $n.Keys) { if (-not $g.ContainsKey($k)) { if ($k.StartsWith("file|")) { $fileDiff.Add($k) } else { $added.Add($k) } } }
+    $fileDiff.Sort([StringComparer]::Ordinal)
     $changed.Sort([StringComparer]::Ordinal)
     $missing.Sort([StringComparer]::Ordinal)
     $added.Sort([StringComparer]::Ordinal)
@@ -111,14 +115,21 @@ function Compare-Dumps([string]$goldenPath, [string]$newPath) {
     [void]$b.AppendLine("")
     [void]$b.AppendLine("=== New (look at them) ===")
     foreach ($k in $added) { $i++; [void]$b.AppendLine("$i. $k"); [void]$b.AppendLine("   new:    $($n[$k])") }
+    [void]$b.AppendLine("")
+    [void]$b.AppendLine("=== This TV's settings file (follows its settings and language; does not stop the release) ===")
+    foreach ($k in $fileDiff) {
+        $i++
+        [void]$b.AppendLine("$i. $k")
+        if ($g.ContainsKey($k)) { [void]$b.AppendLine("   golden: $($g[$k])") }
+        if ($n.ContainsKey($k)) { [void]$b.AppendLine("   new:    $($n[$k])") }
+    }
     [IO.File]::WriteAllText($report, $b.ToString(), (New-Object Text.UTF8Encoding($true)))
 
     # The terminal gets numbers only (it breaks Arabic); the texts are in the report.
-    $fileChanged = @($changed | Where-Object { $_.StartsWith("file|") }).Count
     Write-Host ("Golden lines: {0}   new dump: {1}" -f $g.Count, $n.Count)
     Write-Host ("Changed: {0}   Missing: {1}   New: {2}" -f $changed.Count, $missing.Count, $added.Count)
-    if ($fileChanged -gt 0) {
-        Write-Host ("  {0} of the changed lines are this TV's settings file: were its settings or language changed between the dumps?" -f $fileChanged)
+    if ($fileDiff.Count -gt 0) {
+        Write-Host ("Settings file lines that differ: {0} (this TV's own settings or language changed; listed in the report, not counted)" -f $fileDiff.Count)
     }
     Write-Host "Report: $report"
     if ($changed.Count + $missing.Count -gt 0) {

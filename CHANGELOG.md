@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.16.0]
+
 ### The app
 - The language model (languages plan, phase 2), no change on screen: `Languages` is the one list of the screens'
   languages (Settings' row, the settings file, the editor's choices, the import's check); `Text.rtl()` decides the
@@ -22,6 +24,8 @@ history is in its repository.
 
 ### Tools
 - `AwanTV-editor` 1.5.2: shows a TV's "Language kept" and "Digits kept" answers in its own words.
+- `AwanTV-textdump` 1.1.0: the TV's own settings file ("file|" lines, its language and values) is listed apart in the
+  report and never stops the release; its texts are checked through the editor's descriptions ("schema|").
 
 ## [1.15.0]
 
