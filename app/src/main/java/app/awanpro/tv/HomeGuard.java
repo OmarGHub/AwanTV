@@ -285,6 +285,30 @@ final class HomeGuard {
         open();
     }
 
+    /**
+     * Whether Home is in front, kept on the TV (1.13.1): an update stops the app with no onPause, so after any update,
+     * by any way (the editor, My TVs, AwanTV-install, adb), {@link #afterAnyUpdate} sees that Home was up. Written only
+     * when it changes.
+     */
+    private static final String FRONT = "home_front";
+
+    static void front(Context c, boolean up) {
+        android.content.SharedPreferences p = Prefs.of(c);
+        if (p.getBoolean(FRONT, false) != up) p.edit().putBoolean(FRONT, up).apply();
+    }
+
+    /**
+     * Just bound within a minute of an update of the app (ServiceCheck.justUpdated): Home opens again when it was in
+     * front as the update stopped the app. The TV's own home came up meanwhile with no event to say so; another app
+     * the viewer was in had paused Home, so it is left alone.
+     */
+    void afterAnyUpdate() {
+        if (!active() || MainActivity.shown || !ServiceCheck.justUpdated(service)) return;
+        if (!Prefs.of(service).getBoolean(FRONT, false)) return;
+        Log.i(TAG, "just updated with Home in front: opening it again");
+        open();
+    }
+
     private void open() {
         // Awan TV stopped twice in a row, or the viewer chose the TV's own home on the crash screen: left up a while
         // rather than opening a Home that may stop again (Crash).

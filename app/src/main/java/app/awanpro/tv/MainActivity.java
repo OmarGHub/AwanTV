@@ -210,6 +210,7 @@ public class MainActivity extends Screen {
         // An app installed or removed, or a new default Home, since the service last looked.
         shown = true;
         shownAt = android.os.SystemClock.uptimeMillis();
+        HomeGuard.front(this, true);
         if (RemoteKeys.guard != null) RemoteKeys.guard.refresh();
         // The service on in the settings but not running (a TCL BeyondTV, Android 11): bind it again.
         ServiceCheck.soon(this, "home");
@@ -238,6 +239,7 @@ public class MainActivity extends Screen {
     @Override
     protected void onPause() {
         shown = false;
+        HomeGuard.front(this, false);
         try {
             android.net.ConnectivityManager cm = getSystemService(android.net.ConnectivityManager.class);
             if (cm != null) cm.unregisterNetworkCallback(onNetwork);

@@ -6,6 +6,12 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Home opens again after any update of the app when it was in front as the update stopped it (the editor, the phone
+  installer, AwanTV-install or adb alike): Home keeps whether it is in front (`home_front`, on the TV only), and the
+  service, bound again within a minute of the update, opens it; another app the viewer was in is left alone. The TV's
+  own home came up meanwhile with no event to say so (the 1.10.1 fix covers a boot only, and Update now has its own).
+
 ### Phone installer
 - The newer-installer card says before the press that the installer app will close after the update and to open it
   again, as Android stops an app it updates (F-Droid and Signal close the same way); the installing line says it too.
