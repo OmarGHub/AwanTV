@@ -108,7 +108,7 @@ public class NewsActivity extends Screen {
         card.addView(title);
         s.lineHeight(title, 1.2f);
 
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         LinearLayout list = new LinearLayout(s);
         list.setOrientation(LinearLayout.VERTICAL);
         for (int i = 0; i < versions.size(); i++) {
@@ -221,7 +221,7 @@ public class NewsActivity extends Screen {
         TextView h = s.text(s.ui400, 21, Tokens.MIST_400);
         h.setText(help);
         h.setLineSpacing(0, 1.25f);
-        int dir = s.t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = s.t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         n.setTextDirection(dir);
         h.setTextDirection(dir);
         words.addView(n);

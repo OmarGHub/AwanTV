@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.5.1
+﻿# AwanTV-editor.ps1 - Version 1.5.2
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.5.1"
+$ScriptVersion = "1.5.2"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -112,6 +112,7 @@ $Words = @{
         gStations = "المحطات"; gReciters = "إذاعات القرّاء (mp3quran.net)"; gSaved = "التلاوات المحفوظة على {0}"; gComing = "تُرسل للتحميل الآن"; savedMark = "محفوظة"; gSavedShort = "المحفوظة"; gRecitersShort = "إذاعات القرّاء"; comingMark = "تُحمَّل مع الإرسال"
         noSettingChanged = "لم يتغيّر أي إعداد"; queuedSent = "أُضيف إلى قائمة التحميل: {0} سورة من {1} تلاوة"; queuedNone = "ما أُرسل محفوظ عليها أو في قائمة تحميلها من قبل"
         keptSaved = "بقيت محطتها: «{0}» غير محفوظة عليها"; keptChannels = "بقيت محطتها: قائمة إذاعات القرّاء لم تُحفظ عليها بعد (تقرؤها الآن؛ أعد الإرسال بعد دقيقة)"; keptUnknown = "بقيت محطتها: «{0}» غير موجودة عليها"
+        keptLanguage = "بقيت لغتها كما هي: لغة «{0}» ليست في إصدارها، فحدّثها"; keptDigits = "بقيت أرقامها كما هي: «{0}» ليست في إصدارها، فحدّثها"
         olderNoLibrary = "على نسخة أقدم من 1.9.0: لم تُرسل إليها التلاوات ولا المحطة (حدّثها)"
         nowTitle = "الشاشات الآن"; nowRefresh = "⟳ تحديث الحالة"; playChosen = "▶ تشغيل في المحددة ({0})"; stopChosen = "■ إيقاف في المحددة ({0})"; playChosenTitle = "تشغيل في المحددة ({0})"; stopChosenTitle = "إيقاف في المحددة ({0})"
         chooseNote = "حدّد الشاشات التي يشملها «تشغيل في المحددة» و«إيقاف في المحددة». يُحفظ تحديدك على هذا الحاسب للمرة القادمة."
@@ -184,6 +185,7 @@ $Words = @{
         gStations = "Stations"; gReciters = "Reciter channels (mp3quran.net)"; gSaved = "Saved on {0}"; gComing = "Downloading with this Send"; savedMark = "saved"; gSavedShort = "Saved"; gRecitersShort = "Reciters"; comingMark = "downloads with Send"
         noSettingChanged = "No setting changed"; queuedSent = "Queued {0} surah(s) of {1} recitation(s)"; queuedNone = "What was sent is already saved or queued there"
         keptSaved = "Kept its station: {0} is not saved there"; keptChannels = "Kept its station: it has no reciter channel list yet (reading it now; send again in a minute)"; keptUnknown = "Kept its station: {0} is not there"
+        keptLanguage = "Kept its language: {0} is not in its version; update it"; keptDigits = "Kept its digits: {0} is not in its version; update it"
         olderNoLibrary = "On a version before 1.9.0: recitations and the station were not sent (update it)"
         nowTitle = "TVs now"; nowRefresh = "⟳ Refresh status"; playChosen = "▶ Play on chosen ({0})"; stopChosen = "■ Stop on chosen ({0})"; playChosenTitle = "Play on chosen ({0})"; stopChosenTitle = "Stop on chosen ({0})"
         chooseNote = "Tick the TVs that Play on chosen and Stop on chosen include. Your choice is kept on this computer for next time."
@@ -254,6 +256,8 @@ function Tv-Words([string]$answer) {
         elseif ($part -match '^Queued (\d+) surah\(s\) of (\d+) recitation\(s\)$') {
             if ([int]$Matches[1] -eq 0) { W "queuedNone" } else { [string]::Format((W "queuedSent"), $Matches[1], $Matches[2]) }
         }
+        elseif ($part -match '^Language kept: (.+)$') { [string]::Format((W "keptLanguage"), $Matches[1]) }
+        elseif ($part -match '^Digits kept: (.+)$') { [string]::Format((W "keptDigits"), $Matches[1]) }
         elseif ($part -match '^Station kept: (saved|channels|unknown) (.+)$') {
             $what = Station-Title $Matches[2]
             switch ($Matches[1]) { "saved" { [string]::Format((W "keptSaved"), $what) } "channels" { W "keptChannels" } default { [string]::Format((W "keptUnknown"), $what) } }

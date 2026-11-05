@@ -193,7 +193,7 @@ final class SettingsFile {
 
         // Display and language
         Item locale = new Item("locale", STR_CHOICE, t.language()).help(t.languageHelp())
-            .choices(new String[] {"system", "ar", "en"}, t.languages()).def("system").section("display", t.sectionDisplay());
+            .choices(Languages.values(), t.languages()).def("system").section("display", t.sectionDisplay());
         out.add(locale);
         out.add(new Item("digits", STR_CHOICE, t.digits())
             .choices(new String[] {"", "western", "eastern"}, t.digitChoicesFile()).def(""));
@@ -635,6 +635,13 @@ final class SettingsFile {
                 continue;
             }
             Object raw = in.opt(key);
+            // A language or digits a newer version knows: kept as it is here, with a note, not a mistake (1.16.0), so
+            // a file from a TV in a language this one lacks still brings everything else.
+            if (("locale".equals(key) || "digits".equals(key)) && raw instanceof String
+                    && ((String) raw).matches("[a-z]{2,8}(-[A-Za-z0-9]{1,8})*") && check(it, raw) != null) {
+                done.notes.add(("locale".equals(key) ? "Language kept: " : "Digits kept: ") + raw);
+                continue;
+            }
             String bad = check(it, raw);
             if (bad != null) {
                 errors.add(key + ": " + bad);

@@ -6,6 +6,23 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- The language model (languages plan, phase 2), no change on screen: `Languages` is the one list of the screens'
+  languages (Settings' row, the settings file, the editor's choices, the import's check); `Text.rtl()` decides the
+  direction, `arabicScript()` Amiri's bold, capitals, letter spacing and the comma, `dateLocale()` / `sortLocale()` the
+  dates and the order of names; `t.ar` is left choosing the Arabic side of data written in both languages. The
+  English counting ("1 minute", "2 minutes"...) is in the resources as one/other pairs chosen in code, so a new
+  language brings its own words; the Arabic forms stay in code. The text dump: every line the same.
+- A settings file with a language or digits this version does not know (from a newer TV) is no longer refused whole:
+  the TV keeps its own, with a note ("Language kept: ur"), and takes the rest. A stored language it does not know
+  counts as the TV's language, as Settings already showed it ("TV"); it read as English before. Unknown digits = by
+  language.
+- The crash screen's fallback (used only when the settings can't be read) no longer reads the resources for the
+  comma in its last line: with Eastern digits it would have stopped (since 1.15.0).
+
+### Tools
+- `AwanTV-editor` 1.5.2: shows a TV's "Language kept" and "Digits kept" answers in its own words.
+
 ## [1.15.0]
 
 ### The app

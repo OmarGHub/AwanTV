@@ -44,6 +44,8 @@
     <string name="apOk" formatted="false">"حسنًا"</string>
     <string name="apSub" formatted="false">"الأذان "</string>
     <string name="apSub_2" formatted="false">" · رجوع للإغلاق"</string>
+    <string name="apTitleOne" formatted="false">"%1$s بعد %2$s دقيقة"</string>
+    <string name="apTitleOther" formatted="false">"%1$s بعد %2$s دقيقة"</string>
     <string name="asUsual" formatted="false">"كالمعتاد"</string>
     <string name="asrSchool" formatted="false">"مذهب العصر"</string>
     <string name="asrSchoolHelp" formatted="false">"يغيّر وقت العصر فقط"</string>
@@ -73,6 +75,8 @@
     <string name="buttonsFileNote" formatted="false">"تعود إلى هذه الشاشة وحدها، وتُتجاهل إن أُرسل الملف إلى شاشة أخرى، فلكل ريموت أرقامه."</string>
     <string name="buttonsFileSection" formatted="false">"أزرار الريموت (لهذه الشاشة وحدها)"</string>
     <string name="buttonsHelp" formatted="false">"اجعل زرًا في أي ريموت يفتح ما تختار"</string>
+    <string name="buttonsHelpOne" formatted="false">"%1$s زر مخصص"</string>
+    <string name="buttonsHelpOther" formatted="false">"%1$s زر مخصص"</string>
     <string name="buttonsInfoHelp" formatted="false">"ما دام زر واحد مخصصًا تمر ضغطات الريموت كلها عبر Awan TV، فالضغط المطوّل على الصوت يرفعه درجة واحدة. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."</string>
     <string name="buttonsInfoHelpTcl" formatted="false">"على هذه الشاشة تُخصَّص الأزرار بنظام TCL نفسه، فلا تمر ضغطات الريموت عبر Awan TV ويبقى زر الصوت كما هو. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."</string>
     <string name="buttonsInfoRow" formatted="false">"عن تخصيص الأزرار"</string>
@@ -116,9 +120,10 @@
     <string name="creditsHelp" formatted="false">"أفنون، والطقس، والمدن، والتلاوات، والأذان"</string>
     <string name="creditsRow" formatted="false">"المصادر والتراخيص"</string>
     <string name="creditsSection" formatted="false">"حول التطبيق ← المصادر والتراخيص"</string>
-    <string name="d" formatted="false">"، "</string>
     <string name="dayTitle" formatted="false">"مواقيت اليوم"</string>
     <string name="days" formatted="false">"بلا تعديل"</string>
+    <string name="daysOne" formatted="false">"%1$s يوم"</string>
+    <string name="daysOther" formatted="false">"%1$s يوم"</string>
     <string name="defaultIs" formatted="false">"الافتراضي: "</string>
     <string name="deleteAsk" formatted="false">"حذف؟"</string>
     <string name="deleteSaved" formatted="false">"حذف المحفوظ"</string>
@@ -130,6 +135,7 @@
     <string name="downloadRest" formatted="false">"تحميل الباقي (%1$s)"</string>
     <string name="downloadingNow" formatted="false">" · ثم %1$s في الانتظار"</string>
     <string name="downloadingNow_2" formatted="false">"يُحمَّل الآن: "</string>
+    <string name="downloadingPercent" formatted="false">"%1$s٪"</string>
     <string name="eveningAdhkar" formatted="false">"أذكار المساء"</string>
     <string name="facingLine" formatted="false">"تجلس مواجهًا: "</string>
     <string name="facingNote" formatted="false">"بالدرجات من الشمال، و-1 غير محدد"</string>
@@ -227,6 +233,7 @@
     <string name="imsakHelp" formatted="false">"السحور ينتهي عند الفجر · الإمساك احتياط قبله"</string>
     <string name="imsakRow" formatted="false">"الإمساك في رمضان"</string>
     <string name="in" formatted="false">"بعد %1$s"</string>
+    <string name="inMinutesOther" formatted="false">"بعد %1$s دقيقة"</string>
     <string name="inPlaceOf" formatted="false">"مكان %1$s"</string>
     <string name="iqama" formatted="false">"الإقامة"</string>
     <string name="iqamaAt" formatted="false">"الإقامة "</string>
@@ -318,6 +325,7 @@
     <string name="middleHelp" formatted="false">"حديث يتغير كل 10 دقائق، وأذكار بعد الصلاة 10 دقائق بعد كل صلاة"</string>
     <string name="middleRow" formatted="false">"وسط شاشة الاستراحة"</string>
     <string name="midnight" formatted="false">"منتصف الليل"</string>
+    <string name="minutesAfterOther" formatted="false">"%1$s دقيقة"</string>
     <string name="mitLicence" formatted="false">"(ترخيص MIT)"</string>
     <string name="more" formatted="false">"المزيد"</string>
     <string name="moreFile" formatted="false">"صف «المزيد» بترتيبك (فارغ: تلقائي)"</string>
@@ -373,6 +381,8 @@
     <string name="nowHintOne" formatted="false">"رجوع للإغلاق · يُغلق تلقائيًا بعد دقيقة"</string>
     <string name="nowLabel" formatted="false">"حان الآن وقت صلاة"</string>
     <string name="nowTag" formatted="false">"الآن"</string>
+    <string name="occasionInDays" formatted="false">"%1$s بعد %2$s يوم"</string>
+    <string name="occasionTomorrow" formatted="false">"%1$s غدًا"</string>
     <string name="off" formatted="false">"مطفأ"</string>
     <string name="open" formatted="false">"فتح %1$s"</string>
     <string name="otherLocation" formatted="false">"موقع آخر"</string>
@@ -406,6 +416,8 @@
     <string name="populationMillion" formatted="false">"%1$s مليون"</string>
     <string name="pressHelp" formatted="false">"في الريموت الأصلي أو أي ريموت بلوتوث متصل بالشاشة."</string>
     <string name="pressTitle" formatted="false">"اضغط الزر الذي تريد تخصيصه"</string>
+    <string name="pressWaitingOne" formatted="false">"ينتظر %1$s ثانية"</string>
+    <string name="pressWaitingOther" formatted="false">"ينتظر %1$s ثانية"</string>
     <string name="preview" formatted="false">"العصر اليوم بهذه الإعدادات"</string>
     <string name="putInFav" formatted="false">"ضعه في المفضلة…"</string>
     <string name="putInMore" formatted="false">"ضعه في المزيد…"</string>

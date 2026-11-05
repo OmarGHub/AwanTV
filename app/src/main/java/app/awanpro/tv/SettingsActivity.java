@@ -396,7 +396,7 @@ public class SettingsActivity extends Screen {
         place(preview, 96, 1080 - 56 - 124, 424, 124);
 
         sectionLabel = caps(text(ui400, 22, Tokens.MIST_400));
-        sectionLabel.setAllCaps(!t.ar);
+        sectionLabel.setAllCaps(!t.arabicScript());
         place(sectionLabel, 640, 56, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         hints = new LinearLayout(this);
@@ -910,7 +910,7 @@ public class SettingsActivity extends Screen {
                 });
             case DISPLAY: return Arrays.asList(
                 new Row(SEG) {
-                    final String[] values = {"system", "ar", "en"};
+                    final String[] values = Languages.values();
                     String label() { return t.language(); }
                     String help() { return t.languageHelp(); }
                     String[] segs() { return t.languages(); }
@@ -1647,7 +1647,7 @@ public class SettingsActivity extends Screen {
         r.help = text(ui400, 20, Tokens.PLASTER_100);
         r.help.setSingleLine(true);
         // A line that starts with Latin letters ("Awan TV", a link) still reads from the start side.
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         r.label.setTextDirection(dir);
         r.help.setTextDirection(dir);
         words.addView(r.label);
@@ -2244,7 +2244,7 @@ public class SettingsActivity extends Screen {
     /** A note under a sub-page's rows, lined up with their words. */
     private TextView note(CharSequence s) {
         TextView v = text(ui400, 20, Tokens.MIST_400);
-        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+        v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         v.setText(s);
         v.setLineSpacing(0, 1.3f);
         place(v, 640 + 28, ROWS_TOP + rows.size() * (ROW_H + ROW_GAP) + 14, Tokens.LAYOUT_SETTINGS_ROW_WIDTH - 56,

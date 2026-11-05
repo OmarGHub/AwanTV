@@ -52,7 +52,7 @@ final class WeatherBadge extends LinearLayout {
         temp.setTextColor(textColor);
         temp.setSingleLine(true);
         temp.setIncludeFontPadding(false);
-        temp.setTextDirection(t.ar ? TEXT_DIRECTION_RTL : TEXT_DIRECTION_LTR);
+        temp.setTextDirection(t.rtl() ? TEXT_DIRECTION_RTL : TEXT_DIRECTION_LTR);
         LayoutParams tlp = new LayoutParams(-2, -2);
         tlp.setMarginStart(Ui.ipx(textSize * 0.18f));
         addView(temp, tlp);

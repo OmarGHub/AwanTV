@@ -119,7 +119,7 @@ final class UpdateNotice {
         card.setClipChildren(false);
         card.setClipToPadding(false);
 
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         LinearLayout across = new LinearLayout(s);
         across.setGravity(Gravity.TOP);
         across.setClipChildren(false);

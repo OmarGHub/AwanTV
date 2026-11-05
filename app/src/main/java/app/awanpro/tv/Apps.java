@@ -186,7 +186,7 @@ final class Apps {
 
     /** The order of names in the screen's language (apps here, countries in Settings). */
     static Collator collator(Text t) {
-        return Collator.getInstance(t.ar ? new Locale("ar") : Locale.ENGLISH);
+        return Collator.getInstance(t.sortLocale());
     }
 
     static String name(Context c, Text t, String pkg) {

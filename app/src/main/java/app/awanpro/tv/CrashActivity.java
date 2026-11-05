@@ -55,14 +55,14 @@ public class CrashActivity extends Activity {
         try {
             ui400 = getResources().getFont(R.font.alexandria_regular);
             ui500 = getResources().getFont(R.font.alexandria_medium);
-            title = getResources().getFont(t.ar ? R.font.amiri_bold : R.font.amiri_regular);
+            title = getResources().getFont(t.arabicScript() ? R.font.amiri_bold : R.font.amiri_regular);
         } catch (RuntimeException e) {
             ui400 = ui500 = title = Typeface.DEFAULT;
         }
         repeat = getIntent().getBooleanExtra(REPEAT, false);
         root = new FrameLayout(this);
         root.setBackgroundColor(Tokens.LAPIS_900);
-        root.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        root.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         setContentView(root);
         showMain();
     }
@@ -202,7 +202,7 @@ public class CrashActivity extends Activity {
         v.setTextSize(TypedValue.COMPLEX_UNIT_PX, Ui.px(Tokens.FONT_SIZE_DISPLAY_S));
         v.setTextColor(Tokens.GOLD_400);
         v.setText(text);
-        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+        v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         return v;
     }
 
@@ -212,7 +212,7 @@ public class CrashActivity extends Activity {
         v.setTextSize(TypedValue.COMPLEX_UNIT_PX, Ui.px(size));
         v.setTextColor(color);
         v.setText(text);
-        v.setTextDirection(t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
+        v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         v.setLineSpacing(0, 1.3f);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = Ui.ipx(top);

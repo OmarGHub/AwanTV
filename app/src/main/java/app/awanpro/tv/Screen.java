@@ -86,9 +86,9 @@ abstract class Screen extends Activity {
     @Override
     public void onConfigurationChanged(Configuration c) {
         super.onConfigurationChanged(c);
-        boolean wasAr = t.ar;
+        String was = t.lang;
         loadSettings(null);
-        if (t.ar != wasAr) build();
+        if (!t.lang.equals(was)) build();
     }
 
     @Override
@@ -162,7 +162,7 @@ abstract class Screen extends Activity {
             changed = true;
         }
         t = loadText(this);
-        rtl = t.ar;
+        rtl = t.rtl();
         builtSettings = Prefs.key(this);
         // The colour theme, before anything is built with it.
         Tokens.apply(this);
@@ -175,14 +175,17 @@ abstract class Screen extends Activity {
      * Kept apart from the Context so the text dump (TextDump) checks it for every combination.
      */
     static boolean[] language(String locale, String tvLanguage, String digits) {
-        boolean ar = "system".equals(locale) ? "ar".equals(tvLanguage) : "ar".equals(locale);
-        boolean eastern = digits.isEmpty() ? ar : "eastern".equals(digits);
+        // A value this version does not know (a language from a newer one, or written by adb) counts as the TV's, as
+        // Settings shows it ("TV"); before 1.16.0 it read as English. Digits likewise: unknown = by language.
+        String lang = Languages.known(locale) ? locale : "ar".equals(tvLanguage) ? "ar" : "en";
+        boolean ar = "ar".equals(lang);
+        boolean eastern = "eastern".equals(digits) || (!"western".equals(digits) && ar);
         return new boolean[] {ar, eastern};
     }
 
     /** The locale of Gregorian dates: month and day names in the screen's language, Western digits (t.d() decides). */
     static Locale dateLocale(Text t) {
-        return t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
+        return t.dateLocale();
     }
 
     /** The saved language and digits, for screens and for the screensaver, which is not an Activity. */
@@ -223,7 +226,7 @@ abstract class Screen extends Activity {
         // Amiri for everything large in both languages (it has Latin letters), so titles and numbers are one family;
         // the English titles were in Marcellus, whose digits run from narrow to wide. Bold for the Arabic names only.
         display = getResources().getFont(R.font.amiri_regular);
-        displayBold = t.ar ? getResources().getFont(R.font.amiri_bold) : display;
+        displayBold = t.arabicScript() ? getResources().getFont(R.font.amiri_bold) : display;
         sacred = getResources().getFont(R.font.amiri_regular);
 
         root = new FrameLayout(this);
@@ -415,7 +418,7 @@ abstract class Screen extends Activity {
 
     /** English caps labels get 0.2em tracking; Arabic is never letter-spaced. */
     TextView caps(TextView v) {
-        if (!t.ar) v.setLetterSpacing(0.2f);
+        if (!t.arabicScript()) v.setLetterSpacing(0.2f);
         return v;
     }
 

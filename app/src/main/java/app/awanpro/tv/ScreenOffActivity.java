@@ -64,7 +64,7 @@ public class ScreenOffActivity extends Activity implements Radio.Listener {
 
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Tokens.SCREENSAVER_GROUND);
-        root.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        root.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         LinearLayout col = new LinearLayout(this);
         col.setOrientation(LinearLayout.VERTICAL);
         col.setGravity(Gravity.CENTER_HORIZONTAL);

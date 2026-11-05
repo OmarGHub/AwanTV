@@ -152,11 +152,11 @@ final class PrayerWatch {
         Tokens.apply(service);  // The banner in the chosen theme too
         boolean h24 = Prefs.clock24(service);
         Typeface ui = service.getResources().getFont(R.font.alexandria_regular);
-        Typeface display = service.getResources().getFont(t.ar ? R.font.amiri_bold : R.font.amiri_regular);
+        Typeface display = service.getResources().getFont(t.arabicScript() ? R.font.amiri_bold : R.font.amiri_regular);
 
         LinearLayout card = new LinearLayout(service);
         card.setOrientation(LinearLayout.VERTICAL);
-        card.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        card.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         card.setPadding(Ui.ipx(28), Ui.ipx(24), Ui.ipx(28), 0);
         GradientDrawable bg = new GradientDrawable();
         bg.setColor(Tokens.LAPIS_900);
@@ -177,7 +177,7 @@ final class PrayerWatch {
         if (day.friday) names[PrayerDay.DHUHR] = t.jumuah();
         long minutes = Reminders.minutesLeft(day, now);
         TextView label = text(ui, 20, Tokens.MIST_400, t.apLabel());
-        if (!t.ar) label.setLetterSpacing(0.2f);
+        if (!t.arabicScript()) label.setLetterSpacing(0.2f);
         TextView title = text(display, 44, Tokens.PLASTER_100,
             t.apTitle(names[day.nextIndex], minutes, Screen.duration(Screen.secondsUntil(day.nextTime, now), false)));
         TextView sub = text(ui, 22, Tokens.MIST_400, t.bannerSub(Screen.clock(t, day.nextTime, h24, 1f), BANNER_SECONDS));
@@ -210,7 +210,7 @@ final class PrayerWatch {
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT);
         // Top end: the left in Arabic, the right in English.
-        lp.gravity = Gravity.TOP | (t.ar ? Gravity.LEFT : Gravity.RIGHT);
+        lp.gravity = Gravity.TOP | (t.rtl() ? Gravity.LEFT : Gravity.RIGHT);
         lp.x = Ui.ipx(96);
         lp.y = Ui.ipx(56);
         WindowManager wm = service.getSystemService(WindowManager.class);
@@ -221,7 +221,7 @@ final class PrayerWatch {
         }
         banner = card;
         fill.post(() -> {
-            fill.setPivotX(t.ar ? fill.getWidth() : 0);
+            fill.setPivotX(t.rtl() ? fill.getWidth() : 0);
             fill.animate().scaleX(0f).setDuration(BANNER_SECONDS * 1000L).setInterpolator(null).start();
         });
         handler.postDelayed(this::hideBanner, BANNER_SECONDS * 1000L);
@@ -311,7 +311,7 @@ final class PrayerWatch {
 
         LinearLayout card = new LinearLayout(service);
         card.setGravity(Gravity.CENTER_VERTICAL);
-        card.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        card.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
         card.setPadding(Ui.ipx(26), Ui.ipx(20), Ui.ipx(26), Ui.ipx(20));
         GradientDrawable bg = new GradientDrawable();
         bg.setColor(Tokens.LAPIS_900);
@@ -351,7 +351,7 @@ final class PrayerWatch {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT);
-        lp.gravity = Gravity.TOP | (t.ar ? Gravity.LEFT : Gravity.RIGHT);
+        lp.gravity = Gravity.TOP | (t.rtl() ? Gravity.LEFT : Gravity.RIGHT);
         lp.x = Ui.ipx(96);
         lp.y = Ui.ipx(56);
         try {
@@ -405,7 +405,7 @@ final class PrayerWatch {
             LinearLayout card = new LinearLayout(service);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setGravity(Gravity.CENTER_HORIZONTAL);
-            card.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+            card.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
             card.setPadding(Ui.ipx(64), Ui.ipx(56), Ui.ipx(64), Ui.ipx(56));
             GradientDrawable bg = new GradientDrawable();
             bg.setColor(Tokens.LAPIS_900);
@@ -466,7 +466,7 @@ final class PrayerWatch {
             }
             identify = card;
             fill.post(() -> {
-                fill.setPivotX(t.ar ? fill.getWidth() : 0);
+                fill.setPivotX(t.rtl() ? fill.getWidth() : 0);
                 fill.animate().scaleX(0f).setDuration(IDENTIFY_SECONDS * 1000L).setInterpolator(null).start();
             });
             handler.postDelayed(hideIdentifyLater, IDENTIFY_SECONDS * 1000L);

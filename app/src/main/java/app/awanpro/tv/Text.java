@@ -13,6 +13,13 @@ import com.batoulapps.adhan.Madhab;
  * it must open even when the resources cannot be read, so `new Text(ar, eastern)` (no resources) serves it alone.
  */
 final class Text {
+    /** The language: "ar" or "en" (Languages.TAGS), the resources' folder values-ar or values. */
+    final String lang;
+    /**
+     * Arabic itself. Besides the Arabic counting forms kept in code, it chooses the Arabic side of what is written in
+     * Arabic and English (cities, countries, stations, adhan voices, apps' Arabic names, the reciters' kept names):
+     * any other language takes the English side. Direction and script are rtl() and arabicScript(), not this.
+     */
     final boolean ar;
     /** Eastern Arabic digits (٠١٢٣). Its own setting; defaults to on in Arabic. */
     final boolean eastern;
@@ -32,7 +39,28 @@ final class Text {
     Text(Res res, boolean ar, boolean eastern) {
         this.res = res;
         this.ar = ar;
+        this.lang = ar ? "ar" : "en";
         this.eastern = eastern;
+    }
+
+    /** Written right to left: the screen's layout and its text direction. */
+    boolean rtl() {
+        return ar;
+    }
+
+    /** Written in the Arabic script: Amiri's bold for names; no capitals, no letter spacing, the Arabic comma. */
+    boolean arabicScript() {
+        return ar;
+    }
+
+    /** Month and day names in the screen's language, Western digits (d() decides the digits). */
+    java.util.Locale dateLocale() {
+        return ar ? java.util.Locale.forLanguageTag("ar-EG-u-nu-latn") : java.util.Locale.UK;
+    }
+
+    /** The order of names in the screen's language (apps, countries). */
+    java.util.Locale sortLocale() {
+        return ar ? new java.util.Locale("ar") : java.util.Locale.ENGLISH;
     }
 
     private static final java.util.Map<String, Res> RES = new java.util.concurrent.ConcurrentHashMap<>();
@@ -110,7 +138,8 @@ final class Text {
         if (!eastern) return s;
         // "·" beside Eastern digits reads as a zero (٠); Arabic punctuation takes its own comma instead. Awan TV
         // English with Eastern digits takes the Latin comma ("Cairo, Friday", not "Cairo، Friday").
-        s = s.replace(" · ", s(R.string.d));
+        // Punctuation of the script, not a word: in code, so the crash screen's fallback (no resources) has it too.
+        s = s.replace(" · ", arabicScript() ? "، " : ", ");
         StringBuilder b = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -166,7 +195,7 @@ final class Text {
      */
     String inMinutes(long minutes, String hoursAndMinutes) {
         if (minutes >= 60) return in(hoursAndMinutes);
-        if (!ar) return d("in " + minutes + " min");
+        if (!ar) return d(s(R.string.inMinutesOther, minutes));
         if (minutes <= 1) return "بعد دقيقة واحدة";
         if (minutes == 2) return "بعد دقيقتين";
         return d("بعد " + minutes + (minutes <= 10 ? " دقائق" : " دقيقة"));
@@ -176,7 +205,7 @@ final class Text {
     String apLabel() { return s(R.string.apLabel); }
     /** "Asr in 13 minutes". */
     String apTitle(String prayer, long minutes, String hoursAndMinutes) {
-        if (!ar && minutes < 60) return d(prayer + " in " + minutes + (minutes == 1 ? " minute" : " minutes"));
+        if (!ar && minutes < 60) return d(s(minutes == 1 ? R.string.apTitleOne : R.string.apTitleOther, prayer, minutes));
         return prayer + " " + inMinutes(minutes, hoursAndMinutes);
     }
     String apSub(CharSequence time) { return d((s(R.string.apSub)) + time + (s(R.string.apSub_2))); }
@@ -241,8 +270,7 @@ final class Text {
     }
     String noStorage() { return s(R.string.noStorage); }
     String downloadingNow(String surah, int pct, int waiting) {
-        String p = pct >= 0 ? " " + pct + "٪" : "";
-        if (!ar) p = p.replace("٪", "%");
+        String p = pct >= 0 ? " " + s(R.string.downloadingPercent, pct) : "";
         String then = waiting > 0 ? (s(R.string.downloadingNow, waiting)) : "";
         return (s(R.string.downloadingNow_2)) + surah + p + then;
     }
@@ -587,7 +615,7 @@ final class Text {
         // No adjustment reads as such, not "0 يوم".
         if (n == 0) return s(R.string.days);
         String sign = n > 0 ? "+" : "";
-        if (!ar) return d(sign + n + (Math.abs(n) == 1 ? " day" : " days"));
+        if (!ar) return d(s(Math.abs(n) == 1 ? R.string.daysOne : R.string.daysOther, sign + n));
         return d(sign + n + (Math.abs(n) == 2 ? " يومان" : " يوم"));
     }
     String roomRow() { return roomTitle(); }
@@ -608,7 +636,13 @@ final class Text {
     String adhanHelp() { return s(R.string.adhanHelp); }
     String language() { return s(R.string.language); }
     String languageHelp() { return s(R.string.languageHelp); }
-    String[] languages() { return new String[] {s(R.string.languages), "العربية", "English"}; }
+    /** "TV" in the screen's language, then each language by its own name (Languages). */
+    String[] languages() {
+        String[] out = new String[Languages.NAMES.length + 1];
+        out[0] = s(R.string.languages);
+        System.arraycopy(Languages.NAMES, 0, out, 1, Languages.NAMES.length);
+        return out;
+    }
     String digits() { return s(R.string.digits); }
     String clockRow() { return s(R.string.clockRow); }
     String clockHelp() { return s(R.string.clockHelp); }
@@ -626,7 +660,7 @@ final class Text {
     String buttonsRow() { return s(R.string.buttonsRow); }
     String buttonsHelp(int n) {
         if (n == 0) return s(R.string.buttonsHelp);
-        if (!ar) return d(n == 1 ? "1 button customised" : n + " buttons customised");
+        if (!ar) return d(s(n == 1 ? R.string.buttonsHelpOne : R.string.buttonsHelpOther, n));
         if (n == 1) return "زر واحد مخصص";
         if (n == 2) return "زران مخصصان";
         return d(n <= 10 ? n + " أزرار مخصصة" : n + " زرًا مخصصًا");
@@ -663,7 +697,7 @@ final class Text {
     String pressTitle() { return s(R.string.pressTitle); }
     String pressHelp() { return s(R.string.pressHelp); }
     String pressWaiting(int seconds) {
-        if (!ar) return d("Waiting " + seconds + (seconds == 1 ? " second" : " seconds"));
+        if (!ar) return d(s(seconds == 1 ? R.string.pressWaitingOne : R.string.pressWaitingOther, seconds));
         if (seconds == 1) return "ينتظر ثانية واحدة";
         if (seconds == 2) return "ينتظر ثانيتين";
         return d("ينتظر " + seconds + " ثوانٍ");
@@ -836,7 +870,7 @@ final class Text {
     }
     /** "25 minutes", with the Arabic count forms. */
     String minutesAfter(int n) {
-        if (!ar) return d(n + " min");
+        if (!ar) return d(s(R.string.minutesAfterOther, n));
         if (n == 0) return "مع الأذان";
         if (n == 1) return "دقيقة";
         if (n == 2) return "دقيقتان";
@@ -1018,7 +1052,7 @@ final class Text {
             return a(R.array.occasionToday)[kind];
         }
         String name = a(R.array.occasion)[kind];
-        if (!ar) return d(days == 1 ? name + " tomorrow" : name + " in " + days + " days");
+        if (!ar) return d(days == 1 ? s(R.string.occasionTomorrow, name) : s(R.string.occasionInDays, name, days));
         if (days == 1) return name + " غدًا";
         if (days == 2) return name + " بعد يومين";
         return d(name + " بعد " + days + (days <= 10 ? " أيام" : " يومًا"));

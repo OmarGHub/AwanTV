@@ -844,7 +844,7 @@ public class MainActivity extends Screen {
      */
     private void renderCalendar(Date now) {
         // Once a day (or when the Hijri adjustment or the language changes), not every minute.
-        String key = new SimpleDateFormat("yyyyMMdd", Locale.US).format(now) + "/" + Prefs.hijriOffset(this) + "/" + t.ar + t.eastern;
+        String key = new SimpleDateFormat("yyyyMMdd", Locale.US).format(now) + "/" + Prefs.hijriOffset(this) + "/" + t.lang + t.eastern;
         if (calendar == null || key.equals(calendarFor)) return;
         Hijri.Month m = Hijri.month(this, now);
         if (m.days.isEmpty()) return;
@@ -886,7 +886,7 @@ public class MainActivity extends Screen {
         // Smaller figures when a month runs over six weeks (the rows share the card's height).
         boolean six = rows > 5;
         Locale greg = Screen.dateLocale(t);
-        SimpleDateFormat monthName = new SimpleDateFormat(t.ar ? "MMMM" : "MMM", greg);
+        SimpleDateFormat monthName = new SimpleDateFormat(t.arabicScript() ? "MMMM" : "MMM", greg);
         int i = 0;
         for (int r = 0; r < rows; r++) {
             LinearLayout row = new LinearLayout(this);
@@ -1027,7 +1027,7 @@ public class MainActivity extends Screen {
             }
             cellName[i].setText(names[i]);
             // English 12-hour ("12:41 PM") is too wide for a cell at 34px; Arabic's ص/م is narrow enough.
-            float timeSize = Ui.px(!h24 && !t.ar ? 30 : 34);
+            float timeSize = Ui.px(!h24 && !t.arabicScript() ? 30 : 34);
             if (cellTime[i].getTextSize() != timeSize) {
                 cellTime[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, timeSize);
                 lineHeight(cellTime[i], 1.1f);
@@ -1038,7 +1038,7 @@ public class MainActivity extends Screen {
             cellTag[i].setTypeface(ui400);
             cellName[i].setTypeface(tf);
             cellTime[i].setTypeface(tf);
-            if (!t.ar) cellTag[i].setLetterSpacing(0.2f);
+            if (!t.arabicScript()) cellTag[i].setLetterSpacing(0.2f);
         }
     }
 
@@ -1478,7 +1478,7 @@ public class MainActivity extends Screen {
         int k = e.getKeyCode();
         lastKey = System.currentTimeMillis();
         if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
-        if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false), t.ar)) return true;
+        if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false), t.rtl())) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
         if (k == KeyEvent.KEYCODE_TV_INPUT) {
             Intent source = FirmwareKeys.sourceMenu(this);

@@ -135,11 +135,11 @@ final class SaverScreen {
         regular = c.getResources().getFont(R.font.alexandria_regular);
         medium = c.getResources().getFont(R.font.alexandria_medium);
         amiri = c.getResources().getFont(R.font.amiri_regular);
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
 
         root = new FrameLayout(c);
         root.setBackgroundColor(GROUND);
-        root.setLayoutDirection(t.ar ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
+        root.setLayoutDirection(t.rtl() ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR);
 
         group = new LinearLayout(c);
         group.setOrientation(LinearLayout.VERTICAL);
@@ -277,7 +277,7 @@ final class SaverScreen {
         barFill.setBackground(round(NEXT, 3));
         bar.addView(barFill, new FrameLayout.LayoutParams(-1, -1));
         // The fill grows from the start side by scale, not by width: no layout pass every second.
-        barFill.setPivotX(t.ar ? Ui.px(BAR_W) : 0);
+        barFill.setPivotX(t.rtl() ? Ui.px(BAR_W) : 0);
         barFill.setScaleX(0);
         middle.addView(dhikrLabel, centered(-1, -2, 28));
         LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(-1, 0, 1);
@@ -800,7 +800,7 @@ final class SaverScreen {
     private LinearLayout strip(Cell[] cells, boolean compact) {
         LinearLayout strip = new LinearLayout(c);
         strip.setOrientation(LinearLayout.HORIZONTAL);
-        int dir = t.ar ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
+        int dir = t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR;
         for (int i = 0; i < 6; i++) {
             Cell cell = new Cell();
             cell.box = new LinearLayout(c);

@@ -44,6 +44,8 @@
     <string name="apOk" formatted="false">"Got it"</string>
     <string name="apSub" formatted="false">"Adhan at "</string>
     <string name="apSub_2" formatted="false">" · Back to dismiss"</string>
+    <string name="apTitleOne" formatted="false">"%1$s in %2$s minute"</string>
+    <string name="apTitleOther" formatted="false">"%1$s in %2$s minutes"</string>
     <string name="asUsual" formatted="false">"As usual"</string>
     <string name="asrSchool" formatted="false">"Asr school"</string>
     <string name="asrSchoolHelp" formatted="false">"Only changes the Asr time"</string>
@@ -73,6 +75,8 @@
     <string name="buttonsFileNote" formatted="false">"They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes."</string>
     <string name="buttonsFileSection" formatted="false">"Remote buttons (this TV only)"</string>
     <string name="buttonsHelp" formatted="false">"Make a button on any remote open what you choose"</string>
+    <string name="buttonsHelpOne" formatted="false">"%1$s button customised"</string>
+    <string name="buttonsHelpOther" formatted="false">"%1$s buttons customised"</string>
     <string name="buttonsInfoHelp" formatted="false">"While one button is customised every remote press passes through Awan TV, so holding Volume moves it one step. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power."</string>
     <string name="buttonsInfoHelpTcl" formatted="false">"On this TV the buttons are customised in TCL's own remapping, so remote presses do not pass through Awan TV and Volume is as it was. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power."</string>
     <string name="buttonsInfoRow" formatted="false">"About custom buttons"</string>
@@ -116,9 +120,10 @@
     <string name="creditsHelp" formatted="false">"Afnon, the weather, the cities, the recitations, the adhan"</string>
     <string name="creditsRow" formatted="false">"Sources and licences"</string>
     <string name="creditsSection" formatted="false">"About › Sources and licences"</string>
-    <string name="d" formatted="false">", "</string>
     <string name="dayTitle" formatted="false">"Today's prayers"</string>
     <string name="days" formatted="false">"None"</string>
+    <string name="daysOne" formatted="false">"%1$s day"</string>
+    <string name="daysOther" formatted="false">"%1$s days"</string>
     <string name="defaultIs" formatted="false">"Default: "</string>
     <string name="deleteAsk" formatted="false">"Delete?"</string>
     <string name="deleteSaved" formatted="false">"Delete saved"</string>
@@ -130,6 +135,7 @@
     <string name="downloadRest" formatted="false">"Download the rest (%1$s)"</string>
     <string name="downloadingNow" formatted="false">" · then %1$s waiting"</string>
     <string name="downloadingNow_2" formatted="false">"Downloading: "</string>
+    <string name="downloadingPercent" formatted="false">"%1$s%%"</string>
     <string name="eveningAdhkar" formatted="false">"Evening adhkar"</string>
     <string name="facingLine" formatted="false">"You face: "</string>
     <string name="facingNote" formatted="false">"degrees from north, -1 not set"</string>
@@ -227,6 +233,7 @@
     <string name="imsakHelp" formatted="false">"Suhoor ends at Fajr · imsak is a precaution before it"</string>
     <string name="imsakRow" formatted="false">"Imsak in Ramadan"</string>
     <string name="in" formatted="false">"in %1$s"</string>
+    <string name="inMinutesOther" formatted="false">"in %1$s min"</string>
     <string name="inPlaceOf" formatted="false">"Instead of %1$s"</string>
     <string name="iqama" formatted="false">"Iqamah"</string>
     <string name="iqamaAt" formatted="false">"Iqamah "</string>
@@ -318,6 +325,7 @@
     <string name="middleHelp" formatted="false">"A hadith every 10 min, and the adhkar for 10 min after each prayer"</string>
     <string name="middleRow" formatted="false">"Screensaver's middle"</string>
     <string name="midnight" formatted="false">"Midnight"</string>
+    <string name="minutesAfterOther" formatted="false">"%1$s min"</string>
     <string name="mitLicence" formatted="false">"(MIT licence)"</string>
     <string name="more" formatted="false">"MORE"</string>
     <string name="moreFile" formatted="false">"The More row in your order (empty: automatic)"</string>
@@ -373,6 +381,8 @@
     <string name="nowHintOne" formatted="false">"Back to dismiss · closes by itself after 1 min"</string>
     <string name="nowLabel" formatted="false">"IT'S TIME FOR"</string>
     <string name="nowTag" formatted="false">"NOW"</string>
+    <string name="occasionInDays" formatted="false">"%1$s in %2$s days"</string>
+    <string name="occasionTomorrow" formatted="false">"%1$s tomorrow"</string>
     <string name="off" formatted="false">"Off"</string>
     <string name="open" formatted="false">"Open %1$s"</string>
     <string name="otherLocation" formatted="false">"Another location"</string>
@@ -406,6 +416,8 @@
     <string name="populationMillion" formatted="false">"%1$s million"</string>
     <string name="pressHelp" formatted="false">"On the TV's own remote or any Bluetooth remote connected to it."</string>
     <string name="pressTitle" formatted="false">"Press the button to customise"</string>
+    <string name="pressWaitingOne" formatted="false">"Waiting %1$s second"</string>
+    <string name="pressWaitingOther" formatted="false">"Waiting %1$s seconds"</string>
     <string name="preview" formatted="false">"Asr today with these settings"</string>
     <string name="putInFav" formatted="false">"Put in favourites…"</string>
     <string name="putInMore" formatted="false">"Put in More…"</string>
