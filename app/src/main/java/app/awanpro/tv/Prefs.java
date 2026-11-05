@@ -657,8 +657,9 @@ final class Prefs {
     }
 
     /** Photos behind the screensaver (Photos); off by default, so it stays black. */
+    /** Photos behind the screensaver; on by default since 1.14.0 (Omar: few found it), off kept where it was turned off. */
     static boolean saverPhotos(Context c) {
-        return of(c).getBoolean("saver_photos", false);
+        return of(c).getBoolean("saver_photos", true);
     }
 
     static void setSaverPhotos(Context c, boolean on) {

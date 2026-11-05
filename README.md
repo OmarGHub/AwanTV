@@ -119,7 +119,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
 12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
-13. **ألوان الواجهة**: لازوردي أو زمردي أو عنّابي أو فحمي أو رقّ فاتح، أو تلقائي (لازوردي نهارًا وفحمي بعد المغرب). وشاشة الاستراحة سوداء ما لم تُختر لها الصور.
+13. **ألوان الواجهة**: لازوردي أو زمردي أو عنّابي أو فحمي أو رقّ فاتح، أو تلقائي (لازوردي نهارًا وفحمي بعد المغرب). وشاشة الاستراحة بالصور افتراضيًا، وسوداء إن أُطفئت صورها (العرض واللغة).
 14. **حماية الشاشة من الاحتراق**: الواجهة وشاشة الاستراحة تنزاحان بضع نقاط كل 3 دقائق.
 15. من أفنون: حساب المواقيت دون إنترنت لـ 136 مدينة، والأذان فوق أي تطبيق، والتذكير قبل الصلاة (ومنطوقًا)، والقبلة، والجمعة ورمضان، وإذاعة القرآن الكريم.
 
@@ -413,8 +413,8 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
 13. **Background photos** (Settings > Display): 26 photos of the Haramain, al-Aqsa, mosques, the night
    sky and nature, in the app. Home shows them under the theme's colour; they change every 10 or 30 minutes, every
    hour, with each prayer or daily (Automatic: Home daily, the screensaver every 10 minutes), only the dark ones from
-   Isha until Fajr. Home starts with them (the pattern is the other choice); on the screensaver they are optional,
-   otherwise it stays black.
+   Isha until Fajr. Home starts with them (the pattern is the other choice); the screensaver too (from 1.14.0),
+   black when they are turned off (Display & language).
 14. **Burn-in care**: Home and the screensaver shift a few pixels every three minutes.
 15. From Afnon: offline prayer times for 136 cities, the adhan over any app, reminders (also spoken), Qibla, Friday
    and Ramadan modes, Quran radio.

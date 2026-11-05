@@ -394,9 +394,11 @@ final class Text {
         switch (version) {
             case "1.14.0":
                 return ar ? new String[][] {
-                    {"عدّاد الإقامة فوق التطبيقات", "من الأذان حتى الإقامة تظهر بطاقة صغيرة في زاوية الشاشة فوق أي تطبيق: كم بقي على الإقامة. تُطفأ من الإعدادات ← الإقامة."}}
+                    {"عدّاد الإقامة فوق التطبيقات", "من الأذان حتى الإقامة تظهر بطاقة صغيرة في زاوية الشاشة فوق أي تطبيق: كم بقي على الإقامة. تُطفأ من الإعدادات ← الإقامة."},
+                    {"صور في شاشة الاستراحة", "صورة كل عشر دقائق خلف المواقيت، والداكنة فقط من العشاء حتى الفجر. تُطفأ من الإعدادات ← العرض واللغة."}}
                   : new String[][] {
-                    {"The iqamah countdown over apps", "From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."}};
+                    {"The iqamah countdown over apps", "From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."},
+                    {"Photos in the screensaver", "A photo every ten minutes behind the times, only dark ones from Isha until Fajr. Turn them off in Settings › Display & language."}};
             case "1.13.0":
                 return ar ? new String[][] {
                     {"شاشة أمان إن توقف", "إن توقف Awan TV على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية. وإن تكرر التوقف يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل."},

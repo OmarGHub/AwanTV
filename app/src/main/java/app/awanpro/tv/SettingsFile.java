@@ -204,7 +204,7 @@ final class SettingsFile {
             .def(Tokens.LAPIS));
         out.add(new Item("background", INT_CHOICE, t.backgroundRow()).choices(new Integer[] {Photos.PATTERN, Photos.PHOTOS}, t.backgrounds())
             .def(Photos.PHOTOS));
-        out.add(new Item("saver_photos", BOOL, t.saverPhotosRow()).help(t.saverPhotosHelp()).def(false));
+        out.add(new Item("saver_photos", BOOL, t.saverPhotosRow()).help(t.saverPhotosHelp()).def(true));
         out.add(new Item("photo_every", INT_CHOICE, t.photoEveryRow())
             .choices(new Integer[] {Photos.EVERY_AUTO, Photos.EVERY_10, Photos.EVERY_30, Photos.EVERY_HOUR, Photos.EVERY_PRAYER, Photos.EVERY_DAY},
                 t.photoEveryChoices()).def(Photos.EVERY_AUTO));
