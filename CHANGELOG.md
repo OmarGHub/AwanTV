@@ -6,6 +6,13 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.14.1]
+
+### The app
+- The colours are Automatic by default (Lapis by day, Charcoal after Maghrib; Omar's choice): a TV that never chose
+  turns Charcoal after Maghrib from now on, one that chose keeps its colours. What's new for 1.14.1 says how to keep
+  one colour all day.
+
 ## [1.14.0]
 
 ### The app

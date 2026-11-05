@@ -201,7 +201,7 @@ final class SettingsFile {
             .choices(new String[] {"system", "12", "24"}, t.clocks()).def("system"));
         out.add(new Item("theme", INT_CHOICE, t.themeRow())
             .choices(new Integer[] {Tokens.LAPIS, Tokens.EMERALD, Tokens.BURGUNDY, Tokens.CHARCOAL, Tokens.PARCHMENT, Tokens.AUTO}, t.themes())
-            .def(Tokens.LAPIS));
+            .def(Tokens.AUTO));
         out.add(new Item("background", INT_CHOICE, t.backgroundRow()).choices(new Integer[] {Photos.PATTERN, Photos.PHOTOS}, t.backgrounds())
             .def(Photos.PHOTOS));
         out.add(new Item("saver_photos", BOOL, t.saverPhotosRow()).help(t.saverPhotosHelp()).def(true));

@@ -616,9 +616,10 @@ final class Prefs {
     }
 
     /** The colour theme (Tokens.LAPIS … Tokens.AUTO); Settings > Display & language. */
+    /** The colours; Auto by default since 1.14.1 (Omar: Lapis by day, Charcoal after Maghrib), a choice made kept. */
     static int theme(Context c) {
-        int t = of(c).getInt("theme", Tokens.LAPIS);
-        return t >= Tokens.LAPIS && t <= Tokens.AUTO ? t : Tokens.LAPIS;
+        int t = of(c).getInt("theme", Tokens.AUTO);
+        return t >= Tokens.LAPIS && t <= Tokens.AUTO ? t : Tokens.AUTO;
     }
 
     static void setTheme(Context c, int t) {

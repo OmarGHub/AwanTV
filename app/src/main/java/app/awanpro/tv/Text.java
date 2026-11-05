@@ -392,6 +392,11 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.14.1":
+                return ar ? new String[][] {
+                    {"الألوان تتبع الوقت", "لازوردي في النهار وفحمي بعد المغرب، أخف على العين في الليل. ولون واحد طوال اليوم من الإعدادات ← العرض واللغة ← ألوان الواجهة."}}
+                  : new String[][] {
+                    {"Colours that follow the time", "Lapis by day and Charcoal after Maghrib, easier on the eyes at night. One colour all day in Settings › Display & language › Colours."}};
             case "1.14.0":
                 return ar ? new String[][] {
                     {"عدّاد الإقامة فوق التطبيقات", "من الأذان حتى الإقامة تظهر بطاقة صغيرة في زاوية الشاشة فوق أي تطبيق: كم بقي على الإقامة. تُطفأ من الإعدادات ← الإقامة."},
