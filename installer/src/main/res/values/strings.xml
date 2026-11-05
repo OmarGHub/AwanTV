@@ -133,6 +133,7 @@
     <string name="state_checked">Checked on the TV</string>
     <string name="state_was_set">Already in place on the TV</string>
     <string name="state_not_here">Not on this TV</string>
+    <string name="state_left">What the TV shows is left as it is</string>
     <string name="state_failed">Set, but the TV doesn’t show it</string>
 
     <!-- The installer's own update (SelfUpdate) and About -->

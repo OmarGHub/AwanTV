@@ -131,6 +131,7 @@
     <string name="state_checked">مُتحقَّق منه على التلفاز</string>
     <string name="state_was_set">مضبوط على التلفاز من قبل</string>
     <string name="state_not_here">غير متاح في هذا التلفاز</string>
+    <string name="state_left">تُرك ما على الشاشة كما هو</string>
     <string name="state_failed">ضُبط، لكن التلفاز لا يُظهره</string>
 
     <!-- The installer's own update (SelfUpdate) and About -->

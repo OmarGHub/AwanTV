@@ -1,4 +1,4 @@
-# AwanTV-install.ps1 - Version 1.1.0
+# AwanTV-install.ps1 - Version 1.2.0
 # Installs Awan TV on an Android TV / Google TV over adb and turns it on:
 #   1. the app (the APK you built in Android Studio)
 #   2. its permissions (radio level bars, sleep timer while the radio plays, Wi-Fi name)
@@ -18,7 +18,7 @@
 param([string]$Apk = "", [string]$Device = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.1.0"
+$ScriptVersion = "1.2.0"
 $Pkg = "app.awanpro.tv"
 $Dream = "$Pkg/app.awanpro.tv.AwanDream"
 $Service = "$Pkg/app.awanpro.tv.RemoteKeys"
@@ -193,6 +193,10 @@ if (-not $have -and $current -and $current -ne "null" -and $current -notlike "$P
 # --- install: skipped when the TV has this very APK already (its setup still runs below, putting things right)
 # dumpsys complains on stderr when grep stops reading after the first line: quieted.
 $onTv = [regex]::Match((Shell "dumpsys package $Pkg 2>/dev/null | grep -m1 versionName"), "versionName=(\S+)").Groups[1].Value
+# What the TV shows now: an update stops Awan TV, so at the end it is opened again only when it (its Home or its
+# screensaver) was in front; another app the viewer is in is left alone.
+$front = Shell "dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'"
+$wasFront = ($front -match ([regex]::Escape($Pkg) + "/")) -or ($front -match "DreamActivity")
 $same = $false
 if ($onTv) {
     $path = ((Shell "pm path $Pkg") -split "`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ -like "package:*" } |
@@ -278,10 +282,25 @@ Write-Host "[6/7] Awan TV service on: $(Shell 'settings get secure enabled_acces
 if ($bound) { Write-Host "      Running: yes" }
 else { Write-Host "      Running: NO - restart the TV, then check: adb shell dumpsys accessibility (Bound services)" }
 
-# --- hand the replaced screensaver to the app (Settings > Awan TV puts it back, with or without a PC)
+# --- an update: the app keeps the screensaver it replaced and its city, so Awan TV is opened again only where it was
+# in front; a first install hands the replaced screensaver over below, which opens it.
 $before = ""
 if (Test-Path $saved) { $before = (Get-Content $saved -Raw).Trim() }
-if ($before -and $before -ne "null" -and $before -notlike "$Pkg/*") {
+if ($onTv) {
+    if ($same) {
+        Write-Host "[7/7] Nothing installed, so Awan TV was not stopped: the TV is left as it is"
+    } elseif ($wasFront) {
+        # A key that does nothing (Shift) around the start: "am start" is no user activity and would open into the
+        # screensaver. Not WAKEUP (HDMI-CEC on source boxes).
+        Shell "input keyevent KEYCODE_SHIFT_LEFT" | Out-Null
+        Shell "am start -n $Pkg/app.awanpro.tv.MainActivity" | Out-Null
+        Start-Sleep -Seconds 2
+        Shell "input keyevent KEYCODE_SHIFT_LEFT" | Out-Null
+        Write-Host "[7/7] Awan TV was in front before the update: opened again"
+    } else {
+        Write-Host "[7/7] Another app was in front: left as it is (Home opens Awan TV)"
+    }
+} elseif ($before -and $before -ne "null" -and $before -notlike "$Pkg/*") {
     # A key that does nothing (Shift) around the start: a TV left untouched may be idle or in its screensaver, and
     # "am start" is no user activity, so it would open into the screensaver. Not WAKEUP (HDMI-CEC on source boxes).
     Shell "input keyevent KEYCODE_SHIFT_LEFT" | Out-Null

@@ -15,9 +15,17 @@ history is in its repository.
   one), and Home's button taken on a source box opens the TV's own home while it lasts: it did nothing before.
 
 ### Phone installer
+- Find my TV opens Awan TV at the end of an update only when it (its Home or its screensaver) was in front before;
+  another app the viewer is in is left alone, and Set up again (nothing stopped) leaves the TV as it is. A first
+  install still opens it, for the location question. The timeline's last step says "left as it is".
 - The newer-installer card says before the press that the installer app will close after the update and to open it
   again, as Android stops an app it updates (F-Droid and Signal close the same way); the installing line says it too.
 - "الهاتف" for the phone throughout the Arabic texts (it was "الجوال" in four).
+
+### Tools
+- `AwanTV-install` 1.2.0: an update opens Awan TV at the end only when it (its Home or its screensaver) was in front
+  before it; another app the viewer is in is left alone, and the very same APK (nothing installed) leaves the TV as it
+  is. A first install hands the replaced screensaver over and opens it, as before.
 
 ## [1.13.0]
 

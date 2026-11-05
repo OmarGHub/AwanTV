@@ -808,8 +808,7 @@ public final class MainActivity extends Activity {
             }
             // The install stops Awan TV: its Home (or screensaver) in front now opens again at the end; another app the
             // viewer is in is left alone.
-            String front = a.shell("dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'").out;
-            boolean reopen = front.contains(Setup.PACKAGE + "/") || front.contains("DreamActivity");
+            boolean reopen = awanInFront(a);
             progressLine(g, t, getString(R.string.upd_tv_sending, number(0)), 0);
             int[] last = {0};
             String result = a.install(apk, f -> {
@@ -1337,6 +1336,11 @@ public final class MainActivity extends Activity {
     boolean installedOk;
     /** The run only sets up an Awan TV already on the TV (the same version as carried): nothing is sent. */
     private boolean setUpOnly;
+    /**
+     * Open Awan TV at the end (the timeline's last step): a first install (the city question), or an update with
+     * Awan TV in front before it. Not for Set up again (nothing stopped) or over another app (1.13.1).
+     */
+    private boolean openAtEnd = true;
     /** What the confirmation's main button does once the TV's version is known: install, or set up only. */
     private Runnable confirmGo;
     /** The TV has the very version carried (showVersions): Install it again is offered beside Set up again. */
@@ -1515,6 +1519,7 @@ public final class MainActivity extends Activity {
                 });
                 // Sent every time the install is chosen; the same version is set up only (setUpOnly) from the
                 // confirmation, where its version was read.
+                openAtEnd = versionOnTv(a) == null || awanInFront(a);
                 send(g, a, apk, false);
             } catch (Exception e) {
                 fail(g, getString(R.string.error_install, message(e)));
@@ -1525,6 +1530,7 @@ public final class MainActivity extends Activity {
     /** The same version is on the TV: its setup steps only, as after an install, with nothing sent. */
     private void setUpOnly() {
         setUpOnly = true;
+        openAtEnd = false;
         stopFinders();
         if (host != null) getPreferences(MODE_PRIVATE).edit().putString("last_tv", host).apply();
         frame(INSTALL, Hero.Mode.PROGRESS, getString(R.string.setup_title), getString(R.string.setup_lead));
@@ -1555,7 +1561,11 @@ public final class MainActivity extends Activity {
     /** On the worker thread: the APK into the TV, then the setup steps. */
     private void send(int g, Adb a, File apk, boolean replacing) throws IOException, InterruptedException {
         post(g, () -> timeline.set(0, Timeline.State.WORKING));
-        if (replacing) a.shell("pm uninstall " + Setup.PACKAGE);
+        if (replacing) {
+            a.shell("pm uninstall " + Setup.PACKAGE);
+            // A first install now: the city question shows.
+            openAtEnd = true;
+        }
         long size = apk.length();
         String result = a.install(apk, f -> post(g, () -> {
             hero.progress(0.8f * f);
@@ -1583,6 +1593,15 @@ public final class MainActivity extends Activity {
         runSteps(g, a);
     }
 
+    /**
+     * Whether Awan TV (its Home, or its screensaver) is what the TV shows now: an update stops it, so it is opened
+     * again at the end only then; another app the viewer is in is left alone (1.13.1, as the editor and AwanTV-install).
+     */
+    private static boolean awanInFront(Adb a) throws IOException, InterruptedException {
+        String front = a.shell("dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity'").out;
+        return front.contains(Setup.PACKAGE + "/") || front.contains("DreamActivity");
+    }
+
     /** Awan TV's version name on the TV, or null. */
     private static String versionOnTv(Adb a) throws IOException, InterruptedException {
         java.util.regex.Matcher m = java.util.regex.Pattern.compile("versionName=(\\S+)")
@@ -1601,6 +1620,15 @@ public final class MainActivity extends Activity {
             Setup.Step s = steps.get(i);
             int row = i + 1;
             float at = 0.8f + 0.2f * (i + 1) / steps.size();
+            if (!openAtEnd && s.command.contains("am start")) {
+                // Left as it is: nothing was stopped (Set up again), or another app is in front.
+                post(g, () -> {
+                    timeline.set(row, Timeline.State.SKIPPED);
+                    timeline.note(row, getString(R.string.state_left));
+                    hero.progress(at);
+                });
+                continue;
+            }
             post(g, () -> timeline.set(row, Timeline.State.WORKING));
             Timeline.State end;
             if (s.check != null && a.shell(s.check).ok()) {
