@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.15.0]
+
 ### The app
 - Test builds only (a version ending in a letter): `TEXT_DUMP` writes every text the app shows, in Arabic and English
   with both kinds of digits, to text-dump.txt (`TextDump`: every method of `Text` with inputs from the app's own data,
