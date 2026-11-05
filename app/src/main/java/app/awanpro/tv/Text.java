@@ -1059,6 +1059,29 @@ final class Text {
     String lastThird() { return ar ? "الثلث الأخير" : "Last third"; }
 
     // The screensaver's hadith (assets/hadith/hadith.json)
+    // The remote's buttons by Android's names (Buttons.name)
+    String keyRed() { return ar ? "الزر الأحمر" : "Red button"; }
+    String keyGreen() { return ar ? "الزر الأخضر" : "Green button"; }
+    String keyYellow() { return ar ? "الزر الأصفر" : "Yellow button"; }
+    String keyBlue() { return ar ? "الزر الأزرق" : "Blue button"; }
+    String keySettings() { return ar ? "زر الإعدادات" : "Settings button"; }
+    String keyInput() { return ar ? "زر المصدر" : "Input button"; }
+    String keyGuide() { return ar ? "زر الدليل" : "Guide button"; }
+    String keyInfo() { return ar ? "زر المعلومات" : "Info button"; }
+    String keyBookmark() { return ar ? "زر المفضلة" : "Bookmark button"; }
+    String keyApps() { return ar ? "زر التطبيقات" : "Apps button"; }
+    String keyPlayPause() { return ar ? "زر التشغيل والإيقاف" : "Play/pause button"; }
+    String keyChannelUp() { return ar ? "القناة التالية" : "Channel up"; }
+    String keyChannelDown() { return ar ? "القناة السابقة" : "Channel down"; }
+    /** A button known only by its number ("Button 4020"); the caller puts the digits through d(). */
+    String keyNumbered(String number) { return ar ? "زر رقمه " + number : "Button " + number; }
+    /** A digit key ("Number 5"); the caller puts the digits through d(). */
+    String keyDigit(String digit) { return (ar ? "الرقم " : "Number ") + digit; }
+    /** Any other key by Android's name, underscores as spaces ("MEDIA RECORD button"). */
+    String keyNamed(String name) { return (ar ? "زر " : "") + name + (ar ? "" : " button"); }
+    /** A surah downloading, how far ("45٪"): the Arabic percent sign in both languages, as before. */
+    String percentDone(int percent) { return d(percent + "٪"); }
+
     String hadithSource(int bukhari, int muslim) {
         StringBuilder b = new StringBuilder();
         if (bukhari > 0) b.append(ar ? "البخاري " : "Al-Bukhari ").append(bukhari);

@@ -397,7 +397,7 @@ public class LibraryActivity extends Screen {
             } else if (have.contains(s)) {
                 mark = "✓";
             } else if (item.equals(current)) {
-                mark = pct >= 0 ? t.d(pct + "٪") : "↓";
+                mark = pct >= 0 ? t.percentDone(pct) : "↓";
             } else if (queue.contains(item)) {
                 mark = "↓";
                 color = Tokens.MIST_400;

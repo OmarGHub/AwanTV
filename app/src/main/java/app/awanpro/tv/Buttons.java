@@ -99,30 +99,30 @@ final class Buttons {
     /** A name for the button, in the screen's language where Android's name says what it is. */
     static String name(Text t, int code, int scan) {
         switch (code) {
-            case KeyEvent.KEYCODE_PROG_RED: return t.ar ? "الزر الأحمر" : "Red button";
-            case KeyEvent.KEYCODE_PROG_GREEN: return t.ar ? "الزر الأخضر" : "Green button";
-            case KeyEvent.KEYCODE_PROG_YELLOW: return t.ar ? "الزر الأصفر" : "Yellow button";
-            case KeyEvent.KEYCODE_PROG_BLUE: return t.ar ? "الزر الأزرق" : "Blue button";
-            case KeyEvent.KEYCODE_SETTINGS: return t.ar ? "زر الإعدادات" : "Settings button";
-            case KeyEvent.KEYCODE_TV_INPUT: return t.ar ? "زر المصدر" : "Input button";
-            case KeyEvent.KEYCODE_GUIDE: return t.ar ? "زر الدليل" : "Guide button";
-            case KeyEvent.KEYCODE_INFO: return t.ar ? "زر المعلومات" : "Info button";
-            case KeyEvent.KEYCODE_BOOKMARK: return t.ar ? "زر المفضلة" : "Bookmark button";
-            case KeyEvent.KEYCODE_ALL_APPS: return t.ar ? "زر التطبيقات" : "Apps button";
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: return t.ar ? "زر التشغيل والإيقاف" : "Play/pause button";
-            case KeyEvent.KEYCODE_CHANNEL_UP: return t.ar ? "القناة التالية" : "Channel up";
-            case KeyEvent.KEYCODE_CHANNEL_DOWN: return t.ar ? "القناة السابقة" : "Channel down";
-            case KeyEvent.KEYCODE_UNKNOWN: return t.d(t.ar ? "زر رقمه " + scan : "Button " + scan);
+            case KeyEvent.KEYCODE_PROG_RED: return t.keyRed();
+            case KeyEvent.KEYCODE_PROG_GREEN: return t.keyGreen();
+            case KeyEvent.KEYCODE_PROG_YELLOW: return t.keyYellow();
+            case KeyEvent.KEYCODE_PROG_BLUE: return t.keyBlue();
+            case KeyEvent.KEYCODE_SETTINGS: return t.keySettings();
+            case KeyEvent.KEYCODE_TV_INPUT: return t.keyInput();
+            case KeyEvent.KEYCODE_GUIDE: return t.keyGuide();
+            case KeyEvent.KEYCODE_INFO: return t.keyInfo();
+            case KeyEvent.KEYCODE_BOOKMARK: return t.keyBookmark();
+            case KeyEvent.KEYCODE_ALL_APPS: return t.keyApps();
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: return t.keyPlayPause();
+            case KeyEvent.KEYCODE_CHANNEL_UP: return t.keyChannelUp();
+            case KeyEvent.KEYCODE_CHANNEL_DOWN: return t.keyChannelDown();
+            case KeyEvent.KEYCODE_UNKNOWN: return t.d(t.keyNumbered(String.valueOf(scan)));
             default: break;
         }
         if (code >= KeyEvent.KEYCODE_0 && code <= KeyEvent.KEYCODE_9) {
-            return t.d((t.ar ? "الرقم " : "Number ") + (code - KeyEvent.KEYCODE_0));
+            return t.d(t.keyDigit(String.valueOf(code - KeyEvent.KEYCODE_0)));
         }
         String s = KeyEvent.keyCodeToString(code);
         if (s.startsWith("KEYCODE_")) s = s.substring(8);
         // A keycode with no Android name (TCL's own) prints as its number.
-        if (s.matches("\\d+")) return t.d(t.ar ? "زر رقمه " + s : "Button " + s);
-        return (t.ar ? "زر " : "") + s.replace('_', ' ') + (t.ar ? "" : " button");
+        if (s.matches("\\d+")) return t.d(t.keyNumbered(s));
+        return t.keyNamed(s.replace('_', ' '));
     }
 
     /** For the test builds: the keycode's name and number, and the scancode. */

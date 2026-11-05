@@ -12,6 +12,10 @@ history is in its repository.
   the remote's buttons, the adhan voices, countries, dates, the order of names, the language decision, the editor's
   descriptions and the settings file). The safety net of the languages plan: the strings move to Android's
   resources only when every line stays the same. A release answers "Unknown action".
+- No change on screen: the remote's button names (`Buttons.name`) and a download's percent (`LibraryActivity`) take
+  their words from `Text`, like every other text (the languages plan, phase 1, step 1). Left for the language model
+  (phase 2): the data written in both languages (cities, countries, stations, adhan voices, apps' Arabic names) and
+  the editor's answers, which stay English.
 - No change on screen: the language decision (`Screen.language`), the dates' locale (`Screen.dateLocale`) and the
   order of names (`Apps.collator`) are each in one place now, so the dump checks the very code the screens use.
 
