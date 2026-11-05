@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The screens' texts, from Text.java (languages plan, phase 1). Every value is quoted so its spaces stay;
+     %1$s... are filled by Text.fill itself, not String.format, hence formatted="false"; %% is a percent sign.
+     Arrays are read as written: no %1$s in them. Checked before every build (app/build.gradle checkTexts). -->
+<resources>
+    <string name="accessibilityHelp" formatted="false">"Awan TV hizmetini açmak için: ana ekran ve ezan"</string>
+    <string name="accessibilityRow" formatted="false">"Erişilebilirlik ayarları"</string>
+    <string name="addButtonHelp" formatted="false">"Sonra TV'ye bağlı herhangi bir kumandada bir düğmeye basın"</string>
+    <string name="addButtonRow" formatted="false">"Düğme ekle"</string>
+    <string name="adhanAt" formatted="false">"Ezan"</string>
+    <string name="adhanCredit" formatted="false">"Kayıtlar: github.com/abodehq/Athan-MP3 ve github.com/meypod/audio_files · hak sahibinin isteğiyle her biri kaldırılır"</string>
+    <string name="adhanHelp" formatted="false">"Vakit girince okunur · her namaz için kapatılabilir"</string>
+    <string name="adhanOn" formatted="false">"Açık"</string>
+    <string name="adhanOn_2" formatted="false">"Kapalı"</string>
+    <string name="adhanRow" formatted="false">"Ezan"</string>
+    <string name="adhanToday" formatted="false">"Bugün ezan "</string>
+    <string name="adhkarHelp" formatted="false">"Ekran koruyucuda: sabahtan öğleye, ikindiden yatsıya"</string>
+    <string name="adhkarHelp_2" formatted="false">"Ekran koruyucuda: sabahtan güneşe, ikindiden akşama"</string>
+    <string name="adhkarHelp_3" formatted="false">"Ekran koruyucuda zikir yok"</string>
+    <string name="adhkarRow" formatted="false">"Sabah ve akşam zikirleri"</string>
+    <string name="adjustFileHelp" formatted="false">"Minutes added to the calculated time; negative is earlier"</string>
+    <string name="adjustFileLabel" formatted="false">"%1$s adjustment (minutes)"</string>
+    <string name="adjustNote" formatted="false">"Hesaptan biraz farklı bir cami için. Ezan, kamet, hatırlatıcılar ve ekran koruyucu ayarlanan saate uyar."</string>
+    <string name="adjustRow" formatted="false">"Vakitleri ve tarihi ayarla"</string>
+    <string name="adjustRowHelp" formatted="false">"Her vakit 30 dakikaya kadar erken veya geç, ve Hicri tarih"</string>
+    <string name="adjustSection" formatted="false">"Namaz vakitleri › Vakitleri ve tarihi ayarla"</string>
+    <string name="adjustSummary" formatted="false">"Hicri "</string>
+    <string name="adjustSummary_2" formatted="false">"Yok"</string>
+    <string name="adjustSummary_3" formatted="false">", "</string>
+    <string name="adjustTimeHelpToday" formatted="false">"Bugün %1$s · dakika olarak, 30'a kadar erken veya geç"</string>
+    <string name="adjustTimeHelpTomorrow" formatted="false">"Yarın %1$s · dakika olarak, 30'a kadar erken veya geç"</string>
+    <string name="afterAdhanHelp" formatted="false">"Radyo ezan için durur, sonra…"</string>
+    <string name="afterAdhanLabel" formatted="false">"Ezan duası"</string>
+    <string name="afterAdhanRow" formatted="false">"Ezandan sonra"</string>
+    <string name="afterPrayerLabel" formatted="false">"Namazdan sonra zikirler"</string>
+    <string name="all" formatted="false">"Tüm uygulamalar"</string>
+    <string name="allSaved" formatted="false">"Bütün sureler kayıtlı · Radyo'dan dinleyin"</string>
+    <string name="allTitle" formatted="false">"Tüm uygulamalar"</string>
+    <string name="ampm" formatted="false">"ÖÖ"</string>
+    <string name="ampm_2" formatted="false">"ÖS"</string>
+    <string name="announceHelp" formatted="false">"Bir namazın ezanı kapalıyken «حان الآن موعد صلاة …» der"</string>
+    <string name="announceRow" formatted="false">"Vakti sesli bildir"</string>
+    <string name="apLabel" formatted="false">"VAKİT YAKLAŞIYOR"</string>
+    <string name="apOk" formatted="false">"Tamam"</string>
+    <string name="apSub" formatted="false">"Ezan "</string>
+    <string name="apSub_2" formatted="false">" · kapatmak için Geri"</string>
+    <string name="apTitleOne" formatted="false">"%1$s vaktine %2$s dakika"</string>
+    <string name="apTitleOther" formatted="false">"%1$s vaktine %2$s dakika"</string>
+    <string name="asUsual" formatted="false">"Her zamanki gibi"</string>
+    <string name="asrSchool" formatted="false">"İkindi hesabı"</string>
+    <string name="asrSchoolHelp" formatted="false">"Yalnızca ikindi vaktini değiştirir"</string>
+    <string name="backgroundHelp" formatted="false">"Fotoğraflar: Harameyn, Mescid-i Aksa, camiler ve doğa, tema renginin altında"</string>
+    <string name="backgroundRow" formatted="false">"Ana ekran arka planı"</string>
+    <string name="bannerSub" formatted="false">"Ezan "</string>
+    <string name="bannerSub_2" formatted="false">" · %1$s sn sonra gizlenir"</string>
+    <string name="basedOn" formatted="false">"Afnon ve Masjid TV üzerine kuruldu"</string>
+    <string name="bell" formatted="false">"Ezan açık"</string>
+    <string name="bellRow" formatted="false">"%1$s adhan on"</string>
+    <string name="bellToggle" formatted="false">"Bu namaz için ezanı aç/kapat"</string>
+    <string name="bell_2" formatted="false">"Ezan kapalı"</string>
+    <string name="bellsNoteFile" formatted="false">"On the TV: Today &amp; Qibla, the bell by each prayer"</string>
+    <string name="boolValues" formatted="false">"Values: true = on, false = off"</string>
+    <string name="buttonFrom" formatted="false">"“%1$s” kumandasından"</string>
+    <string name="buttonLongIs" formatted="false">"Basılı tutma: "</string>
+    <string name="buttonLongNone" formatted="false">"Basılı tutunca hiçbir şey"</string>
+    <string name="buttonLongNote" formatted="false">"Basılı tutma yarım saniye veya daha uzundur"</string>
+    <string name="buttonLongShort" formatted="false">"Basılı: "</string>
+    <string name="buttonLongTitle" formatted="false">"%1$s, basılı tutulunca"</string>
+    <string name="buttonNone" formatted="false">"Hiçbir şey (düğmeyi kapatır)"</string>
+    <string name="buttonOff" formatted="false">"Hiçbir şey (kapalı)"</string>
+    <string name="buttonOpens" formatted="false">"%1$s açılır"</string>
+    <string name="buttonOriginal" formatted="false">"Düğmenin asıl işi (özelleştirilmemiş)"</string>
+    <string name="buttonPressIs" formatted="false">"Basma: "</string>
+    <string name="buttonRadio" formatted="false">"Radyo (çal ve durdur)"</string>
+    <string name="buttonsFileNote" formatted="false">"They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes."</string>
+    <string name="buttonsFileSection" formatted="false">"Remote buttons (this TV only)"</string>
+    <string name="buttonsHelp" formatted="false">"Herhangi bir kumandadaki bir düğmeye seçtiğiniz şeyi açtırın"</string>
+    <string name="buttonsHelpOne" formatted="false">"%1$s düğme özelleştirildi"</string>
+    <string name="buttonsHelpOther" formatted="false">"%1$s düğme özelleştirildi"</string>
+    <string name="buttonsInfoHelp" formatted="false">"Bir düğme özelleştirildiğinde kumandanın her basışı Awan TV'den geçer, bu yüzden Ses düğmesini basılı tutmak sesi bir adım değiştirir. Şu düğmeler hiç özelleştirilmez: oklar, OK, Geri, Ana ekran, Ses, Güç."</string>
+    <string name="buttonsInfoHelpTcl" formatted="false">"Bu TV'de düğmeler TCL'nin kendi eşlemesiyle özelleştirilir, bu yüzden kumanda basışları Awan TV'den geçmez ve Ses eskisi gibidir. Şu düğmeler hiç özelleştirilmez: oklar, OK, Geri, Ana ekran, Ses, Güç."</string>
+    <string name="buttonsInfoRow" formatted="false">"Özel düğmeler hakkında"</string>
+    <string name="buttonsRow" formatted="false">"Kumanda düğmeleri"</string>
+    <string name="buttonsSection" formatted="false">"Cihaz ayarları › Kumanda düğmeleri"</string>
+    <string name="buttonsServiceOff" formatted="false">"Awan TV hizmeti kapalı: özel düğmeler hizmet açılınca çalışır"</string>
+    <string name="byAwan" formatted="false">"Geliştiren: OMAR A ALHWAIRTH"</string>
+    <string name="byCity" formatted="false">"by the location"</string>
+    <string name="byCountry" formatted="false">"the country's, if it has an official one, else 0 (off)"</string>
+    <string name="byCountryOr" formatted="false">"the country's, else %1$s"</string>
+    <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
+    <string name="bytes" formatted="false">"%1$s MB"</string>
+    <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calendarSource" formatted="false">"Ümmü'l-Kurâ"</string>
+    <string name="callCloseHelp" formatted="false">"Sonra izlediğiniz şeye dönülür"</string>
+    <string name="callCloseRow" formatted="false">"Ezan ekranını kapat"</string>
+    <string name="cancel" formatted="false">"İptal"</string>
+    <string name="checkFailed" formatted="false">"GitHub'a ulaşılamadı"</string>
+    <string name="checkNowHelp" formatted="false">"Günlük sorusunu beklemeden GitHub'a şimdi sorar"</string>
+    <string name="checkNowRow" formatted="false">"Güncellemeleri şimdi denetle"</string>
+    <string name="checking" formatted="false">"Denetleniyor…"</string>
+    <string name="chip" formatted="false">"%1$s vaktine"</string>
+    <string name="chooseFavSlot" formatted="false">"Favorilerdeki yerini seçin"</string>
+    <string name="chooseLocation" formatted="false">"Konumunuzu seçin"</string>
+    <string name="chooseMoreSlot" formatted="false">"Diğer'deki yerini seçin"</string>
+    <string name="chosenPlace" formatted="false">"Seçilen yer"</string>
+    <string name="citiesCredit" formatted="false">"Şehirler: GeoNames.org"</string>
+    <string name="citiesCreditLong" formatted="false">"Şehir listesi: GeoNames.org (CC BY 4.0)"</string>
+    <string name="cityFileHelp" formatted="false">"The city, or a place by its coordinates"</string>
+    <string name="cityValues" formatted="false">"Copied as it is between TVs; to change the location, pick it on the TV"</string>
+    <string name="clockHelp" formatted="false">"“TV”, TV'nin saat ayarına uyar"</string>
+    <string name="clockRow" formatted="false">"Saat"</string>
+    <string name="close" formatted="false">"Kapat"</string>
+    <string name="comingSoon" formatted="false">"Bu ekran bir sonraki güncellemede geliyor"</string>
+    <string name="complete" formatted="false">"✓ Tamam"</string>
+    <string name="coordinates" formatted="false">"K"</string>
+    <string name="coordinates_2" formatted="false">"G"</string>
+    <string name="coordinates_3" formatted="false">"D"</string>
+    <string name="coordinates_4" formatted="false">"B"</string>
+    <string name="country" formatted="false">"Ülke"</string>
+    <string name="creditsHelp" formatted="false">"Afnon, hava durumu, şehirler, tilavetler, ezan"</string>
+    <string name="creditsRow" formatted="false">"Kaynaklar ve lisanslar"</string>
+    <string name="creditsSection" formatted="false">"Hakkında › Kaynaklar ve lisanslar"</string>
+    <string name="dayTitle" formatted="false">"Bugünün namazları"</string>
+    <string name="days" formatted="false">"Yok"</string>
+    <string name="daysOne" formatted="false">"%1$s gün"</string>
+    <string name="daysOther" formatted="false">"%1$s gün"</string>
+    <string name="defaultIs" formatted="false">"Default: "</string>
+    <string name="deleteAsk" formatted="false">"Silinsin mi?"</string>
+    <string name="deleteSaved" formatted="false">"Kayıtlıyı sil"</string>
+    <string name="deviceHelp" formatted="false">"Görüntü, ses, uygulamalar ve sistem"</string>
+    <string name="deviceRow" formatted="false">"TV ayarları"</string>
+    <string name="digits" formatted="false">"Rakamlar"</string>
+    <string name="dismiss" formatted="false">"Kapat"</string>
+    <string name="downloadAll" formatted="false">"Tümünü indir (%1$s)"</string>
+    <string name="downloadRest" formatted="false">"Kalanını indir (%1$s)"</string>
+    <string name="downloadingNow" formatted="false">" · ardından %1$s bekliyor"</string>
+    <string name="downloadingNow_2" formatted="false">"İndiriliyor: "</string>
+    <string name="downloadingPercent" formatted="false">"%%%1$s"</string>
+    <string name="eveningAdhkar" formatted="false">"Akşam zikirleri"</string>
+    <string name="facingLine" formatted="false">"Baktığınız yön: "</string>
+    <string name="facingNote" formatted="false">"degrees from north, -1 not set"</string>
+    <string name="fajrAt" formatted="false">"Sabah "</string>
+    <string name="fajrLevelHelp" formatted="false">"TV sesinin bir payı · gezinirken duyulur"</string>
+    <string name="fajrLevelHelpFile" formatted="false">"A share of the TV's sound"</string>
+    <string name="fajrLevelTitle" formatted="false">"Sabah ezanı ses düzeyi"</string>
+    <string name="fajrVoiceFile" formatted="false">"Fajr adhan voice"</string>
+    <string name="fajrVoiceHelp" formatted="false">"Ses, sonra düzeyi · en iyisi «es-salâtü hayrun mine'n-nevm» olan"</string>
+    <string name="fajrVoiceRow" formatted="false">"Sabah ezanı"</string>
+    <string name="fastHelp" formatted="false">"Bir akşam önce: pazartesi, perşembe, Eyyâm-ı Bîd, Tasua ve Aşure"</string>
+    <string name="fastRow" formatted="false">"Sünnet oruç hatırlatıcısı"</string>
+    <string name="fav" formatted="false">"FAVORİLER"</string>
+    <string name="favNote" formatted="false">"Favorilerde · %1$s. sıra"</string>
+    <string name="favourite" formatted="false">"Favori"</string>
+    <string name="favouritesFile" formatted="false">"Home's favourite apps"</string>
+    <string name="freeSize" formatted="false">"Boş "</string>
+    <string name="fridayEveLine" formatted="false">"Cuma gecesi · Kehf · Salavât ﷺ"</string>
+    <string name="fridayFixedNote" formatted="false">"Used when Friday prayer is Fixed time (2)"</string>
+    <string name="fridayHelp" formatted="false">"Hutbe saati aşağıda"</string>
+    <string name="fridayHelp_2" formatted="false">"Hutbe öğle ezanında"</string>
+    <string name="fridayHelp_3" formatted="false">"Ülkeye göre: hutbe öğle ezanında"</string>
+    <string name="fridayHelp_4" formatted="false">"Ülkeye göre: %1$s %2$s · din işleri kurumu"</string>
+    <string name="fridayLine" formatted="false">"Kehf · Salavât ﷺ"</string>
+    <string name="fridayNote" formatted="false">"Cuma günleri bunun yerine hutbe"</string>
+    <string name="fridayRow" formatted="false">"Cuma namazı"</string>
+    <string name="fridayTimeHelp" formatted="false">"Her cuma · cuma geri sayımı ona göredir"</string>
+    <string name="fridayTimeRow" formatted="false">"Hutbe saati"</string>
+    <string name="fromHome" formatted="false">"Ana ekrandan"</string>
+    <string name="fullLevel" formatted="false">"Tam (diğer ezanlar gibi)"</string>
+    <string name="granted" formatted="false">"Verildi"</string>
+    <string name="granted_2" formatted="false">"Verilmedi"</string>
+    <string name="habousAngles" formatted="false">"Sabah 19° · Yatsı 17° · bakanlığın tablolarını hesapladığı gibi"</string>
+    <string name="habousAngles_2" formatted="false">"Fas dışında: Sabah 19° · Yatsı 17° · bakanlığın paylarıyla"</string>
+    <string name="habousAuto" formatted="false">"Automatic: the nearest"</string>
+    <string name="habousChooser" formatted="false">"Bakanlık 191 yerleşim yeri için birer tablo yayımlar. Bunlar konumunuza en yakın olanlar."</string>
+    <string name="habousCredit" formatted="false">"Fas Vakıflar ve İslami İşler Bakanlığı'nın (habous.gov.ma) vakit tablolarına göre ayarlandı"</string>
+    <string name="habousCreditRow" formatted="false">"Fas vakitleri"</string>
+    <string name="habousFileHelp" formatted="false">"Which of the Moroccan ministry's tables the TV follows in Morocco"</string>
+    <string name="habousHelp" formatted="false">"Sizin seçtiğiniz, konumunuzdan %1$s km uzakta"</string>
+    <string name="habousHelp_2" formatted="false">"Bakanlığın en yakın yerleşim yeri, %1$s km uzakta"</string>
+    <string name="habousItem" formatted="false">" km"</string>
+    <string name="habousRow" formatted="false">"Bakanlık tablosu"</string>
+    <string name="hadithRowFile" formatted="false">"A hadith in the screensaver's middle"</string>
+    <string name="hadithSource" formatted="false">"Buhârî "</string>
+    <string name="hadithSource_2" formatted="false">"Müslim "</string>
+    <string name="hijriAdjust" formatted="false">"Hicri tarih ayarı"</string>
+    <string name="hijriSuffix" formatted="false">" H"</string>
+    <string name="hijriToday" formatted="false">"Bugün: "</string>
+    <string name="hintApps" formatted="false">"▶  Uygulamalar"</string>
+    <string name="hintBackAbout" formatted="false">"Geri  Hakkında"</string>
+    <string name="hintBackCancel" formatted="false">"Geri  İptal"</string>
+    <string name="hintBackClose" formatted="false">"Geri  Kapat"</string>
+    <string name="hintBackDevice" formatted="false">"Geri  Cihaz ayarları"</string>
+    <string name="hintBackHome" formatted="false">"Geri  Ana ekran"</string>
+    <string name="hintBackLater" formatted="false">"Geri  Sonra"</string>
+    <string name="hintBackLocate" formatted="false">"Geri  Konumu ayarla"</string>
+    <string name="hintBackMenu" formatted="false">"Geri  Menü"</string>
+    <string name="hintBackPrayer" formatted="false">"Geri  Namaz vakitleri"</string>
+    <string name="hintBackSettings" formatted="false">"Geri  Ayarlar"</string>
+    <string name="hintBackUndo" formatted="false">"Geri  Önceki dil"</string>
+    <string name="hintCancel" formatted="false">"Geri  İptal"</string>
+    <string name="hintChange" formatted="false">"◀▶  Değiştir"</string>
+    <string name="hintChoose" formatted="false">"OK  Seç"</string>
+    <string name="hintChooseWord" formatted="false">"Seç"</string>
+    <string name="hintClose" formatted="false">"Geri  Kapat"</string>
+    <string name="hintEdit" formatted="false">"OK  Düzenle"</string>
+    <string name="hintFavs" formatted="false">"▲  Favoriler"</string>
+    <string name="hintHold" formatted="false">"OK basılı  Ana ekranı düzenle"</string>
+    <string name="hintHoldOk" formatted="false">"OK  Basılı tut"</string>
+    <string name="hintMore" formatted="false">"▼  Diğer"</string>
+    <string name="hintMove" formatted="false">"▲▼  Taşı"</string>
+    <string name="hintOpen" formatted="false">"OK  Aç"</string>
+    <string name="hintPick" formatted="false">"OK  Şehri seç"</string>
+    <string name="hintQibla" formatted="false">"▶  Kıble"</string>
+    <string name="hintSave" formatted="false">"OK  Kaydet"</string>
+    <string name="hintSwitch" formatted="false">"OK  Aç/Kapat"</string>
+    <string name="hintTimes" formatted="false">"◀  Vakitler"</string>
+    <string name="hintToChosen" formatted="false">"▶  Seçilen yere"</string>
+    <string name="hintToSurahs" formatted="false">"▶  Surelere"</string>
+    <string name="home" formatted="false">"Ana ekran"</string>
+    <string name="homeAppsFile" formatted="false">"Home's apps and the device"</string>
+    <string name="homeAppsNoteFile" formatted="false">"On the TV they are arranged on Home itself"</string>
+    <string name="homeButtonFileHelp" formatted="false">"Only on boxes connected to a TV (Google TV Streamer)"</string>
+    <string name="homeButtonHelp" formatted="false">"Ana ekrandan sonra ses sistemi susuyorsa açın · basılı tutun: kutunun kendi ana ekranı"</string>
+    <string name="homeButtonRow" formatted="false">"Ana ekran düğmesi doğrudan Awan TV'yi açar"</string>
+    <string name="homeSectionFile" formatted="false">"Home"</string>
+    <string name="identifyDevice" formatted="false">"Cihaz adı: "</string>
+    <string name="identifyFoot" formatted="false">"Ayar düzenleyicisi istedi · %1$s saniyede kaybolur"</string>
+    <string name="identifyLabel" formatted="false">"Bu TV"</string>
+    <string name="identifyNoName" formatted="false">"Bilgisayarda henüz adlandırılmadı"</string>
+    <string name="iftar" formatted="false">"İftar"</string>
+    <string name="iftarIn" formatted="false">"İFTARA KALAN"</string>
+    <string name="iftarTag" formatted="false">"İFTAR"</string>
+    <string name="imsakAt" formatted="false">"İhtiyat "</string>
+    <string name="imsakHelp" formatted="false">"Oruç imsakla, sabah vaktinin girişiyle başlar · ihtiyat, öncesinde isteğe bağlı bir paydır"</string>
+    <string name="imsakRow" formatted="false">"Ramazan'da ihtiyat payı"</string>
+    <string name="in" formatted="false">"%1$s sonra"</string>
+    <string name="inMinutesOther" formatted="false">"%1$s dk sonra"</string>
+    <string name="inPlaceOf" formatted="false">"%1$s yerine"</string>
+    <string name="iqama" formatted="false">"Kamet"</string>
+    <string name="iqamaAt" formatted="false">"Kamet "</string>
+    <string name="iqamaCounterHelp" formatted="false">"Ezandan sonra, kamete kadar ekranın bir köşesinde"</string>
+    <string name="iqamaCounterOff" formatted="false">"Ayarlar › Kamet'ten kapatın"</string>
+    <string name="iqamaCounterRow" formatted="false">"Uygulamaların üstünde kamet geri sayımı"</string>
+    <string name="iqamaFixedHelp" formatted="false">"When Iqamah is Fixed (3)"</string>
+    <string name="iqamaFixedRow" formatted="false">"%1$s fixed iqamah"</string>
+    <string name="iqamaInMinutes" formatted="false">"Kamet şimdi"</string>
+    <string name="iqamaInMinutes_2" formatted="false">"Kamete %1$s dk"</string>
+    <string name="iqamaMinutesHelp" formatted="false">"After the adhan, when Iqamah is Minutes (2)"</string>
+    <string name="iqamaMinutesRow" formatted="false">"%1$s iqamah minutes"</string>
+    <string name="iqamaModeHelp" formatted="false">"Resmî bekleme süresi: %1$s"</string>
+    <string name="iqamaModeHelp_2" formatted="false">"Ezandan sonra dakika, her namaz için"</string>
+    <string name="iqamaModeHelp_3" formatted="false">"Her namaz için sabit saat, caminizdeki gibi"</string>
+    <string name="iqamaModeHelp_4" formatted="false">"Kamet gösterilmez"</string>
+    <string name="iqamaModeHelp_5" formatted="false">"Bu ülke için henüz resmî bir ölçü yok"</string>
+    <string name="iqamaPeriodHelp" formatted="false">"Ramazan'da ezandan sonraki dakikalar · “Her zamanki gibi” diğer günlere uyar"</string>
+    <string name="iqamaPeriodHelp_2" formatted="false">"Ramazan'ın kendi ayarı var"</string>
+    <string name="iqamaPeriodRow" formatted="false">"Kamet dönemi"</string>
+    <string name="iqamaRamadanHelp" formatted="false">"Minutes after the adhan, -1 as on other days"</string>
+    <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
+    <string name="iqamaRow" formatted="false">"Kamet vakti"</string>
+    <string name="iqamaToday" formatted="false">"Bugün kamet "</string>
+    <string name="jumuah" formatted="false">"Cuma"</string>
+    <string name="jumuahLabel" formatted="false">"CUMA"</string>
+    <string name="kahf" formatted="false">"Bugün Kehf Suresi"</string>
+    <string name="kahfTonight" formatted="false">"Cuma gecesi · Kehf Suresi"</string>
+    <string name="keyApps" formatted="false">"Uygulamalar düğmesi"</string>
+    <string name="keyBlue" formatted="false">"Mavi düğme"</string>
+    <string name="keyBookmark" formatted="false">"Yer imi düğmesi"</string>
+    <string name="keyChannelDown" formatted="false">"Kanal aşağı"</string>
+    <string name="keyChannelUp" formatted="false">"Kanal yukarı"</string>
+    <string name="keyDigit" formatted="false">"Rakam "</string>
+    <string name="keyGreen" formatted="false">"Yeşil düğme"</string>
+    <string name="keyGuide" formatted="false">"Rehber düğmesi"</string>
+    <string name="keyInfo" formatted="false">"Bilgi düğmesi"</string>
+    <string name="keyInput" formatted="false">"Kaynak düğmesi"</string>
+    <string name="keyNamed" formatted="false">""</string>
+    <string name="keyNamed_2" formatted="false">" düğmesi"</string>
+    <string name="keyNumbered" formatted="false">"%1$s düğmesi"</string>
+    <string name="keyPlayPause" formatted="false">"Oynat/duraklat düğmesi"</string>
+    <string name="keyRed" formatted="false">"Kırmızı düğme"</string>
+    <string name="keySettings" formatted="false">"Ayarlar düğmesi"</string>
+    <string name="keyYellow" formatted="false">"Sarı düğme"</string>
+    <string name="khutbah" formatted="false">"Hutbe"</string>
+    <string name="khutbahAt" formatted="false">"Hutbe "</string>
+    <string name="khutbahIn" formatted="false">"Hutbeye kalan"</string>
+    <string name="language" formatted="false">"Dil"</string>
+    <string name="languageGoesBack" formatted="false">"%1$s sn içinde %2$s diline dönülecek"</string>
+    <string name="languageHelp" formatted="false">"“TV”, TV'nin diline uyar"</string>
+    <string name="languageKeep" formatted="false">"Kalsın"</string>
+    <string name="languageKeepTitle" formatted="false">"Bu dil kalsın mı?"</string>
+    <string name="languageTv" formatted="false">"TV (şu an %1$s)"</string>
+    <string name="languageUndo" formatted="false">"Geri dön"</string>
+    <string name="languages" formatted="false">"TV"</string>
+    <string name="lastAdhanRow" formatted="false">"Son ezan"</string>
+    <string name="lastCrashRow" formatted="false">"Uygulamanın son durduğu zaman"</string>
+    <string name="lastThird" formatted="false">"Son üçte bir"</string>
+    <string name="later" formatted="false">"Sonra"</string>
+    <string name="latitude" formatted="false">"Enlem"</string>
+    <string name="libraryHelp" formatted="false">"İnternetsiz dinlemek için tilavetleri kaydedin"</string>
+    <string name="libraryHelpMany" formatted="false">"%1$s kayıt · %2$s"</string>
+    <string name="libraryHelpOne" formatted="false">"%1$s kayıt · %2$s"</string>
+    <string name="libraryIntro" formatted="false">"İnternetsiz dinlemek için mp3quran.net'ten indirilir: Radyo › İstasyon › TV'de kayıtlı"</string>
+    <string name="libraryLegend" formatted="false">"✓ kayıtlı · ↓ bekliyor · bir surede OK: indir veya iptal et, iki kez: sil"</string>
+    <string name="libraryRow" formatted="false">"Kayıtlı tilavetler"</string>
+    <string name="listValues" formatted="false">"Values: a list of the apps' package names, in order"</string>
+    <string name="loadingCities" formatted="false">"Şehirler yükleniyor…"</string>
+    <string name="loadingReciters" formatted="false">"Kâriler yükleniyor…"</string>
+    <string name="locating" formatted="false">"Konumunuz bulunuyor…"</string>
+    <string name="location" formatted="false">"Konum"</string>
+    <string name="locationAskBody" formatted="false">"Vakitler şu an TV'nin saat dilimine göre “%1$s” için ve konumunuzdan farklı olabilir. Ezan bunlara göre okunur."</string>
+    <string name="locationAskTitle" formatted="false">"Konumunuz henüz ayarlanmadı"</string>
+    <string name="locationHelp" formatted="false">" · koordinatlarla"</string>
+    <string name="locationHelp_2" formatted="false">" · listeden seçildi"</string>
+    <string name="longitude" formatted="false">"Boylam"</string>
+    <string name="method" formatted="false">"Hesaplama yöntemi"</string>
+    <string name="methodAngles" formatted="false">"Sabah açısı "</string>
+    <string name="methodAngles_2" formatted="false">"Yatsı akşamdan %1$s dk sonra"</string>
+    <string name="methodAngles_3" formatted="false">"Yatsı "</string>
+    <string name="methodName" formatted="false">"Ümmü'l-Kurâ, Mekke"</string>
+    <string name="methodName_10" formatted="false">"Vakıflar Bakanlığı, Umman"</string>
+    <string name="methodName_11" formatted="false">"Vakıflar Bakanlığı, Fas"</string>
+    <string name="methodName_12" formatted="false">"Mısır Genel Harita Kurumu"</string>
+    <string name="methodName_2" formatted="false">"Dünya Müslüman Birliği"</string>
+    <string name="methodName_3" formatted="false">"İslami İlimler Üniversitesi, Karaçi"</string>
+    <string name="methodName_4" formatted="false">"Dubai"</string>
+    <string name="methodName_5" formatted="false">"Kuveyt"</string>
+    <string name="methodName_6" formatted="false">"Katar"</string>
+    <string name="methodName_7" formatted="false">"ISNA, Kuzey Amerika"</string>
+    <string name="methodName_8" formatted="false">"Ay Gözlem Komitesi"</string>
+    <string name="methodName_9" formatted="false">"Singapur"</string>
+    <string name="middleHelp" formatted="false">"Her 10 dakikada bir hadis · her namazdan sonra 10 dakika zikir"</string>
+    <string name="middleRow" formatted="false">"Ekran koruyucunun ortası"</string>
+    <string name="midnight" formatted="false">"Gece yarısı"</string>
+    <string name="minutesAfterOther" formatted="false">"%1$s dk"</string>
+    <string name="mitLicence" formatted="false">"(MIT lisansı)"</string>
+    <string name="more" formatted="false">"DİĞER"</string>
+    <string name="moreFile" formatted="false">"The More row in your order (empty: automatic)"</string>
+    <string name="moreNote" formatted="false">"Diğer'de · %1$s. sıra"</string>
+    <string name="morningAdhkar" formatted="false">"Sabah zikirleri"</string>
+    <string name="moveEarlier" formatted="false">"Favorilerde öne al"</string>
+    <string name="moveEarlierMore" formatted="false">"Diğer'de öne al"</string>
+    <string name="moveLater" formatted="false">"Favorilerde geriye al"</string>
+    <string name="moveLaterMore" formatted="false">"Diğer'de geriye al"</string>
+    <string name="moveToFav" formatted="false">"Favorilere taşı…"</string>
+    <string name="moveToMore" formatted="false">"Diğer'e taşı…"</string>
+    <string name="near" formatted="false">"%1$s yakını"</string>
+    <string name="netNoInternet" formatted="false">"Bağlı, internet yok"</string>
+    <string name="netOff" formatted="false">"Bağlı değil"</string>
+    <string name="netWired" formatted="false">"Kabloyla bağlı"</string>
+    <string name="network" formatted="false">"Ağ ayarları"</string>
+    <string name="networkHelp" formatted="false">"Kablosuz ve Ethernet"</string>
+    <string name="networkRow" formatted="false">"TV ağ ayarları"</string>
+    <string name="newVersion" formatted="false">"Yeni sürüm çıktı: "</string>
+    <string name="newsAll" formatted="false">"Yenilikler"</string>
+    <string name="newsAlso" formatted="false">"Ve %1$s sürümünden"</string>
+    <string name="newsLater" formatted="false">"Daha sonra Ayarlar › Hakkında › Yenilikler'de bulabilirsiniz."</string>
+    <string name="newsOk" formatted="false">"Tamam"</string>
+    <string name="newsRow" formatted="false">"Yenilikler"</string>
+    <string name="newsRowHelp" formatted="false">"Her sürümün getirdikleri"</string>
+    <string name="newsTitle" formatted="false">"Awan TV %1$s: yenilikler"</string>
+    <string name="nextAdhanRow" formatted="false">"Sonraki ezan"</string>
+    <string name="nextIn" formatted="false">"%1$s vaktine"</string>
+    <string name="nextPrayer" formatted="false">"SONRAKİ NAMAZ"</string>
+    <string name="nextTag" formatted="false">"SONRAKİ"</string>
+    <string name="nightDimHelp" formatted="false">"Ekran koruyucu, yatsıdan iki saat sonra sabaha kadar"</string>
+    <string name="nightDimRow" formatted="false">"Gece karart"</string>
+    <string name="noAdhanYet" formatted="false">"Bu cihazda henüz ezan okunmadı"</string>
+    <string name="noCity" formatted="false">"Sonuç yok · başka bir yazımı deneyin veya koordinatları yazın"</string>
+    <string name="noCrash" formatted="false">"Kayıtlı durma yok"</string>
+    <string name="noDownloads" formatted="false">"İndirmeler durdu: TV'nin indirme yöneticisi yanıt vermiyor (Uygulamalar'da kapatılmış olabilir)"</string>
+    <string name="noIqama" formatted="false">"Kamet yok"</string>
+    <string name="noLocation" formatted="false">"Konumunuz henüz ayarlanmadı"</string>
+    <string name="noReciter" formatted="false">"Bu adla kâri yok"</string>
+    <string name="noStorage" formatted="false">"Bu TV'de uygulama için yer yok"</string>
+    <string name="none" formatted="false">"Yok"</string>
+    <string name="noneBody" formatted="false">"10 saniye geçti ve Awan TV'ye hiçbir şey ulaşmadı."</string>
+    <string name="noneTitle" formatted="false">"Hiçbir düğme gelmedi"</string>
+    <string name="noneWhy" formatted="false">"TV bazı düğmeleri hiçbir uygulama görmeden alır, bu yüzden burada özelleştirilemezler. Başka bir düğme deneyin."</string>
+    <string name="north" formatted="false">"▲ Kuzey"</string>
+    <string name="notFav" formatted="false">"Ana ekrana koymak için OK'yi basılı tutun"</string>
+    <string name="notInstalledFile" formatted="false">"(not installed on this TV)"</string>
+    <string name="notOnHome" formatted="false">"Ana ekranda değil"</string>
+    <string name="notSet" formatted="false">"Ayarlanmadı"</string>
+    <string name="nothingSaved" formatted="false">"Henüz kayıt yok · Radyo › Kayıtlı tilavetler"</string>
+    <string name="nowHint" formatted="false">"Kapatmak için Geri · ezandan sonra kendiliğinden kapanır"</string>
+    <string name="nowHintMany" formatted="false">"Kapatmak için Geri · %1$s dk sonra kendiliğinden kapanır"</string>
+    <string name="nowHintOne" formatted="false">"Kapatmak için Geri · 1 dk sonra kendiliğinden kapanır"</string>
+    <string name="nowLabel" formatted="false">"VAKİT GİRDİ"</string>
+    <string name="nowTag" formatted="false">"ŞİMDİ"</string>
+    <string name="occasionInDays" formatted="false">"%2$s gün sonra %1$s"</string>
+    <string name="occasionTomorrow" formatted="false">"Yarın %1$s"</string>
+    <string name="off" formatted="false">"Kapalı"</string>
+    <string name="open" formatted="false">"%1$s uygulamasını aç"</string>
+    <string name="otherLocation" formatted="false">"Başka bir konum"</string>
+    <string name="otherPlace" formatted="false">"Dünyada herhangi bir yer (arama veya koordinatlar)"</string>
+    <string name="packagesHelp" formatted="false">"Ones not installed on this TV are skipped"</string>
+    <string name="palestine" formatted="false">"Filistin"</string>
+    <string name="passed" formatted="false">"geçti"</string>
+    <string name="passedSunrise" formatted="false">"geçti"</string>
+    <string name="percent" formatted="false">"%%%1$s"</string>
+    <string name="permissionHelp" formatted="false">"Ekran koruyucuyu ayarlamak ve hizmeti yeniden bağlamak için (kurulumda verilir)"</string>
+    <string name="permissionRow" formatted="false">"Ayar izni"</string>
+    <string name="photoEveryHelp" formatted="false">"Ana ekran ve ekran koruyucu · Otomatik: ana ekran günde bir, ekran koruyucu her 10 dakikada"</string>
+    <string name="photoEveryRow" formatted="false">"Fotoğraf değişimi"</string>
+    <string name="pickReciter" formatted="false">"Listeden bir kâri seçin"</string>
+    <string name="place" formatted="false">", "</string>
+    <string name="placeAfter" formatted="false">"Sonra o yerin camilerinin hesaplama yöntemini seçin"</string>
+    <string name="placeBad" formatted="false">"Sayıları kontrol edin: enlem −90 ile 90, boylam −180 ile 180 arası"</string>
+    <string name="placeCancel" formatted="false">"İptal"</string>
+    <string name="placeIntro" formatted="false">"Arapça veya İngilizce adla arayın, sonra kaydedin · ya da küçük bir yer için koordinatları yazın"</string>
+    <string name="placeIqama" formatted="false">"Kamet: resmî bekleme süresi (%1$s)"</string>
+    <string name="placeMethod" formatted="false">"Yöntem: %1$s · kaydettikten sonra kontrol edin"</string>
+    <string name="placeMethod_2" formatted="false">"Yöntem: "</string>
+    <string name="placeMethod_3" formatted="false">"Yöntem: %1$s · %2$s gibi"</string>
+    <string name="placeName" formatted="false">"Yerin adı (değiştirebilirsiniz)"</string>
+    <string name="placeNoName" formatted="false">"Yere bir ad verin"</string>
+    <string name="placeSave" formatted="false">"Kaydet"</string>
+    <string name="placeTitle" formatted="false">"Dünyada herhangi bir yer"</string>
+    <string name="play" formatted="false">"Ezanı çal"</string>
+    <string name="played" formatted="false">"Çalındı"</string>
+    <string name="played_2" formatted="false">"Çalınamadı"</string>
+    <string name="population" formatted="false">"%1$s bin"</string>
+    <string name="populationMillion" formatted="false">"%1$s milyon"</string>
+    <string name="pressHelp" formatted="false">"TV'nin kendi kumandasında veya ona bağlı herhangi bir Bluetooth kumandada."</string>
+    <string name="pressTitle" formatted="false">"Özelleştirilecek düğmeye basın"</string>
+    <string name="pressWaitingOne" formatted="false">"%1$s saniye bekleniyor"</string>
+    <string name="pressWaitingOther" formatted="false">"%1$s saniye bekleniyor"</string>
+    <string name="preview" formatted="false">"Bu ayarlarla bugün ikindi"</string>
+    <string name="putInFav" formatted="false">"Favorilere koy…"</string>
+    <string name="putInMore" formatted="false">"Diğer'e koy…"</string>
+    <string name="qibla" formatted="false">"KIBLE"</string>
+    <string name="qiblaDirection" formatted="false">" · "</string>
+    <string name="qiblaHint" formatted="false">"Pusulanın kuzeyini gerçek kuzeye hizalayın"</string>
+    <string name="qiblaRelative_2" formatted="false">"Kıble "</string>
+    <string name="qrHint" formatted="false">"Telefonunuzun kamerasıyla tarayın"</string>
+    <string name="queuedOnly" formatted="false">"Başka bir kayıttan sonra %1$s bekliyor"</string>
+    <string name="radio" formatted="false">"Radyo"</string>
+    <string name="radioDarkHelp" formatted="false">"Ekran karanlık, radyo açık · herhangi bir tuş geri getirir"</string>
+    <string name="radioDarkRow" formatted="false">"Dinlerken ekranı kapat"</string>
+    <string name="radioNote" formatted="false">"Ana ekranda ve ekran koruyucuda çalmaya devam eder · başka bir uygulama ses çalınca durur"</string>
+    <string name="radioPlay" formatted="false">"Çal"</string>
+    <string name="radioResumeRowFile" formatted="false">"The radio after the adhan"</string>
+    <string name="radioRowHelp" formatted="false">" · internet gerekir"</string>
+    <string name="radioStatus" formatted="false">"Yayında"</string>
+    <string name="radioStatus_2" formatted="false">"Bağlanıyor…"</string>
+    <string name="radioStatus_3" formatted="false">"Sinyal kesildi · yeniden deneniyor"</string>
+    <string name="radioStatus_4" formatted="false">"Ezan için duraklatıldı"</string>
+    <string name="radioStatus_5" formatted="false">"Kapalı"</string>
+    <string name="radioStop" formatted="false">"Durdur"</string>
+    <string name="ramadanDay" formatted="false">"Ramazan'ın %1$s. günü"</string>
+    <string name="rangeValues" formatted="false">"Values: %1$s to %2$s"</string>
+    <string name="recitationsCredit" formatted="false">"Tilavetler: mp3quran.net · kârilerine aittir"</string>
+    <string name="recitationsCreditLong" formatted="false">"Tilavetler: mp3quran.net (her geliştiricinin kullanımına açık) · kârilerine aittir"</string>
+    <string name="recitersOffline" formatted="false">"mp3quran.net'e ulaşılamadı · interneti kontrol edip bu ekranı yeniden açın"</string>
+    <string name="ref" formatted="false">"Nisâ 4:103"</string>
+    <string name="region" formatted="false">"Bölge"</string>
+    <string name="remind" formatted="false">"Namazdan önce hatırlat"</string>
+    <string name="remindHelp" formatted="false">"Ana ekranda ve videonun üstünde"</string>
+    <string name="remindVoiceHelp" formatted="false">"Hatırlatıcıyla birlikte «اقترب موعد صلاة …» der"</string>
+    <string name="remindVoiceRow" formatted="false">"Sesli hatırlatıcı"</string>
+    <string name="removeHelp" formatted="false">"Eski ekran koruyucuyu geri koyar, sonra kaldırır"</string>
+    <string name="removeRecitationsSub" formatted="false">"Music/Awan TV içinde %1$s · tutarsanız bir sonraki kurulum için kalır"</string>
+    <string name="removeRecitationsTitle" formatted="false">"Kayıtlı tilavetler de silinsin mi?"</string>
+    <string name="removeRow" formatted="false">"Awan TV'yi kaldır"</string>
+    <string name="reserveNote" formatted="false">"TV için her zaman 2 GB boş bırakılır"</string>
+    <string name="resetBackupNote" formatted="false">"Geçerli ayarlar önce TV'de saklanır,\nve bir bilgisayardan şu komutla geri getirilebilir:"</string>
+    <string name="resetContinue" formatted="false">"Devam"</string>
+    <string name="resetGoesHead" formatted="false">"Yeni kurulumdaki hâline döner:"</string>
+    <string name="resetHelp" formatted="false">"Awan TV'nin her ayarı yeni kurulumdaki gibi olur, sonra konumdan başlar"</string>
+    <string name="resetHoldHelp" formatted="false">"Üç saniye · bırakınca yeniden başlar, başka bir düğme iptal eder"</string>
+    <string name="resetHoldTitle" formatted="false">"Onaylamak için OK'yi basılı tutun"</string>
+    <string name="resetRow" formatted="false">"Ayarları sıfırla"</string>
+    <string name="resetStaysHead" formatted="false">"Olduğu gibi kalır:"</string>
+    <string name="resetTitle" formatted="false">"Ayarlar sıfırlansın mı?"</string>
+    <string name="roomButton" formatted="false">"Oda yönünü değiştir"</string>
+    <string name="roomButton_2" formatted="false">"Oda yönünü ayarla"</string>
+    <string name="roomHelp" formatted="false">"Kıble oturduğunuz yere göre gösterilsin diye"</string>
+    <string name="roomKeys" formatted="false">"◀ ▶  5°     ▲ ▼  45°     OK  Kaydet     Geri  İptal"</string>
+    <string name="roomTip" formatted="false">"TV'ye dönük durun, telefonunuzda pusula uygulamasını açıp önünüzde düz tutun, sonra buradaki sayıyı onun gösterdiğine ayarlayın. TV yerinde kaldıkça bir kez yeterlidir."</string>
+    <string name="roomTitle" formatted="false">"Oda yönü"</string>
+    <string name="rowNow" formatted="false">"şimdi"</string>
+    <string name="runHelp" formatted="false">"Ana ekran için Awan TV hizmeti açık olmalı (Erişilebilirlik, aşağıda)"</string>
+    <string name="runHelp_2" formatted="false">"Ana ekran ve vakitli, zikirli ekran koruyucu"</string>
+    <string name="runHelp_3" formatted="false">"Yalnızca ana ekran · ekran koruyucu ve zikir yok"</string>
+    <string name="runHelp_4" formatted="false">"Yalnızca ekran koruyucu · TV'nin kendi ana ekranı"</string>
+    <string name="runHelp_5" formatted="false">"Kapalı · ezan ve hatırlatıcılar kendi ayarlarını korur"</string>
+    <string name="runRow" formatted="false">"Çalışma biçimi"</string>
+    <string name="running" formatted="false">"Çalışıyor"</string>
+    <string name="running_2" formatted="false">"Durdu"</string>
+    <string name="saved" formatted="false">"✓  Kaydedildi"</string>
+    <string name="savedSize" formatted="false">"Kayıtlı "</string>
+    <string name="saverIdleHelp" formatted="false">"TV kendi bekleme süresinden sonra başlatır · bu ana ekran içindir"</string>
+    <string name="saverIdleHelp_2" formatted="false">"Ana ekranda hiçbir tuşa basılmazsa · sonra TV'nin ayarına göre kapanır"</string>
+    <string name="saverIdleRow" formatted="false">"Ekran koruyucu süresi"</string>
+    <string name="saverNowHelp" formatted="false">"Hemen gösterir · herhangi bir tuş kapatır"</string>
+    <string name="saverNowRow" formatted="false">"Ekran koruyucu şimdi"</string>
+    <string name="saverPhotosHelp" formatted="false">"Yatsıdan sabaha yalnızca koyu olanlar"</string>
+    <string name="saverPhotosRow" formatted="false">"Ekran koruyucu fotoğrafları"</string>
+    <string name="saverStatusRow" formatted="false">"Ekran koruyucu"</string>
+    <string name="school" formatted="false">"İkindi: Asr-ı Sânî (Hanefî)"</string>
+    <string name="school_2" formatted="false">"İkindi: Asr-ı Evvel (Şâfiî)"</string>
+    <string name="screenOff" formatted="false">"Ekranı kapat"</string>
+    <string name="screenOffNote" formatted="false">"Ekran kapalı, radyo çalıyor · dönmek için herhangi bir tuşa basın"</string>
+    <string name="searchCity" formatted="false">"Şehir ara"</string>
+    <string name="searchReciter" formatted="false">"Kâri ara"</string>
+    <string name="sectionAbout" formatted="false">"Hakkında"</string>
+    <string name="sectionDevice" formatted="false">"Cihaz ayarları"</string>
+    <string name="sectionDisplay" formatted="false">"Görünüm ve dil"</string>
+    <string name="sectionIqama" formatted="false">"Kamet"</string>
+    <string name="sectionNetwork" formatted="false">"Ağ"</string>
+    <string name="sectionNetwork_2" formatted="false">"Ağ · "</string>
+    <string name="sectionPrayer" formatted="false">"Namaz vakitleri"</string>
+    <string name="sectionRadio" formatted="false">"Radyo"</string>
+    <string name="sectionReminders" formatted="false">"Hatırlatıcılar ve ezan"</string>
+    <string name="sectionRun" formatted="false">"Awan TV"</string>
+    <string name="serviceHelp" formatted="false">"Cihazın ana ekranı yerine ana ekran, ve her uygulamanın üstünde ezan"</string>
+    <string name="serviceOffHelp" formatted="false">"Cihazın Ayarlar › Erişilebilirlik › Awan TV bölümünden açın"</string>
+    <string name="serviceRow" formatted="false">"Awan TV hizmeti"</string>
+    <string name="setLocation" formatted="false">"Konumu ayarla"</string>
+    <string name="setYourLocation" formatted="false">"Konumunuzu ayarlayın"</string>
+    <string name="settings" formatted="false">"Ayarlar"</string>
+    <string name="someOf" formatted="false">"%1$s / %2$s"</string>
+    <string name="sourceRow" formatted="false">"Kaynak ve güncellemeler"</string>
+    <string name="stationAroundClock" formatted="false">"Günün her saati tilavet"</string>
+    <string name="stationFileHelp" formatted="false">"Sent to the chosen TVs; a TV that doesn't have it keeps its own"</string>
+    <string name="stationRow" formatted="false">"İstasyon"</string>
+    <string name="stationSaved" formatted="false">"TV'de kayıtlı"</string>
+    <string name="stationSavedFile" formatted="false">"a recitation saved on this TV, so not copied; pick it on the TV"</string>
+    <string name="statusHelp" formatted="false">"Hizmet, ekran koruyucu ve ezan bu cihazda çalışıyor mu"</string>
+    <string name="statusRow" formatted="false">"Uygulama durumu"</string>
+    <string name="statusSection" formatted="false">"Hakkında › Uygulama durumu"</string>
+    <string name="stockHelp" formatted="false">"Başka bir uygulama açana kadar kalır"</string>
+    <string name="stockRow" formatted="false">"TV'nin kendi ana ekranı"</string>
+    <string name="stop" formatted="false">"Ezanı durdur"</string>
+    <string name="suhoorEnds" formatted="false">"İmsak %1$s"</string>
+    <string name="suhoorEndsIn" formatted="false">"İmsaka kalan"</string>
+    <string name="suhoorTag" formatted="false">"İMSAK"</string>
+    <string name="surahMany" formatted="false">"%1$s sure"</string>
+    <string name="surahOne" formatted="false">"%1$s sure"</string>
+    <string name="textValue" formatted="false">"Values: text in quotes"</string>
+    <string name="themeHelp" formatted="false">"Ana ekran ve Ayarlar · Otomatik: gündüz lacivert, akşamdan sonra füme"</string>
+    <string name="themeRow" formatted="false">"Renkler"</string>
+    <string name="timeBetween" formatted="false">"Values: a time \"HH:MM\" from %1$s to %2$s"</string>
+    <string name="timeOrEmpty" formatted="false">"Values: a time \"HH:MM\" (24-hour), or \"\" for none"</string>
+    <string name="today" formatted="false">"Bugün ve Kıble"</string>
+    <string name="todayWord" formatted="false">"bugün"</string>
+    <string name="tryAgain" formatted="false">"Yeniden dene"</string>
+    <string name="tvMarker" formatted="false">"▲ TV"</string>
+    <string name="upToDate" formatted="false">"En son sürüm sizde"</string>
+    <string name="updateAgain" formatted="false">"Güncelleyene kadar her hafta hatırlatırız; Ayarlar › Hakkında'da da var."</string>
+    <string name="updateConfirm" formatted="false">"Android bu uygulamanın güncellenip güncellenmeyeceğini sorarsa Güncelle'ye gelip OK'ye basın. Sonra yeni ana ekran geri gelir."</string>
+    <string name="updateContinue" formatted="false">"Kuruluma devam et"</string>
+    <string name="updateDownloading" formatted="false">"Sürüm indiriliyor: "</string>
+    <string name="updateDownloading_2" formatted="false">"… %%"</string>
+    <string name="updateDownloading_3" formatted="false">""</string>
+    <string name="updateFailed" formatted="false">"Güncelleme tamamlanamadı. TV'nin internet bağlantısını kontrol edip yeniden deneyin veya kodu tarayıp indirme sayfasından güncelleyin."</string>
+    <string name="updateHave" formatted="false">"Bu TV'de %1$s var."</string>
+    <string name="updateHow" formatted="false">"İndirme sayfasını açmak için kodu bir telefonun kamerasıyla tarayın, sonra telefon yükleyicisiyle veya bir Windows bilgisayardan güncelleyin. Ayarlar ve kayıtlı tilavetler kalır."</string>
+    <string name="updateHowSelf" formatted="false">"Şimdi güncelle sürümü indirir ve bu TV'ye kurar; ayarlar ve kayıtlı tilavetler kalır. Ya da indirme sayfasını açmak için kodu bir telefonla tarayın."</string>
+    <string name="updateInstalling" formatted="false">"Kuruluyor…"</string>
+    <string name="updateLater" formatted="false">"Sonra"</string>
+    <string name="updateLeave" formatted="false">"Bu pencereden çıkabilirsiniz; indirme sürer."</string>
+    <string name="updateManual" formatted="false">"Uygulamanın her özelliğini, TV'de tek basışla güncelleme de dahil, almak için telefon yükleyicisiyle veya bir Windows bilgisayardan kurun: indirme sayfasındaki 1. ve 2. yollar."</string>
+    <string name="updateMute" formatted="false">"Bu sürümü bana hatırlatma"</string>
+    <string name="updateNow" formatted="false">"Şimdi güncelle"</string>
+    <string name="updateOpen" formatted="false">"Sürüm sayfasını aç"</string>
+    <string name="updateRetry" formatted="false">"Yeniden dene"</string>
+    <string name="updateThen" formatted="false">"Sonra Android bu uygulamanın güncellenip güncellenmeyeceğini sorar: Güncelle'ye gelip OK'ye basın, yeni ana ekran saniyeler içinde geri gelir."</string>
+    <string name="updateTitle" formatted="false">"Yeni sürüm: Awan TV %1$s"</string>
+    <string name="updateWhy" formatted="false">"Uygulamanın kullandığınızdan daha yeni bir sürümü var. Yeni özellikler ve düzeltmeler için güncelleyin; her zaman mevcut en son sürüme güncellemenizi öneririz."</string>
+    <string name="valuesWord" formatted="false">"Values: "</string>
+    <string name="version" formatted="false">"Sürüm "</string>
+    <string name="versionRow" formatted="false">"Sürüm"</string>
+    <string name="voiceHelp" formatted="false">"Sabah hariç her namaz · listede gezinirken çalar"</string>
+    <string name="voiceHelpFile" formatted="false">"Every prayer but Fajr"</string>
+    <string name="voiceRow" formatted="false">"Ezan sesi"</string>
+    <string name="waitingSpace" formatted="false">"Bekliyor: 2 GB'tan az boş yer · devam etmek için bir şey silin"</string>
+    <string name="warnBody" formatted="false">"Awan TV hangi düğmeye bastığınızı bilsin diye, bir düğme özelleştirildiğinde kumandanın her basışı ondan geçer."</string>
+    <string name="warnTitle" formatted="false">"İlk düğmeyi özelleştirmeden önce"</string>
+    <string name="warnUndo" formatted="false">"Tüm özel düğmeleri kaldırın, kumanda eskisi gibi olur."</string>
+    <string name="warnVolume" formatted="false">"Çoğu TV'de hiçbir fark hissetmezsiniz. Ama Ses düğmesini basılı tutmak sesi yalnızca bir adım değiştirir, bu yüzden birkaç kez basın."</string>
+    <string name="weatherCredit" formatted="false">"Hava durumu verisi: Open-Meteo.com (CC BY 4.0)"</string>
+    <string name="weatherHelp" formatted="false">"Saatin yanında · Open-Meteo'dan her 30 dakikada, çevrimdışıyken gizlenir"</string>
+    <string name="weatherHelp_2" formatted="false">"Hava durumu için bağlantı yok"</string>
+    <string name="weatherNone" formatted="false">"3 saattir güncelleme yok (ağ veya konum)"</string>
+    <string name="weatherRow" formatted="false">"Hava durumu"</string>
+    <string name="weatherStatusHelp" formatted="false">"Son güncelleme %1$s · Open-Meteo"</string>
+    <string name="works" formatted="false">"Çalışıyor"</string>
+    <string name="works_2" formatted="false">"Ulaşılamıyor"</string>
+    <string-array name="adhkarModes">
+        <item>"Kapalı"</item>
+        <item>"Geniş"</item>
+        <item>"Tercih edilen"</item>
+    </string-array>
+    <string-array name="afterAdhanChoices">
+        <item>"Devam eder"</item>
+        <item>"Kapalı kalır"</item>
+    </string-array>
+    <string-array name="asrSchools">
+        <item>"Asr-ı Evvel"</item>
+        <item>"Asr-ı Sânî"</item>
+    </string-array>
+    <string-array name="backgrounds">
+        <item>"Desen"</item>
+        <item>"Fotoğraflar"</item>
+    </string-array>
+    <string-array name="callCloseChoices">
+        <item>"Ezandan sonra"</item>
+        <item>"1 dk"</item>
+        <item>"5 dk"</item>
+        <item>"10 dk"</item>
+    </string-array>
+    <string-array name="clocks">
+        <item>"TV"</item>
+        <item>"12 saat"</item>
+        <item>"24 saat"</item>
+    </string-array>
+    <string-array name="digitChoicesFile">
+        <item>"By language"</item>
+        <item>"0123"</item>
+        <item>"٠١٢٣"</item>
+    </string-array>
+    <string-array name="fastTomorrow">
+        <item>"Yarın: pazartesi orucu"</item>
+        <item>"Yarın: perşembe orucu"</item>
+        <item>"Yarın: Eyyâm-ı Bîd orucu"</item>
+        <item>"Yarın: Tasua orucu"</item>
+        <item>"Yarın: Aşure orucu"</item>
+    </string-array>
+    <string-array name="fileHeader">
+        <item>"Awan TV settings: change the values, then send them to the TV:"</item>
+        <item>"  powershell -ExecutionPolicy Bypass -File tools\\AwanTV-settings.ps1 -Import -File &lt;this file&gt; -Device &lt;the TV&gt;"</item>
+        <item>"Above each setting: what it is, its values and its default. Lines starting with // are notes, not read."</item>
+        <item>"A setting left out of the file stays as it is on the TV. The whole file is checked: one mistake stops the import and nothing changes."</item>
+        <item>"Before importing, the TV's settings are kept as a backup in state\\settings on the computer."</item>
+    </string-array>
+    <string-array name="fridayChoices">
+        <item>"Ülkeye göre"</item>
+        <item>"Öğle vaktinde"</item>
+        <item>"Sabit saat"</item>
+    </string-array>
+    <string-array name="hijriMonths">
+        <item>"Muharrem"</item>
+        <item>"Safer"</item>
+        <item>"Rebiülevvel"</item>
+        <item>"Rebiülahir"</item>
+        <item>"Cemaziyelevvel"</item>
+        <item>"Cemaziyelahir"</item>
+        <item>"Recep"</item>
+        <item>"Şaban"</item>
+        <item>"Ramazan"</item>
+        <item>"Şevval"</item>
+        <item>"Zilkade"</item>
+        <item>"Zilhicce"</item>
+    </string-array>
+    <string-array name="imsakChoices">
+        <item>"Yok"</item>
+        <item>"5 dk"</item>
+        <item>"10 dk"</item>
+        <item>"15 dk"</item>
+        <item>"20 dk"</item>
+    </string-array>
+    <string-array name="iqamaModes">
+        <item>"Kapalı"</item>
+        <item>"Ülke"</item>
+        <item>"Dakika"</item>
+        <item>"Sabit"</item>
+    </string-array>
+    <string-array name="iqamaPeriods">
+        <item>"Diğer günler"</item>
+        <item>"Ramazan"</item>
+    </string-array>
+    <string-array name="middleChoices">
+        <item>"İkisi"</item>
+        <item>"Hadis"</item>
+        <item>"Zikir"</item>
+        <item>"Hiçbiri"</item>
+    </string-array>
+    <string-array name="news_1_10_0">
+        <item>"The radio on your TVs from the computer"</item>
+        <item>"From the settings editor: see what each TV is playing now, and start or stop the radio on one TV or on all of them. A TV playing something else is not cut off unless you choose to."</item>
+    </string-array>
+    <string-array name="news_1_13_0">
+        <item>"A safety screen if it stops"</item>
+        <item>"If Awan TV stops unexpectedly, a screen restarts it or opens the TV's own home. If it stops again, the TV runs on its own home for half an hour, so it stays usable."</item>
+        <item>"Put a TV right from the phone or the computer"</item>
+        <item>"Tick an up-to-date TV in the installer's My TVs or the editor's Update TVs, and it is set up again without sending the app anew."</item>
+    </string-array>
+    <string-array name="news_1_14_0">
+        <item>"The iqamah countdown over apps"</item>
+        <item>"From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."</item>
+        <item>"Photos in the screensaver"</item>
+        <item>"A photo every ten minutes behind the times, only dark ones from Isha until Fajr. Turn them off in Settings › Display &amp; language."</item>
+    </string-array>
+    <string-array name="news_1_14_1">
+        <item>"Colours that follow the time"</item>
+        <item>"Lapis by day and Charcoal after Maghrib, easier on the eyes at night. One colour all day in Settings › Display &amp; language › Colours."</item>
+    </string-array>
+    <string-array name="news_1_14_2">
+        <item>"Saved recitations keep their names"</item>
+        <item>"After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."</item>
+    </string-array>
+    <string-array name="news_1_17_0">
+        <item>"Ana ekrandan dil"</item>
+        <item>"Ayarlar'ın yanındaki dünya düğmesi dil listesini açar, her dil kendi adıyla. Seçimden sonra ekran Kalsın mı yoksa Geri dön mü diye sorar ve yanıt gelmezse on saniye sonra kendiliğinden geri döner."</item>
+    </string-array>
+    <string-array name="news_1_18_0">
+        <item>"Urduca"</item>
+        <item>"Her ekran Urduca, kâriler ve sureler de Urduca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+        <item>"Orucun başladığı an"</item>
+        <item>"Ramazan'da sabah hücresi orucun başladığını söyler. Öncesindeki isteğe bağlı ihtiyat payı Ayarlar'dan ayarlanır."</item>
+    </string-array>
+    <string-array name="news_1_1_0">
+        <item>"Remote buttons"</item>
+        <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
+    </string-array>
+    <string-array name="news_1_2_0">
+        <item>"Adjust the times by minutes"</item>
+        <item>"Settings › Prayer times › Adjust the times and the date: each time up to 30 minutes earlier or later, to match your masjid."</item>
+        <item>"A new version's QR code"</item>
+        <item>"When a newer version is out, About opens a window with a code to scan with a phone to reach its page."</item>
+        <item>"What's new"</item>
+        <item>"This window, once after each update, and in About."</item>
+    </string-array>
+    <string-array name="news_1_3_0">
+        <item>"Oman's Ministry of Awqaf method"</item>
+        <item>"Oman's prayer times by its Ministry of Awqaf, chosen for its cities by themselves."</item>
+        <item>"Three radio stations"</item>
+        <item>"Oman's Holy Quran Radio, and Saudi Arabia's Quran Radio and Nida Al-Islam, in Settings › Radio."</item>
+        <item>"The phone installer"</item>
+        <item>"It tells you of a newer installer, and says why it couldn't reach the TV and what to do."</item>
+    </string-array>
+    <string-array name="news_1_4_0">
+        <item>"The station from Home"</item>
+        <item>"The radio card has a Station button: change the station or recitation without opening Settings."</item>
+        <item>"Hold a button"</item>
+        <item>"Each button you customised in Remote buttons can open something else when held."</item>
+        <item>"Two adhan voices"</item>
+        <item>"The adhan of Al-Masjid an-Nabawi, and Sheikh Ragheb Mustafa Ghalwash's, in Settings › Adhan."</item>
+    </string-array>
+    <string-array name="news_1_5_0">
+        <item>"Told of a new version"</item>
+        <item>"When a newer version is out, Home tells you with a code to scan with a phone, and a gold mark stays on the Settings button until you update."</item>
+    </string-array>
+    <string-array name="news_1_7_0">
+        <item>"Update with one press"</item>
+        <item>"When a newer version is out, press Update now in its window: the app downloads it and installs it on the TV itself, with no phone or computer."</item>
+    </string-array>
+    <string-array name="news_1_8_0">
+        <item>"Morocco's times as the ministry publishes them"</item>
+        <item>"The Moroccan Ministry of Habous' method, with the table of each of its 191 localities; pick the one near you in Settings › Prayer times › Ministry table."</item>
+    </string-array>
+    <string-array name="news_1_9_0">
+        <item>"Recitations and the station from the computer"</item>
+        <item>"From the settings editor on Windows: choose recitations for one or more TVs to download by themselves, and change the station, without going to each TV."</item>
+    </string-array>
+    <string-array name="occasion">
+        <item>"Ramazan"</item>
+        <item>"Ramazan Bayramı"</item>
+        <item>"Arefe günü"</item>
+        <item>"Kurban Bayramı"</item>
+    </string-array>
+    <string-array name="occasionToday">
+        <item>"Hayırlı Ramazanlar"</item>
+        <item>"Bayramınız mübarek olsun"</item>
+        <item>"Bugün Arefe günü"</item>
+        <item>"Bayramınız mübarek olsun"</item>
+    </string-array>
+    <string-array name="octant">
+        <item>"Kuzey"</item>
+        <item>"Kuzeydoğu"</item>
+        <item>"Doğu"</item>
+        <item>"Güneydoğu"</item>
+        <item>"Güney"</item>
+        <item>"Güneybatı"</item>
+        <item>"Batı"</item>
+        <item>"Kuzeybatı"</item>
+    </string-array>
+    <string-array name="photoEveryChoices">
+        <item>"Otomatik"</item>
+        <item>"Her 10 dakikada"</item>
+        <item>"Her yarım saatte"</item>
+        <item>"Her saat"</item>
+        <item>"Her namazla"</item>
+        <item>"Her gün"</item>
+    </string-array>
+    <string-array name="prayerNames">
+        <item>"Sabah"</item>
+        <item>"Güneş"</item>
+        <item>"Öğle"</item>
+        <item>"İkindi"</item>
+        <item>"Akşam"</item>
+        <item>"Yatsı"</item>
+    </string-array>
+    <string-array name="qiblaRelative">
+        <item>"önünüzde"</item>
+        <item>"önde, sağınızda"</item>
+        <item>"sağınızda"</item>
+        <item>"arkada, sağınızda"</item>
+        <item>"arkanızda"</item>
+        <item>"arkada, solunuzda"</item>
+        <item>"solunuzda"</item>
+        <item>"önde, solunuzda"</item>
+    </string-array>
+    <string-array name="radioDarkChoices">
+        <item>"Ekran koruyucuyla"</item>
+        <item>"15 dk sonra"</item>
+        <item>"Asla"</item>
+    </string-array>
+    <string-array name="regions">
+        <item>"Arap dünyası"</item>
+        <item>"Asya"</item>
+        <item>"Avrupa"</item>
+        <item>"Amerika"</item>
+        <item>"Afrika"</item>
+        <item>"Okyanusya"</item>
+    </string-array>
+    <string-array name="remindChoices">
+        <item>"5 dk"</item>
+        <item>"10 dk"</item>
+        <item>"15 dk"</item>
+        <item>"20 dk"</item>
+        <item>"30 dk"</item>
+        <item>"Kapalı"</item>
+    </string-array>
+    <string-array name="removeChoices">
+        <item>"Şimdi kaldır"</item>
+        <item>"İptal"</item>
+    </string-array>
+    <string-array name="removeRecitationsChoices">
+        <item>"Kalsın"</item>
+        <item>"Sil"</item>
+    </string-array>
+    <string-array name="resetGoes">
+        <item>"Konum, yöntem, kamet ve cuma"</item>
+        <item>"Hatırlatıcılar, ezan sesleri ve sabah ezanı düzeyi"</item>
+        <item>"Renkler, fotoğraflar, dil ve hava durumu"</item>
+        <item>"Favori uygulamalar ve Diğer satırı"</item>
+        <item>"Özel kumanda düğmeleri"</item>
+    </string-array>
+    <string-array name="resetStays">
+        <item>"Kayıtlı tilavetler"</item>
+        <item>"TV'nin önceki ekran koruyucusu (Awan TV'yi sonra kaldırmak için)"</item>
+        <item>"Awan TV hizmeti ve izinleri"</item>
+    </string-array>
+    <string-array name="runModes">
+        <item>"Tümü"</item>
+        <item>"Ana ekran"</item>
+        <item>"Ekran koruyucu"</item>
+        <item>"Kapalı"</item>
+    </string-array>
+    <string-array name="saverIdleChoices">
+        <item>"5 dk"</item>
+        <item>"10 dk"</item>
+        <item>"15 dk"</item>
+        <item>"30 dk"</item>
+    </string-array>
+    <string-array name="saverStatusHelp">
+        <item>"Cihazın ekran koruyucusu Awan TV"</item>
+        <item>"Awan TV onu ana ekrandan kendisi açar (cihazınkini ayarlama izni yok)"</item>
+        <item>"«Awan TV» bölümünde kapalı"</item>
+    </string-array>
+    <string-array name="sky">
+        <item>"Açık"</item>
+        <item>"Parçalı bulutlu"</item>
+        <item>"Bulutlu"</item>
+        <item>"Sis"</item>
+        <item>"Çisenti"</item>
+        <item>"Yağmur"</item>
+        <item>"Kar"</item>
+        <item>"Fırtına"</item>
+    </string-array>
+    <string-array name="stationGroups">
+        <item>"Kur'an radyoları"</item>
+        <item>"Kâriler"</item>
+        <item>"TV'de kayıtlı"</item>
+    </string-array>
+    <string-array name="themes">
+        <item>"Lacivert"</item>
+        <item>"Zümrüt"</item>
+        <item>"Bordo"</item>
+        <item>"Füme"</item>
+        <item>"Parşömen"</item>
+        <item>"Otomatik"</item>
+    </string-array>
+    <string-array name="weatherChoices">
+        <item>"Kapalı"</item>
+        <item>"°C"</item>
+        <item>"°F"</item>
+    </string-array>
+    <string-array name="weekdaysShort">
+        <item>"Paz"</item>
+        <item>"Pzt"</item>
+        <item>"Sal"</item>
+        <item>"Çar"</item>
+        <item>"Per"</item>
+        <item>"Cum"</item>
+        <item>"Cmt"</item>
+    </string-array>
+</resources>

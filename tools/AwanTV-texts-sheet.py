@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# AwanTV-texts-sheet.py - Version 1.0.0
+# AwanTV-texts-sheet.py - Version 1.1.0
 # The side-by-side sheet given with every release that adds a language (languages plan, phase 4): one row per
 # text, numbered, with its key, where it shows, the Arabic, the English, the new language and a notes column, read
 # from the very files the release carries: app/src/main/res/values*/texts.xml (strings, then each array item as
@@ -7,21 +7,22 @@
 # assets/hadith/hadith.json: countAr/countEn/countXx, refAr/refEn/refXx), each different English text once.
 # "Where it shows": the screens whose code calls the Text method that reads the text (SCREENS below).
 #
-# Usage: python3 tools/AwanTV-texts-sheet.py <language, e.g. ur> <version, e.g. 1.18.0b>
-#   writes state/texts/AwanTV-texts-<version>-<language>.xlsx (needs openpyxl: pip install openpyxl)
+# Usage: python3 tools/AwanTV-texts-sheet.py <language(s), e.g. ur or ur,tr> <version, e.g. 1.18.0b>
+#   writes state/texts/AwanTV-texts-<version>-<languages joined by ->.xlsx (needs openpyxl: pip install openpyxl)
+# 1.1.0: several languages, a column each after English (for a review of all of them at once).
 import json, os, re, sys
 import xml.etree.ElementTree as ET
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(ROOT, "app", "src", "main", "res")
 TEXT = os.path.join(ROOT, "app", "src", "main", "java", "app", "awanpro", "tv", "Text.java")
 ASSETS = os.path.join(ROOT, "app", "src", "main", "assets")
 print("AwanTV-texts-sheet " + VERSION)
 if len(sys.argv) != 3:
-    sys.exit("usage: AwanTV-texts-sheet.py <language, e.g. ur> <version, e.g. 1.18.0b>")
-lang, version = sys.argv[1], sys.argv[2]
-folder = {"id": "values-in", "he": "values-iw"}.get(lang, "values-" + lang)
+    sys.exit("usage: AwanTV-texts-sheet.py <language(s), e.g. ur or ur,tr> <version, e.g. 1.18.0b>")
+langs, version = [l.strip() for l in sys.argv[1].split(",") if l.strip()], sys.argv[2]
+folder_of = lambda lang: {"id": "values-in", "he": "values-iw"}.get(lang, "values-" + lang)
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 
@@ -63,9 +64,12 @@ def read(name):
 
 en_s, en_a, _ = read("values")
 ar_s, ar_a, _ = read("values-ar")
-xx_s, xx_a, has_lang = read(folder)
-if not has_lang:
-    print("No %s/texts.xml yet: the new language's column is empty." % folder)
+XX = []
+for lang in langs:
+    xs, xa, has = read(folder_of(lang))
+    if not has:
+        print("No %s/texts.xml yet: its column is empty." % folder_of(lang))
+    XX.append((lang, xs, xa, has))
 
 # Where each key shows: the screens whose code calls the Text method that reads it (MainActivity: Home, ...);
 # a method called only from other Text methods takes their screens; else Text.java's section comment above it.
@@ -133,15 +137,15 @@ for key, methods in method_keys.items():
 
 rows = []
 for key in sorted(en_s, key=str.lower):
-    rows.append((key, where.get(key, ""), ar_s.get(key, ""), en_s[key], xx_s.get(key, "")))
+    rows.append((key, where.get(key, ""), ar_s.get(key, ""), en_s[key], [xs.get(key, "") for _, xs, _, _ in XX]))
 for key in sorted(en_a, key=str.lower):
     for i, v in enumerate(en_a[key]):
         a = ar_a.get(key, [])
-        x = xx_a.get(key, [])
-        rows.append(("%s[%d]" % (key, i), where.get(key, ""), a[i] if i < len(a) else "", v, x[i] if i < len(x) else ""))
+        xs = [xa.get(key, []) for _, _, xa, _ in XX]
+        rows.append(("%s[%d]" % (key, i), where.get(key, ""), a[i] if i < len(a) else "", v, [x[i] if i < len(x) else "" for x in xs]))
 
 # Counts and references around the religious texts (their words stay Arabic): each English text once.
-cap = lang[:1].upper() + lang[1:]
+caps = [l[:1].upper() + l[1:] for l in langs]
 def items(path):
     d = json.load(open(path, encoding="utf-8"))
     for k, v in d.items():
@@ -160,48 +164,54 @@ for name, path in (("adhkar.json", os.path.join(ASSETS, "adhkar", "adhkar.json")
             seen.add((name, field, en))
             rows.append(("%s %s: %s" % (name, field, en), {"adhkar": "Screensaver, adhkar / الاستراحة: الأذكار", "afterPrayer": "Screensaver, after the prayer / الاستراحة: أذكار بعد الصلاة",
                           "afterAdhan": "Adhan, after it / بعد الأذان"}.get(part if name == "hadith.json" else "adhkar", part),
-                         o.get(field + "Ar", ""), en, o.get(field + cap, "")))
+                         o.get(field + "Ar", ""), en, [o.get(field + c, "") for c in caps]))
 
 wb = Workbook()
 ws = wb.active
 ws.title = "Texts"
 ws.sheet_view.rightToLeft = True
-head = ["#", "المفتاح / Key", "أين يظهر / Where", "العربية / Arabic", "English", lang, "ملاحظات / Notes"]
+NAMES = {"ur": "اردو / Urdu", "tr": "Türkçe / Turkish", "id": "Bahasa Indonesia / Indonesian", "fr": "Français / French"}
+head = ["#", "المفتاح / Key", "أين يظهر / Where", "العربية / Arabic", "English"] + [NAMES.get(l, l) for l in langs] + ["ملاحظات / Notes"]
 ws.append(head)
 for c in ws[1]:
     c.font = Font(bold=True)
     c.fill = PatternFill("solid", fgColor="DDE4F0")
-missing = 0
-for n, (key, w, ar, en, xx) in enumerate(rows, 1):
+missing = {l: 0 for l in langs}
+for n, (key, w, ar, en, xxs) in enumerate(rows, 1):
     note = []
     parts = sorted(set(re.findall(r"%\d+\$s", en)))
     if parts:
         note.append("parts: " + " ".join(parts))
-    if has_lang and not xx and en.strip():
-        note.append("missing")
-        missing += 1
-    elif has_lang and xx == en and re.search(r"[A-Za-z]{3}", en):
-        if w.startswith("Settings file, editor"):
-            note.append("English: the settings file is Arabic or English only")
-        elif key.startswith("news_"):
-            note.append("English: What's new of an earlier version")
-        else:
-            note.append("same as English")
-    ws.append([n, key, w, ar, en, xx, "; ".join(note)])
-widths = {"A": 7, "B": 30, "C": 26, "D": 55, "E": 55, "F": 55, "G": 22}
-for col, wdt in widths.items():
-    ws.column_dimensions[col].width = wdt
+    for (lang, _, _, has), xx in zip(XX, xxs):
+        if has and not xx and re.search(r"\w", en):  # "%%" alone may be left empty (Turkish "%45")
+            note.append(lang + ": missing")
+            missing[lang] += 1
+        elif has and xx == en and re.search(r"[A-Za-z]{3}", en):
+            if w.startswith("Settings file, editor"):
+                note.append(lang + ": English, the settings file is Arabic or English only")
+            elif key.startswith("news_"):
+                note.append(lang + ": English, What's new of an earlier version")
+            else:
+                note.append(lang + ": same as English")
+    ws.append([n, key, w, ar, en] + xxs + ["; ".join(note)])
+from openpyxl.utils import get_column_letter
+widths = [7, 30, 26, 50, 50] + [50] * len(langs) + [26]
+for i, wdt in enumerate(widths, 1):
+    ws.column_dimensions[get_column_letter(i)].width = wdt
 for row in ws.iter_rows(min_row=2):
     for c in row:
         c.alignment = Alignment(wrap_text=True, vertical="top")
     row[3].alignment = Alignment(wrap_text=True, vertical="top", horizontal="right")
     row[4].alignment = Alignment(wrap_text=True, vertical="top", horizontal="left")
+    for j, lang in enumerate(langs):
+        rtl = lang in ("ar", "ur", "fa", "ug")
+        row[5 + j].alignment = Alignment(wrap_text=True, vertical="top", horizontal="right" if rtl else "left")
 ws.freeze_panes = "C2"
 ws.auto_filter.ref = ws.dimensions
 
 out_dir = os.path.join(ROOT, "state", "texts")
 os.makedirs(out_dir, exist_ok=True)
-out = os.path.join(out_dir, "AwanTV-texts-%s-%s.xlsx" % (version, lang))
+out = os.path.join(out_dir, "AwanTV-texts-%s-%s.xlsx" % (version, "-".join(langs)))
 wb.save(out)
-print("Rows: %d   missing in %s: %d" % (len(rows), lang, missing if has_lang else len(rows)))
+print("Rows: %d   missing: %s" % (len(rows), ", ".join("%s %d" % (l, missing[l] if h else len(rows)) for l, _, _, h in XX)))
 print("Saved: " + out)

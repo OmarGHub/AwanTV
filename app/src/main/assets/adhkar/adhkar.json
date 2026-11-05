@@ -15,7 +15,8 @@
    "refAr": "",
    "refEn": "",
    "night": false,
-   "countUr": "ایک بار"
+   "countUr": "ایک بار",
+   "countTr": "Bir kez"
   },
   {
    "order": 2,
@@ -28,7 +29,9 @@
    "refEn": "Reported by Al-Hakim, An-Nasa'i and At-Tabarani",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: حاکم، نسائی اور طبرانی"
+   "refUr": "روایت: حاکم، نسائی اور طبرانی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Hâkim, Nesâî ve Taberânî"
   },
   {
    "order": 3,
@@ -41,7 +44,9 @@
    "refEn": "Reported by Al-Bukhari and Muslim",
    "night": true,
    "countUr": "ایک بار",
-   "refUr": "روایت: بخاری و مسلم"
+   "refUr": "روایت: بخاری و مسلم",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Buhârî ve Müslim"
   },
   {
    "order": 4,
@@ -54,7 +59,9 @@
    "refEn": "Reported by Abu Dawud and At-Tirmidhi",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: ابو داؤد و ترمذی"
+   "refUr": "روایت: ابو داؤد و ترمذی",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
   },
   {
    "order": 5,
@@ -67,7 +74,9 @@
    "refEn": "Reported by Abu Dawud and At-Tirmidhi",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: ابو داؤد و ترمذی"
+   "refUr": "روایت: ابو داؤد و ترمذی",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
   },
   {
    "order": 6,
@@ -80,7 +89,9 @@
    "refEn": "Reported by Abu Dawud and At-Tirmidhi",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: ابو داؤد و ترمذی"
+   "refUr": "روایت: ابو داؤد و ترمذی",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
   },
   {
    "order": 7,
@@ -93,7 +104,9 @@
    "refEn": "Reported by Muslim",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: مسلم"
+   "refUr": "روایت: مسلم",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Müslim"
   },
   {
    "order": 8,
@@ -106,7 +119,9 @@
    "refEn": "Reported by Muslim",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: مسلم"
+   "refUr": "روایت: مسلم",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Müslim"
   },
   {
    "order": 9,
@@ -119,7 +134,9 @@
    "refEn": "Reported by At-Tirmidhi",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ترمذی"
+   "refUr": "روایت: ترمذی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Tirmizî"
   },
   {
    "order": 10,
@@ -132,7 +149,9 @@
    "refEn": "Reported by At-Tirmidhi",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ترمذی"
+   "refUr": "روایت: ترمذی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Tirmizî"
   },
   {
    "order": 11,
@@ -145,7 +164,9 @@
    "refEn": "Reported by Al-Bukhari",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: بخاری"
+   "refUr": "روایت: بخاری",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Buhârî"
   },
   {
    "order": 12,
@@ -158,7 +179,9 @@
    "refEn": "Reported by Abu Dawud and An-Nasa'i",
    "night": false,
    "countUr": "چار بار",
-   "refUr": "روایت: ابو داؤد و نسائی"
+   "refUr": "روایت: ابو داؤد و نسائی",
+   "countTr": "Dört kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
   },
   {
    "order": 13,
@@ -171,7 +194,9 @@
    "refEn": "Reported by Abu Dawud and An-Nasa'i",
    "night": false,
    "countUr": "چار بار",
-   "refUr": "روایت: ابو داؤد و نسائی"
+   "refUr": "روایت: ابو داؤد و نسائی",
+   "countTr": "Dört kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
   },
   {
    "order": 14,
@@ -184,7 +209,9 @@
    "refEn": "Reported by Abu Dawud and An-Nasa'i",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابو داؤد و نسائی"
+   "refUr": "روایت: ابو داؤد و نسائی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
   },
   {
    "order": 15,
@@ -197,7 +224,9 @@
    "refEn": "Reported by Abu Dawud and An-Nasa'i",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابو داؤد و نسائی"
+   "refUr": "روایت: ابو داؤد و نسائی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
   },
   {
    "order": 16,
@@ -210,7 +239,9 @@
    "refEn": "Reported by Abu Dawud and Ahmad",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: ابو داؤد و احمد"
+   "refUr": "روایت: ابو داؤد و احمد",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve Ahmed"
   },
   {
    "order": 17,
@@ -223,7 +254,9 @@
    "refEn": "Reported by Ibn as-Sunni and Abu Dawud",
    "night": false,
    "countUr": "سات بار",
-   "refUr": "روایت: ابن السنی و ابو داؤد"
+   "refUr": "روایت: ابن السنی و ابو داؤد",
+   "countTr": "Yedi kez",
+   "refTr": "Rivayet: İbnü's-Sünnî ve Ebû Dâvûd"
   },
   {
    "order": 18,
@@ -236,7 +269,9 @@
    "refEn": "Reported by Abu Dawud and Ibn Majah",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابو داؤد و ابن ماجہ"
+   "refUr": "روایت: ابو داؤد و ابن ماجہ",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ebû Dâvûd ve İbn Mâce"
   },
   {
    "order": 19,
@@ -249,7 +284,9 @@
    "refEn": "Reported by At-Tirmidhi and Abu Dawud",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ترمذی و ابو داؤد"
+   "refUr": "روایت: ترمذی و ابو داؤد",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Tirmizî ve Ebû Dâvûd"
   },
   {
    "order": 20,
@@ -262,7 +299,9 @@
    "refEn": "Reported by Abu Dawud, At-Tirmidhi and Ibn Majah",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: ابو داؤد، ترمذی اور ابن ماجہ"
+   "refUr": "روایت: ابو داؤد، ترمذی اور ابن ماجہ",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ebû Dâvûd, Tirmizî ve İbn Mâce"
   },
   {
    "order": 21,
@@ -275,7 +314,9 @@
    "refEn": "Reported by Ahmad and An-Nasa'i",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: احمد و نسائی"
+   "refUr": "روایت: احمد و نسائی",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ahmed ve Nesâî"
   },
   {
    "order": 22,
@@ -288,7 +329,9 @@
    "refEn": "Reported by Al-Hakim",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: حاکم"
+   "refUr": "روایت: حاکم",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Hâkim"
   },
   {
    "order": 23,
@@ -301,7 +344,9 @@
    "refEn": "Reported by Abu Dawud",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابو داؤد"
+   "refUr": "روایت: ابو داؤد",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ebû Dâvûd"
   },
   {
    "order": 24,
@@ -314,7 +359,9 @@
    "refEn": "Reported by Abu Dawud",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابو داؤد"
+   "refUr": "روایت: ابو داؤد",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ebû Dâvûd"
   },
   {
    "order": 25,
@@ -327,7 +374,9 @@
    "refEn": "Reported by Ahmad and Ibn as-Sunni",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: احمد و ابن السنی"
+   "refUr": "روایت: احمد و ابن السنی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî"
   },
   {
    "order": 26,
@@ -340,7 +389,9 @@
    "refEn": "Reported by Ahmad and Ibn as-Sunni",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: احمد و ابن السنی"
+   "refUr": "روایت: احمد و ابن السنی",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî"
   },
   {
    "order": 27,
@@ -353,7 +404,9 @@
    "refEn": "Reported by Ibn as-Sunni and Ibn Majah",
    "night": false,
    "countUr": "ایک بار",
-   "refUr": "روایت: ابن السنی و ابن ماجہ"
+   "refUr": "روایت: ابن السنی و ابن ماجہ",
+   "countTr": "Bir kez",
+   "refTr": "Rivayet: İbnü's-Sünnî ve İbn Mâce"
   },
   {
    "order": 28,
@@ -366,7 +419,9 @@
    "refEn": "Reported by Al-Bukhari and Muslim",
    "night": false,
    "countUr": "دس بار، یا سستی ہو تو ایک بار",
-   "refUr": "روایت: بخاری و مسلم"
+   "refUr": "روایت: بخاری و مسلم",
+   "countTr": "On kez, ya da üşenince bir kez",
+   "refTr": "Rivayet: Buhârî ve Müslim"
   },
   {
    "order": 29,
@@ -379,7 +434,9 @@
    "refEn": "Reported by At-Tabarani",
    "night": false,
    "countUr": "دس بار",
-   "refUr": "روایت: طبرانی"
+   "refUr": "روایت: طبرانی",
+   "countTr": "On kez",
+   "refTr": "Rivayet: Taberânî"
   },
   {
    "order": 30,
@@ -392,7 +449,9 @@
    "refEn": "Reported by Ahmad and An-Nasa'i",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: احمد و نسائی"
+   "refUr": "روایت: احمد و نسائی",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Ahmed ve Nesâî"
   },
   {
    "order": 31,
@@ -405,7 +464,9 @@
    "refEn": "Reported by Muslim",
    "night": false,
    "countUr": "تین بار",
-   "refUr": "روایت: مسلم"
+   "refUr": "روایت: مسلم",
+   "countTr": "Üç kez",
+   "refTr": "Rivayet: Müslim"
   },
   {
    "order": 32,
@@ -418,7 +479,9 @@
    "refEn": "Reported by Al-Bukhari and Muslim",
    "night": false,
    "countUr": "سو بار",
-   "refUr": "روایت: بخاری و مسلم"
+   "refUr": "روایت: بخاری و مسلم",
+   "countTr": "Yüz kez",
+   "refTr": "Rivayet: Buhârî ve Müslim"
   },
   {
    "order": 33,
@@ -431,7 +494,9 @@
    "refEn": "Reported by Al-Bukhari and Muslim",
    "night": false,
    "countUr": "دن میں سو بار",
-   "refUr": "روایت: بخاری و مسلم"
+   "refUr": "روایت: بخاری و مسلم",
+   "countTr": "Günde yüz kez",
+   "refTr": "Rivayet: Buhârî ve Müslim"
   },
   {
    "order": 34,
@@ -444,7 +509,9 @@
    "refEn": "Reported by Muslim",
    "night": false,
    "countUr": "سو بار",
-   "refUr": "روایت: مسلم"
+   "refUr": "روایت: مسلم",
+   "countTr": "Yüz kez",
+   "refTr": "Rivayet: Müslim"
   }
  ]
 }

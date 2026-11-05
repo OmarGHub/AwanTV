@@ -397,6 +397,8 @@ public class SettingsActivity extends Screen {
 
         sectionLabel = caps(text(ui400, 22, Tokens.MIST_400));
         sectionLabel.setAllCaps(!t.arabicScript());
+        // Capitals by the screen's language, not the TV's: Turkish "i" is "İ" ("NAMAZ VAKİTLERİ").
+        sectionLabel.setTextLocale(java.util.Locale.forLanguageTag(t.lang));
         place(sectionLabel, 640, 56, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         hints = new LinearLayout(this);

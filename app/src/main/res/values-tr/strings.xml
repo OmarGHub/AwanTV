@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">TV\'nin kendi ana ekranı her açıldığında Awan TV\'yi gösterir ve namaz vaktinde o an ne oynuyorsa üstünde ezanı okur. TV\'de hiçbir şey devre dışı bırakılmaz: TV\'nin ana ekranını geri almak için bunu kapatın.</string>
+</resources>

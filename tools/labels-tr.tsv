@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in Turkish (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Turkish. AwanTV-apply-labels.py writes them as countTr / refTr.
+# Names of the hadith books as Diyanet writes them (Buhârî, Müslim, Ebû Dâvûd, Tirmizî, Nesâî, İbn Mâce).
+Once	Bir kez
+Three times	Üç kez
+Four times	Dört kez
+Seven times	Yedi kez
+Ten times or once when lazy	On kez, ya da üşenince bir kez
+Ten times	On kez
+One hundred times	Yüz kez
+One hundred times a day	Günde yüz kez
+3 times	3 kez
+33 times	33 kez
+To make it 100	Yüze tamamlamak için
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	Rivayet: Hâkim, Nesâî ve Taberânî
+Reported by Al-Bukhari and Muslim	Rivayet: Buhârî ve Müslim
+Reported by Abu Dawud and At-Tirmidhi	Rivayet: Ebû Dâvûd ve Tirmizî
+Reported by Muslim	Rivayet: Müslim
+Reported by At-Tirmidhi	Rivayet: Tirmizî
+Reported by Al-Bukhari	Rivayet: Buhârî
+Reported by Abu Dawud and An-Nasa'i	Rivayet: Ebû Dâvûd ve Nesâî
+Reported by Abu Dawud and Ahmad	Rivayet: Ebû Dâvûd ve Ahmed
+Reported by Ibn as-Sunni and Abu Dawud	Rivayet: İbnü's-Sünnî ve Ebû Dâvûd
+Reported by Abu Dawud and Ibn Majah	Rivayet: Ebû Dâvûd ve İbn Mâce
+Reported by At-Tirmidhi and Abu Dawud	Rivayet: Tirmizî ve Ebû Dâvûd
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	Rivayet: Ebû Dâvûd, Tirmizî ve İbn Mâce
+Reported by Ahmad and An-Nasa'i	Rivayet: Ahmed ve Nesâî
+Reported by Al-Hakim	Rivayet: Hâkim
+Reported by Abu Dawud	Rivayet: Ebû Dâvûd
+Reported by Ahmad and Ibn as-Sunni	Rivayet: Ahmed ve İbnü's-Sünnî
+Reported by Ibn as-Sunni and Ibn Majah	Rivayet: İbnü's-Sünnî ve İbn Mâce
+Reported by At-Tabarani	Rivayet: Taberânî
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	Rivayet: Nesâî, Amelü'l-yevm ve'l-leyle
+Abu Dawud and an-Nasa'i	Rivayet: Ebû Dâvûd ve Nesâî

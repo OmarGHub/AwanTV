@@ -11,9 +11,9 @@ final class Languages {
     private Languages() {}
 
     /** The setting's values after "system", in the order Settings shows them. */
-    static final String[] TAGS = {"ar", "en", "ur"};
+    static final String[] TAGS = {"ar", "en", "ur", "tr"};
     /** Each in its own language; not translated. */
-    static final String[] NAMES = {"العربية", "English", "اردو"};
+    static final String[] NAMES = {"العربية", "English", "اردو", "Türkçe"};
 
     /** The setting's values: "system" (the TV's language), then each language. */
     static String[] values() {

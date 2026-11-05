@@ -6,6 +6,22 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Turkish (Türkçe), the second language after Arabic and English (test builds from 1.19.0a): every screen's words
+  (res/values-tr), in Diyanet's terms and as Turkish prayer apps write them (Namaz Vakti, Al-Azan, and Android's own
+  Turkish for the settings words): Sabah, Güneş, Öğle, İkindi, Akşam, Yatsı; Kamet for the iqamah; Asr-ı Evvel and
+  Asr-ı Sânî. Ramadan's Fajr cell says "İMSAK": in Turkey imsak is the fast's start itself (Diyanet: the first light
+  of true dawn, the start of the fast and of Sabah's time), so the optional precaution before it is "İhtiyat"
+  (Settings > Prayer times). Reciters and surahs in Turkish by mp3quran.net ("tr"); the adhkar's counts and the
+  hadiths' references in Turkish (`tools/labels-tr.tsv`, the books as Diyanet names them). No text ends in a
+  suffix after a part (Turkish suffixes follow the word put in: "Sabah vaktine", "%2$s gün sonra %1$s"); the
+  percent sign before the number ("%45"). Settings' section titles in capitals by the screen's language, not the
+  TV's (Turkish "i" is "İ").
+
+### Tools
+- `AwanTV-texts-sheet.py` 1.1.0: several languages side by side (`ur,tr`: Arabic, English, Urdu, Turkish), a
+  column and its notes each.
+
 ## [1.18.0]
 
 ### The app
