@@ -313,6 +313,9 @@ public final class MainActivity extends Activity {
         } else if (newer) {
             card.addView(gold(getString(R.string.newer_installer_title, iso(newerInstaller))));
             card.addView(Ui.small(this, getString(R.string.newer_installer_body, iso(ownVersion()))), Ui.wide(this, 6));
+            // Said before the press: Android stops an app it updates, and lets nothing open it again (1.13.0's try
+            // through the install's answer is refused by Android itself), as with F-Droid's and Signal's own updates.
+            card.addView(Ui.small(this, getString(R.string.upd_closes)), Ui.wide(this, 6));
             buttons.addView(Ui.pill(this, getString(R.string.upd_button), true, v -> pressUpdate()));
         } else {
             // About, nothing newer: what GitHub said, and Check now.

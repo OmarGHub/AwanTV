@@ -74,6 +74,7 @@
     <string name="same_lead">It has %1$s, the version this installer carries. Set up again puts the service, permissions and screensaver right in seconds, without installing again.</string>
     <string name="newer_installer_title">A newer installer is out: %1$s</string>
     <string name="newer_installer_body">This one carries Awan TV %1$s. Update it to install the newest on your TVs.</string>
+    <string name="upd_closes">The installer app on your phone will close after the update; open it again.</string>
     <string name="same_chip">Awan TV %1$s · the same version</string>
     <string name="setup_button">Set up again</string>
     <string name="reinstall_button">Install it again</string>
@@ -139,7 +140,7 @@
     <string name="upd_downloading">Downloading the installer %1$s</string>
     <string name="upd_progress">%1$s%% · %2$s of %3$s MB</string>
     <string name="upd_installing_title">Installing the new installer</string>
-    <string name="upd_installing">Accept “Update” in Android’s window. Then open the new installer from its icon.</string>
+    <string name="upd_installing">Accept “Update” in Android’s window. The installer app on your phone then closes; open it again.</string>
     <string name="upd_continue">Continue installing</string>
     <string name="upd_failed_title">The installer could not be updated</string>
     <string name="upd_failed">Try again, or download the new installer from: %1$s</string>

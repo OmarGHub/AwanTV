@@ -6,6 +6,11 @@ history is in its repository.
 
 ## [Unreleased]
 
+### Phone installer
+- The newer-installer card says before the press that the installer app will close after the update and to open it
+  again, as Android stops an app it updates (F-Droid and Signal close the same way); the installing line says it too.
+- "الهاتف" for the phone throughout the Arabic texts (it was "الجوال" in four).
+
 ## [1.13.0]
 
 ### The app
@@ -25,10 +30,9 @@ history is in its repository.
 - My TVs ticks an up-to-date TV too, to put it right, as the editor's Update TVs: with this very APK on it (by
   SHA-256) nothing is sent and it is only set up again; another file with the same number is installed again, then
   set up. The button, the titles and each result say which was done ("Run on the ticked"). A newer TV has no box.
-- After "Update the installer" the new installer opens by itself: Android's answer to the install now goes to the
-  installer's screen (an activity PendingIntent the system sends) rather than a broadcast, since a phone stops the
-  installer to replace it and a receiver may not open a screen from the background. It takes effect from the update
-  after the one carrying it (the PendingIntent is the old installer's).
+- Android's answer to "Update the installer" goes to the installer's screen (an activity PendingIntent) rather than a
+  broadcast. Meant to open the new installer after it updates itself, it does not: Android gives the install's answer
+  no right to open a screen (PackageInstallerSession, on purpose). The installer still closes after updating itself.
 
 ### Tools
 - `AwanTV-editor` 1.4.3: after an update, Awan TV's Home opens again on a TV where it (or its screensaver) was in front

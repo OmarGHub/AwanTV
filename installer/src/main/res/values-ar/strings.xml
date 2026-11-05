@@ -72,6 +72,7 @@
     <string name="same_lead">عليه %1$s، الإصدار نفسه الذي يحمله المثبّت. «أعد الإعداد» يصلح الخدمة والصلاحيات وشاشة الاستراحة في ثوانٍ، دون إعادة التثبيت.</string>
     <string name="newer_installer_title">صدر مثبّت أحدث: %1$s</string>
     <string name="newer_installer_body">هذا المثبّت يحمل Awan TV %1$s. حدّثه ليثبّت الأحدث على شاشاتك.</string>
+    <string name="upd_closes">سيُغلق تطبيق المثبّت على هاتفك بعد التحديث، فافتحه من جديد.</string>
     <string name="same_chip">Awan TV %1$s · الإصدار نفسه</string>
     <string name="setup_button">أعد الإعداد</string>
     <string name="reinstall_button">أعد التثبيت</string>
@@ -137,7 +138,7 @@
     <string name="upd_downloading">يُنزَّل المثبّت %1$s</string>
     <string name="upd_progress">%1$s%% · %2$s من %3$s ميجابايت</string>
     <string name="upd_installing_title">يُثبَّت المثبّت الجديد</string>
-    <string name="upd_installing">وافق على «تحديث» في نافذة أندرويد. بعدها يُفتح المثبّت الجديد من أيقونته.</string>
+    <string name="upd_installing">وافق على «تحديث» في نافذة أندرويد. بعدها سيُغلق تطبيق المثبّت على هاتفك، فافتحه من جديد.</string>
     <string name="upd_continue">متابعة التثبيت</string>
     <string name="upd_failed_title">تعذّر تحديث المثبّت</string>
     <string name="upd_failed">جرّب مرة أخرى، أو نزّل المثبّت الجديد من: %1$s</string>
@@ -146,7 +147,7 @@
     <string name="upd_perm_body">أول مرة فقط: يفتح أندرويد إعداد «تثبيت التطبيقات غير المعروفة» لهذا التطبيق، ففعّله ثم ارجع. بعدها يسألك أندرويد «هل تريد تحديث هذا التطبيق؟» عند كل تحديث.</string>
     <string name="upd_perm_open">افتح الإعداد</string>
     <string name="upd_later">لاحقًا</string>
-    <string name="about_lead">المثبّت على الجوال %1$s · يثبّت Awan TV %2$s</string>
+    <string name="about_lead">المثبّت على الهاتف %1$s · يثبّت Awan TV %2$s</string>
     <string name="about_updates">التحديثات</string>
     <string name="about_latest">لديك أحدث مثبّت</string>
     <string name="about_checking">يسأل GitHub…</string>
@@ -166,8 +167,8 @@
     <!-- My TVs (MyTvs): the TVs this phone set up, their version, and updating them -->
     <string name="mytvs_button">شاشاتي · تحديث Awan TV عليها</string>
     <string name="mytvs_title">شاشاتي</string>
-    <string name="mytvs_lead">الشاشات التي ثبّت عليها هذا الجوال Awan TV. يحمل المثبّت %1$s، ويحتاج التصحيح مفعّلًا على الشاشة.</string>
-    <string name="mytvs_empty">لا شاشات بعد. كل شاشة تثبّت عليها Awan TV أو تعيد إعدادها من هذا الجوال تظهر هنا، أو أضفها من الشبكة. وللإزالة من القائمة: اضغط على الشاشة مطولًا.</string>
+    <string name="mytvs_lead">الشاشات التي ثبّت عليها هذا الهاتف Awan TV. يحمل المثبّت %1$s، ويحتاج التصحيح مفعّلًا على الشاشة.</string>
+    <string name="mytvs_empty">لا شاشات بعد. كل شاشة تثبّت عليها Awan TV أو تعيد إعدادها من هذا الهاتف تظهر هنا، أو أضفها من الشبكة. وللإزالة من القائمة: اضغط على الشاشة مطولًا.</string>
     <string name="mytvs_pick">حدّد ما يحتاج تحديثًا</string>
     <string name="mytvs_checking">يقرأ الإصدار…</string>
     <string name="mytvs_older">تحتاج تحديثًا: %1$s ← %2$s</string>
@@ -176,7 +177,7 @@
     <string name="mytvs_newer">عليها %1$s، أحدث من هذا المثبّت</string>
     <string name="mytvs_none">Awan TV غير مثبّت عليها</string>
     <string name="mytvs_no_answer">لا ترد: التصحيح مطفأ أو الشاشة مغلقة</string>
-    <string name="mytvs_pair">نسيت الشاشة اقترانها بهذا الجوال: أضفها من الشبكة</string>
+    <string name="mytvs_pair">نسيت الشاشة اقترانها بهذا الهاتف: أضفها من الشبكة</string>
     <string name="mytvs_moved">عنوانها تغيّر: أضفها من الشبكة</string>
     <string name="mytvs_update">حدّث المحددة (%1$s)</string>
     <string name="mytvs_run">نفّذ على المحددة (%1$s)</string>
