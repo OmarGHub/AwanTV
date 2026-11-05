@@ -1,4 +1,4 @@
-# AwanTV-textdump.ps1 - Version 1.2.0
+# AwanTV-textdump.ps1 - Version 1.3.0
 # The languages plan's safety net (claude/awan-languages-plan.md, phase 0). A test build of Awan TV (a version ending
 # in a letter) writes every text it shows, in Arabic and English with both kinds of digits (TextDump.java); this tool
 # asks the TV for that file, keeps it in state\textdump\<version>.txt, and compares it with a golden one.
@@ -19,12 +19,15 @@
 #       (1.2.0) copies the TV's list of texts that do not fit their place (CropCheck.java, test builds: each screen
 #       looks every two seconds while it is in front) to state\textdump\crops-<version>.txt; -Clear then empties
 #       it on the TV, to start a new round of screens
+# The "schema|" and "file|" lines are numbered by their place in the file (the dump's format is frozen), so one line
+# added near the top would move every one after it: from 1.3.0 they are matched by their text first (the lines both
+# have alike, then the changed ones in the order they come), and only a line really added, gone or changed is listed.
 # Exit code: 0 the same, 1 a golden line changed or is missing, 2 the dump failed.
 
 param([string]$Device = "", [string]$Golden = "", [string]$File = "", [switch]$Crops, [switch]$Clear)
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.2.0"
+$ScriptVersion = "1.3.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Remote = "/sdcard/Android/data/$Pkg/files/text-dump.txt"
@@ -80,9 +83,74 @@ function Read-Dump([string]$path) {
     return ,$map
 }
 
+# For each b line, the a line it stands for (-1: added): the same start and end, then the longest run of lines
+# alike between them; the lines left over between two alike ones are paired in order (changed), the rest added.
+function Align([string[]]$a, [string[]]$b) {
+    $na = $a.Count; $nb = $b.Count
+    $map = New-Object int[] $nb
+    for ($j = 0; $j -lt $nb; $j++) { $map[$j] = -1 }
+    $pre = 0
+    while ($pre -lt $na -and $pre -lt $nb -and $a[$pre] -ceq $b[$pre]) { $map[$pre] = $pre; $pre++ }
+    $suf = 0
+    while ($suf -lt ($na - $pre) -and $suf -lt ($nb - $pre) -and $a[$na - 1 - $suf] -ceq $b[$nb - 1 - $suf]) {
+        $map[$nb - 1 - $suf] = $na - 1 - $suf; $suf++
+    }
+    $m = $na - $pre - $suf; $k = $nb - $pre - $suf
+    if ($m -le 0 -or $k -le 0) { return ,$map }
+    if ([long]$m * $k -gt 4000000) {
+        for ($j = 0; $j -lt [Math]::Min($m, $k); $j++) { $map[$pre + $j] = $pre + $j }
+        return ,$map
+    }
+    $L = New-Object 'int[,]' ($m + 1), ($k + 1)
+    for ($i = $m - 1; $i -ge 0; $i--) {
+        for ($j = $k - 1; $j -ge 0; $j--) {
+            if ($a[$pre + $i] -ceq $b[$pre + $j]) { $L[$i, $j] = $L[($i + 1), ($j + 1)] + 1 }
+            elseif ($L[($i + 1), $j] -ge $L[$i, ($j + 1)]) { $L[$i, $j] = $L[($i + 1), $j] }
+            else { $L[$i, $j] = $L[$i, ($j + 1)] }
+        }
+    }
+    $i = 0; $j = 0
+    $gone = New-Object System.Collections.Generic.List[int]
+    $new = New-Object System.Collections.Generic.List[int]
+    while ($i -lt $m -or $j -lt $k) {
+        if ($i -lt $m -and $j -lt $k -and $a[$pre + $i] -ceq $b[$pre + $j]) {
+            for ($p = 0; $p -lt [Math]::Min($gone.Count, $new.Count); $p++) { $map[$new[$p]] = $gone[$p] }
+            $gone.Clear(); $new.Clear()
+            $map[$pre + $j] = $pre + $i; $i++; $j++
+        } elseif ($j -lt $k -and ($i -ge $m -or $L[$i, ($j + 1)] -ge $L[($i + 1), $j])) {
+            $new.Add($pre + $j); $j++
+        } else {
+            $gone.Add($pre + $i); $i++
+        }
+    }
+    for ($p = 0; $p -lt [Math]::Min($gone.Count, $new.Count); $p++) { $map[$new[$p]] = $gone[$p] }
+    return ,$map
+}
+
+# The new dump's numbered lines (schema|ar|, schema|en|, file|) keyed as the golden line each stands for (Align); an
+# added one as <group>|+<its number>, so it is New and every line after it still meets its own.
+function Realign($g, $n) {
+    $groups = @{}
+    foreach ($k in @($g.Keys) + @($n.Keys)) {
+        if ($k -match '^(schema\|[^|]+|file)\|\d+$') { $groups[$Matches[1]] = $true }
+    }
+    foreach ($grp in $groups.Keys) {
+        $gk = @($g.Keys | Where-Object { $_.StartsWith($grp + "|") -and $_ -match '\|\d+$' } | Sort-Object)
+        $nk = @($n.Keys | Where-Object { $_.StartsWith($grp + "|") -and $_ -match '\|\d+$' } | Sort-Object)
+        $map = Align ([string[]]@($gk | ForEach-Object { $g[$_] })) ([string[]]@($nk | ForEach-Object { $n[$_] }))
+        $vals = @($nk | ForEach-Object { $n[$_] })
+        foreach ($k in $nk) { [void]$n.Remove($k) }
+        for ($j = 0; $j -lt $nk.Count; $j++) {
+            $key = if ($map[$j] -ge 0) { $gk[$map[$j]] } else { $grp + "|+" + $nk[$j].Substring($grp.Length + 1) }
+            $n[$key] = $vals[$j]
+        }
+    }
+}
+
 function Compare-Dumps([string]$goldenPath, [string]$newPath) {
     $g = Read-Dump $goldenPath
     $n = Read-Dump $newPath
+    Realign $g $n
     $changed = New-Object System.Collections.Generic.List[string]
     $missing = New-Object System.Collections.Generic.List[string]
     $added = New-Object System.Collections.Generic.List[string]

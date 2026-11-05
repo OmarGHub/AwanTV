@@ -14,6 +14,8 @@ history is in its repository.
   and hadiths are in Urdu (`tools/labels-ur.tsv`); cities, Afnon's stations and the adhan voices in English. The
   settings file and the editor stay Arabic or English; What's new of earlier versions in English. The Arabic digit
   paths (the decimal sign, the 2 GB note, the waiting line) follow the Arabic script, Urdu too.
+  Home's prayer times in Urdu with a 12-hour clock as small as English's (they write AM/PM too: 1.18.0d's crop
+  check found "12:07 PM" 10 px too wide).
 - Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
   12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
   temperature's figures alone smaller, only as far as needed (Omar's idea).
@@ -35,6 +37,9 @@ history is in its repository.
 
 ### Tools
 - `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.
+- `AwanTV-textdump` 1.3.0: the editor's description and the settings file (numbered by place) are matched by their
+  text, so a line added near the top no longer lists every one after it (1.18.0d against 1.18.0c: 620 changed lines
+  became the 10 that changed and 4 new).
 - `AwanTV-apply-labels.py` 1.0.0: the counts and references around the adhkar and hadiths in each other language
   (tools/labels-<lang>.tsv); `AwanTV-build-hadith` 1.1.0 runs it after building.
 - `AwanTV-texts-sheet.py` 1.0.0: the side-by-side sheet of a language (number, key, where it shows, Arabic,

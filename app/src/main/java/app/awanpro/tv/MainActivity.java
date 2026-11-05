@@ -1058,8 +1058,9 @@ public class MainActivity extends Screen {
                 ((GradientDrawable) cellBar[i].getBackground()).setColor(light ? Tokens.alpha(Tokens.LAPIS_900, 0x33) : Tokens.alpha(Tokens.PLASTER_100, 0x33));
             }
             cellName[i].setText(names[i]);
-            // English 12-hour ("12:41 PM") is too wide for a cell at 34px; Arabic's ص/م is narrow enough.
-            float timeSize = Ui.px(!h24 && !t.arabicScript() ? 30 : 34);
+            // English 12-hour ("12:41 PM") is too wide for a cell at 34px; Arabic's ص/م is narrow enough. Urdu writes
+            // AM/PM too (1.18.0d's crop check: "12:07 PM" 10 px too wide), so only Arabic keeps 34.
+            float timeSize = Ui.px(!h24 && !t.ar ? 30 : 34);
             if (cellTime[i].getTextSize() != timeSize) {
                 cellTime[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, timeSize);
                 lineHeight(cellTime[i], 1.1f);
