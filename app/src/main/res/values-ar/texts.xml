@@ -521,8 +521,10 @@
     <string name="settings" formatted="false">"الإعدادات"</string>
     <string name="someOf" formatted="false">"%1$s من %2$s"</string>
     <string name="sourceRow" formatted="false">"المصدر والتحديثات"</string>
+    <string name="stationAroundClock" formatted="false">"تلاوة على مدار الساعة"</string>
     <string name="stationFileHelp" formatted="false">"تُرسل إلى الشاشات المختارة؛ الشاشة التي لا توجد عليها تبقى محطتها"</string>
     <string name="stationRow" formatted="false">"المحطة"</string>
+    <string name="stationSaved" formatted="false">"محفوظة على التلفاز"</string>
     <string name="stationSavedFile" formatted="false">"تلاوة محفوظة على هذه الشاشة، فلا تُنقل؛ اخترها من التلفاز"</string>
     <string name="statusHelp" formatted="false">"هل الخدمة والاستراحة والأذان تعمل على هذا الجهاز"</string>
     <string name="statusRow" formatted="false">"حالة التطبيق"</string>

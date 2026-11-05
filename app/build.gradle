@@ -43,6 +43,15 @@ android {
 def mp3quranDir = file('src/main/assets/mp3quran')
 def mp3quranLists = ['reciters-ar.json': 'reciters?language=ar', 'reciters-en.json': 'reciters?language=eng',
                      'suwar-ar.json': 'suwar?language=ar', 'suwar-en.json': 'suwar?language=eng']
+// The screens' other languages (Languages.TAGS) carry their own two lists, by mp3quran.net's code for them
+// (Languages.mp3quran: the same as the tag but Chinese "cn"); a language it does not have (Malay) carries none.
+def languageTags = ((file('src/main/java/app/awanpro/tv/Languages.java').getText('UTF-8') =~ /TAGS = \{([^}]*)\}/)[0][1] =~ /"(\w+)"/).collect { it[1] }
+def mp3quranOwn = ['fr', 'ru', 'de', 'es', 'tr', 'zh', 'th', 'ur', 'bn', 'bs', 'ug', 'fa', 'tg', 'ml', 'tl', 'id', 'pt', 'ha', 'sw']
+languageTags.findAll { it in mp3quranOwn }.each { tag ->
+    def code = tag == 'zh' ? 'cn' : tag
+    mp3quranLists["reciters-${tag}.json".toString()] = "reciters?language=${code}".toString()
+    mp3quranLists["suwar-${tag}.json".toString()] = "suwar?language=${code}".toString()
+}
 def mp3quranRead = { boolean onlyMissing ->
     def api = project.findProperty('mp3quranApi') ?: 'https://mp3quran.net/api/v3/'
     def slurper = new groovy.json.JsonSlurper()

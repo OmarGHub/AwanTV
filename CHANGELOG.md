@@ -23,7 +23,8 @@ history is in its repository.
   end in "…"; the screensaver's gold line likewise to 60% (Android's own autosize let "Friday night · Al-Kahf ·
   Salawat" run out of the centre); the About codes' hint takes two lines. Shorter in both languages (Omar: short
   is best in this app): the hadith and adhkar help, Home and screensaver's run mode, the radio's dark screen, and in
-  English the codes' hint and Friday's gold line ("Al-Kahf · Salawat ﷺ", as Friday night's).
+  English the codes' hint, Friday's gold line ("Al-Kahf · Salawat ﷺ", as Friday night's) and, 1.18.0d, the radio's
+  dark screen again ("Screen dark, radio on · any key brings it back": the row's choices leave it under 500 px).
 
 ### Tools
 - `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.

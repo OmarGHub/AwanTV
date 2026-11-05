@@ -71,6 +71,8 @@ final class Library {
         final int id, moshaf;
         final String ar, en, moshafAr, moshafEn, server;
         final int[] surahs;
+        /** Its names in the screens' other languages that mp3quran.net has (Languages.moreLists): {name, moshaf}. */
+        final Map<String, String[]> more = new HashMap<>();
 
         Reciter(int id, int moshaf, String ar, String en, String moshafAr, String moshafEn, String server, int[] surahs) {
             this.id = id;
@@ -89,10 +91,14 @@ final class Library {
         }
 
         String name(Text t) {
+            String[] own = more.get(t.lang);
+            if (own != null && !own[0].isEmpty()) return own[0];
             return t.ar || en.isEmpty() ? ar : en;
         }
 
         String moshaf(Text t) {
+            String[] own = more.get(t.lang);
+            if (own != null && !own[1].isEmpty()) return own[1];
             return t.ar || moshafEn.isEmpty() ? moshafAr : moshafEn;
         }
 
@@ -111,6 +117,9 @@ final class Library {
             try {
                 save(ar, get(API + "reciters?language=ar"));
                 save(en, get(API + "reciters?language=eng"));
+                for (String lang : Languages.moreLists()) {
+                    save(new File(dir(c, false), "reciters-" + lang + ".json"), get(API + "reciters?language=" + Languages.mp3quran(lang)));
+                }
                 synchronized (KNOWN_LOCK) {
                     known = null;
                 }
@@ -128,7 +137,19 @@ final class Library {
         if (arText == null) throw new IOException("no reciter list");
         Map<String, String[]> english = new LinkedHashMap<>();
         if (enText != null) for (Reciter r : parse(enText, null)) english.put(r.key(), new String[] {r.ar, r.moshafAr});
-        return parse(arText, english);
+        List<Reciter> out = parse(arText, english);
+        // Names in the screens' other languages, from their own lists (none for Arabic and English only).
+        for (String lang : Languages.moreLists()) {
+            String text = listText(c, "reciters-" + lang + ".json");
+            if (text == null) continue;
+            Map<String, String[]> names = new HashMap<>();
+            for (Reciter r : parse(text, null)) names.put(r.key(), new String[] {r.ar, r.moshafAr});
+            for (Reciter r : out) {
+                String[] n = names.get(r.key());
+                if (n != null) r.more.put(lang, n);
+            }
+        }
+        return out;
     }
 
     /** A list as the TV last read it, else the app's own copy; null when there is neither. */
@@ -181,7 +202,12 @@ final class Library {
 
     /** The surah names as kept on the TV, else the app's own copy (no network), index 1..114; null where not known. */
     static String[] cachedSurahNames(Context c, boolean ar) {
-        String text = listText(c, ar ? "suwar-ar.json" : "suwar-en.json");
+        return cachedSurahNames(c, ar ? "ar" : "en");
+    }
+
+    /** As above in any of the screens' languages (suwar-<lang>.json); all null for one mp3quran.net lacks. */
+    static String[] cachedSurahNames(Context c, String lang) {
+        String text = listText(c, "suwar-" + lang + ".json");
         String[] out = new String[115];
         if (text == null) return out;
         try {
@@ -199,13 +225,20 @@ final class Library {
 
     /** The surah names from mp3quran.net (cached with the reciters; offline, the app's own copy), index 1..114. */
     static String[] surahNames(Context c, boolean ar) {
-        File f = new File(dir(c, false), ar ? "suwar-ar.json" : "suwar-en.json");
+        return surahNames(c, ar ? "ar" : "en");
+    }
+
+    /** As above in any of the screens' languages mp3quran.net has; all null for another. Not on the main thread. */
+    static String[] surahNames(Context c, String lang) {
+        String code = Languages.mp3quran(lang);
+        if (code == null) return new String[115];
+        File f = new File(dir(c, false), "suwar-" + lang + ".json");
         try {
-            if (!f.exists()) save(f, get(API + "suwar?language=" + (ar ? "ar" : "eng")));
+            if (!f.exists()) save(f, get(API + "suwar?language=" + code));
         } catch (IOException e) {
             // Offline: the app's own copy.
         }
-        return cachedSurahNames(c, ar);
+        return cachedSurahNames(c, lang);
     }
 
     private static List<Reciter> parse(String json, Map<String, String[]> english) throws Exception {
@@ -711,6 +744,29 @@ final class Library {
         Prefs.of(c).edit().putString("dl_server_" + r.key(), r.server)
             .putString("lib_ar_" + r.key(), r.ar).putString("lib_en_" + r.key(), r.en.isEmpty() ? r.ar : r.en)
             .putString("lib_mar_" + r.key(), r.moshafAr).putString("lib_men_" + r.key(), r.moshafEn).apply();
+        SharedPreferences.Editor more = Prefs.of(c).edit();
+        for (Map.Entry<String, String[]> e : r.more.entrySet()) {
+            more.putString("lib_" + e.getKey() + "_" + r.key(), e.getValue()[0]).putString("lib_m" + e.getKey() + "_" + r.key(), e.getValue()[1]);
+        }
+        more.apply();
+    }
+
+    /** The recording's reciter in the screen's language: its own name where mp3quran.net has one, else English's. */
+    static String name(Context c, String key, Text t) {
+        if (t.ar || "en".equals(t.lang)) return name(c, key, t.ar);
+        String s = nameIn(c, key, t.lang);
+        return s == null ? name(c, key, false) : s;
+    }
+
+    /** The recording's reciter in one of the screens' other languages as kept, else as its list has it; null: none. */
+    static String nameIn(Context c, String key, String lang) {
+        String s = Prefs.of(c).getString("lib_" + lang + "_" + key, null);
+        if (s == null || s.isEmpty()) {
+            Reciter r = known(c, key);
+            String[] own = r == null ? null : r.more.get(lang);
+            s = own == null ? null : own[0];
+        }
+        return s == null || s.isEmpty() ? null : s;
     }
 
     /** The recording's reciter as kept with it, else as the lists have it, else its key ("r30-m30"). */

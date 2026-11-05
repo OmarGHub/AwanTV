@@ -239,8 +239,19 @@ final class Text {
     String dismiss() { return s(R.string.dismiss); }
     // Radio: Home's pill and card, the screen-off view, the screensaver line and the Settings section.
     String radio() { return s(R.string.radio); }
-    String station(Radio.Station s) { return d(ar ? s.ar : s.en); }
-    String stationWhere(Radio.Station s) { return d(ar ? s.whereAr : s.whereEn); }
+    /** A station's name: Arabic or English as written; another language mp3quran.net's name for it, else English. */
+    String station(Radio.Station s) {
+        if (ar || "en".equals(lang)) return d(ar ? s.ar : s.en);
+        String own = s.more.get(lang);
+        return d(own != null ? own : s.en);
+    }
+    /** Under a station's name: where it broadcasts (English in another language), or what a reciter's channel is. */
+    String stationWhere(Radio.Station s) {
+        if (ar || "en".equals(lang)) return d(ar ? s.whereAr : s.whereEn);
+        if (s.savedSurahs >= 0) return d(s(R.string.stationSaved) + " · " + surahCount(s.savedSurahs));
+        if (s.reciter) return d(s(R.string.stationAroundClock));
+        return d(s.whereEn);
+    }
     /** A station in a list: its name and place, since several are called إذاعة القرآن الكريم. */
     String stationChoice(Radio.Station s) { return s.reciter ? station(s) : station(s) + sep() + stationWhere(s); }
     String stationRow() { return s(R.string.stationRow); }

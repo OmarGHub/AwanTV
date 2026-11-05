@@ -31,6 +31,10 @@ final class Radio {
         final String id, ar, en, whereAr, whereEn, url;
         /** A reciter's around-the-clock channel rather than a broadcast station. */
         final boolean reciter;
+        /** Its name in the screens' other languages (a saved recording's, from mp3quran.net's lists). */
+        final java.util.Map<String, String> more = new java.util.HashMap<>();
+        /** A saved recording's surahs on the TV; -1 for a stream. */
+        int savedSurahs = -1;
 
         Station(String id, String ar, String en, String whereAr, String whereEn, String url, boolean reciter) {
             this.id = id;
@@ -50,8 +54,14 @@ final class Radio {
         /** A recording saved on the TV ({@link Library}), played from its files without internet. */
         static Station saved(Context c, String key) {
             int n = Library.savedSurahs(c, key).length;
-            return new Station(SAVED + key, Library.name(c, key, true), Library.name(c, key, false),
+            Station s = new Station(SAVED + key, Library.name(c, key, true), Library.name(c, key, false),
                 "محفوظة على التلفاز · " + Text.surahsAr(n), "Saved on the TV · " + n + (n == 1 ? " surah" : " surahs"), null, true);
+            s.savedSurahs = n;
+            for (String lang : Languages.moreLists()) {
+                String own = Library.nameIn(c, key, lang);
+                if (own != null) s.more.put(lang, own);
+            }
+            return s;
         }
 
         /** The saved recording's folder, or null for a stream. */

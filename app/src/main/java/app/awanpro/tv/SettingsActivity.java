@@ -2073,7 +2073,7 @@ public class SettingsActivity extends Screen {
         String now = Radio.station(this).savedKey();
         int sel = -1;
         for (int k = 0; k < names.length; k++) {
-            names[k] = t.d(Library.name(this, keys.get(k), t.ar));
+            names[k] = t.d(Library.name(this, keys.get(k), t));
             if (keys.get(k).equals(now)) sel = k;
         }
         openChooser(t.stationGroups()[2], names, sel, k -> { Radio.switchToSaved(this, keys.get(k)); showSaved(); });

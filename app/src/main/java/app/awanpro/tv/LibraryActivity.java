@@ -45,6 +45,8 @@ public class LibraryActivity extends Screen {
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private List<Library.Reciter> all = new ArrayList<>();
     private String[] surahAr = new String[115], surahEn = new String[115];
+    /** In the screen's language when it is neither Arabic nor English (mp3quran.net's list); English where missing. */
+    private String[] surahOwn = new String[115];
 
     private EditText search;
     private LinearLayout list;
@@ -235,6 +237,7 @@ public class LibraryActivity extends Screen {
         worker.execute(() -> {
             List<Library.Reciter> got;
             String[] ar = Library.surahNames(this, true), en = Library.surahNames(this, false);
+            String[] own = t.ar || "en".equals(t.lang) ? new String[115] : Library.surahNames(this, t.lang);
             try {
                 got = Library.reciters(this, fresh);
             } catch (Exception e) {
@@ -244,6 +247,7 @@ public class LibraryActivity extends Screen {
             main.post(() -> {
                 surahAr = ar;
                 surahEn = en;
+                surahOwn = own;
                 for (int s = 1; s <= 114; s++) chipName[s].setText(surahLabel(s));
                 if (result == null) {
                     listNote.setText(t.recitersOffline());
@@ -522,13 +526,19 @@ public class LibraryActivity extends Screen {
 
     // ---------------------------------------------------------------- small helpers
 
+    /** A surah's name in the screen's language: Arabic, English, or another's from its list, else English. */
+    private String surahIn(int s) {
+        if (t.ar) return surahAr[s];
+        return surahOwn[s] != null ? surahOwn[s] : surahEn[s];
+    }
+
     private String surahName(int s) {
-        String n = (t.ar ? surahAr : surahEn)[s];
+        String n = surahIn(s);
         return n == null ? t.d(String.valueOf(s)) : n;
     }
 
     private String surahLabel(int s) {
-        String n = (t.ar ? surahAr : surahEn)[s];
+        String n = surahIn(s);
         return t.d(String.valueOf(s)) + (n == null ? "" : " " + n);
     }
 

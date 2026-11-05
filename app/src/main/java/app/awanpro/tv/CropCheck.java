@@ -78,7 +78,13 @@ final class CropCheck {
         String why = null;
         int innerW = v.getWidth() - v.getTotalPaddingLeft() - v.getTotalPaddingRight();
         int innerH = v.getHeight() - v.getTotalPaddingTop() - v.getTotalPaddingBottom();
-        for (int i = 0; i < l.getLineCount() && why == null; i++) if (l.getEllipsisCount(i) > 0) why = "ends in ...";
+        for (int i = 0; i < l.getLineCount() && why == null; i++) {
+            if (l.getEllipsisCount(i) > 0) {
+                // How wide the whole text would be at the view's present size, against its room.
+                float whole = android.text.Layout.getDesiredWidth(text, v.getPaint());
+                why = "ends in ... (needs " + Math.round(whole) + " of " + innerW + " px)";
+            }
+        }
         if (why == null && l.getLineCount() > v.getMaxLines()) why = "more lines than shown";
         if (why == null && l.getLineCount() == 1 && l.getLineWidth(0) > innerW + 1) {
             why = "wider than its place by " + Math.round(l.getLineWidth(0) - innerW) + " of " + innerW + " px";

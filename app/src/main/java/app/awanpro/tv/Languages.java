@@ -49,6 +49,29 @@ final class Languages {
         }
     }
 
+    /**
+     * The language's code at mp3quran.net (its API's ?language=, mp3quran.net/api): its own scheme ("eng", "cn"),
+     * so reciters, surahs and reciter channels are named in the screen's language. Null for one it does not have
+     * (Malay, Omar's one exception): those names then show in English.
+     */
+    static String mp3quran(String tag) {
+        switch (tag) {
+            case "en": return "eng";
+            case "zh": return "cn";
+            case "ar": case "fr": case "ru": case "de": case "es": case "tr": case "th": case "ur": case "bn": case "bs":
+            case "ug": case "fa": case "tg": case "ml": case "tl": case "id": case "pt": case "ha": case "sw":
+                return tag;
+            default: return null;
+        }
+    }
+
+    /** The screens' languages besides Arabic and English that mp3quran.net names things in: their own lists. */
+    static java.util.List<String> moreLists() {
+        java.util.List<String> out = new java.util.ArrayList<>();
+        for (String t : TAGS) if (!"ar".equals(t) && !"en".equals(t) && mp3quran(t) != null) out.add(t);
+        return out;
+    }
+
     /** Written right to left: Arabic, Urdu, Persian, Uyghur (of mp3quran.net's languages, the upper limit). */
     static boolean rtl(String tag) {
         return arabicScript(tag);

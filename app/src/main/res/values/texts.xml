@@ -435,7 +435,7 @@
     <string name="qrHint" formatted="false">"Scan with your phone's camera"</string>
     <string name="queuedOnly" formatted="false">"%1$s waiting after another recording"</string>
     <string name="radio" formatted="false">"Radio"</string>
-    <string name="radioDarkHelp" formatted="false">"The screen goes dark, the radio plays on · any key brings it back"</string>
+    <string name="radioDarkHelp" formatted="false">"Screen dark, radio on · any key brings it back"</string>
     <string name="radioDarkRow" formatted="false">"Screen off while listening"</string>
     <string name="radioNote" formatted="false">"Keeps playing on Home and the screensaver · stops when another app plays sound"</string>
     <string name="radioPlay" formatted="false">"Play"</string>
@@ -521,8 +521,10 @@
     <string name="settings" formatted="false">"Settings"</string>
     <string name="someOf" formatted="false">"%1$s of %2$s"</string>
     <string name="sourceRow" formatted="false">"Source and updates"</string>
+    <string name="stationAroundClock" formatted="false">"Recitation, around the clock"</string>
     <string name="stationFileHelp" formatted="false">"Sent to the chosen TVs; a TV that doesn't have it keeps its own"</string>
     <string name="stationRow" formatted="false">"Station"</string>
+    <string name="stationSaved" formatted="false">"Saved on the TV"</string>
     <string name="stationSavedFile" formatted="false">"a recitation saved on this TV, so not copied; pick it on the TV"</string>
     <string name="statusHelp" formatted="false">"Whether the service, the screensaver and the adhan work on this device"</string>
     <string name="statusRow" formatted="false">"App status"</string>

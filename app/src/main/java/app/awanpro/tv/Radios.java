@@ -57,19 +57,48 @@ final class Radios {
                     english.put(r.getInt("id"), r.getString("name").trim());
                 }
             }
+            // Names in the screens' other languages (Languages.moreLists), by the channel's id at mp3quran.net.
+            Map<String, Map<Integer, String>> more = new HashMap<>();
+            for (String lang : Languages.moreLists()) {
+                File f = fileIn(c, lang);
+                if (!f.exists()) continue;
+                Map<Integer, String> names = new HashMap<>();
+                JSONArray list = new JSONObject(read(f)).getJSONArray("radios");
+                for (int i = 0; i < list.length(); i++) {
+                    JSONObject r = list.getJSONObject(i);
+                    names.put(r.getInt("id"), clean(r.getString("name")));
+                }
+                more.put(lang, names);
+            }
             Set<String> known = new HashSet<>();
-            for (Radio.Station s : Radio.STATIONS) known.add(s.id);
+            Map<String, Radio.Station> afnon = new HashMap<>();
+            for (Radio.Station s : Radio.STATIONS) {
+                known.add(s.id);
+                afnon.put(s.id, s);
+            }
             if (ar.exists()) {
                 JSONArray list = new JSONObject(read(ar)).getJSONArray("radios");
                 for (int i = 0; i < list.length(); i++) {
                     JSONObject r = list.getJSONObject(i);
                     String url = r.optString("url", "");
                     String id = idOf(url);
+                    // Afnon's ten take their names in the other languages from the list too.
+                    if (id != null && afnon.containsKey(id)) {
+                        for (Map.Entry<String, Map<Integer, String>> e : more.entrySet()) {
+                            String own = e.getValue().get(r.getInt("id"));
+                            if (own != null && !own.isEmpty()) afnon.get(id).more.put(e.getKey(), own);
+                        }
+                    }
                     if (id == null || known.contains(id)) continue;
                     known.add(id);
                     String nameAr = clean(r.getString("name"));
                     String nameEn = english.containsKey(r.getInt("id")) ? clean(english.get(r.getInt("id"))) : nameAr;
-                    out.add(Radio.Station.reciter(id, nameAr, nameEn));
+                    Radio.Station st = Radio.Station.reciter(id, nameAr, nameEn);
+                    for (Map.Entry<String, Map<Integer, String>> e : more.entrySet()) {
+                        String own = e.getValue().get(r.getInt("id"));
+                        if (own != null && !own.isEmpty()) st.more.put(e.getKey(), own);
+                    }
+                    out.add(st);
                 }
             }
         } catch (Exception e) {
@@ -97,12 +126,15 @@ final class Radios {
     /** Reads the list again in the background when it is a week old (or missing). */
     static void refresh(Context c) {
         Context app = c.getApplicationContext();
-        if (fetching || System.currentTimeMillis() - file(app, true).lastModified() < MAX_AGE) return;
+        boolean missing = false;
+        for (String lang : Languages.moreLists()) if (!fileIn(app, lang).exists()) missing = true;
+        if (fetching || (!missing && System.currentTimeMillis() - file(app, true).lastModified() < MAX_AGE)) return;
         fetching = true;
         new Thread(() -> {
             try {
                 save(file(app, true), get(API + "ar"));
                 save(file(app, false), get(API + "eng"));
+                for (String lang : Languages.moreLists()) save(fileIn(app, lang), get(API + Languages.mp3quran(lang)));
             } catch (Exception e) {
                 Log.i(Library.TAG, "radios list not read: " + e);
             } finally {
@@ -121,6 +153,10 @@ final class Radios {
 
     private static File file(Context c, boolean ar) {
         return new File(Library.dir(c, false), ar ? "radios-ar.json" : "radios-en.json");
+    }
+
+    private static File fileIn(Context c, String lang) {
+        return new File(Library.dir(c, false), "radios-" + lang + ".json");
     }
 
     private static String get(String url) throws IOException {
