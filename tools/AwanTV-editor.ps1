@@ -1,4 +1,4 @@
-﻿# AwanTV-editor.ps1 - Version 1.5.0
+﻿# AwanTV-editor.ps1 - Version 1.5.1
 # Awan TV settings editor for Windows.
 # One window: get the settings from a connected TV or open a settings file, change them with lists, switches and
 # steppers (nothing typed by hand), then send them to one or more connected TVs, or save them to a file. Every TV's own
@@ -29,7 +29,7 @@
 # met before connects from its card (its new Wireless debugging port is found on the network when it changed).
 
 $ErrorActionPreference = "Stop"
-$ScriptVersion = "1.5.0"
+$ScriptVersion = "1.5.1"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"
@@ -645,7 +645,7 @@ function Changed-Count {
 # The file to send or save: the settings, a comment above each from the description, in the TV's order.
 # $forFile: a saved recitation as the station stays out (it plays on its own TV only). $downloads: the recordings to
 # queue, sent to a TV only (Saved recitations).
-function Build-File([string[]]$onlyKeys, [bool]$forFile = $false, [object[]]$downloads = @()) {
+function Build-File([string[]]$onlyKeys, [bool]$forFile = $false, [object[]]$downloads = @(), [bool]$withButtons = $false) {
     $lines = New-Object Collections.Generic.List[string]
     $lines.Add("// Awan TV settings · AwanTV-editor v$ScriptVersion · $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
     $lines.Add("{")
@@ -675,8 +675,9 @@ function Build-File([string[]]$onlyKeys, [bool]$forFile = $false, [object[]]$dow
         $body.Add("  ""downloads"": " + (ConvertTo-Json -InputObject $list -Compress -Depth 5))
     }
     # Save to file keeps the remote's buttons too (TVs from 1.14.0), marked with their TV as it gave them: that TV
-    # takes them back, another passes them over. Never in what is sent to TVs (a TV older than 1.14.0 refuses them).
-    if ($forFile -and $script:Extra -and $script:Extra.Contains("buttons")) {
+    # takes them back, another passes them over. Sent only to that very TV ($withButtons, 1.5.1): a TV older than
+    # 1.14.0 refuses them, and another TV's remote has other codes.
+    if (($forFile -or $withButtons) -and $script:Extra -and $script:Extra.Contains("buttons")) {
         $body.Add("  // $(W 'buttonsLine')")
         $body.Add("  ""buttons"": " + (ConvertTo-Json -InputObject $script:Extra["buttons"] -Compress -Depth 6))
     }
@@ -2725,8 +2726,17 @@ $ui.SendBtn.Add_Click({
                     $skipped = @($script:Values.Keys | Where-Object { $only -notcontains $_ -and $_ -ne "station" }).Count
                 }
                 $downloads = if ($knows) { @($script:Pending) } else { @() }
+                # The remote's buttons go back only to the TV they came from: its own file (the backup just taken) bears
+                # the same mark, which also says it is 1.14.0 or later.
+                $same = $false
+                if ($script:Extra -and $script:Extra.Contains("buttons")) {
+                    try {
+                        $mine = (Read-Settings $got.File).buttons
+                        $same = $mine -and $mine.tv -and ([string]$mine.tv -eq [string]$script:Extra["buttons"].tv)
+                    } catch { $same = $false }
+                }
                 $payload = Join-Path $EditorDir "send.jsonc"
-                Write-Utf8 $payload (Build-File $only $false $downloads)
+                Write-Utf8 $payload (Build-File $only $false $downloads $same)
                 [void](Shell $tv.Serial "mkdir -p $Files")
                 [void](Adb $tv.Serial @("push", $payload, $Remote))
                 try { $answer = Tv-Words (Send-Action $tv.Serial "$Pkg.IMPORT") } finally { [void](Shell $tv.Serial "rm -f $Remote") }
