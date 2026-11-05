@@ -328,7 +328,7 @@
     <string name="methodName_7" formatted="false">"الجمعية الإسلامية لأمريكا الشمالية"</string>
     <string name="methodName_8" formatted="false">"لجنة رؤية الهلال"</string>
     <string name="methodName_9" formatted="false">"سنغافورة"</string>
-    <string name="middleHelp" formatted="false">"حديث يتغير كل 10 دقائق، وأذكار بعد الصلاة 10 دقائق بعد كل صلاة"</string>
+    <string name="middleHelp" formatted="false">"حديث كل 10 دقائق · أذكار 10 دقائق بعد كل صلاة"</string>
     <string name="middleRow" formatted="false">"وسط شاشة الاستراحة"</string>
     <string name="midnight" formatted="false">"منتصف الليل"</string>
     <string name="minutesAfterOther" formatted="false">"%1$s دقيقة"</string>
@@ -435,7 +435,7 @@
     <string name="qrHint" formatted="false">"امسح الرمز بكاميرا هاتفك"</string>
     <string name="queuedOnly" formatted="false">"%1$s في الانتظار بعد تلاوة أخرى"</string>
     <string name="radio" formatted="false">"الإذاعة"</string>
-    <string name="radioDarkHelp" formatted="false">"توفير الكهرباء: تنطفئ الشاشة وتستمر الإذاعة · أي زر يعيدها"</string>
+    <string name="radioDarkHelp" formatted="false">"تنطفئ الشاشة وتستمر الإذاعة · أي زر يعيدها"</string>
     <string name="radioDarkRow" formatted="false">"إطفاء الشاشة أثناء الاستماع"</string>
     <string name="radioNote" formatted="false">"تستمر في الرئيسية وشاشة الاستراحة · تتوقف إذا شغّل تطبيق آخر صوتًا"</string>
     <string name="radioPlay" formatted="false">"تشغيل"</string>
@@ -480,7 +480,7 @@
     <string name="roomTitle" formatted="false">"اتجاه الغرفة"</string>
     <string name="rowNow" formatted="false">"الآن"</string>
     <string name="runHelp" formatted="false">"الرئيسية تحتاج تشغيل خدمة Awan TV (إمكانية الوصول، أدناه)"</string>
-    <string name="runHelp_2" formatted="false">"الرئيسية فوق شاشة التلفاز، وشاشة الاستراحة بالمواقيت والأذكار"</string>
+    <string name="runHelp_2" formatted="false">"الرئيسية وشاشة الاستراحة بالمواقيت والأذكار"</string>
     <string name="runHelp_3" formatted="false">"الرئيسية فقط · شاشة الاستراحة والأذكار متوقفة"</string>
     <string name="runHelp_4" formatted="false">"شاشة الاستراحة فقط · رئيسية التلفاز كما هي"</string>
     <string name="runHelp_5" formatted="false">"متوقف · الأذان والتذكير حسب إعداداتهما"</string>

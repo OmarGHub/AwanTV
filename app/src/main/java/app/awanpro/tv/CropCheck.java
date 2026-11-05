@@ -80,7 +80,9 @@ final class CropCheck {
         int innerH = v.getHeight() - v.getTotalPaddingTop() - v.getTotalPaddingBottom();
         for (int i = 0; i < l.getLineCount() && why == null; i++) if (l.getEllipsisCount(i) > 0) why = "ends in ...";
         if (why == null && l.getLineCount() > v.getMaxLines()) why = "more lines than shown";
-        if (why == null && l.getLineCount() == 1 && l.getLineWidth(0) > innerW + 1) why = "wider than its place";
+        if (why == null && l.getLineCount() == 1 && l.getLineWidth(0) > innerW + 1) {
+            why = "wider than its place by " + Math.round(l.getLineWidth(0) - innerW) + " of " + innerW + " px";
+        }
         // Font padding off with the negative margins of Screen.lineHeight lets glyphs sit past the box by design:
         // only a whole line more counts.
         if (why == null && l.getLineCount() > 1 && l.getHeight() > innerH + l.getHeight() / l.getLineCount() / 2) {

@@ -19,6 +19,11 @@ history is in its repository.
 - Before a language is announced (1.18.0b): the build stops when a language's texts use a letter missing from the
   app's fonts (`checkFonts`, beside `checkTexts`); test builds list every text that does not fit its place
   (`CropCheck`: "...", lines or width past the view, cut by its box) for `AwanTV-textdump -Crops`.
+- Texts that did not fit (1.18.0b's crop check): Settings' help lines grow smaller to fit their row, to 80%, then
+  end in "…"; the screensaver's gold line likewise to 60% (Android's own autosize let "Friday night · Al-Kahf ·
+  Salawat" run out of the centre); the About codes' hint takes two lines. Shorter in both languages (Omar: short
+  is best in this app): the hadith and adhkar help, Home and screensaver's run mode, the radio's dark screen, and in
+  English the codes' hint and Friday's gold line ("Al-Kahf · Salawat ﷺ", as Friday night's).
 
 ### Tools
 - `AwanTV-textdump` 1.2.0: `-Crops` copies the TV's list of texts that do not fit (each once), `-Clear` empties it.

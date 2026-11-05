@@ -159,7 +159,7 @@
     <string name="fridayHelp_2" formatted="false">"The khutbah at the Dhuhr adhan"</string>
     <string name="fridayHelp_3" formatted="false">"By country: the khutbah at the Dhuhr adhan"</string>
     <string name="fridayHelp_4" formatted="false">"By country: %1$s %2$s · the Islamic Affairs authority"</string>
-    <string name="fridayLine" formatted="false">"Surat Al-Kahf · Salawat on the Prophet ﷺ"</string>
+    <string name="fridayLine" formatted="false">"Al-Kahf · Salawat ﷺ"</string>
     <string name="fridayNote" formatted="false">"On Fridays the khutbah instead"</string>
     <string name="fridayRow" formatted="false">"Friday prayer"</string>
     <string name="fridayTimeHelp" formatted="false">"Every Friday · Friday's countdown is to it"</string>
@@ -328,7 +328,7 @@
     <string name="methodName_7" formatted="false">"ISNA, North America"</string>
     <string name="methodName_8" formatted="false">"Moonsighting Committee"</string>
     <string name="methodName_9" formatted="false">"Singapore"</string>
-    <string name="middleHelp" formatted="false">"A hadith every 10 min, and the adhkar for 10 min after each prayer"</string>
+    <string name="middleHelp" formatted="false">"A hadith every 10 min · adhkar for 10 min after each prayer"</string>
     <string name="middleRow" formatted="false">"Screensaver's middle"</string>
     <string name="midnight" formatted="false">"Midnight"</string>
     <string name="minutesAfterOther" formatted="false">"%1$s min"</string>
@@ -432,10 +432,10 @@
     <string name="qiblaDirection" formatted="false">" · from "</string>
     <string name="qiblaHint" formatted="false">"Line up the compass north with true north"</string>
     <string name="qiblaRelative_2" formatted="false">"Qibla is "</string>
-    <string name="qrHint" formatted="false">"Scan a code with your phone's camera"</string>
+    <string name="qrHint" formatted="false">"Scan with your phone's camera"</string>
     <string name="queuedOnly" formatted="false">"%1$s waiting after another recording"</string>
     <string name="radio" formatted="false">"Radio"</string>
-    <string name="radioDarkHelp" formatted="false">"Saves power: the screen goes dark, the radio keeps playing · any key brings it back"</string>
+    <string name="radioDarkHelp" formatted="false">"The screen goes dark, the radio plays on · any key brings it back"</string>
     <string name="radioDarkRow" formatted="false">"Screen off while listening"</string>
     <string name="radioNote" formatted="false">"Keeps playing on Home and the screensaver · stops when another app plays sound"</string>
     <string name="radioPlay" formatted="false">"Play"</string>
@@ -480,7 +480,7 @@
     <string name="roomTitle" formatted="false">"Room direction"</string>
     <string name="rowNow" formatted="false">"now"</string>
     <string name="runHelp" formatted="false">"Home needs the Awan TV service on (Accessibility, below)"</string>
-    <string name="runHelp_2" formatted="false">"Home over the TV's own, and the screensaver with times and adhkar"</string>
+    <string name="runHelp_2" formatted="false">"Home and the screensaver with times and adhkar"</string>
     <string name="runHelp_3" formatted="false">"Home only · no screensaver or adhkar"</string>
     <string name="runHelp_4" formatted="false">"Screensaver only · the TV's own home screen"</string>
     <string name="runHelp_5" formatted="false">"Off · the adhan and reminders keep their own settings"</string>

@@ -536,6 +536,9 @@ public class SettingsActivity extends Screen {
         name.setText("Awan TV");
         panel.addView(name, wide(0));
         TextView hint = centred(text(ui400, 19, Tokens.MIST_400));
+        // Two lines when the panel is too narrow for one (English, longer languages).
+        hint.setSingleLine(false);
+        hint.setMaxLines(2);
         hint.setText(t.qrHint());
         panel.addView(hint, wide(4));
         panel.addView(qrBox(R.drawable.qr_site, siteLogo(), t.siteTitle(), Updates.shown(Updates.SITE)), wide(16));
@@ -1694,9 +1697,11 @@ public class SettingsActivity extends Screen {
         r.label.setTextDirection(dir);
         r.help.setTextDirection(dir);
         words.addView(r.label);
-        words.addView(r.help);
+        // The row's width, not the text's: a long help line grows smaller to fit it (Screen.fitWidth).
+        words.addView(r.help, new LinearLayout.LayoutParams(-1, -2));
         lineHeight(r.label, 1.25f);
         lineHeight(r.help, 1.35f);
+        fitWidth(r.help, 0.8f);
         line.addView(words, new LinearLayout.LayoutParams(0, -2, 1));
         r.control = new LinearLayout(this);
         r.control.setGravity(Gravity.CENTER_VERTICAL);

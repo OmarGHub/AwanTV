@@ -183,10 +183,14 @@ final class SaverScreen {
         centre.addView(nextFull, nfp);
         // Under the countdown, gone on other days, so they
         // look as before; it shrinks to fit the centre's width.
-        note = fit(text(regular, 30, NEXT), 30);
+        // Smaller to fit the centre's width (to 60%, as before), then "…": Android's own autosize let a long line
+        // run out of it (1.18.0b's crop check; "ليلة الجمعة · سورة الكهف · الصلاة على النـ").
+        note = text(regular, 30, NEXT);
+        note.setIncludeFontPadding(false);
         note.setGravity(Gravity.CENTER);
         note.setTextDirection(dir);
         note.setMaxLines(1);
+        Screen.fitWidth(note, 0.6f);
         note.setVisibility(View.GONE);
         LinearLayout.LayoutParams ntp = new LinearLayout.LayoutParams(-1, Ui.ipx(30 * 1.4f));
         ntp.topMargin = Ui.ipx(16);

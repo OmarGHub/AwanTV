@@ -64,7 +64,7 @@ abstract class Screen extends Activity {
             onTick();
             long now = System.currentTimeMillis();
             // Test builds: any text cut on this screen, every two seconds (CropCheck).
-            if ((now / 1000) % 2 == 0 && t != null) CropCheck.scan(Screen.this, getWindow().getDecorView(), getClass().getSimpleName(), t.lang);
+            if ((now / 1000) % 2 == 0 && t != null) CropCheck.scan(Screen.this, getWindow().getDecorView(), Screen.this.getClass().getSimpleName(), t.lang);
             tick.postDelayed(this, 1000 - (now % 1000) + 5);
         }
     };
@@ -674,6 +674,26 @@ abstract class Screen extends Activity {
     }
 
     // ---------------------------------------------------------------- helpers
+
+    /**
+     * One line that grows smaller to fit its width once laid out, as far as minScale of its size, then ends in "…"
+     * (1.18.0c: help lines and the screensaver's gold line, for longer languages too; CropCheck lists the "…").
+     * Its width must not follow its text (MATCH_PARENT or a set width), or it would never grow back.
+     */
+    static void fitWidth(TextView v, float minScale) {
+        final float base = v.getTextSize();
+        v.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        v.addOnLayoutChangeListener((x, l, tp, r, b, ol, ot, or, ob) -> {
+            int room = v.getWidth() - v.getTotalPaddingLeft() - v.getTotalPaddingRight();
+            CharSequence s = v.getText();
+            if (room <= 0 || s == null || s.length() == 0) return;
+            android.text.TextPaint p = new android.text.TextPaint(v.getPaint());
+            p.setTextSize(base);
+            float w = android.text.Layout.getDesiredWidth(s, p);
+            float size = w > room ? base * Math.max(minScale, room / w) : base;
+            if (Math.abs(v.getTextSize() - size) > 0.5f) v.post(() -> v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size));
+        });
+    }
 
     /**
      * Every text in a list at the screen's start edge, whatever its own script: a list of languages mixes them, and
