@@ -119,7 +119,7 @@ final class Apps {
         for (String p : moreSaved(c)) if (!favs.contains(p)) favs.add(p);
         List<String> rest = new ArrayList<>();
         for (String p : all) if (!favs.contains(p)) rest.add(p);
-        Collator col = Collator.getInstance(t.ar ? new Locale("ar") : Locale.ENGLISH);
+        Collator col = collator(t);
         Map<String, String> names = new HashMap<>();
         for (String p : rest) names.put(p, name(c, t, p));
         rest.sort((a, b) -> col.compare(names.get(a), names.get(b)));
@@ -183,6 +183,11 @@ final class Apps {
     }
 
     // ---------------------------------------------------------------- one app
+
+    /** The order of names in the screen's language (apps here, countries in Settings). */
+    static Collator collator(Text t) {
+        return Collator.getInstance(t.ar ? new Locale("ar") : Locale.ENGLISH);
+    }
 
     static String name(Context c, Text t, String pkg) {
         if (t.ar && AR_NAMES.containsKey(pkg)) return AR_NAMES.get(pkg);

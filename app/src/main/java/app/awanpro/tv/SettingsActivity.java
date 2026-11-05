@@ -1976,7 +1976,7 @@ public class SettingsActivity extends Screen {
                 if (city.countryEn.equals(en)) { countries.add(t.ar ? city.countryAr : city.countryEn); break; }
             }
         }
-        java.text.Collator order = java.text.Collator.getInstance(t.ar ? new Locale("ar") : Locale.ENGLISH);
+        java.text.Collator order = Apps.collator(t);
         Collections.sort(countries, (a, b) -> order.compare(a.replaceFirst("^ال", ""), b.replaceFirst("^ال", "")));
         Prefs.City now = Prefs.city(this);
         int sel = countries.indexOf(t.ar ? now.countryAr : now.countryEn);

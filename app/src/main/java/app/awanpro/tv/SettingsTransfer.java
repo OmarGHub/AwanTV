@@ -43,6 +43,8 @@ public class SettingsTransfer extends BroadcastReceiver {
      * app a second later to see the safety net (Crash). A release answers Unknown action.
      */
     static final String TEST_UPDATE = "app.awanpro.tv.TEST_UPDATE";
+    /** Test builds only: every text the app writes, for the languages plan's comparison (TextDump, AwanTV-textdump.ps1). */
+    static final String TEXT_DUMP = "app.awanpro.tv.TEXT_DUMP";
     /**
      * The editor's TVs now (1.10.0): STATUS answers "radio=on|off station=<id> sound=yes|no name=<Base64 of the
      * station's Arabic name, a new line, its English one>" (sound: something plays on the TV now, Awan TV's radio
@@ -137,6 +139,11 @@ public class SettingsTransfer extends BroadcastReceiver {
                     throw new IOException("Give --es do play or --es do stop");
                 }
                 result += " | " + status(c);
+            } else if (TEXT_DUMP.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
+                File out = new File(dir, TextDump.FILE);
+                long start = System.currentTimeMillis();
+                TextDump.write(c, out);
+                result = "Text dump written in " + (System.currentTimeMillis() - start) + " ms: " + out.getAbsolutePath();
             } else if (TEST_UPDATE.equals(intent.getAction()) && versionName(c).matches(".*\\d[a-z]+$")) {
                 int days = intent.getIntExtra("days_ago", -1);
                 String download = intent.getStringExtra("download");

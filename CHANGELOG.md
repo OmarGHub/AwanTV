@@ -6,6 +6,20 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Test builds only (a version ending in a letter): `TEXT_DUMP` writes every text the app shows, in Arabic and English
+  with both kinds of digits, to text-dump.txt (`TextDump`: every method of `Text` with inputs from the app's own data,
+  the remote's buttons, the adhan voices, countries, dates, the order of names, the language decision, the editor's
+  descriptions and the settings file). The safety net of the languages plan: the strings move to Android's
+  resources only when every line stays the same. A release answers "Unknown action".
+- No change on screen: the language decision (`Screen.language`), the dates' locale (`Screen.dateLocale`) and the
+  order of names (`Apps.collator`) are each in one place now, so the dump checks the very code the screens use.
+
+### Tools
+- `AwanTV-textdump` 1.0.0: takes the dump from a TV into state\textdump\<version>.txt and compares it with a golden
+  one (`-Golden`); a changed or missing golden line = exit code 1, new lines are listed. The texts go to a report
+  file, numbers only on the terminal.
+
 ## [1.14.2]
 
 ### The app

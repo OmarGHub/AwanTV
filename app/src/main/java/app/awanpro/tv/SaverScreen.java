@@ -407,7 +407,7 @@ final class SaverScreen {
             CharSequence clock = Screen.clock(t, now, h24, 0.3f);
             clockBig.setText(clock);
             clockSmall.setText(clock);
-            Locale loc = t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
+            Locale loc = Screen.dateLocale(t);
             String hijriText = t.d(day.hijriDay + " " + t.hijriMonths()[day.hijriMonth] + " " + day.hijriYear) + t.hijriSuffix();
             gregorian.setText(t.d(new SimpleDateFormat("d MMMM yyyy", loc).format(now)));
             cityDay.setText(t.city() + t.sep() + new SimpleDateFormat("EEEE", loc).format(now));

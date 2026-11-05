@@ -170,16 +170,28 @@ abstract class Screen extends Activity {
         return changed || (wasSettings != null && (!wasSettings.equals(builtSettings) || wasTheme != builtTheme));
     }
 
+    /**
+     * The language and digits from the settings ("locale", "digits") and the TV's language: {Arabic, Eastern digits}.
+     * Kept apart from the Context so the text dump (TextDump) checks it for every combination.
+     */
+    static boolean[] language(String locale, String tvLanguage, String digits) {
+        boolean ar = "system".equals(locale) ? "ar".equals(tvLanguage) : "ar".equals(locale);
+        boolean eastern = digits.isEmpty() ? ar : "eastern".equals(digits);
+        return new boolean[] {ar, eastern};
+    }
+
+    /** The locale of Gregorian dates: month and day names in the screen's language, Western digits (t.d() decides). */
+    static Locale dateLocale(Text t) {
+        return t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
+    }
+
     /** The saved language and digits, for screens and for the screensaver, which is not an Activity. */
     static Text loadText(Context c) {
         SharedPreferences p = Prefs.of(c);
-        String locale = p.getString("locale", "system");
-        boolean ar = "system".equals(locale)
-            ? "ar".equals(c.getResources().getConfiguration().getLocales().get(0).getLanguage())
-            : "ar".equals(locale);
-        String digits = p.getString("digits", "");
-        boolean eastern = digits.isEmpty() ? ar : "eastern".equals(digits);
-        Text t = new Text(ar, eastern);
+        boolean[] lang = language(p.getString("locale", "system"),
+            c.getResources().getConfiguration().getLocales().get(0).getLanguage(), p.getString("digits", ""));
+        boolean ar = lang[0];
+        Text t = new Text(ar, lang[1]);
         Prefs.City city = Prefs.city(c);
         t.cityName = ar ? city.ar : city.en;
         return t;
@@ -308,8 +320,7 @@ abstract class Screen extends Activity {
 
     /** "Wednesday 21 October 2026" in the screen's language and digits. */
     String gregorian(Date now) {
-        Locale dateLocale = t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
-        return t.d(new SimpleDateFormat("EEEE d MMMM yyyy", dateLocale).format(now));
+        return t.d(new SimpleDateFormat("EEEE d MMMM yyyy", dateLocale(t)).format(now));
     }
 
     /** "10 Jumada al-Ula 1448 AH". */

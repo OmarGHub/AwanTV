@@ -885,7 +885,7 @@ public class MainActivity extends Screen {
         int rows = (col + m.days.size() + 6) / 7;
         // Smaller figures when a month runs over six weeks (the rows share the card's height).
         boolean six = rows > 5;
-        Locale greg = t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
+        Locale greg = Screen.dateLocale(t);
         SimpleDateFormat monthName = new SimpleDateFormat(t.ar ? "MMMM" : "MMM", greg);
         int i = 0;
         for (int r = 0; r < rows; r++) {
@@ -952,7 +952,7 @@ public class MainActivity extends Screen {
         showHomePhoto(now);
         readClockFormat();
         clock.setText(time(now, 0.4f));
-        Locale dateLocale = t.ar ? Locale.forLanguageTag("ar-EG-u-nu-latn") : Locale.UK;
+        Locale dateLocale = Screen.dateLocale(t);
         gdate.setText(t.d(new SimpleDateFormat("d MMMM yyyy", dateLocale).format(now)));
         hdate.setText(hijri(day));
         cityLine.setText(t.city() + t.sep() + new SimpleDateFormat("EEEE", dateLocale).format(now));
