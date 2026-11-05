@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.18.0]
+
 ### The app
 - Urdu (اردو), the first language after Arabic and English (languages plan, phase 4; test builds from 1.18.0d):
   every screen's words (res/values-ur), right to left in the app's fonts, with Urdu's own digits (۰۱۲۳) when Eastern
@@ -28,7 +30,7 @@ history is in its repository.
   "SUHOOR" / "سحری"). Imsak in Arabic timetables is the optional precaution minutes before Fajr (Egypt's Dar al-Ifta:
   a precaution, not binding), so on the Fajr cell it read as optional; it stays the name of that precaution alone
   (Settings > Prayer times > Imsak in Ramadan, whose help now says the fast begins at the Fajr adhan and imsak is an
-  optional caution before it). Omar's choice.
+  optional caution before it). Omar's choice. In What's new, with Urdu.
 - Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
   12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
   temperature's figures alone smaller, only as far as needed (Omar's idea).

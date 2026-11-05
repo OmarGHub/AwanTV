@@ -704,6 +704,12 @@
         <item>"Language from Home"</item>
         <item>"The globe button beside Settings opens the list of languages, each by its own name. After a pick the screen asks Keep or Go back, and goes back by itself after ten seconds without an answer."</item>
     </string-array>
+    <string-array name="news_1_18_0">
+        <item>"Urdu"</item>
+        <item>"Every screen in Urdu, with reciters and surahs named in Urdu. Pick it from the globe button on Home."</item>
+        <item>"When the fast begins"</item>
+        <item>"In Ramadan the Fajr cell says the fast begins. Imsak, an optional caution before it, is set in Settings."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

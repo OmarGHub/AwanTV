@@ -704,6 +704,12 @@
         <item>"ہوم سے زبان"</item>
         <item>"ترتیبات کے ساتھ گلوب کا بٹن زبانوں کی فہرست کھولتا ہے، ہر زبان اپنے نام سے۔ انتخاب کے بعد اسکرین پوچھتی ہے: رکھیں یا واپس جائیں، اور جواب نہ ملے تو دس سیکنڈ میں خود واپس چلی جاتی ہے۔"</item>
     </string-array>
+    <string-array name="news_1_18_0">
+        <item>"اردو"</item>
+        <item>"ہر اسکرین اردو میں، قاریوں اور سورتوں کے نام بھی۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+        <item>"روزے کا آغاز"</item>
+        <item>"رمضان میں فجر کے خانے پر «روزے کا آغاز» لکھا ہوتا ہے۔ امساک اس سے پہلے اختیاری احتیاط ہے، جو ترتیبات میں مقرر ہوتا ہے۔"</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
