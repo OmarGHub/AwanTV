@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"IFTAR IN"</string>
     <string name="iftarTag" formatted="false">"IFTAR"</string>
     <string name="imsakAt" formatted="false">"Imsak "</string>
-    <string name="imsakHelp" formatted="false">"Suhoor ends at Fajr · imsak is a precaution before it"</string>
+    <string name="imsakHelp" formatted="false">"The fast begins at the Fajr adhan · imsak is an optional caution before it"</string>
     <string name="imsakRow" formatted="false">"Imsak in Ramadan"</string>
     <string name="in" formatted="false">"in %1$s"</string>
     <string name="inMinutesOther" formatted="false">"in %1$s min"</string>
@@ -299,7 +299,7 @@
     <string name="libraryHelp" formatted="false">"Save recitations to listen without the internet"</string>
     <string name="libraryHelpMany" formatted="false">"%1$s recordings · %2$s"</string>
     <string name="libraryHelpOne" formatted="false">"%1$s recording · %2$s"</string>
-    <string name="libraryIntro" formatted="false">"Downloaded from mp3quran.net to play without the internet: Radio &gt; Station &gt; Saved on the TV"</string>
+    <string name="libraryIntro" formatted="false">"Downloaded from mp3quran.net to play without the internet: Radio › Station › Saved on the TV"</string>
     <string name="libraryLegend" formatted="false">"✓ saved · ↓ waiting · OK on a surah: download or cancel it, twice to delete it"</string>
     <string name="libraryRow" formatted="false">"Saved recitations"</string>
     <string name="listValues" formatted="false">"Values: a list of the apps' package names, in order"</string>
@@ -381,7 +381,7 @@
     <string name="notInstalledFile" formatted="false">"(not installed on this TV)"</string>
     <string name="notOnHome" formatted="false">"Not on Home"</string>
     <string name="notSet" formatted="false">"Not set"</string>
-    <string name="nothingSaved" formatted="false">"Nothing saved yet · Radio &gt; Saved recitations"</string>
+    <string name="nothingSaved" formatted="false">"Nothing saved yet · Radio › Saved recitations"</string>
     <string name="nowHint" formatted="false">"Back to dismiss · closes by itself after the adhan"</string>
     <string name="nowHintMany" formatted="false">"Back to dismiss · closes by itself after %1$s min"</string>
     <string name="nowHintOne" formatted="false">"Back to dismiss · closes by itself after 1 min"</string>
@@ -534,7 +534,7 @@
     <string name="stop" formatted="false">"Stop adhan"</string>
     <string name="suhoorEnds" formatted="false">"Suhoor ends %1$s"</string>
     <string name="suhoorEndsIn" formatted="false">"Suhoor ends in"</string>
-    <string name="suhoorTag" formatted="false">"SUHOOR"</string>
+    <string name="suhoorTag" formatted="false">"FASTING"</string>
     <string name="surahMany" formatted="false">"%1$s surahs"</string>
     <string name="surahOne" formatted="false">"%1$s surah"</string>
     <string name="textValue" formatted="false">"Values: text in quotes"</string>

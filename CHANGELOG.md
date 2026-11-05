@@ -19,6 +19,16 @@ history is in its repository.
   From the Urdu screens (1.18.0f): Home's prayer names keep one line, smaller where wide ("طلوعِ آفتاب" took two);
   Settings' menu and its windows' lines read from the screen's start even when they begin with "Awan TV" (the
   menu's "Awan TV" stood at the left, the reset window's ✓ at the line's end). Arabic and English look the same.
+  After a review of the Urdu against Android's own Urdu and Urdu prayer apps (Al-Azan, Prayer Times) (1.18.0g):
+  the countdown labels "فجر تک" (Fajr's "میں" read as "during"), "ایڈجسٹمنٹ" for adjusting the times (Android's
+  word), "کوآرڈینیٹس" for coordinates, "رابطہ عالمِ اسلامی" (the League's Urdu name), "گہرا سرمئی" for Charcoal,
+  "تھیم", "محفوظ کریں", "تبدیل کریں", "دبائے رکھنے پر کچھ نہیں", the update line's word order and a few closer to the
+  Arabic.
+- Ramadan's Fajr cell on Home says the fast begins: "بداية الصوم" / "FASTING" / "روزے کا آغاز" (was "الإمساك" /
+  "SUHOOR" / "سحری"). Imsak in Arabic timetables is the optional precaution minutes before Fajr (Egypt's Dar al-Ifta:
+  a precaution, not binding), so on the Fajr cell it read as optional; it stays the name of that precaution alone
+  (Settings > Prayer times > Imsak in Ramadan, whose help now says the fast begins at the Fajr adhan and imsak is an
+  optional caution before it). Omar's choice.
 - Home: the weather sits closer to the clock (16 px each side of the line between them, 32 before), so beside a
   12-hour clock "28°" no longer runs under the radio button; a wider reading ("-12°", "113°") makes the
   temperature's figures alone smaller, only as far as needed (Omar's idea).

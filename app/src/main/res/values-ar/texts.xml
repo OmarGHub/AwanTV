@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"الإفطار بعد"</string>
     <string name="iftarTag" formatted="false">"الإفطار"</string>
     <string name="imsakAt" formatted="false">"الإمساك "</string>
-    <string name="imsakHelp" formatted="false">"السحور ينتهي عند الفجر · الإمساك احتياط قبله"</string>
+    <string name="imsakHelp" formatted="false">"يبدأ الصوم عند أذان الفجر · الإمساك احتياط اختياري قبله"</string>
     <string name="imsakRow" formatted="false">"الإمساك في رمضان"</string>
     <string name="in" formatted="false">"بعد %1$s"</string>
     <string name="inMinutesOther" formatted="false">"بعد %1$s دقيقة"</string>
@@ -534,7 +534,7 @@
     <string name="stop" formatted="false">"إيقاف الأذان"</string>
     <string name="suhoorEnds" formatted="false">"السحور حتى %1$s"</string>
     <string name="suhoorEndsIn" formatted="false">"السحور ينتهي بعد"</string>
-    <string name="suhoorTag" formatted="false">"الإمساك"</string>
+    <string name="suhoorTag" formatted="false">"بداية الصوم"</string>
     <string name="surahMany" formatted="false">"%1$s سور"</string>
     <string name="surahOne" formatted="false">"%1$s سورة"</string>
     <string name="textValue" formatted="false">"القيم: نص بين علامتي تنصيص"</string>
