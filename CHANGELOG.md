@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.14.0]
+
 ### The app
 - The iqamah countdown over apps is on by default (Omar: off, hardly anyone would find it; on, anyone can turn it
   off): a TV that never chose gets it with the update, one turned off stays off. Its first five times (a prayer each,
