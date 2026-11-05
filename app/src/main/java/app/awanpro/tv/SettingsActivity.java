@@ -576,6 +576,9 @@ public class SettingsActivity extends Screen {
 
         TextView name = centred(text(ui500, 22, Tokens.GOLD_400));
         name.setText(title);
+        // One line, smaller where wider than the code (1.19.0b: Turkish "Kaynak ve güncellemeler" by 22 px).
+        name.setSingleLine(true);
+        Screen.fitWidth(name, 0.8f);
         box.addView(name, wide(12));
         TextView where = centred(text(ui400, 15, Tokens.MIST_400));
         where.setText(address);

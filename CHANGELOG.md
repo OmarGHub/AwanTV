@@ -17,6 +17,12 @@ history is in its repository.
   suffix after a part (Turkish suffixes follow the word put in: "Sabah vaktine", "%2$s gün sonra %1$s"); the
   percent sign before the number ("%45"). Settings' section titles in capitals by the screen's language, not the
   TV's (Turkish "i" is "İ").
+  After Gemini's review, each item checked against the code and Turkish sources (1.19.0b): the adhan is read, not
+  played ("Okundu", "Ezanı dinle"); "Dünya İslâm Birliği" (TDV İslâm Ansiklopedisi's name for the League);
+  "Eyyâm-ı Biyd"; "düğme" for every button; no comma before "ve"; Turkish quotes; and a few closer to the Arabic.
+- Lists drawn over a screen (the stations, the languages, every chooser) grow smaller where a name is wider than its
+  row, to 80%, then end in "…" (1.19.0b's crop check: mp3quran.net's reciter channels in Turkish ran past the row);
+  the About codes' titles keep one line and grow smaller likewise. Arabic, English and Urdu look the same.
 
 ### Tools
 - `AwanTV-texts-sheet.py` 1.1.0: several languages side by side (`ur,tr`: Arabic, English, Urdu, Turkish), a
