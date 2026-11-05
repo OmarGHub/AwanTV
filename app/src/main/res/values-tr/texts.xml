@@ -710,6 +710,10 @@
         <item>"Orucun başladığı an"</item>
         <item>"Ramazan'da sabah hücresinde “İmsak” yazar. Öncesindeki isteğe bağlı ihtiyat payı Ayarlar'dan ayarlanır."</item>
     </string-array>
+    <string-array name="news_1_19_0">
+        <item>"Türkçe"</item>
+        <item>"Her ekran Türkçe, Diyanet'in terimleriyle; kâriler ve sureler de Türkçe adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

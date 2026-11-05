@@ -710,6 +710,10 @@
         <item>"When the fast begins"</item>
         <item>"In Ramadan the Fajr cell says the fast begins. Imsak, an optional caution before it, is set in Settings."</item>
     </string-array>
+    <string-array name="news_1_19_0">
+        <item>"Turkish"</item>
+        <item>"Every screen in Turkish, in Diyanet's terms, with reciters and surahs named in Turkish. Pick it from the globe button on Home."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

@@ -6,9 +6,11 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.19.0]
+
 ### The app
-- Turkish (Türkçe), the second language after Arabic and English (test builds from 1.19.0a): every screen's words
-  (res/values-tr), in Diyanet's terms and as Turkish prayer apps write them (Namaz Vakti, Al-Azan, and Android's own
+- Turkish (Türkçe), the second language added to Arabic and English, after Urdu (test builds from 1.19.0a): every
+  screen's words (res/values-tr), in Diyanet's terms and as Turkish prayer apps write them (Namaz Vakti, Al-Azan, and Android's own
   Turkish for the settings words): Sabah, Güneş, Öğle, İkindi, Akşam, Yatsı; Kamet for the iqamah; Asr-ı Evvel and
   Asr-ı Sânî. Ramadan's Fajr cell says "İMSAK": in Turkey imsak is the fast's start itself (Diyanet: the first light
   of true dawn, the start of the fast and of Sabah's time), so the optional precaution before it is "İhtiyat"
@@ -16,7 +18,7 @@ history is in its repository.
   hadiths' references in Turkish (`tools/labels-tr.tsv`, the books as Diyanet names them). No text ends in a
   suffix after a part (Turkish suffixes follow the word put in: "Sabah vaktine", "%2$s gün sonra %1$s"); the
   percent sign before the number ("%45"). Settings' section titles in capitals by the screen's language, not the
-  TV's (Turkish "i" is "İ").
+  TV's (Turkish "i" is "İ"). In What's new.
   After Gemini's review, each item checked against the code and Turkish sources (1.19.0b): the adhan is read, not
   played ("Okundu", "Ezanı dinle"); "Dünya İslâm Birliği" (TDV İslâm Ansiklopedisi's name for the League);
   "Eyyâm-ı Biyd"; "düğme" for every button; no comma before "ve"; Turkish quotes; and a few closer to the Arabic.
