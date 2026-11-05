@@ -1078,6 +1078,12 @@ final class Text {
     String iqamaCounterRow() { return ar ? "عدّاد الإقامة فوق التطبيقات" : "Iqamah countdown over apps"; }
     /** Under the countdown card its first times (PrayerWatch.HINT_TIMES): where it is turned off. */
     String iqamaCounterOff() { return ar ? "تُطفأ من الإعدادات ← الإقامة" : "Turn it off in Settings › Iqamah"; }
+    // The settings file's last part (SettingsFile.write, 1.14.0).
+    String buttonsFileSection() { return ar ? "أزرار الريموت (لهذه الشاشة وحدها)" : "Remote buttons (this TV only)"; }
+    String buttonsFileNote() {
+        return ar ? "تعود إلى هذه الشاشة وحدها، وتُتجاهل إن أُرسل الملف إلى شاشة أخرى، فلكل ريموت أرقامه."
+            : "They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes.";
+    }
     String iqamaCounterHelp() { return ar ? "بعد الأذان، في زاوية الشاشة حتى الإقامة" : "After the adhan, in a corner of the screen until the iqamah"; }
     /** "الإقامة بعد 8 د" / "Iqamah in 8 min"; under a minute "الإقامة الآن". */
     String iqamaInMinutes(long minutes) {

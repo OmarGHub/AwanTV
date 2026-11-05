@@ -1,4 +1,4 @@
-# AwanTV-settings.ps1 - Version 1.0.0
+# AwanTV-settings.ps1 - Version 1.1.0
 # Awan TV's settings as one commented file (.jsonc) over adb:
 #   -Export  saves every setting of the TV to a file on this PC (state\settings\), each with a comment: what it is,
 #            its values and its default. Edit it in Notepad or VS Code, or send it to another TV as it is.
@@ -10,7 +10,10 @@
 #            already a new install's); the newest is restored and every copy is saved in state\settings
 #            (awantv-before-reset-<TV serial>-<time of the reset>.jsonc), so an older one can go back with -Import -File.
 # What belongs to one TV is not in the file: the screensaver Awan TV replaced, the radio's saved sleep timer, the
-# downloads and saved recitations, the weather read, the reminders already shown, the last adhan.
+# downloads and saved recitations, the weather read, the reminders already shown, the last adhan. The remote's
+# buttons are (TVs from 1.14.0), marked with the TV they came from: -Restore and an import to that same TV bring them
+# back; another TV passes them over (each remote has its own codes). A TV older than 1.14.0 refuses a file with them:
+# update it first.
 #
 # Usage: powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Export [-Device <serial>] [-File <path>]
 #        powershell -ExecutionPolicy Bypass -File tools\AwanTV-settings.ps1 -Import [-Device <serial>] [-File <path>]
@@ -27,7 +30,7 @@
 param([switch]$Export, [switch]$Import, [switch]$Restore, [string]$Device = "", [string]$File = "")
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.0.0"
+$ScriptVersion = "1.1.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Files = "/sdcard/Android/data/$Pkg/files"

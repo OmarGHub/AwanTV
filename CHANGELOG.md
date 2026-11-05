@@ -12,6 +12,14 @@ history is in its repository.
   a whole day) the card says where it is turned off (Settings > Iqamah). What's new for 1.14.0 says so too.
 - The screensaver's photos are on by default too (they were off, and few found them); turned off, they stay off.
   What's new for 1.14.0 says where they are turned off (Display & language).
+- The remote's buttons are in the settings file (`"buttons"`, the last part), marked with the TV (a hash of its
+  ANDROID_ID, the same after a reinstall): Reset's copy, `AwanTV-settings -Restore` and an import to the same TV bring
+  them back (they were lost with a reset or a reinstall); another TV passes them over ("Buttons kept: another TV's"),
+  as each remote has its own codes. A TV older than 1.14.0 refuses a file with them: update it first. The editor
+  leaves them out of what it sends.
+
+### Tools
+- `AwanTV-settings` 1.1.0: its notes say the buttons come back to their own TV only.
 
 ## [1.13.1]
 

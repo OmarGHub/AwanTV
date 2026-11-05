@@ -268,11 +268,67 @@ final class SettingsFile {
                         .append(name.equals(pkg) ? t.notInstalledFile() : name).append('\n');
                 }
             }
-            b.append("  ").append(JSONObject.quote(it.key)).append(": ").append(json(it, now));
-            b.append(i == all.size() - 1 ? "\n" : ",\n");
+            b.append("  ").append(JSONObject.quote(it.key)).append(": ").append(json(it, now)).append(",\n");
         }
+        // The remote's buttons (1.14.0): each remote has its own codes, so they come back to this TV alone (Reset's
+        // copy, a reinstall, an import here) and are passed over on another TV. Marked with this TV's id.
+        b.append("\n  // ═══ ").append(t.buttonsFileSection()).append(" ═══\n");
+        b.append("  // ").append(t.buttonsFileNote()).append('\n');
+        JSONObject buttons = new JSONObject().put("tv", tvId(c)).put("list", buttonsNow(c));
+        b.append("  \"buttons\": ").append(buttons.toString()).append('\n');
         b.append("}\n");
         return b.toString();
+    }
+
+    /**
+     * This TV in the file, for its remote's buttons: a hash of ANDROID_ID (the same after a reinstall signed with the
+     * same key, new after a factory reset), so the file names no identifier of the TV itself.
+     */
+    static String tvId(Context c) {
+        try {
+            String id = android.provider.Settings.Secure.getString(c.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+            byte[] h = java.security.MessageDigest.getInstance("SHA-256").digest(("awantv:" + id).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            StringBuilder out = new StringBuilder();
+            for (int i = 0; i < 6; i++) out.append(String.format(java.util.Locale.ROOT, "%02x", h[i]));
+            return out.toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private static JSONArray buttonsNow(Context c) {
+        try {
+            String raw = Prefs.of(c).getString(Buttons.KEY, null);
+            return raw == null ? new JSONArray() : new JSONArray(raw);
+        } catch (JSONException e) {
+            return new JSONArray();
+        }
+    }
+
+    private static final Pattern BUTTON_ID = Pattern.compile("^s?\\d{1,6}$");
+    private static final Pattern BUTTON_DO = Pattern.compile("^(none|awan:(saver|today|radio)|app:[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+)$");
+
+    /** The file's buttons checked; their mistakes into errors. Null when there are none to take. */
+    private static JSONArray buttonsIn(Object v, List<String> errors) {
+        if (!(v instanceof JSONObject)) {
+            errors.add("buttons: not an object with tv and list");
+            return null;
+        }
+        JSONArray list = ((JSONObject) v).optJSONArray("list");
+        if (list == null) {
+            errors.add("buttons: no list");
+            return null;
+        }
+        for (int i = 0; i < list.length(); i++) {
+            JSONObject o = list.optJSONObject(i);
+            String k = o == null ? "" : o.optString("k"), d = o == null ? "" : o.optString("do");
+            String l = o == null || !o.has("long") ? null : o.optString("long");
+            if (!BUTTON_ID.matcher(k).matches() || !BUTTON_DO.matcher(d).matches() || (l != null && !BUTTON_DO.matcher(l).matches())) {
+                errors.add("buttons: entry " + (i + 1) + " is not a button");
+                return null;
+            }
+        }
+        return list;
     }
 
     /** Western digits and the plain " · " in the file: the values are numbers JSON reads. */
@@ -551,11 +607,26 @@ final class SettingsFile {
             errors.add(e.getMessage());
         }
         String station = null;
+        boolean buttons = false;
         java.util.Set<String> coming = new java.util.HashSet<>();
         for (LibraryRemote.Download d : downloads) coming.add(d.reciter.key());
         for (Iterator<String> keys = in.keys(); keys.hasNext(); ) {
             String key = keys.next();
             if (key.equals("app") || key.equals("format") || key.equals("version") || key.equals("downloads")) continue;
+            if (key.equals("buttons")) {
+                JSONArray list = buttonsIn(in.opt(key), errors);
+                if (list == null) continue;
+                if (!tvId(c).equals(((JSONObject) in.opt(key)).optString("tv"))) {
+                    // Another TV's remote: its codes mean other buttons here.
+                    if (list.length() > 0) done.notes.add("Buttons kept: another TV's");
+                    continue;
+                }
+                if (list.toString().equals(buttonsNow(c).toString())) continue;
+                if (list.length() == 0) ed.remove(Buttons.KEY); else ed.putString(Buttons.KEY, list.toString());
+                buttons = true;
+                changed++;
+                continue;
+            }
             Item it = table.get(key);
             // Settings no longer kept (an older TV's file): passed over, not a mistake.
             if (it == null && RETIRED.contains(key)) continue;
@@ -588,6 +659,8 @@ final class SettingsFile {
         if (!errors.isEmpty()) throw new java.io.IOException(errors.size() + " mistake(s), nothing changed | " + TextUtils.join(" | ", errors));
         if (changed > 0 && !ed.commit()) throw new java.io.IOException("The settings could not be saved");
         if (station != null) Radio.switchToId(c, station);
+        // TCL's remapping and the key filter follow the buttons brought back.
+        if (buttons) RemoteKeys.buttonsChanged();
         done.changed = changed;
         if (!downloads.isEmpty()) {
             done.recordings = downloads.size();
