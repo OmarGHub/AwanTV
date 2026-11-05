@@ -3,22 +3,114 @@ package app.awanpro.tv;
 import com.batoulapps.adhan.CalculationParameters;
 import com.batoulapps.adhan.Madhab;
 
-/** Interface strings for both locales, taken from the `t` tables in design/afnon-mihrab/design/Home.dc.html. */
+/**
+ * Interface strings for both locales, first taken from the `t` tables in design/afnon-mihrab/design/Home.dc.html.
+ *
+ * <p>The words are in res/values/texts.xml (English, also what any missing text falls back to) and
+ * res/values-ar/texts.xml (languages plan, phase 1): read in the language chosen in Settings, whatever the TV's own,
+ * from one Resources per language (`of`). The methods still decide everything else: which text, the digits (d()),
+ * the Arabic counting forms, still in code until phase 2. The crash screen's texts stay in code (`crash...`, `back`):
+ * it must open even when the resources cannot be read, so `new Text(ar, eastern)` (no resources) serves it alone.
+ */
 final class Text {
     final boolean ar;
     /** Eastern Arabic digits (٠١٢٣). Its own setting; defaults to on in Arabic. */
     final boolean eastern;
+    private final Res res;
 
+    /** Where the words come from: Android's resources in one language, or (the text dump's check) any table. */
+    interface Res {
+        String string(int id);
+        String[] array(int id);
+    }
+
+    /** Without resources: the crash screen's fallback only (its texts are in code). */
     Text(boolean ar, boolean eastern) {
+        this(null, ar, eastern);
+    }
+
+    Text(Res res, boolean ar, boolean eastern) {
+        this.res = res;
         this.ar = ar;
         this.eastern = eastern;
+    }
+
+    private static final java.util.Map<String, Res> RES = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * The texts in Arabic or English, whatever the TV's own language: the application's resources with only the
+     * locale set, made once per language and kept (screens, the screensaver, the services and the adb receiver may
+     * ask from different threads). Words only: no size, image or font is read through it.
+     */
+    static Text of(android.content.Context c, boolean ar, boolean eastern) {
+        String tag = ar ? "ar" : "en";
+        Res r = RES.get(tag);
+        if (r == null) {
+            android.content.Context app = c.getApplicationContext() != null ? c.getApplicationContext() : c;
+            android.content.res.Configuration cfg = new android.content.res.Configuration(app.getResources().getConfiguration());
+            cfg.setLocale(new java.util.Locale(tag));
+            android.content.res.Resources words = app.createConfigurationContext(cfg).getResources();
+            r = new Res() {
+                @Override public String string(int id) { return words.getString(id); }
+                @Override public String[] array(int id) { return words.getStringArray(id); }
+            };
+            RES.put(tag, r);
+        }
+        return new Text(r, ar, eastern);
+    }
+
+    /** A text: %% in it is a percent sign (every string is written for fill). */
+    private String s(int id) {
+        return fill(res.string(id));
+    }
+
+    /** A text with its parts: %1$s, %2$s… by position, %% a percent sign. */
+    private String s(int id, Object... parts) {
+        return fill(res.string(id), parts);
+    }
+
+    /**
+     * Fills %1$s… in one pass (a part that itself holds "%2$s" stays as it is). Not String.format: that would write
+     * the numbers in the resources' locale, and the digits are d()'s alone. Each part as string concatenation wrote it.
+     */
+    static String fill(String template, Object... parts) {
+        StringBuilder b = new StringBuilder(template.length() + 16);
+        int n = template.length();
+        for (int i = 0; i < n; i++) {
+            char c = template.charAt(i);
+            if (c == '%' && i + 1 < n) {
+                char next = template.charAt(i + 1);
+                if (next == '%') { b.append('%'); i++; continue; }
+                int j = i + 1;
+                while (j < n && Character.isDigit(template.charAt(j))) j++;
+                if (j > i + 1 && j + 1 < n && template.charAt(j) == '$' && template.charAt(j + 1) == 's') {
+                    int k = Integer.parseInt(template.substring(i + 1, j)) - 1;
+                    b.append(k >= 0 && k < parts.length ? String.valueOf(parts[k]) : template.substring(i, j + 2));
+                    i = j + 1;
+                    continue;
+                }
+            }
+            b.append(c);
+        }
+        return b.toString();
+    }
+
+    private String[] a(int id) {
+        return res.array(id);
+    }
+
+    /** An array written row after row (title, line, title, line…) as rows of width. */
+    private static String[][] pairs(String[] flat, int width) {
+        String[][] out = new String[flat.length / width][];
+        for (int i = 0; i < out.length; i++) out[i] = java.util.Arrays.copyOfRange(flat, i * width, i * width + width);
+        return out;
     }
 
     String d(String s) {
         if (!eastern) return s;
         // "·" beside Eastern digits reads as a zero (٠); Arabic punctuation takes its own comma instead. Awan TV
         // English with Eastern digits takes the Latin comma ("Cairo, Friday", not "Cairo، Friday").
-        s = s.replace(" · ", ar ? "، " : ", ");
+        s = s.replace(" · ", s(R.string.d));
         StringBuilder b = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -31,41 +123,41 @@ final class Text {
     String sep() { return d(" · "); }
 
     /** The arch verse's reference (An-Nisa 4:103), in the screen's digits like every other number. */
-    String ref() { return ar ? d("النساء 103") : d("An-Nisa 4:103"); }
-    String nextPrayer() { return ar ? "الصلاة القادمة" : "NEXT PRAYER"; }
-    String today() { return ar ? "مواقيت اليوم والقبلة" : "Today & Qibla"; }
-    String settings() { return ar ? "الإعدادات" : "Settings"; }
+    String ref() { return d(s(R.string.ref)); }
+    String nextPrayer() { return s(R.string.nextPrayer); }
+    String today() { return s(R.string.today); }
+    String settings() { return s(R.string.settings); }
     /** The saved city in this language; set by {@link Screen#loadText}. */
     String cityName = "";
     String city() { return cityName; }
-    String fav() { return ar ? "المفضلة" : "FAVOURITES"; }
-    String more() { return ar ? "المزيد" : "MORE"; }
+    String fav() { return s(R.string.fav); }
+    String more() { return s(R.string.more); }
     /** Home's tile: the label over the count. */
-    String all(int n) { return d((ar ? "كل التطبيقات" : "All apps") + "\n" + n); }
-    String ampm(boolean am) { return ar ? (am ? "ص" : "م") : (am ? "AM" : "PM"); }
-    String adhanAt() { return ar ? "الأذان" : "Adhan at"; }
-    String nowTag() { return ar ? "الآن" : "NOW"; }
-    String nextTag() { return ar ? "التالية" : "NEXT"; }
-    String jumuahLabel() { return ar ? "صلاة الجمعة" : "JUMU'AH"; }
-    String jumuah() { return ar ? "الجمعة" : "Jumu'ah"; }
-    String kahf() { return ar ? "سورة الكهف اليوم" : "Surat Al-Kahf today"; }
-    String iftarIn() { return ar ? "الإفطار بعد" : "IFTAR IN"; }
-    String iftar() { return ar ? "الإفطار" : "Iftar"; }
-    String iftarTag() { return ar ? "الإفطار" : "IFTAR"; }
-    String suhoorTag() { return ar ? "الإمساك" : "SUHOOR"; }
-    String suhoorEnds(String time) { return d(ar ? "السحور حتى " + time : "Suhoor ends " + time); }
-    String comingSoon() { return ar ? "هذه الشاشة قادمة في التحديث التالي" : "This screen comes in the next update"; }
+    String all(int n) { return d((s(R.string.all)) + "\n" + n); }
+    String ampm(boolean am) { return (am ? s(R.string.ampm) : s(R.string.ampm_2)); }
+    String adhanAt() { return s(R.string.adhanAt); }
+    String nowTag() { return s(R.string.nowTag); }
+    String nextTag() { return s(R.string.nextTag); }
+    String jumuahLabel() { return s(R.string.jumuahLabel); }
+    String jumuah() { return s(R.string.jumuah); }
+    String kahf() { return s(R.string.kahf); }
+    String iftarIn() { return s(R.string.iftarIn); }
+    String iftar() { return s(R.string.iftar); }
+    String iftarTag() { return s(R.string.iftarTag); }
+    String suhoorTag() { return s(R.string.suhoorTag); }
+    String suhoorEnds(String time) { return d(s(R.string.suhoorEnds, time)); }
+    String comingSoon() { return s(R.string.comingSoon); }
 
     String hintOk(String what) { return "OK  " + what; }
-    String hintApps() { return ar ? "◀  التطبيقات" : "▶  Apps"; }
-    String hintMore() { return ar ? "▼  المزيد" : "▼  More"; }
-    String hintFavs() { return ar ? "▲  المفضلة" : "▲  Favourites"; }
-    String open(String app) { return ar ? "فتح " + app : "Open " + app; }
-    String network() { return ar ? "إعدادات الشبكة" : "Network settings"; }
+    String hintApps() { return s(R.string.hintApps); }
+    String hintMore() { return s(R.string.hintMore); }
+    String hintFavs() { return s(R.string.hintFavs); }
+    String open(String app) { return s(R.string.open, app); }
+    String network() { return s(R.string.network); }
     // Home's network button, in its hint.
-    String netWired() { return ar ? "متصل بالكابل" : "Connected by cable"; }
-    String netOff() { return ar ? "غير متصل" : "Not connected"; }
-    String netNoInternet() { return ar ? "متصل بلا إنترنت" : "Connected, no internet"; }
+    String netWired() { return s(R.string.netWired); }
+    String netOff() { return s(R.string.netOff); }
+    String netNoInternet() { return s(R.string.netNoInternet); }
 
     // Screensaver (design/afnon-mihrab/design/Screensaver.dc.html)
     /**
@@ -81,55 +173,54 @@ final class Text {
     }
 
     // Reminder and call to prayer (design/afnon-mihrab/design/Home.dc.html approach/now, design/afnon-mihrab/design/ApproachVideo.dc.html)
-    String apLabel() { return ar ? "اقتربت الصلاة" : "PRAYER APPROACHING"; }
+    String apLabel() { return s(R.string.apLabel); }
     /** "Asr in 13 minutes". */
     String apTitle(String prayer, long minutes, String hoursAndMinutes) {
         if (!ar && minutes < 60) return d(prayer + " in " + minutes + (minutes == 1 ? " minute" : " minutes"));
         return prayer + " " + inMinutes(minutes, hoursAndMinutes);
     }
-    String apSub(CharSequence time) { return d((ar ? "الأذان " : "Adhan at ") + time + (ar ? " · رجوع للإغلاق" : " · Back to dismiss")); }
-    String apOk() { return ar ? "حسنًا" : "Got it"; }
+    String apSub(CharSequence time) { return d((s(R.string.apSub)) + time + (s(R.string.apSub_2))); }
+    String apOk() { return s(R.string.apOk); }
     String bannerSub(CharSequence time, int seconds) {
-        return d((ar ? "الأذان " : "Adhan ") + time + (ar ? " · يختفي خلال " + seconds + " ث" : " · hides in " + seconds + " s"));
+        return d((s(R.string.bannerSub)) + time + (s(R.string.bannerSub_2, seconds)));
     }
-    String nowLabel() { return ar ? "حان الآن وقت صلاة" : "IT'S TIME FOR"; }
-    String play() { return ar ? "تشغيل الأذان" : "Play adhan"; }
-    String stop() { return ar ? "إيقاف الأذان" : "Stop adhan"; }
-    String dismiss() { return ar ? "إغلاق" : "Dismiss"; }
+    String nowLabel() { return s(R.string.nowLabel); }
+    String play() { return s(R.string.play); }
+    String stop() { return s(R.string.stop); }
+    String dismiss() { return s(R.string.dismiss); }
     // Radio: Home's pill and card, the screen-off view, the screensaver line and the Settings section.
-    String radio() { return ar ? "الإذاعة" : "Radio"; }
+    String radio() { return s(R.string.radio); }
     String station(Radio.Station s) { return d(ar ? s.ar : s.en); }
     String stationWhere(Radio.Station s) { return d(ar ? s.whereAr : s.whereEn); }
     /** A station in a list: its name and place, since several are called إذاعة القرآن الكريم. */
     String stationChoice(Radio.Station s) { return s.reciter ? station(s) : station(s) + sep() + stationWhere(s); }
-    String stationRow() { return ar ? "المحطة" : "Station"; }
+    String stationRow() { return s(R.string.stationRow); }
     String[] stationGroups() {
         // Awan TV adds the recordings saved on the TV (Library).
-        return ar ? new String[] {"إذاعات القرآن الكريم", "القرّاء", "المحفوظة على التلفاز"}
-                  : new String[] {"Quran radio stations", "Reciters", "Saved on the TV"};
+        return a(R.array.stationGroups);
     }
-    String libraryRow() { return ar ? "التلاوات المحفوظة" : "Saved recitations"; }
+    String libraryRow() { return s(R.string.libraryRow); }
     String libraryHelp(int recordings, String size) {
-        if (recordings == 0) return ar ? "حمّل تلاوات لتُسمع دون إنترنت" : "Save recitations to listen without the internet";
-        return d(ar ? recordings + " من القرّاء · " + size : recordings + (recordings == 1 ? " recording · " : " recordings · ") + size);
+        if (recordings == 0) return s(R.string.libraryHelp);
+        return d(s(recordings == 1 ? R.string.libraryHelpOne : R.string.libraryHelpMany, recordings, size));
     }
     String libraryIntro() {
-        return ar ? "تُحمَّل من mp3quran.net لتُسمع دون إنترنت، من الإذاعة ← المحطة ← المحفوظة على التلفاز"
-                  : "Downloaded from mp3quran.net to play without the internet: Radio > Station > Saved on the TV";
+        return s(R.string.libraryIntro);
     }
-    String reserveNote() { return ar ? d("يُترك 2 جيجابايت فارغة للتلفاز دائمًا") : "2 GB are always left free for the TV"; }
-    String savedSize(String s) { return (ar ? "المحفوظ " : "Saved ") + s; }
-    String freeSize(String s) { return (ar ? "المتاح " : "Free ") + s; }
-    String searchReciter() { return ar ? "ابحث عن قارئ" : "Search for a reciter"; }
-    String loadingReciters() { return ar ? "تُحمَّل قائمة القرّاء…" : "Loading the reciters…"; }
+    /** The Arabic line puts its digits through d(), the English one never did. */
+    String reserveNote() { String v = s(R.string.reserveNote); return ar ? d(v) : v; }
+    String savedSize(String s) { return (s(R.string.savedSize)) + s; }
+    String freeSize(String s) { return (s(R.string.freeSize)) + s; }
+    String searchReciter() { return s(R.string.searchReciter); }
+    String loadingReciters() { return s(R.string.loadingReciters); }
     String recitersOffline() {
-        return ar ? "تعذّر الوصول إلى mp3quran.net · تحقق من الإنترنت ثم افتح الشاشة مرة أخرى"
-                  : "Could not reach mp3quran.net · check the internet and open this screen again";
+        return s(R.string.recitersOffline);
     }
-    String noReciter() { return ar ? "لا قارئ بهذا الاسم" : "No reciter by that name"; }
-    String complete() { return ar ? "✓ كامل" : "✓ Complete"; }
-    String someOf(int have, int of) { return ar ? have + " من " + of : have + " of " + of; }
-    String surahCount(int n) { return ar ? surahsAr(n) : n + (n == 1 ? " surah" : " surahs"); }
+    String noReciter() { return s(R.string.noReciter); }
+    String complete() { return s(R.string.complete); }
+    String someOf(int have, int of) { return s(R.string.someOf, have, of); }
+    /** Arabic counts by surahsAr (its grammar in code until the plural forms move, phase 2); the Arabic values are unused. */
+    String surahCount(int n) { return ar ? surahsAr(n) : s(n == 1 ? R.string.surahOne : R.string.surahMany, n); }
     /** "سورة واحدة", "سورتان", "3 سور", "11 سورة", "103 سور": Arabic counts by the last two digits. */
     static String surahsAr(int n) {
         if (n == 1) return "سورة واحدة";
@@ -138,44 +229,41 @@ final class Text {
         return n + (m >= 3 && m <= 10 ? " سور" : " سورة");
     }
     String noDownloads() {
-        return ar ? "التحميل متوقف: مدير التحميل في التلفاز لا يستجيب (قد يكون معطّلًا في إعدادات التطبيقات)"
-                  : "Downloads stopped: the TV's download manager does not answer (it may be turned off in Apps)";
+        return s(R.string.noDownloads);
     }
-    String downloadAll(int n) { return ar ? "تحميل الكل (" + surahCount(n) + ")" : "Download all (" + surahCount(n) + ")"; }
-    String downloadRest(int n) { return ar ? "تحميل الباقي (" + surahCount(n) + ")" : "Download the rest (" + surahCount(n) + ")"; }
-    String deleteSaved() { return ar ? "حذف المحفوظ" : "Delete saved"; }
+    String downloadAll(int n) { return s(R.string.downloadAll, surahCount(n)); }
+    String downloadRest(int n) { return s(R.string.downloadRest, surahCount(n)); }
+    String deleteSaved() { return s(R.string.deleteSaved); }
     String waitingSpace() {
-        return ar ? d("متوقف: المساحة المتاحة أقل من 2 جيجابايت · احذف شيئًا ليكمل")
-                  : "Waiting: less than 2 GB free · delete something to go on";
+        // The Arabic line puts its digits through d(), the English one never did.
+        String v = s(R.string.waitingSpace);
+        return ar ? d(v) : v;
     }
-    String noStorage() { return ar ? "لا مساحة تخزين متاحة لهذا التطبيق على التلفاز" : "This TV has no storage for the app"; }
+    String noStorage() { return s(R.string.noStorage); }
     String downloadingNow(String surah, int pct, int waiting) {
         String p = pct >= 0 ? " " + pct + "٪" : "";
         if (!ar) p = p.replace("٪", "%");
-        String then = waiting > 0 ? (ar ? " · ثم " + waiting + " في الانتظار" : " · then " + waiting + " waiting") : "";
-        return (ar ? "يُحمَّل الآن: " : "Downloading: ") + surah + p + then;
+        String then = waiting > 0 ? (s(R.string.downloadingNow, waiting)) : "";
+        return (s(R.string.downloadingNow_2)) + surah + p + then;
     }
-    String queuedOnly(int waiting) { return ar ? waiting + " في الانتظار بعد تلاوة أخرى" : waiting + " waiting after another recording"; }
-    String allSaved() { return ar ? "كل السور محفوظة · تُسمع من الإذاعة" : "Every surah is saved · play it from Radio"; }
-    String deleteAsk() { return ar ? "حذف؟" : "Delete?"; }
-    String pickReciter() { return ar ? "اختر قارئًا من القائمة" : "Pick a reciter from the list"; }
+    String queuedOnly(int waiting) { return s(R.string.queuedOnly, waiting); }
+    String allSaved() { return s(R.string.allSaved); }
+    String deleteAsk() { return s(R.string.deleteAsk); }
+    String pickReciter() { return s(R.string.pickReciter); }
     String libraryLegend() {
-        return ar ? "✓ محفوظة · ↓ في الانتظار · OK على سورة: تحميلها أو إلغاؤها، ومرتين لحذفها"
-                  : "✓ saved · ↓ waiting · OK on a surah: download or cancel it, twice to delete it";
+        return s(R.string.libraryLegend);
     }
-    String hintChooseWord() { return ar ? "اختيار" : "Choose"; }
-    String hintToSurahs() { return ar ? "◀  إلى السور" : "▶  To the surahs"; }
-    String hintBackSettings() { return ar ? "رجوع  الإعدادات" : "Back  Settings"; }
-    String recitationsCredit() { return ar ? "التلاوات: mp3quran.net · ملك قرّائها" : "Recitations: mp3quran.net · their reciters'"; }
+    String hintChooseWord() { return s(R.string.hintChooseWord); }
+    String hintToSurahs() { return s(R.string.hintToSurahs); }
+    String hintBackSettings() { return s(R.string.hintBackSettings); }
+    String recitationsCredit() { return s(R.string.recitationsCredit); }
     String recitationsCreditLong() {
-        return ar ? "التلاوات: mp3quran.net (يحق لأي مطور استخدام موادها) · ملك قرّائها"
-                  : "Recitations: mp3quran.net (open to any developer) · their reciters'";
+        return s(R.string.recitationsCreditLong);
     }
     String adhanCredit() {
-        return ar ? "التسجيلات: github.com/abodehq/Athan-MP3 و github.com/meypod/audio_files · يُحذف أي تسجيل بطلب صاحب حقه"
-                  : "Recordings: github.com/abodehq/Athan-MP3 and github.com/meypod/audio_files · any one removed at its rights holder's request";
+        return s(R.string.adhanCredit);
     }
-    String nothingSaved() { return ar ? "لا تلاوات محفوظة بعد · من الإذاعة ← التلاوات المحفوظة" : "Nothing saved yet · Radio > Saved recitations"; }
+    String nothingSaved() { return s(R.string.nothingSaved); }
     /** The decimal point: the Arabic one (٫) with Eastern digits, a point with Western ones. */
     private String decimal(String v) { return eastern ? v.replace('.', '٫') : v; }
     /** A size in MB or GB, in the screen's digits. */
@@ -183,363 +271,301 @@ final class Text {
         double gb = b / (1024.0 * 1024 * 1024);
         if (gb >= 1) {
             String v = String.format(java.util.Locale.US, "%.1f", gb);
-            return d(ar ? decimal(v) + " جيجابايت" : v + " GB");
+            return d(s(R.string.bytesGb, ar ? decimal(v) : v));
         }
         long mb = Math.round(b / (1024.0 * 1024));
-        return d(ar ? mb + " ميجابايت" : mb + " MB");
+        return d(s(R.string.bytes, mb));
     }
     String radioStatus(int s) {
         switch (s) {
-            case Radio.PLAYING: return ar ? "على الهواء" : "On air";
-            case Radio.CONNECTING: return ar ? "جارٍ الاتصال…" : "Connecting…";
-            case Radio.RETRYING: return ar ? "انقطع البث · نعيد المحاولة" : "Signal lost · retrying";
-            case Radio.PAUSED: return ar ? "متوقفة للأذان" : "Paused for the adhan";
-            default: return ar ? "متوقفة" : "Off";
+            case Radio.PLAYING: return s(R.string.radioStatus);
+            case Radio.CONNECTING: return s(R.string.radioStatus_2);
+            case Radio.RETRYING: return s(R.string.radioStatus_3);
+            case Radio.PAUSED: return s(R.string.radioStatus_4);
+            default: return s(R.string.radioStatus_5);
         }
     }
-    String radioPlay() { return ar ? "تشغيل" : "Play"; }
-    String radioStop() { return ar ? "إيقاف" : "Stop"; }
-    String screenOff() { return ar ? "إطفاء الشاشة" : "Screen off"; }
+    String radioPlay() { return s(R.string.radioPlay); }
+    String radioStop() { return s(R.string.radioStop); }
+    String screenOff() { return s(R.string.screenOff); }
     String radioNote() {
-        return d(ar ? "تستمر في الرئيسية وشاشة الاستراحة · تتوقف إذا شغّل تطبيق آخر صوتًا"
-                    : "Keeps playing on Home and the screensaver · stops when another app plays sound");
+        return d(s(R.string.radioNote));
     }
     String screenOffNote() {
-        return d(ar ? "الشاشة مطفأة والإذاعة تعمل · اضغط أي زر للعودة" : "Screen off, radio playing · press any key to come back");
+        return d(s(R.string.screenOffNote));
     }
-    String hintClose() { return ar ? "رجوع  إغلاق" : "Back  Close"; }
-    String sectionRadio() { return ar ? "الإذاعة" : "Radio"; }
+    String hintClose() { return s(R.string.hintClose); }
+    String sectionRadio() { return s(R.string.sectionRadio); }
     String radioRowHelp(Radio.Station s) {
         // A saved recording plays without the internet.
         if (s.url == null) return stationWhere(s);
-        return stationWhere(s) + (ar ? " · تحتاج إلى الإنترنت" : " · needs the internet");
+        return stationWhere(s) + (s(R.string.radioRowHelp));
     }
-    String afterAdhanRow() { return ar ? "بعد الأذان" : "After the adhan"; }
-    String afterAdhanHelp() { return ar ? "تتوقف الإذاعة أثناء الأذان ثم…" : "The radio pauses for the adhan, then…"; }
-    String[] afterAdhanChoices() { return ar ? new String[] {"تُستأنف", "تبقى متوقفة"} : new String[] {"Resumes", "Stays off"}; }
-    String radioDarkRow() { return ar ? "إطفاء الشاشة أثناء الاستماع" : "Screen off while listening"; }
+    String afterAdhanRow() { return s(R.string.afterAdhanRow); }
+    String afterAdhanHelp() { return s(R.string.afterAdhanHelp); }
+    String[] afterAdhanChoices() { return a(R.array.afterAdhanChoices); }
+    String radioDarkRow() { return s(R.string.radioDarkRow); }
     String radioDarkHelp() {
-        return d(ar ? "توفير الكهرباء: تنطفئ الشاشة وتستمر الإذاعة · أي زر يعيدها"
-                    : "Saves power: the screen goes dark, the radio keeps playing · any key brings it back");
+        return d(s(R.string.radioDarkHelp));
     }
     String[] radioDarkChoices() {
-        return ar ? new String[] {"مع شاشة الاستراحة", "بعدها بـ 15 د", "أبدًا"} : new String[] {"With screensaver", "15 min later", "Never"};
+        return a(R.array.radioDarkChoices);
     }
 
     /** The call screen's hint: how it closes by itself (Settings → Reminders); 0 is when the adhan ends. */
     String nowHint(int minutes) {
-        if (minutes == 0) return d(ar ? "رجوع للإغلاق · يُغلق تلقائيًا بعد الأذان" : "Back to dismiss · closes by itself after the adhan");
-        return d(ar ? "رجوع للإغلاق · يُغلق تلقائيًا بعد " + (minutes == 1 ? "دقيقة" : minutes + " دقائق")
-                    : "Back to dismiss · closes by itself after " + minutes + " min");
+        if (minutes == 0) return d(s(R.string.nowHint));
+        return d(minutes == 1 ? s(R.string.nowHintOne) : s(R.string.nowHintMany, minutes));
     }
-    String callCloseRow() { return ar ? "إغلاق شاشة الأذان" : "Close the call screen"; }
-    String callCloseHelp() { return ar ? "ثم تعود إلى ما كنت تشاهده" : "Then back to what you were watching"; }
+    String callCloseRow() { return s(R.string.callCloseRow); }
+    String callCloseHelp() { return s(R.string.callCloseHelp); }
     /** In the order of the row's minutes: 0 (after the adhan), 1, 5, 10. */
     String[] callCloseChoices() {
-        return ar ? new String[] {"بعد الأذان", "1 د", "5 د", "10 د"} : new String[] {"After adhan", "1 min", "5 min", "10 min"};
+        return a(R.array.callCloseChoices);
     }
-    String voiceRow() { return ar ? "صوت الأذان" : "Adhan voice"; }
-    String voiceHelp() { return ar ? "لكل الصلوات عدا الفجر · يُسمع عند التنقل في القائمة" : "Every prayer but Fajr · plays as you move through the list"; }
-    String fajrVoiceRow() { return ar ? "أذان الفجر" : "Fajr adhan"; }
-    String fajrVoiceHelp() { return ar ? "الصوت ثم مستواه · يُفضَّل أذان فيه «الصلاة خير من النوم»" : "The voice, then its level · best with “prayer is better than sleep”"; }
+    String voiceRow() { return s(R.string.voiceRow); }
+    String voiceHelp() { return s(R.string.voiceHelp); }
+    String fajrVoiceRow() { return s(R.string.fajrVoiceRow); }
+    String fajrVoiceHelp() { return s(R.string.fajrVoiceHelp); }
 
     // All apps (design/afnon-mihrab/design/AllApps.dc.html)
-    String allTitle() { return ar ? "كل التطبيقات" : "All apps"; }
+    String allTitle() { return s(R.string.allTitle); }
     String back() { return ar ? "رجوع" : "Back"; }
     /** "Asr in", followed by the countdown. */
-    String chip(String prayer) { return ar ? prayer + " بعد" : prayer + " in"; }
+    String chip(String prayer) { return s(R.string.chip, prayer); }
     String favNote(int position) {
         // Six favourites now (Apps.FAVOURITE_SLOTS); the fifth and sixth crashed All apps.
-        return ar ? "في المفضلة · " + ordinal(position) : d("In favourites · position " + position);
+        return ar ? s(R.string.favNote, ordinal(position)) : d(s(R.string.favNote, position));
     }
     /** "In More · 3rd". */
-    String moreNote(int position) { return ar ? "في المزيد · " + ordinal(position) : d("In More · position " + position); }
+    String moreNote(int position) { return ar ? s(R.string.moreNote, ordinal(position)) : d(s(R.string.moreNote, position)); }
     private String ordinal(int position) {
         String[] ord = {"الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس"};
         return position >= 1 && position <= ord.length ? ord[position - 1] : d(String.valueOf(position));
     }
-    String notFav() { return ar ? "اضغط مطولًا على OK لوضعه في الرئيسية" : "Hold OK to put it on Home"; }
-    String notOnHome() { return ar ? "ليس في الرئيسية" : "Not on Home"; }
-    String moveEarlierMore() { return ar ? "تقديمه في المزيد" : "Move earlier in More"; }
-    String moveLaterMore() { return ar ? "تأخيره في المزيد" : "Move later in More"; }
-    String moveToMore() { return ar ? "نقله إلى المزيد…" : "Move to More…"; }
-    String moveToFav() { return ar ? "نقله إلى المفضلة…" : "Move to favourites…"; }
-    String putInFav() { return ar ? "ضعه في المفضلة…" : "Put in favourites…"; }
-    String putInMore() { return ar ? "ضعه في المزيد…" : "Put in More…"; }
-    String inPlaceOf(String app) { return ar ? "مكان " + app : "Instead of " + app; }
-    String chooseFavSlot() { return ar ? "اختر مكانه في المفضلة" : "Pick its place in favourites"; }
-    String chooseMoreSlot() { return ar ? "اختر مكانه في المزيد" : "Pick its place in More"; }
-    String hintOpen() { return ar ? "OK  فتح" : "OK  Open"; }
-    String hintHold() { return ar ? "اضغط مطولًا  ترتيب الرئيسية" : "Hold OK  Arrange Home"; }
-    String moveEarlier() { return ar ? "تقديمه في المفضلة" : "Move earlier in favourites"; }
-    String moveLater() { return ar ? "تأخيره في المفضلة" : "Move later in favourites"; }
-    String cancel() { return ar ? "إلغاء" : "Cancel"; }
-    String favourite() { return ar ? "مفضل" : "Favourite"; }
+    String notFav() { return s(R.string.notFav); }
+    String notOnHome() { return s(R.string.notOnHome); }
+    String moveEarlierMore() { return s(R.string.moveEarlierMore); }
+    String moveLaterMore() { return s(R.string.moveLaterMore); }
+    String moveToMore() { return s(R.string.moveToMore); }
+    String moveToFav() { return s(R.string.moveToFav); }
+    String putInFav() { return s(R.string.putInFav); }
+    String putInMore() { return s(R.string.putInMore); }
+    String inPlaceOf(String app) { return s(R.string.inPlaceOf, app); }
+    String chooseFavSlot() { return s(R.string.chooseFavSlot); }
+    String chooseMoreSlot() { return s(R.string.chooseMoreSlot); }
+    String hintOpen() { return s(R.string.hintOpen); }
+    String hintHold() { return s(R.string.hintHold); }
+    String moveEarlier() { return s(R.string.moveEarlier); }
+    String moveLater() { return s(R.string.moveLater); }
+    String cancel() { return s(R.string.cancel); }
+    String favourite() { return s(R.string.favourite); }
 
     // Prayer day (design/afnon-mihrab/design/PrayerDay.dc.html)
-    String dayTitle() { return ar ? "مواقيت اليوم" : "Today's prayers"; }
-    String home() { return ar ? "الرئيسية" : "Home"; }
+    String dayTitle() { return s(R.string.dayTitle); }
+    String home() { return s(R.string.home); }
     String school(Madhab m) {
-        if (m == Madhab.HANAFI) return ar ? "العصر: الحنفي" : "Asr: Hanafi";
-        return ar ? "العصر: الجمهور (شافعي)" : "Asr: standard (Shafi‘i)";
+        if (m == Madhab.HANAFI) return s(R.string.school);
+        return s(R.string.school_2);
     }
 
     String methodName(Method m) {
-        if (m == Method.UMM_AL_QURA) return ar ? "أم القرى، مكة المكرمة" : "Umm al-Qura, Makkah";
-        if (m == Method.MUSLIM_WORLD_LEAGUE) return ar ? "رابطة العالم الإسلامي" : "Muslim World League";
-        if (m == Method.KARACHI) return ar ? "جامعة العلوم الإسلامية، كراتشي" : "University of Islamic Sciences, Karachi";
-        if (m == Method.DUBAI) return ar ? "دبي" : "Dubai";
-        if (m == Method.KUWAIT) return ar ? "الكويت" : "Kuwait";
-        if (m == Method.QATAR) return ar ? "قطر" : "Qatar";
-        if (m == Method.NORTH_AMERICA) return ar ? "الجمعية الإسلامية لأمريكا الشمالية" : "ISNA, North America";
-        if (m == Method.MOON_SIGHTING_COMMITTEE) return ar ? "لجنة رؤية الهلال" : "Moonsighting Committee";
-        if (m == Method.SINGAPORE) return ar ? "سنغافورة" : "Singapore";
-        if (m == Method.OMAN_AWQAF) return ar ? "وزارة الأوقاف والشؤون الدينية، سلطنة عُمان" : "Ministry of Awqaf, Oman";
-        if (m == Method.MOROCCO_HABOUS) return ar ? "وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية" : "Ministry of Habous, Morocco";
-        return ar ? "الهيئة المصرية العامة للمساحة" : "Egyptian General Authority of Survey";
+        if (m == Method.UMM_AL_QURA) return s(R.string.methodName);
+        if (m == Method.MUSLIM_WORLD_LEAGUE) return s(R.string.methodName_2);
+        if (m == Method.KARACHI) return s(R.string.methodName_3);
+        if (m == Method.DUBAI) return s(R.string.methodName_4);
+        if (m == Method.KUWAIT) return s(R.string.methodName_5);
+        if (m == Method.QATAR) return s(R.string.methodName_6);
+        if (m == Method.NORTH_AMERICA) return s(R.string.methodName_7);
+        if (m == Method.MOON_SIGHTING_COMMITTEE) return s(R.string.methodName_8);
+        if (m == Method.SINGAPORE) return s(R.string.methodName_9);
+        if (m == Method.OMAN_AWQAF) return s(R.string.methodName_10);
+        if (m == Method.MOROCCO_HABOUS) return s(R.string.methodName_11);
+        return s(R.string.methodName_12);
     }
 
     String methodAngles(Method m) {
         CalculationParameters p = Prefs.parameters(m);
-        String fajr = (ar ? "زاوية الفجر " : "Fajr angle ") + trim(p.fajrAngle) + "°";
+        String fajr = (s(R.string.methodAngles)) + trim(p.fajrAngle) + "°";
         String isha = p.ishaInterval > 0
-            ? (ar ? "العشاء بعد المغرب بـ " + p.ishaInterval + " دقيقة" : "Isha " + p.ishaInterval + " min after Maghrib")
-            : (ar ? "العشاء " : "Isha ") + trim(p.ishaAngle) + "°";
+            ? (s(R.string.methodAngles_2, p.ishaInterval))
+            : (s(R.string.methodAngles_3)) + trim(p.ishaAngle) + "°";
         return d(fajr + " · " + isha);
     }
 
     /** Morocco's method under its name: in Morocco by the ministry's tables, elsewhere at its coastal horizon. */
     String habousAngles(boolean table) {
-        return d(table ? (ar ? "الفجر 19° · العشاء 17° · كما تحسب الوزارة جداولها" : "Fajr 19° · Isha 17° · as the ministry computes its tables")
-                       : (ar ? "خارج المغرب: الفجر 19° · العشاء 17° · باحتياط الوزارة" : "Outside Morocco: Fajr 19° · Isha 17° · with the ministry's margins"));
+        return d(table ? (s(R.string.habousAngles))
+                       : (s(R.string.habousAngles_2)));
     }
 
     /** Settings > Prayer times > Ministry table (Morocco): which of the ministry's 191 timetables. */
-    String habousRow() { return ar ? "جدول الوزارة" : "Ministry table"; }
+    String habousRow() { return s(R.string.habousRow); }
     String habousHelp(int km, boolean chosen) {
-        return d(chosen ? (ar ? "اخترته أنت، على بعد " + km + " كم من موقعك" : "Chosen by you, " + km + " km from your location")
-                        : (ar ? "أقرب مدن الوزارة إلى موقعك، على بعد " + km + " كم" : "The ministry's nearest locality, " + km + " km away"));
+        return d(chosen ? (s(R.string.habousHelp, km))
+                        : (s(R.string.habousHelp_2, km)));
     }
-    String habousChooser() { return ar ? "الوزارة تنشر جدولًا لكل مدينة من 191 مدينة ومركزًا. هذه أقربها إلى موقعك." : "The ministry publishes a table for each of 191 localities. These are the nearest to your location."; }
-    String habousItem(String name, int km) { return d(name + "  ·  " + km + (ar ? " كم" : " km")); }
-    String habousAuto() { return ar ? "تلقائي: الأقرب إلى الموقع" : "Automatic: the nearest"; }
-    String habousFileHelp() { return ar ? "أي جداول وزارة الأوقاف المغربية تتبعه الشاشة في المغرب" : "Which of the Moroccan ministry's tables the TV follows in Morocco"; }
+    String habousChooser() { return s(R.string.habousChooser); }
+    String habousItem(String name, int km) { return d(name + "  ·  " + km + (s(R.string.habousItem))); }
+    String habousAuto() { return s(R.string.habousAuto); }
+    String habousFileHelp() { return s(R.string.habousFileHelp); }
 
     private static String trim(double v) {
         return v == Math.rint(v) ? String.valueOf((int) v) : String.valueOf(v);
     }
 
     // Settings (design/afnon-mihrab/design/Settings.dc.html)
-    String sectionPrayer() { return ar ? "مواقيت الصلاة" : "Prayer times"; }
-    String sectionReminders() { return ar ? "التنبيهات والأذان" : "Reminders & adhan"; }
-    String sectionDisplay() { return ar ? "العرض واللغة" : "Display & language"; }
-    String sectionNetwork(String ssid) { return ssid == null ? (ar ? "الشبكة" : "Network") : (ar ? "الشبكة · " : "Network · ") + ssid; }
-    String sectionDevice() { return ar ? "إعدادات الجهاز" : "Device settings"; }
-    String preview() { return ar ? "العصر اليوم بهذه الإعدادات" : "Asr today with these settings"; }
-    String location() { return ar ? "الموقع" : "Location"; }
+    String sectionPrayer() { return s(R.string.sectionPrayer); }
+    String sectionReminders() { return s(R.string.sectionReminders); }
+    String sectionDisplay() { return s(R.string.sectionDisplay); }
+    String sectionNetwork(String ssid) { return ssid == null ? (s(R.string.sectionNetwork)) : (s(R.string.sectionNetwork_2)) + ssid; }
+    String sectionDevice() { return s(R.string.sectionDevice); }
+    String preview() { return s(R.string.preview); }
+    String location() { return s(R.string.location); }
     // The first run's location and Home's reminder while none is set.
-    String chooseLocation() { return ar ? "اختر موقعك" : "Choose your location"; }
-    String otherLocation() { return ar ? "موقع آخر" : "Another location"; }
-    String locating() { return ar ? "جارٍ تحديد الموقع…" : "Finding your location…"; }
-    String near(String place) { return ar ? "قرب " + place : "Near " + place; }
-    String locationAskTitle() { return ar ? "لم تحدد موقعك بعد" : "Your location isn't set yet"; }
+    String chooseLocation() { return s(R.string.chooseLocation); }
+    String otherLocation() { return s(R.string.otherLocation); }
+    String locating() { return s(R.string.locating); }
+    String near(String place) { return s(R.string.near, place); }
+    String locationAskTitle() { return s(R.string.locationAskTitle); }
     String locationAskBody(String guess) {
-        return ar ? "المواقيت الآن لموقع «" + guess + "» حسب المنطقة الزمنية للتلفاز، وقد تختلف عن موقعك. والأذان يُرفع عليها."
-                  : "The times are now for “" + guess + "”, by the TV's time zone, and may differ from your location. The adhan is called on them.";
+        return s(R.string.locationAskBody, guess);
     }
-    String setLocation() { return ar ? "تحديد الموقع" : "Set location"; }
-    String later() { return ar ? "لاحقًا" : "Later"; }
-    String hintBackLater() { return ar ? "رجوع  لاحقًا" : "Back  Later"; }
-    String hintBackLocate() { return ar ? "رجوع  تحديد الموقع" : "Back  Set location"; }
-    String noLocation() { return ar ? "لم يُحدَّد موقعك بعد" : "Your location isn't set yet"; }
-    String setYourLocation() { return ar ? "حدّد موقعك" : "Set your location"; }
-    String country() { return ar ? "الدولة" : "Country"; }
-    String region() { return ar ? "المنطقة" : "Region"; }
+    String setLocation() { return s(R.string.setLocation); }
+    String later() { return s(R.string.later); }
+    String hintBackLater() { return s(R.string.hintBackLater); }
+    String hintBackLocate() { return s(R.string.hintBackLocate); }
+    String noLocation() { return s(R.string.noLocation); }
+    String setYourLocation() { return s(R.string.setYourLocation); }
+    String country() { return s(R.string.country); }
+    String region() { return s(R.string.region); }
     /** Location's first step, in the order of Prefs.REGIONS. */
     String[] regions() {
-        return ar ? new String[] {"الدول العربية", "آسيا", "أوروبا", "الأمريكتان", "أفريقيا", "أوقيانوسيا"}
-            : new String[] {"Arab world", "Asia", "Europe", "Americas", "Africa", "Oceania"};
+        return a(R.array.regions);
     }
     String locationHelp(double lat, double lng, boolean byCoordinates) {
-        return coordinates(lat, lng) + (byCoordinates ? (ar ? " · بالإحداثيات" : " · by coordinates")
-                                                      : (ar ? " · يُختار من القائمة" : " · chosen from the list"));
+        return coordinates(lat, lng) + (byCoordinates ? (s(R.string.locationHelp))
+                                                      : (s(R.string.locationHelp_2)));
     }
     /** "21.42° N · 39.83° E" in the screen's digits. */
     String coordinates(double lat, double lng) {
-        String ns = lat >= 0 ? (ar ? "ش" : "N") : (ar ? "ج" : "S");
-        String ew = lng >= 0 ? (ar ? "ق" : "E") : (ar ? "غ" : "W");
+        String ns = lat >= 0 ? (s(R.string.coordinates)) : (s(R.string.coordinates_2));
+        String ew = lng >= 0 ? (s(R.string.coordinates_3)) : (s(R.string.coordinates_4));
         return d(String.format(java.util.Locale.US, "%.2f° %s · %.2f° %s", Math.abs(lat), ns, Math.abs(lng), ew));
     }
-    String place(String city, String country) { return city + (ar ? "، " : ", ") + country; }
-    String method() { return ar ? "طريقة الحساب" : "Calculation method"; }
-    String asrSchool() { return ar ? "مذهب العصر" : "Asr school"; }
-    String asrSchoolHelp() { return ar ? "يغيّر وقت العصر فقط" : "Only changes the Asr time"; }
-    String[] asrSchools() { return ar ? new String[] {"الجمهور", "الحنفي"} : new String[] {"Standard", "Hanafi"}; }
-    String hijriAdjust() { return ar ? "تعديل التاريخ الهجري" : "Hijri date adjustment"; }
+    String place(String city, String country) { return city + (s(R.string.place)) + country; }
+    String method() { return s(R.string.method); }
+    String asrSchool() { return s(R.string.asrSchool); }
+    String asrSchoolHelp() { return s(R.string.asrSchoolHelp); }
+    String[] asrSchools() { return a(R.array.asrSchools); }
+    String hijriAdjust() { return s(R.string.hijriAdjust); }
     /** About > Sources and licences (SettingsActivity.creditRows). */
-    String creditsRow() { return ar ? "المصادر والتراخيص" : "Sources and licences"; }
-    String creditsHelp() { return ar ? "أفنون، والطقس، والمدن، والتلاوات، والأذان" : "Afnon, the weather, the cities, the recitations, the adhan"; }
-    String creditsSection() { return ar ? "حول التطبيق ← المصادر والتراخيص" : "About › Sources and licences"; }
+    String creditsRow() { return s(R.string.creditsRow); }
+    String creditsHelp() { return s(R.string.creditsHelp); }
+    String creditsSection() { return s(R.string.creditsSection); }
 
     /** What's new (NewsActivity): after an update, and from About. */
-    String newsRow() { return ar ? "ما الجديد" : "What's new"; }
-    String newsRowHelp() { return ar ? "ما أضافه كل إصدار" : "What each version added"; }
-    String newsAll() { return ar ? "ما الجديد" : "What's new"; }
-    String newsTitle(String version) { return ar ? "الجديد في Awan TV " + version : "New in Awan TV " + version; }
-    String newsAlso(String version) { return ar ? "ومن " + version : "And from " + version; }
-    String newsLater() { return ar ? "تجده لاحقًا في الإعدادات ← حول التطبيق ← ما الجديد." : "Find it later in Settings › About › What's new."; }
-    String newsOk() { return ar ? "حسنًا" : "OK"; }
+    String newsRow() { return s(R.string.newsRow); }
+    String newsRowHelp() { return s(R.string.newsRowHelp); }
+    String newsAll() { return s(R.string.newsAll); }
+    String newsTitle(String version) { return s(R.string.newsTitle, version); }
+    String newsAlso(String version) { return s(R.string.newsAlso, version); }
+    String newsLater() { return s(R.string.newsLater); }
+    String newsOk() { return s(R.string.newsOk); }
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
             case "1.14.2":
-                return ar ? new String[][] {
-                    {"أسماء التلاوات المحفوظة لا تضيع", "بعد حذف التطبيق وإعادة تثبيته تعود التلاوات المحفوظة بأسماء قرّائها ومصاحفها، ولو دون إنترنت."}}
-                  : new String[][] {
-                    {"Saved recitations keep their names", "After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."}};
+                return pairs(a(R.array.news_1_14_2), 2);
             case "1.14.1":
-                return ar ? new String[][] {
-                    {"الألوان تتبع الوقت", "لازوردي في النهار وفحمي بعد المغرب، أخف على العين في الليل. ولون واحد طوال اليوم من الإعدادات ← العرض واللغة ← ألوان الواجهة."}}
-                  : new String[][] {
-                    {"Colours that follow the time", "Lapis by day and Charcoal after Maghrib, easier on the eyes at night. One colour all day in Settings › Display & language › Colours."}};
+                return pairs(a(R.array.news_1_14_1), 2);
             case "1.14.0":
-                return ar ? new String[][] {
-                    {"عدّاد الإقامة فوق التطبيقات", "من الأذان حتى الإقامة تظهر بطاقة صغيرة في زاوية الشاشة فوق أي تطبيق: كم بقي على الإقامة. تُطفأ من الإعدادات ← الإقامة."},
-                    {"صور في شاشة الاستراحة", "صورة كل عشر دقائق خلف المواقيت، والداكنة فقط من العشاء حتى الفجر. تُطفأ من الإعدادات ← العرض واللغة."}}
-                  : new String[][] {
-                    {"The iqamah countdown over apps", "From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."},
-                    {"Photos in the screensaver", "A photo every ten minutes behind the times, only dark ones from Isha until Fajr. Turn them off in Settings › Display & language."}};
+                return pairs(a(R.array.news_1_14_0), 2);
             case "1.13.0":
-                return ar ? new String[][] {
-                    {"شاشة أمان إن توقف", "إن توقف Awan TV على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية. وإن تكرر التوقف يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل."},
-                    {"إصلاح الشاشة من الجوال أو الحاسب", "حدّد شاشة محدّثة في «شاشاتي» بالمثبّت أو في «تحديث الشاشات» بالمحرر، فيُعاد إعدادها دون إرسال التطبيق من جديد."}}
-                  : new String[][] {
-                    {"A safety screen if it stops", "If Awan TV stops unexpectedly, a screen restarts it or opens the TV's own home. If it stops again, the TV runs on its own home for half an hour, so it stays usable."},
-                    {"Put a TV right from the phone or the computer", "Tick an up-to-date TV in the installer's My TVs or the editor's Update TVs, and it is set up again without sending the app anew."}};
+                return pairs(a(R.array.news_1_13_0), 2);
             case "1.10.0":
-                return ar ? new String[][] {
-                    {"الإذاعة على شاشاتك من الحاسب", "من محرر الإعدادات: ترى ما تبثه كل شاشة الآن، وتشغّل الإذاعة أو توقفها على شاشة أو على كل الشاشات. ولا تُقطع شاشة يُسمع عليها شيء آخر إلا إن اخترت ذلك."}}
-                  : new String[][] {
-                    {"The radio on your TVs from the computer", "From the settings editor: see what each TV is playing now, and start or stop the radio on one TV or on all of them. A TV playing something else is not cut off unless you choose to."}};
+                return pairs(a(R.array.news_1_10_0), 2);
             case "1.9.0":
-                return ar ? new String[][] {
-                    {"التلاوات والمحطة من الحاسب", "من محرر الإعدادات على Windows: اختر تلاوات تحمّلها شاشة أو أكثر بنفسها، وغيّر المحطة، دون الذهاب إلى كل شاشة."}}
-                  : new String[][] {
-                    {"Recitations and the station from the computer", "From the settings editor on Windows: choose recitations for one or more TVs to download by themselves, and change the station, without going to each TV."}};
+                return pairs(a(R.array.news_1_9_0), 2);
             case "1.8.0":
-                return ar ? new String[][] {
-                    {"مواقيت المغرب كما تنشرها الوزارة", "طريقة وزارة الأوقاف والشؤون الإسلامية المغربية بجدول كل مدينة من مدنها الـ 191، وتختار الأقرب إلى موقعك من الإعدادات ← مواقيت الصلاة ← جدول الوزارة."}}
-                  : new String[][] {
-                    {"Morocco's times as the ministry publishes them", "The Moroccan Ministry of Habous' method, with the table of each of its 191 localities; pick the one near you in Settings › Prayer times › Ministry table."}};
+                return pairs(a(R.array.news_1_8_0), 2);
             case "1.7.0":
-                return ar ? new String[][] {
-                    {"التحديث بضغطة", "حين يصدر إصدار أحدث، اضغط «حدّث الآن» في نافذته، فينزّله التطبيق ويثبّته على الشاشة نفسها، دون جوال ولا حاسب."}}
-                  : new String[][] {
-                    {"Update with one press", "When a newer version is out, press Update now in its window: the app downloads it and installs it on the TV itself, with no phone or computer."}};
+                return pairs(a(R.array.news_1_7_0), 2);
             case "1.5.0":
-                return ar ? new String[][] {
-                    {"تنبيه بالإصدار الجديد", "حين يصدر إصدار أحدث تخبرك الرئيسية به برمز تمسحه بالجوال، وتبقى نقطة ذهبية على زر الإعدادات حتى تحدّث."}}
-                  : new String[][] {
-                    {"Told of a new version", "When a newer version is out, Home tells you with a code to scan with a phone, and a gold mark stays on the Settings button until you update."}};
+                return pairs(a(R.array.news_1_5_0), 2);
             case "1.4.0":
-                return ar ? new String[][] {
-                    {"المحطة من الرئيسية", "في بطاقة الإذاعة زر «المحطة»: بدّل الإذاعة أو التلاوة دون أن تفتح الإعدادات."},
-                    {"الضغطة المطوّلة", "لكل زر خصصته في أزرار الريموت ضغطة مطوّلة تفتح شيئًا آخر."},
-                    {"صوتان للأذان", "أذان المسجد النبوي، وأذان الشيخ راغب مصطفى غلوش، في الإعدادات ← الأذان."}}
-                  : new String[][] {
-                    {"The station from Home", "The radio card has a Station button: change the station or recitation without opening Settings."},
-                    {"Hold a button", "Each button you customised in Remote buttons can open something else when held."},
-                    {"Two adhan voices", "The adhan of Al-Masjid an-Nabawi, and Sheikh Ragheb Mustafa Ghalwash's, in Settings › Adhan."}};
+                return pairs(a(R.array.news_1_4_0), 2);
             case "1.3.0":
-                return ar ? new String[][] {
-                    {"طريقة وزارة الأوقاف العُمانية", "مواقيت سلطنة عُمان بطريقة وزارة الأوقاف والشؤون الدينية، تُختار تلقائيًا لمدنها."},
-                    {"ثلاث إذاعات", "إذاعة القرآن الكريم من سلطنة عُمان، وإذاعة القرآن الكريم ونداء الإسلام من السعودية، في الإعدادات ← الإذاعة."},
-                    {"المثبّت على الجوال", "يخبرك بالمثبّت الأحدث، ويقول لماذا لم يصل إلى الشاشة وماذا تفعل."}}
-                  : new String[][] {
-                    {"Oman's Ministry of Awqaf method", "Oman's prayer times by its Ministry of Awqaf, chosen for its cities by themselves."},
-                    {"Three radio stations", "Oman's Holy Quran Radio, and Saudi Arabia's Quran Radio and Nida Al-Islam, in Settings › Radio."},
-                    {"The phone installer", "It tells you of a newer installer, and says why it couldn't reach the TV and what to do."}};
+                return pairs(a(R.array.news_1_3_0), 2);
             case "1.2.0":
-                return ar ? new String[][] {
-                    {"تعديل المواقيت بالدقائق", d("الإعدادات ← مواقيت الصلاة ← تعديل المواقيت والتاريخ: كل وقت حتى 30 دقيقة قبله أو بعده، ليطابق مسجدك.")},
-                    {"الإصدار الجديد برمز QR", "حين يصدر إصدار أحدث، يفتح «حول التطبيق» نافذة برمز تمسحه بالجوال لتصل إلى صفحته."},
-                    {"ما الجديد", "هذه النافذة، مرة بعد كل تحديث، وتجدها في «حول التطبيق»."}}
-                  : new String[][] {
-                    {"Adjust the times by minutes", d("Settings › Prayer times › Adjust the times and the date: each time up to 30 minutes earlier or later, to match your masjid.")},
-                    {"A new version's QR code", "When a newer version is out, About opens a window with a code to scan with a phone to reach its page."},
-                    {"What's new", "This window, once after each update, and in About."}};
+            {
+                // The first line's digits through d(), as before.
+                String[][] p = pairs(a(R.array.news_1_2_0), 2);
+                p[0][1] = d(p[0][1]);
+                return p;
+            }
             case "1.1.0":
-                return ar ? new String[][] {
-                    {"أزرار الريموت", "الإعدادات ← إعدادات الجهاز ← أزرار الريموت: اجعل زرًا في أي ريموت يفتح ما تختار."}}
-                  : new String[][] {
-                    {"Remote buttons", "Settings › Device settings › Remote buttons: make a button on any remote open what you choose."}};
+                return pairs(a(R.array.news_1_1_0), 2);
             default:
                 return new String[0][];
         }
     }
 
     /** The new version's window (SettingsActivity.openUpdate). */
-    String updateTitle(String version) { return ar ? "إصدار جديد: Awan TV " + version : "New version: Awan TV " + version; }
-    String updateHave(String version) { return ar ? "على هذه الشاشة " + version + "." : "This TV has " + version + "."; }
+    String updateTitle(String version) { return s(R.string.updateTitle, version); }
+    String updateHave(String version) { return s(R.string.updateHave, version); }
     String updateHow() {
-        return ar ? "امسح الرمز بكاميرا الجوال لتفتح صفحة التحميل، ثم حدّث بالمثبّت على الجوال أو من حاسب Windows. الإعدادات والتلاوات المحفوظة تبقى."
-                  : "Scan the code with a phone's camera to open the download page, then update with the phone installer or from a Windows computer. The settings and saved recitations stay.";
+        return s(R.string.updateHow);
     }
     /** Over Home (UpdateNotice): why to update, when it comes again, and the version-only mute. */
     String updateWhy() {
-        return ar ? "يوجد إصدار أحدث للتطبيق من الذي تستخدمه حاليًا. حدّث التطبيق لتحصل على الميزات الجديدة والإصلاحات، ونوصي بالتحديث دائمًا إلى أحدث إصدار متوفر."
-                  : "There is a newer version of the app than the one you are using. Update it to get the new features and fixes; we recommend always updating to the latest version available.";
+        return s(R.string.updateWhy);
     }
     String updateAgain() {
-        return ar ? "نذكّرك كل أسبوع حتى تحدّث، وتجده في الإعدادات ← حول التطبيق." : "We'll remind you every week until you update; it is also in Settings › About.";
+        return s(R.string.updateAgain);
     }
-    String updateMute() { return ar ? "لا تذكّرني بهذا الإصدار" : "Don't remind me of this version"; }
+    String updateMute() { return s(R.string.updateMute); }
     /** Update now (SelfUpdate), over Home and in Settings > About's window. */
-    String updateNow() { return ar ? "حدّث الآن" : "Update now"; }
-    String updateLater() { return ar ? "لاحقًا" : "Later"; }
-    String updateRetry() { return ar ? "حاول مرة أخرى" : "Try again"; }
+    String updateNow() { return s(R.string.updateNow); }
+    String updateLater() { return s(R.string.updateLater); }
+    String updateRetry() { return s(R.string.updateRetry); }
     String updateHowSelf() {
-        return ar ? "«حدّث الآن» ينزّل الإصدار ويثبّته على هذه الشاشة، والإعدادات والتلاوات المحفوظة تبقى. أو امسح الرمز بالجوال لتفتح صفحة التحميل."
-                  : "Update now downloads the version and installs it on this TV; the settings and saved recitations stay. Or scan the code with a phone to open the download page.";
+        return s(R.string.updateHowSelf);
     }
     /** Without the install appop (installed by hand): what Update now needs. */
     String updateManual() {
-        return ar ? "للاستفادة من كل ميزات التطبيق، ومنها التحديث بضغطة من الشاشة، ثبّته بالمثبّت على الجوال أو من حاسب Windows، وهما الطريقتان 1 و2 في صفحة التحميل."
-                  : "To get every feature of the app, updating with one press on the TV among them, install it with the phone installer or from a Windows computer, ways 1 and 2 on the download page.";
+        return s(R.string.updateManual);
     }
     String updateDownloading(String version, int percent) {
-        return d((ar ? "جارٍ تنزيل الإصدار " : "Downloading version ") + version + (ar ? "… " : "… ") + percent + (ar ? "٪" : "%"));
+        return d((s(R.string.updateDownloading)) + version + (s(R.string.updateDownloading_2)) + percent + (s(R.string.updateDownloading_3)));
     }
-    String updateLeave() { return ar ? "يمكنك ترك هذه النافذة، ويكمل التنزيل." : "You can leave this window; the download carries on."; }
+    String updateLeave() { return s(R.string.updateLeave); }
     String updateThen() {
-        return ar ? "بعده يسألك Android «هل تريد تحديث هذا التطبيق؟»: انتقل إلى «تحديث» واضغط OK، وتعود الشاشة الرئيسية الجديدة خلال ثوانٍ."
-                  : "Then Android asks whether to update this app: move to Update and press OK, and the new Home comes back within seconds.";
+        return s(R.string.updateThen);
     }
-    String updateInstalling() { return ar ? "جارٍ التثبيت…" : "Installing…"; }
-    String updateContinue() { return ar ? "متابعة التثبيت" : "Continue installing"; }
+    String updateInstalling() { return s(R.string.updateInstalling); }
+    String updateContinue() { return s(R.string.updateContinue); }
     String updateConfirm() {
-        return ar ? "إن سألك Android «هل تريد تحديث هذا التطبيق؟»، فانتقل إلى «تحديث» واضغط OK. ثم تعود الشاشة الرئيسية الجديدة."
-                  : "If Android asks whether to update this app, move to Update and press OK. The new Home then comes back.";
+        return s(R.string.updateConfirm);
     }
     String updateFailed() {
-        return ar ? "تعذّر التحديث. تأكد من اتصال الشاشة بالإنترنت ثم حاول مرة أخرى، أو امسح الرمز وحدّث من صفحة التحميل."
-                  : "The update didn't go through. Check the TV's internet connection and try again, or scan the code and update from the download page.";
+        return s(R.string.updateFailed);
     }
-    String updateOpen() { return ar ? "فتح صفحة الإصدار" : "Open the release page"; }
-    String hintBackClose() { return ar ? "رجوع  إغلاق" : "Back  Close"; }
+    String updateOpen() { return s(R.string.updateOpen); }
+    String hintBackClose() { return s(R.string.hintBackClose); }
     /** Prayer times > Adjust the times and the date (Prefs.adjustments, Prefs.hijriOffset). */
-    String adjustRow() { return ar ? "تعديل المواقيت والتاريخ" : "Adjust the times and the date"; }
-    String adjustRowHelp() { return d(ar ? "كل وقت حتى 30 دقيقة قبله أو بعده، والتاريخ الهجري" : "Each time up to 30 minutes earlier or later, and the Hijri date"); }
-    String adjustSection() { return ar ? "مواقيت الصلاة ← تعديل المواقيت والتاريخ" : "Prayer times › Adjust the times and the date"; }
-    String hintBackPrayer() { return ar ? "رجوع  مواقيت الصلاة" : "Back  Prayer times"; }
+    String adjustRow() { return s(R.string.adjustRow); }
+    String adjustRowHelp() { return d(s(R.string.adjustRowHelp)); }
+    String adjustSection() { return s(R.string.adjustSection); }
+    String hintBackPrayer() { return s(R.string.hintBackPrayer); }
     /** The row's value: what is adjusted ("الفجر +2، المغرب +1"), the first two and "…" after; "بلا تعديل" for none. */
     String adjustSummary(int[] minutes, int hijriDays) {
         java.util.List<String> parts = new java.util.ArrayList<>();
         String[] names = prayerNames();
         for (int i = 0; i < minutes.length; i++) if (minutes[i] != 0) parts.add(names[i] + " " + minutesSigned(minutes[i]));
-        if (hijriDays != 0) parts.add((ar ? "الهجري " : "Hijri ") + minutesSigned(hijriDays));
-        if (parts.isEmpty()) return ar ? "بلا تعديل" : "None";
-        String s = parts.get(0) + (parts.size() > 1 ? (ar ? "، " : ", ") + parts.get(1) : "");
+        if (hijriDays != 0) parts.add((s(R.string.adjustSummary)) + minutesSigned(hijriDays));
+        if (parts.isEmpty()) return s(R.string.adjustSummary_2);
+        String s = parts.get(0) + (parts.size() > 1 ? (s(R.string.adjustSummary_3)) + parts.get(1) : "");
         return parts.size() > 2 ? s + " …" : s;
     }
     /** A time's adjustment between its − and + buttons: "+2", "0", "-3" (minutes). */
@@ -549,113 +575,106 @@ final class Text {
     }
     /** Under each time's name: what it is with the adjustment (Fajr is tomorrow's after Isha), and how far it goes. */
     String adjustTimeHelp(String time, boolean tomorrow) {
-        return d(ar ? (tomorrow ? "غدًا " : "اليوم ") + time + " · بالدقائق، حتى 30 قبله أو بعده"
-                    : (tomorrow ? "Tomorrow " : "Today ") + time + " · in minutes, up to 30 earlier or later");
+        return d(s(tomorrow ? R.string.adjustTimeHelpTomorrow : R.string.adjustTimeHelpToday, time));
     }
     String adjustNote() {
-        return ar ? "لمن يتبع مسجدًا يختلف قليلًا عن الحساب. الأذان والإقامة والتنبيهات وشاشة الاستراحة كلها تتبع الوقت بعد التعديل."
-                  : "For a masjid a little off the calculation. The adhan, the iqamah, the reminders and the screensaver all follow the adjusted time.";
+        return s(R.string.adjustNote);
     }
-    String adjustFileLabel(String prayer) { return ar ? "تعديل " + prayer + " بالدقائق" : prayer + " adjustment (minutes)"; }
-    String adjustFileHelp() { return ar ? "دقائق تُضاف إلى الوقت المحسوب، وبالسالب قبله" : "Minutes added to the calculated time; negative is earlier"; }
-    String hijriToday(String date) { return (ar ? "اليوم: " : "Today: ") + date; }
+    String adjustFileLabel(String prayer) { return s(R.string.adjustFileLabel, prayer); }
+    String adjustFileHelp() { return s(R.string.adjustFileHelp); }
+    String hijriToday(String date) { return (s(R.string.hijriToday)) + date; }
     String days(int n) {
         // No adjustment reads as such, not "0 يوم".
-        if (n == 0) return ar ? "بلا تعديل" : "None";
+        if (n == 0) return s(R.string.days);
         String sign = n > 0 ? "+" : "";
         if (!ar) return d(sign + n + (Math.abs(n) == 1 ? " day" : " days"));
         return d(sign + n + (Math.abs(n) == 2 ? " يومان" : " يوم"));
     }
     String roomRow() { return roomTitle(); }
-    String roomHelp() { return ar ? "لمعرفة القبلة بالنسبة لمكان جلوسك" : "So the Qibla is shown from where you sit"; }
-    String notSet() { return ar ? "لم يُحدَّد" : "Not set"; }
-    String remind() { return ar ? "التنبيه قبل الصلاة" : "Remind me before prayer"; }
-    String remindHelp() { return ar ? "على الرئيسية وفوق الفيديو" : "On Home and over video"; }
+    String roomHelp() { return s(R.string.roomHelp); }
+    String notSet() { return s(R.string.notSet); }
+    String remind() { return s(R.string.remind); }
+    String remindHelp() { return s(R.string.remindHelp); }
     String[] remindChoices() {
-        return ar ? new String[] {"5 د", "10 د", "15 د", "20 د", "30 د", "إيقاف"}
-                  : new String[] {"5 min", "10 min", "15 min", "20 min", "30 min", "Off"};
+        return a(R.array.remindChoices);
     }
-    String remindVoiceRow() { return ar ? "تذكير صوتي" : "Spoken reminder"; }
-    String remindVoiceHelp() { return ar ? "«اقترب موعد صلاة …» مع التذكير" : "Says «اقترب موعد صلاة …» with the reminder"; }
-    String announceRow() { return ar ? "إعلان دخول الوقت" : "Announce the time"; }
+    String remindVoiceRow() { return s(R.string.remindVoiceRow); }
+    String remindVoiceHelp() { return s(R.string.remindVoiceHelp); }
+    String announceRow() { return s(R.string.announceRow); }
     String announceHelp() {
-        return ar ? "«حان الآن موعد صلاة …» للصلاة التي أذانها متوقف" : "Says «حان الآن موعد صلاة …» when a prayer's adhan is off";
+        return s(R.string.announceHelp);
     }
-    String adhanRow() { return ar ? "الأذان" : "Adhan"; }
-    String adhanHelp() { return ar ? "يُشغَّل عند دخول الوقت · يمكن إيقافه لكل صلاة" : "Plays when the time begins · can be muted per prayer"; }
-    String language() { return ar ? "اللغة" : "Language"; }
-    String languageHelp() { return ar ? "«التلفاز» يتبع لغة التلفاز" : "“TV” follows the TV's language"; }
-    String[] languages() { return new String[] {ar ? "التلفاز" : "TV", "العربية", "English"}; }
-    String digits() { return ar ? "الأرقام" : "Digits"; }
-    String clockRow() { return ar ? "الساعة" : "Clock"; }
-    String clockHelp() { return ar ? "«التلفاز» يتبع إعداد الوقت في التلفاز" : "“TV” follows the TV's time setting"; }
-    String[] clocks() { return ar ? new String[] {"التلفاز", "12 س", "24 س"} : new String[] {"TV", "12 h", "24 h"}; }
-    String networkRow() { return ar ? "إعدادات الشبكة في التلفاز" : "TV network settings"; }
-    String networkHelp() { return ar ? "واي فاي وإيثرنت" : "Wi-Fi and Ethernet"; }
-    String deviceRow() { return ar ? "إعدادات التلفاز" : "TV settings"; }
-    String deviceHelp() { return ar ? "الصورة والصوت والتطبيقات والنظام" : "Picture, sound, apps and system"; }
+    String adhanRow() { return s(R.string.adhanRow); }
+    String adhanHelp() { return s(R.string.adhanHelp); }
+    String language() { return s(R.string.language); }
+    String languageHelp() { return s(R.string.languageHelp); }
+    String[] languages() { return new String[] {s(R.string.languages), "العربية", "English"}; }
+    String digits() { return s(R.string.digits); }
+    String clockRow() { return s(R.string.clockRow); }
+    String clockHelp() { return s(R.string.clockHelp); }
+    String[] clocks() { return a(R.array.clocks); }
+    String networkRow() { return s(R.string.networkRow); }
+    String networkHelp() { return s(R.string.networkHelp); }
+    String deviceRow() { return s(R.string.deviceRow); }
+    String deviceHelp() { return s(R.string.deviceHelp); }
     /** Home's button on an HDMI source box (Prefs.homeButton). */
-    String homeButtonRow() { return ar ? "زر Home يفتح Awan TV مباشرة" : "Home button opens Awan TV directly"; }
+    String homeButtonRow() { return s(R.string.homeButtonRow); }
     String homeButtonHelp() {
-        return ar ? "فعّله إن صمت مكبّر الصوت بعد Home · الضغط المطوّل: واجهة الجهاز"
-                  : "On if the soundbar goes silent after Home · hold it: the box's own home";
+        return s(R.string.homeButtonHelp);
     }
     /** Settings > Device settings > Remote buttons (Buttons). */
-    String buttonsRow() { return ar ? "أزرار الريموت" : "Remote buttons"; }
+    String buttonsRow() { return s(R.string.buttonsRow); }
     String buttonsHelp(int n) {
-        if (n == 0) return ar ? "اجعل زرًا في أي ريموت يفتح ما تختار" : "Make a button on any remote open what you choose";
+        if (n == 0) return s(R.string.buttonsHelp);
         if (!ar) return d(n == 1 ? "1 button customised" : n + " buttons customised");
         if (n == 1) return "زر واحد مخصص";
         if (n == 2) return "زران مخصصان";
         return d(n <= 10 ? n + " أزرار مخصصة" : n + " زرًا مخصصًا");
     }
-    String buttonsSection() { return ar ? "إعدادات الجهاز ← أزرار الريموت" : "Device settings › Remote buttons"; }
-    String hintBackDevice() { return ar ? "رجوع  إعدادات الجهاز" : "Back  Device settings"; }
+    String buttonsSection() { return s(R.string.buttonsSection); }
+    String hintBackDevice() { return s(R.string.hintBackDevice); }
     String buttonFrom(String remote) {
         if (remote == null || remote.isEmpty()) return "";
-        return ar ? "من «" + remote + "»" : "From \u201C" + remote + "\u201D";
+        return s(R.string.buttonFrom, remote);
     }
-    String addButtonRow() { return ar ? "إضافة زر" : "Add a button"; }
-    String addButtonHelp() { return ar ? "اضغط بعدها أي زر في أي ريموت متصل بالشاشة" : "Then press any button on any remote connected to the TV"; }
-    String buttonsInfoRow() { return ar ? "عن تخصيص الأزرار" : "About custom buttons"; }
+    String addButtonRow() { return s(R.string.addButtonRow); }
+    String addButtonHelp() { return s(R.string.addButtonHelp); }
+    String buttonsInfoRow() { return s(R.string.buttonsInfoRow); }
     String buttonsInfoHelp() {
-        return ar ? "ما دام زر واحد مخصصًا تمر ضغطات الريموت كلها عبر Awan TV، فالضغط المطوّل على الصوت يرفعه درجة واحدة. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."
-                  : "While one button is customised every remote press passes through Awan TV, so holding Volume moves it one step. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power.";
+        return s(R.string.buttonsInfoHelp);
     }
     String buttonsInfoHelpTcl() {
-        return ar ? "على هذه الشاشة تُخصَّص الأزرار بنظام TCL نفسه، فلا تمر ضغطات الريموت عبر Awan TV ويبقى زر الصوت كما هو. ولا تُخصَّص هذه الأزرار: الأسهم، OK، رجوع، Home، الصوت، التشغيل."
-                  : "On this TV the buttons are customised in TCL's own remapping, so remote presses do not pass through Awan TV and Volume is as it was. These buttons are never customised: the arrows, OK, Back, Home, Volume, Power.";
+        return s(R.string.buttonsInfoHelpTcl);
     }
-    String buttonsServiceOff() { return ar ? "خدمة Awan TV متوقفة: لا تعمل الأزرار المخصصة حتى تشغّلها" : "The Awan TV service is off: custom buttons work once it is on"; }
-    String buttonOpens(String name) { return ar ? name + " يفتح" : name + " opens"; }
+    String buttonsServiceOff() { return s(R.string.buttonsServiceOff); }
+    String buttonOpens(String name) { return s(R.string.buttonOpens, name); }
     /** A custom button's press and hold (Buttons.Entry.longAction). */
-    String buttonPressIs(String action) { return (ar ? "ضغطة: " : "Press: ") + action; }
-    String buttonLongIs(String action) { return (ar ? "ضغطة مطوّلة: " : "Hold: ") + action; }
-    String buttonLongNone() { return ar ? "بلا ضغطة مطوّلة" : "No hold"; }
-    String buttonLongNote() { return ar ? "الضغطة المطوّلة نصف ثانية أو أكثر" : "A hold is half a second or more"; }
-    String buttonLongShort(String action) { return (ar ? "مطوّلًا: " : "Held: ") + action; }
-    String buttonLongTitle(String name) { return ar ? name + " مطوّلًا" : name + ", held"; }
-    String buttonOriginal() { return ar ? "عمله الأصلي (بلا تخصيص)" : "What it always did (not customised)"; }
-    String buttonNone() { return ar ? "لا شيء (يعطّل الزر)" : "Nothing (turns the button off)"; }
-    String buttonOff() { return ar ? "لا شيء (معطّل)" : "Nothing (off)"; }
+    String buttonPressIs(String action) { return (s(R.string.buttonPressIs)) + action; }
+    String buttonLongIs(String action) { return (s(R.string.buttonLongIs)) + action; }
+    String buttonLongNone() { return s(R.string.buttonLongNone); }
+    String buttonLongNote() { return s(R.string.buttonLongNote); }
+    String buttonLongShort(String action) { return (s(R.string.buttonLongShort)) + action; }
+    String buttonLongTitle(String name) { return s(R.string.buttonLongTitle, name); }
+    String buttonOriginal() { return s(R.string.buttonOriginal); }
+    String buttonNone() { return s(R.string.buttonNone); }
+    String buttonOff() { return s(R.string.buttonOff); }
     String buttonAwan(String screen) { return "Awan TV · " + screen; }
-    String buttonRadio() { return ar ? "الإذاعة (تشغيل وإيقاف)" : "Radio (play and stop)"; }
-    String pressTitle() { return ar ? "اضغط الزر الذي تريد تخصيصه" : "Press the button to customise"; }
-    String pressHelp() { return ar ? "في الريموت الأصلي أو أي ريموت بلوتوث متصل بالشاشة." : "On the TV's own remote or any Bluetooth remote connected to it."; }
+    String buttonRadio() { return s(R.string.buttonRadio); }
+    String pressTitle() { return s(R.string.pressTitle); }
+    String pressHelp() { return s(R.string.pressHelp); }
     String pressWaiting(int seconds) {
         if (!ar) return d("Waiting " + seconds + (seconds == 1 ? " second" : " seconds"));
         if (seconds == 1) return "ينتظر ثانية واحدة";
         if (seconds == 2) return "ينتظر ثانيتين";
         return d("ينتظر " + seconds + " ثوانٍ");
     }
-    String noneTitle() { return ar ? "لم يصل أي زر" : "No button came through"; }
-    String noneBody() { return d(ar ? "مرّت 10 ثوانٍ دون أن يصل شيء إلى Awan TV." : "10 seconds went by and nothing reached Awan TV."); }
+    String noneTitle() { return s(R.string.noneTitle); }
+    String noneBody() { return d(s(R.string.noneBody)); }
     String noneWhy() {
-        return ar ? "بعض الأزرار يأخذها التلفاز قبل أي تطبيق، فلا يمكن تخصيصها هنا. جرّب زرًا آخر."
-                  : "The TV takes some buttons before any app sees them, so they cannot be customised here. Try another one.";
+        return s(R.string.noneWhy);
     }
-    String tryAgain() { return ar ? "حاول مرة أخرى" : "Try again"; }
-    String close() { return ar ? "إغلاق" : "Close"; }
+    String tryAgain() { return s(R.string.tryAgain); }
+    String close() { return s(R.string.close); }
 
     // The safety net's screen (Crash, CrashActivity, 1.13.0).
     String crashTitle() { return ar ? "توقف Awan TV على غير المتوقع" : "Awan TV stopped unexpectedly"; }
@@ -685,49 +704,46 @@ final class Text {
         return ar ? "امسح الرمز بالجوال لتفتح بلاغًا على صفحة المشروع، ثم الصق فيه هذه الأسطر أو صوّرها. لا تحمل شيئًا عنك ولا عن شبكتك."
             : "Scan the code with a phone to open a report on the project's page, then paste these lines or a photo of them. They carry nothing about you or your network.";
     }
-    String lastCrashRow() { return ar ? "آخر توقف للتطبيق" : "Last time the app stopped"; }
+    String lastCrashRow() { return s(R.string.lastCrashRow); }
     String lastCrashHelp(String when, String what) { return d(when) + sep() + what; }
-    String noCrash() { return ar ? "لا توقف مسجّل" : "No stop recorded"; }
-    String warnTitle() { return ar ? "قبل أول تخصيص" : "Before the first button"; }
+    String noCrash() { return s(R.string.noCrash); }
+    String warnTitle() { return s(R.string.warnTitle); }
     String warnBody() {
-        return ar ? "لكي يعرف Awan TV الزر الذي ضغطته، تمر ضغطات الريموت كلها عبره ما دام زر واحد مخصصًا."
-                  : "So that Awan TV knows which button you pressed, every remote press passes through it while one button is customised.";
+        return s(R.string.warnBody);
     }
     String warnVolume() {
-        return ar ? "على أغلب الشاشات لا تشعر بفرق. لكن الضغط المطوّل على زر الصوت يرفعه درجة واحدة فقط، فاضغطه مرات متتالية."
-                  : "On most TVs you feel no difference. But holding Volume moves it only one step, so press it several times instead.";
+        return s(R.string.warnVolume);
     }
-    String warnUndo() { return ar ? "إن حذفت كل الأزرار المخصصة عاد الريموت كما كان." : "Remove every custom button and the remote is as it was."; }
-    String hintMove() { return ar ? "▲▼  تنقل" : "▲▼  Move"; }
-    String hintChange() { return ar ? "◀▶  تغيير القيمة" : "◀▶  Change value"; }
-    String hintChoose() { return ar ? "OK  اختيار" : "OK  Choose"; }
-    String hintBackMenu() { return ar ? "رجوع  القائمة" : "Back  Menu"; }
-    String hintEdit() { return ar ? "OK  تعديل" : "OK  Edit"; }
-    String hintSwitch() { return ar ? "OK  تشغيل/إيقاف" : "OK  On/Off"; }
-    String hintSave() { return ar ? "OK  حفظ" : "OK  Save"; }
-    String hintBackCancel() { return ar ? "رجوع  إلغاء" : "Back  Cancel"; }
-    String saved() { return ar ? "✓  تم الحفظ" : "✓  Saved"; }
-    String qibla() { return ar ? "القبلة" : "QIBLA"; }
-    String north() { return ar ? "الشمال ▲" : "▲ North"; }
-    String qiblaHint() { return ar ? "وجّه الشمال على البوصلة نحو الشمال الحقيقي" : "Line up the compass north with true north"; }
-    String bellToggle() { return ar ? "تشغيل/إيقاف الأذان لهذه الصلاة" : "Adhan on/off for this prayer"; }
-    String hintBackHome() { return ar ? "رجوع  الرئيسية" : "Back  Home"; }
-    String bell(boolean on) { return ar ? (on ? "الأذان مفعّل" : "الأذان متوقف") : (on ? "Adhan on" : "Adhan off"); }
-    String rowNow() { return ar ? "الآن" : "now"; }
+    String warnUndo() { return s(R.string.warnUndo); }
+    String hintMove() { return s(R.string.hintMove); }
+    String hintChange() { return s(R.string.hintChange); }
+    String hintChoose() { return s(R.string.hintChoose); }
+    String hintBackMenu() { return s(R.string.hintBackMenu); }
+    String hintEdit() { return s(R.string.hintEdit); }
+    String hintSwitch() { return s(R.string.hintSwitch); }
+    String hintSave() { return s(R.string.hintSave); }
+    String hintBackCancel() { return s(R.string.hintBackCancel); }
+    String saved() { return s(R.string.saved); }
+    String qibla() { return s(R.string.qibla); }
+    String north() { return s(R.string.north); }
+    String qiblaHint() { return s(R.string.qiblaHint); }
+    String bellToggle() { return s(R.string.bellToggle); }
+    String hintBackHome() { return s(R.string.hintBackHome); }
+    String bell(boolean on) { return (on ? s(R.string.bell) : s(R.string.bell_2)); }
+    String rowNow() { return s(R.string.rowNow); }
     /** Sunrise is masculine in Arabic (الشروق مضى); the prayers are feminine (الصلاة مضت). */
-    String passed(boolean sunrise) { return ar ? (sunrise ? "مضى" : "مضت") : "passed"; }
-    String in(String duration) { return d(ar ? "بعد " + duration : "in " + duration); }
+    String passed(boolean sunrise) { return s(sunrise ? R.string.passedSunrise : R.string.passed); }
+    String in(String duration) { return d(s(R.string.in, duration)); }
     /** "الفجر بعد" / "Fajr in": the screensaver's line above its countdown. */
-    String nextIn(String prayer) { return ar ? prayer + " بعد" : prayer + " in"; }
+    String nextIn(String prayer) { return s(R.string.nextIn, prayer); }
 
     /** "South-east · from Cairo" for a bearing in degrees from true north. */
     String qiblaDirection(double bearing) {
-        return octant(bearing) + (ar ? " · من " : " · from ") + city();
+        return octant(bearing) + (s(R.string.qiblaDirection)) + city();
     }
 
     String octant(double bearing) {
-        String[] names = ar ? new String[] {"شمال", "شمال شرق", "شرق", "جنوب شرق", "جنوب", "جنوب غرب", "غرب", "شمال غرب"}
-                            : new String[] {"North", "North-east", "East", "South-east", "South", "South-west", "West", "North-west"};
+        String[] names = a(R.array.octant);
         return names[sector(bearing)];
     }
 
@@ -736,27 +752,23 @@ final class Text {
      * are the viewer's own, so they never mirror with the layout.
      */
     String qiblaRelative(double clockwise) {
-        String[] where = ar
-            ? new String[] {"أمامك", "أمامك إلى اليمين", "على يمينك", "خلفك إلى اليمين", "خلفك", "خلفك إلى اليسار", "على يسارك", "أمامك إلى اليسار"}
-            : new String[] {"ahead of you", "ahead, to your right", "to your right", "behind, to your right", "behind you",
-                            "behind, to your left", "to your left", "ahead, to your left"};
-        return (ar ? "القبلة " : "Qibla is ") + where[sector(clockwise)];
+        String[] where = a(R.array.qiblaRelative);
+        return (s(R.string.qiblaRelative_2)) + where[sector(clockwise)];
     }
 
     /** "North-west · 320°". */
     String bearingLabel(int degrees) { return d(octant(degrees) + " · " + degrees + "°"); }
 
-    String facingLine(int facing) { return (ar ? "تجلس مواجهًا: " : "You face: ") + bearingLabel(facing); }
-    String tvMarker() { return ar ? "التلفاز ▲" : "▲ TV"; }
-    String roomButton(boolean set) { return ar ? (set ? "تغيير اتجاه الغرفة" : "حدّد اتجاه الغرفة") : (set ? "Change room direction" : "Set room direction"); }
-    String roomTitle() { return ar ? "اتجاه الغرفة" : "Room direction"; }
+    String facingLine(int facing) { return (s(R.string.facingLine)) + bearingLabel(facing); }
+    String tvMarker() { return s(R.string.tvMarker); }
+    String roomButton(boolean set) { return (set ? s(R.string.roomButton) : s(R.string.roomButton_2)); }
+    String roomTitle() { return s(R.string.roomTitle); }
     String roomTip() {
-        return ar ? "قف مواجهًا للتلفاز، وافتح تطبيق البوصلة في هاتفك وأمسكه مستويًا أمامك، ثم اضبط الرقم هنا على ما تقرؤه. يكفي ذلك مرة واحدة ما دام التلفاز في مكانه."
-                  : "Stand facing the TV, open the compass app on your phone and hold it flat in front of you, then set the number here to what it reads. Once is enough while the TV stays where it is.";
+        return s(R.string.roomTip);
     }
-    String roomKeys() { return ar ? "◀ ▶  ٥°     ▲ ▼  ٤٥°     OK  حفظ     رجوع  إلغاء" : "◀ ▶  5°     ▲ ▼  45°     OK  Save     Back  Cancel"; }
-    String hintQibla() { return ar ? "◀  القبلة" : "▶  Qibla"; }
-    String hintTimes() { return ar ? "▶  المواقيت" : "◀  Times"; }
+    String roomKeys() { return s(R.string.roomKeys); }
+    String hintQibla() { return s(R.string.hintQibla); }
+    String hintTimes() { return s(R.string.hintTimes); }
 
     private static int sector(double degrees) {
         return (int) Math.round(((degrees % 360) + 360) % 360 / 45) % 8;
@@ -764,68 +776,62 @@ final class Text {
 
     /** Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha. */
     String[] prayerNames() {
-        return ar ? new String[] {"الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"}
-                  : new String[] {"Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"};
+        return a(R.array.prayerNames);
     }
 
     String[] hijriMonths() {
-        return ar ? new String[] {"محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة",
-                                  "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"}
-                  : new String[] {"Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Ula",
-                                  "Jumada al-Akhirah", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qadah",
-                                  "Dhu al-Hijjah"};
+        return a(R.array.hijriMonths);
     }
 
-    String hijriSuffix() { return ar ? " هـ" : " AH"; }
+    String hijriSuffix() { return s(R.string.hijriSuffix); }
 
     // ----------------------------------------------------------------
 
     // Iqamah (Settings, screensaver)
-    String sectionIqama() { return ar ? "الإقامة" : "Iqamah"; }
-    String iqama() { return ar ? "الإقامة" : "Iqamah"; }
-    String iqamaAt(CharSequence time) { return (ar ? "الإقامة " : "Iqamah ") + time; }
-    String noIqama() { return ar ? "لا إقامة" : "No iqamah"; }
-    String khutbah() { return ar ? "الخطبة" : "Khutbah"; }
+    String sectionIqama() { return s(R.string.sectionIqama); }
+    String iqama() { return s(R.string.iqama); }
+    String iqamaAt(CharSequence time) { return (s(R.string.iqamaAt)) + time; }
+    String noIqama() { return s(R.string.noIqama); }
+    String khutbah() { return s(R.string.khutbah); }
     // Friday's khutbah and Ramadan's imsak (Jumuah; Settings > Prayer times; the screensaver)
-    String khutbahAt(CharSequence time) { return (ar ? "الخطبة " : "Khutbah ") + time; }
-    String khutbahIn() { return ar ? "الخطبة بعد" : "Khutbah in"; }
-    String suhoorEndsIn() { return ar ? "السحور ينتهي بعد" : "Suhoor ends in"; }
-    String fridayLine() { return ar ? "سورة الكهف · الصلاة على النبي ﷺ" : "Surat Al-Kahf · Salawat on the Prophet ﷺ"; }
-    String fridayEveLine() { return ar ? "ليلة الجمعة · سورة الكهف · الصلاة على النبي ﷺ" : "Friday night · Al-Kahf · Salawat ﷺ"; }
-    String kahfTonight() { return ar ? "ليلة الجمعة · سورة الكهف" : "Friday night · Surat Al-Kahf"; }
-    String ramadanDay(int day) { return d(ar ? "اليوم " + day + " من رمضان" : "Day " + day + " of Ramadan"); }
-    String imsakAt(CharSequence time) { return (ar ? "الإمساك " : "Imsak ") + time; }
-    String fajrAt(CharSequence time) { return (ar ? "الفجر " : "Fajr ") + time; }
-    String fridayRow() { return ar ? "صلاة الجمعة" : "Friday prayer"; }
-    String[] fridayChoices() { return ar ? new String[] {"حسب الدولة", "عند الظهر", "موعد ثابت"} : new String[] {"By country", "At Dhuhr", "Fixed time"}; }
+    String khutbahAt(CharSequence time) { return (s(R.string.khutbahAt)) + time; }
+    String khutbahIn() { return s(R.string.khutbahIn); }
+    String suhoorEndsIn() { return s(R.string.suhoorEndsIn); }
+    String fridayLine() { return s(R.string.fridayLine); }
+    String fridayEveLine() { return s(R.string.fridayEveLine); }
+    String kahfTonight() { return s(R.string.kahfTonight); }
+    String ramadanDay(int day) { return d(s(R.string.ramadanDay, day)); }
+    String imsakAt(CharSequence time) { return (s(R.string.imsakAt)) + time; }
+    String fajrAt(CharSequence time) { return (s(R.string.fajrAt)) + time; }
+    String fridayRow() { return s(R.string.fridayRow); }
+    String[] fridayChoices() { return a(R.array.fridayChoices); }
     /** preset: the country's own time ("12:45 PM"), or null when the country's khutbah is at Dhuhr. */
     String fridayHelp(int mode, CharSequence preset, String country) {
-        if (mode == Prefs.FRIDAY_FIXED) return ar ? "موعد الخطبة أدناه" : "The khutbah's time below";
+        if (mode == Prefs.FRIDAY_FIXED) return s(R.string.fridayHelp);
         if (mode == Prefs.FRIDAY_DHUHR || preset == null) {
-            return mode == Prefs.FRIDAY_DHUHR ? (ar ? "الخطبة عند أذان الظهر" : "The khutbah at the Dhuhr adhan")
-                                              : (ar ? "حسب الدولة: الخطبة عند أذان الظهر" : "By country: the khutbah at the Dhuhr adhan");
+            return mode == Prefs.FRIDAY_DHUHR ? (s(R.string.fridayHelp_2))
+                                              : (s(R.string.fridayHelp_3));
         }
-        return ar ? "حسب الدولة: " + country + " " + preset + " · الهيئة العامة للشؤون الإسلامية"
-                  : "By country: " + country + " " + preset + " · the Islamic Affairs authority";
+        return s(R.string.fridayHelp_4, country, preset);
     }
-    String fridayTimeRow() { return ar ? "موعد الخطبة" : "Khutbah time"; }
-    String fridayTimeHelp() { return ar ? "كل جمعة · العد التنازلي يوم الجمعة إليه" : "Every Friday · Friday's countdown is to it"; }
-    String imsakRow() { return ar ? "الإمساك في رمضان" : "Imsak in Ramadan"; }
-    String[] imsakChoices() { return ar ? new String[] {"بلا", "5 د", "10 د", "15 د", "20 د"} : new String[] {"None", "5 min", "10 min", "15 min", "20 min"}; }
-    String imsakHelp() { return ar ? "السحور ينتهي عند الفجر · الإمساك احتياط قبله" : "Suhoor ends at Fajr · imsak is a precaution before it"; }
-    String iqamaRow() { return ar ? "وقت الإقامة" : "Iqamah time"; }
+    String fridayTimeRow() { return s(R.string.fridayTimeRow); }
+    String fridayTimeHelp() { return s(R.string.fridayTimeHelp); }
+    String imsakRow() { return s(R.string.imsakRow); }
+    String[] imsakChoices() { return a(R.array.imsakChoices); }
+    String imsakHelp() { return s(R.string.imsakHelp); }
+    String iqamaRow() { return s(R.string.iqamaRow); }
     String[] iqamaModes() {
-        return ar ? new String[] {"إيقاف", "الدولة", "دقائق", "وقت ثابت"} : new String[] {"Off", "Country", "Minutes", "Fixed"};
+        return a(R.array.iqamaModes);
     }
     /** The mode row's help line: what the mode does, or why Country is not on offer. */
     String iqamaModeHelp(int mode, String country, boolean hasPreset) {
         switch (mode) {
-            case Iqama.COUNTRY: return ar ? "المعتمد رسميًا في " + country : "The official wait in " + country;
-            case Iqama.MINUTES: return ar ? "دقائق بعد الأذان، لكل صلاة" : "Minutes after the adhan, per prayer";
-            case Iqama.FIXED: return ar ? "وقت ثابت لكل صلاة، كما في مسجدك" : "A set time per prayer, as at your mosque";
+            case Iqama.COUNTRY: return s(R.string.iqamaModeHelp, country);
+            case Iqama.MINUTES: return s(R.string.iqamaModeHelp_2);
+            case Iqama.FIXED: return s(R.string.iqamaModeHelp_3);
             default:
-                if (hasPreset) return ar ? "لا يظهر وقت الإقامة" : "No iqamah shown";
-                return ar ? "لا معيار رسمي مسجَّل لهذه الدولة بعد" : "No official standard for this country yet";
+                if (hasPreset) return s(R.string.iqamaModeHelp_4);
+                return s(R.string.iqamaModeHelp_5);
         }
     }
     /** "25 minutes", with the Arabic count forms. */
@@ -836,198 +842,182 @@ final class Text {
         if (n == 2) return "دقيقتان";
         return d(n + (n <= 10 ? " دقائق" : " دقيقة"));
     }
-    String adhanToday(CharSequence time) { return (ar ? "الأذان اليوم " : "Adhan today ") + time; }
-    String iqamaToday(CharSequence time) { return (ar ? "الإقامة اليوم " : "Iqamah today ") + time; }
-    String fridayNote() { return ar ? "وفي الجمعة الخطبة بدل الإقامة" : "On Fridays the khutbah instead"; }
+    String adhanToday(CharSequence time) { return (s(R.string.adhanToday)) + time; }
+    String iqamaToday(CharSequence time) { return (s(R.string.iqamaToday)) + time; }
+    String fridayNote() { return s(R.string.fridayNote); }
 
     // Settings > Awan TV: what runs (Prefs.run), the screensaver, the TV's own home screen, removing the app
-    String sectionRun() { return ar ? "تشغيل Awan TV" : "Awan TV"; }
-    String runRow() { return ar ? "يعمل" : "Runs"; }
+    String sectionRun() { return s(R.string.sectionRun); }
+    String runRow() { return s(R.string.runRow); }
     String[] runModes() {
-        return ar ? new String[] {"الكل", "الرئيسية", "الاستراحة", "إيقاف"} : new String[] {"All", "Home", "Screensaver", "Off"};
+        return a(R.array.runModes);
     }
     /** The run row's help: what the choice runs, or what it still needs. */
     String runHelp(int run, boolean serviceOn) {
         if (!serviceOn && (run == Prefs.RUN_ALL || run == Prefs.RUN_HOME)) {
-            return ar ? "الرئيسية تحتاج تشغيل خدمة Awan TV (إمكانية الوصول، أدناه)"
-                      : "Home needs the Awan TV service on (Accessibility, below)";
+            return s(R.string.runHelp);
         }
         switch (run) {
-            case Prefs.RUN_ALL: return ar ? "الرئيسية فوق شاشة التلفاز، وشاشة الاستراحة بالمواقيت والأذكار"
-                                          : "Home over the TV's own, and the screensaver with times and adhkar";
-            case Prefs.RUN_HOME: return ar ? "الرئيسية فقط · شاشة الاستراحة والأذكار متوقفة"
-                                           : "Home only · no screensaver or adhkar";
-            case Prefs.RUN_SAVER: return ar ? "شاشة الاستراحة فقط · رئيسية التلفاز كما هي"
-                                            : "Screensaver only · the TV's own home screen";
-            default: return ar ? "متوقف · الأذان والتذكير حسب إعداداتهما"
-                               : "Off · the adhan and reminders keep their own settings";
+            case Prefs.RUN_ALL: return s(R.string.runHelp_2);
+            case Prefs.RUN_HOME: return s(R.string.runHelp_3);
+            case Prefs.RUN_SAVER: return s(R.string.runHelp_4);
+            default: return s(R.string.runHelp_5);
         }
     }
-    String saverIdleRow() { return ar ? "شاشة الاستراحة بعد" : "Screensaver after"; }
+    String saverIdleRow() { return s(R.string.saverIdleRow); }
     String[] saverIdleChoices() {
-        return ar ? new String[] {"5 دقائق", "10 دقائق", "15 دقيقة", "30 دقيقة"} : new String[] {"5 min", "10 min", "15 min", "30 min"};
+        return a(R.array.saverIdleChoices);
     }
     /** ours: the TV's screensaver is Awan TV's (set over adb), so the TV starts it after its own timeout. */
     String saverIdleHelp(boolean ours) {
-        return ours ? (ar ? "يبدؤها التلفاز بنفسه حسب مهلته · هذا للرئيسية فقط" : "The TV starts it after its own timeout · this is for Home")
-                    : (ar ? "على الرئيسية دون ضغط زر · ثم تنطفئ حسب إعداد التلفاز" : "On Home with no key pressed · then off as the TV is set");
+        return ours ? (s(R.string.saverIdleHelp))
+                    : (s(R.string.saverIdleHelp_2));
     }
-    String stockRow() { return ar ? "الشاشة الرئيسية الأصلية" : "The TV's own home screen"; }
-    String stockHelp() { return ar ? "تبقى حتى تفتح تطبيقًا آخر" : "Stays until you open another app"; }
-    String removeRow() { return ar ? "إزالة Awan TV" : "Remove Awan TV"; }
+    String stockRow() { return s(R.string.stockRow); }
+    String stockHelp() { return s(R.string.stockHelp); }
+    String removeRow() { return s(R.string.removeRow); }
     String removeHelp() {
-        return ar ? "يعيد شاشة الاستراحة السابقة، ثم يحذف التطبيق" : "Puts the old screensaver back, then uninstalls";
+        return s(R.string.removeHelp);
     }
-    String removeRecitationsTitle() { return ar ? "حذف التلاوات المحفوظة أيضًا؟" : "Delete the saved recitations too?"; }
+    String removeRecitationsTitle() { return s(R.string.removeRecitationsTitle); }
     String removeRecitationsSub(String size) {
-        return ar ? size + " في Music/Awan TV · تبقى للتثبيت القادم إن أبقيتها" : size + " in Music/Awan TV · kept for the next install if you keep them";
+        return s(R.string.removeRecitationsSub, size);
     }
     String[] removeRecitationsChoices() {
-        return ar ? new String[] {"أبقِها", "احذفها"} : new String[] {"Keep them", "Delete them"};
+        return a(R.array.removeRecitationsChoices);
     }
-    String[] removeChoices() { return ar ? new String[] {"إزالة الآن", "إلغاء"} : new String[] {"Remove now", "Cancel"}; }
-    String accessibilityRow() { return ar ? "إعدادات إمكانية الوصول" : "Accessibility settings"; }
-    String accessibilityHelp() { return ar ? "لتشغيل خدمة Awan TV: الشاشة الرئيسية والأذان" : "To turn on the Awan TV service: Home and the adhan"; }
+    String[] removeChoices() { return a(R.array.removeChoices); }
+    String accessibilityRow() { return s(R.string.accessibilityRow); }
+    String accessibilityHelp() { return s(R.string.accessibilityHelp); }
 
     // Adhkar (screensaver, Settings > Reminders)
-    String morningAdhkar() { return ar ? "أذكار الصباح" : "Morning adhkar"; }
-    String eveningAdhkar() { return ar ? "أذكار المساء" : "Evening adhkar"; }
-    String adhkarRow() { return ar ? "أذكار الصباح والمساء" : "Morning and evening adhkar"; }
-    String[] adhkarModes() { return ar ? new String[] {"إيقاف", "ممتد", "الأفضل"} : new String[] {"Off", "Extended", "Preferred"}; }
+    String morningAdhkar() { return s(R.string.morningAdhkar); }
+    String eveningAdhkar() { return s(R.string.eveningAdhkar); }
+    String adhkarRow() { return s(R.string.adhkarRow); }
+    String[] adhkarModes() { return a(R.array.adhkarModes); }
     String adhkarHelp(int mode) {
         switch (mode) {
-            case Adhkar.EXTENDED: return ar ? "من الفجر إلى الظهر، ومن العصر إلى العشاء" : "On the screensaver: Fajr to Dhuhr, Asr to Isha";
-            case Adhkar.PREFERRED: return ar ? "من الفجر إلى الشروق، ومن العصر إلى المغرب" : "On the screensaver: Fajr to sunrise, Asr to Maghrib";
-            default: return ar ? "لا تظهر على شاشة الاستراحة" : "No adhkar on the screensaver";
+            case Adhkar.EXTENDED: return s(R.string.adhkarHelp);
+            case Adhkar.PREFERRED: return s(R.string.adhkarHelp_2);
+            default: return s(R.string.adhkarHelp_3);
         }
     }
 
     // Weather by the clock (Weather; Settings > Display)
-    String weatherRow() { return ar ? "الطقس" : "Weather"; }
-    String[] weatherChoices() { return ar ? new String[] {"إيقاف", "°م", "°ف"} : new String[] {"Off", "°C", "°F"}; }
+    String weatherRow() { return s(R.string.weatherRow); }
+    String[] weatherChoices() { return a(R.array.weatherChoices); }
     String weatherHelp(boolean on) {
-        return on ? (ar ? "بجانب الساعة · من Open-Meteo كل 30 دقيقة، ويختفي دون إنترنت"
-                        : "By the clock · from Open-Meteo every 30 minutes, hidden when offline")
-                  : (ar ? "لا يتصل التطبيق لأجل الطقس" : "No connection for the weather");
+        return on ? (s(R.string.weatherHelp))
+                  : (s(R.string.weatherHelp_2));
     }
-    String weatherCredit() { return ar ? "بيانات الطقس: Open-Meteo.com (ترخيص CC BY 4.0)" : "Weather data: Open-Meteo.com (CC BY 4.0)"; }
+    String weatherCredit() { return s(R.string.weatherCredit); }
     /** The sky's name, for screen readers. */
     String sky(int sky) {
-        String[] ar = {"صافٍ", "غائم جزئيًا", "غائم", "ضباب", "رذاذ", "مطر", "ثلج", "عاصفة رعدية"};
-        String[] en = {"Clear", "Partly cloudy", "Cloudy", "Fog", "Drizzle", "Rain", "Snow", "Thunderstorm"};
-        return (this.ar ? ar : en)[Math.max(0, Math.min(7, sky))];
+        return a(R.array.sky)[Math.max(0, Math.min(7, sky))];
     }
 
     // Another place, by coordinates (Settings > Location, PlaceActivity)
-    String otherPlace() { return ar ? "أي مكان في العالم (بحث أو إحداثيات)" : "Any place in the world (search or coordinates)"; }
-    String placeTitle() { return ar ? "أي مكان في العالم" : "Any place in the world"; }
+    String otherPlace() { return s(R.string.otherPlace); }
+    String placeTitle() { return s(R.string.placeTitle); }
     String placeIntro() {
-        return ar ? "ابحث بالاسم بالعربية أو الإنجليزية، ثم احفظ · أو اكتب الإحداثيات مباشرة لمكان أصغر"
-                  : "Search by name in Arabic or English, then save · or type the coordinates for a smaller place";
+        return s(R.string.placeIntro);
     }
-    String searchCity() { return ar ? "ابحث عن مدينة" : "Search for a city"; }
-    String loadingCities() { return ar ? "تُحمَّل قائمة المدن…" : "Loading the cities…"; }
+    String searchCity() { return s(R.string.searchCity); }
+    String loadingCities() { return s(R.string.loadingCities); }
     String noCity() {
-        return ar ? "لا نتائج · جرّب الاسم بالإنجليزية، أو اكتب الإحداثيات في المكان المختار"
-                  : "No results · try another spelling, or type the coordinates";
+        return s(R.string.noCity);
     }
     /** "4.7 million", "195 thousand": a city's size in the results. */
     String population(long n) {
         if (n >= 1_000_000) {
             String m = String.format(java.util.Locale.US, "%.1f", n / 1_000_000.0).replace(".0", "");
-            return d(ar ? decimal(m) + " مليون" : m + " million");
+            return d(s(R.string.populationMillion, ar ? decimal(m) : m));
         }
         long k = Math.max(1, Math.round(n / 1000.0));
-        return d(ar ? k + " ألف" : k + " thousand");
+        return d(s(R.string.population, k));
     }
-    String chosenPlace() { return ar ? "المكان المختار" : "Chosen place"; }
-    String placeName() { return ar ? "اسم المكان (يمكنك تعديله)" : "Place name (you can change it)"; }
-    String latitude() { return ar ? "خط العرض" : "Latitude"; }
-    String longitude() { return ar ? "خط الطول" : "Longitude"; }
+    String chosenPlace() { return s(R.string.chosenPlace); }
+    String placeName() { return s(R.string.placeName); }
+    String latitude() { return s(R.string.latitude); }
+    String longitude() { return s(R.string.longitude); }
     /** The method a place gets: its country's, or the one set now when its country's is not known. */
     String placeMethod(String method, String country) {
-        if (country == null) return ar ? "طريقة الحساب: " + method + " · راجعها بعد الحفظ"
-                                       : "Method: " + method + " · check it after saving";
+        if (country == null) return s(R.string.placeMethod, method);
         // A ministry's name already says its country (Oman, Morocco): the line stays one line.
-        if (method.contains(country)) return (ar ? "طريقة الحساب: " : "Method: ") + method;
-        return ar ? "طريقة الحساب: " + method + " · المتبعة في " + country : "Method: " + method + " · as in " + country;
+        if (method.contains(country)) return (s(R.string.placeMethod_2)) + method;
+        return s(R.string.placeMethod_3, method, country);
     }
     String placeIqama(String country) {
-        return ar ? "والإقامة حسب المعيار الرسمي لـ" + country : "Iqamah: the official wait in " + country;
+        return s(R.string.placeIqama, country);
     }
-    String hintPick() { return ar ? "OK  اختيار المدينة" : "OK  Pick the city"; }
-    String hintToChosen() { return ar ? "◀  إلى المكان المختار" : "▶  To the chosen place"; }
-    String hintCancel() { return ar ? "رجوع  إلغاء" : "Back  Cancel"; }
-    String citiesCredit() { return ar ? "المدن: GeoNames.org" : "Cities: GeoNames.org"; }
-    String habousCreditRow() { return ar ? "مواقيت المغرب" : "Morocco's times"; }
-    String habousCredit() { return ar ? "مستخرجة من جداول وزارة الأوقاف والشؤون الإسلامية المغربية (habous.gov.ma)" : "Fitted to the timetables of Morocco's Ministry of Habous and Islamic Affairs (habous.gov.ma)"; }
-    String citiesCreditLong() { return ar ? "قائمة المدن: GeoNames.org (ترخيص CC BY 4.0)" : "City list: GeoNames.org (CC BY 4.0)"; }
-    String placeSave() { return ar ? "حفظ" : "Save"; }
-    String placeCancel() { return ar ? "إلغاء" : "Cancel"; }
-    String placeBad() { return ar ? "تحقق من الأرقام: خط العرض بين −90 و90، وخط الطول بين −180 و180" : "Check the numbers: latitude −90 to 90, longitude −180 to 180"; }
-    String placeNoName() { return ar ? "اكتب اسمًا للمكان" : "Give the place a name"; }
+    String hintPick() { return s(R.string.hintPick); }
+    String hintToChosen() { return s(R.string.hintToChosen); }
+    String hintCancel() { return s(R.string.hintCancel); }
+    String citiesCredit() { return s(R.string.citiesCredit); }
+    String habousCreditRow() { return s(R.string.habousCreditRow); }
+    String habousCredit() { return s(R.string.habousCredit); }
+    String citiesCreditLong() { return s(R.string.citiesCreditLong); }
+    String placeSave() { return s(R.string.placeSave); }
+    String placeCancel() { return s(R.string.placeCancel); }
+    String placeBad() { return s(R.string.placeBad); }
+    String placeNoName() { return s(R.string.placeNoName); }
     String placeAfter() {
-        return ar ? "ثم اختر طريقة الحساب المتبعة في مساجد المكان" : "Then pick the calculation method of the place's mosques";
+        return s(R.string.placeAfter);
     }
 
     // Screensaver now (Settings > Awan TV, and Home's button)
-    String saverNowRow() { return ar ? "شاشة الاستراحة الآن" : "Screensaver now"; }
-    String saverNowHelp() { return ar ? "تظهر فورًا · أي زر يغلقها" : "Shows at once · any key closes it"; }
+    String saverNowRow() { return s(R.string.saverNowRow); }
+    String saverNowHelp() { return s(R.string.saverNowHelp); }
 
     // Iqamah in Ramadan (Settings > Iqamah)
-    String iqamaPeriodRow() { return ar ? "الإقامة في" : "Iqamah for"; }
-    String[] iqamaPeriods() { return ar ? new String[] {"الأيام العادية", "رمضان"} : new String[] {"Other days", "Ramadan"}; }
+    String iqamaPeriodRow() { return s(R.string.iqamaPeriodRow); }
+    String[] iqamaPeriods() { return a(R.array.iqamaPeriods); }
     String iqamaPeriodHelp(boolean ramadan) {
-        return ramadan ? (ar ? "دقائق بعد الأذان في رمضان · «كالمعتاد» يتبع بقية الأيام" : "Minutes after the adhan in Ramadan · “As usual” follows the other days")
-                       : (ar ? "لرمضان ضبط مستقل" : "Ramadan has its own setting");
+        return ramadan ? (s(R.string.iqamaPeriodHelp))
+                       : (s(R.string.iqamaPeriodHelp_2));
     }
-    String asUsual() { return ar ? "كالمعتاد" : "As usual"; }
+    String asUsual() { return s(R.string.asUsual); }
 
     // About
-    String sectionAbout() { return ar ? "حول التطبيق" : "About"; }
-    String version(String v) { return d((ar ? "الإصدار " : "Version ") + v); }
-    String byAwan() { return ar ? "تطوير عمر أحمد الحويرث" : "Developed by OMAR A ALHWAIRTH"; }
-    String sourceRow() { return ar ? "المصدر والتحديثات" : "Source and updates"; }
-    String newVersion(String v) { return d((ar ? "إصدار جديد متاح: " : "New version out: ") + v); }
-    String qrHint() { return ar ? "امسح الرمز بكاميرا هاتفك" : "Scan a code with your phone's camera"; }
+    String sectionAbout() { return s(R.string.sectionAbout); }
+    String version(String v) { return d((s(R.string.version)) + v); }
+    String byAwan() { return s(R.string.byAwan); }
+    String sourceRow() { return s(R.string.sourceRow); }
+    String newVersion(String v) { return d((s(R.string.newVersion)) + v); }
+    String qrHint() { return s(R.string.qrHint); }
     String siteTitle() { return "AwanPro"; }
-    String checkNowRow() { return ar ? "ابحث عن تحديث الآن" : "Check for updates now"; }
+    String checkNowRow() { return s(R.string.checkNowRow); }
     String checkNowHelp() {
-        return ar ? "يسأل GitHub الآن، دون انتظار سؤاله اليومي" : "Asks GitHub now, without waiting for its daily question";
+        return s(R.string.checkNowHelp);
     }
-    String checking() { return ar ? "جارٍ البحث…" : "Checking…"; }
-    String upToDate() { return ar ? "لديك أحدث إصدار" : "You have the latest version"; }
-    String checkFailed() { return ar ? "تعذّر الوصول إلى GitHub" : "Couldn't reach GitHub"; }
-    String basedOn() { return ar ? "مبني على تطبيقي أفنون وMasjid TV" : "Built on Afnon and Masjid TV"; }
-    String mitLicence() { return ar ? "(ترخيص MIT)" : "(MIT licence)"; }
+    String checking() { return s(R.string.checking); }
+    String upToDate() { return s(R.string.upToDate); }
+    String checkFailed() { return s(R.string.checkFailed); }
+    String basedOn() { return s(R.string.basedOn); }
+    String mitLicence() { return s(R.string.mitLicence); }
 
     // Colour themes (Settings > Display & language), in Tokens' order
-    String themeRow() { return ar ? "ألوان الواجهة" : "Colours"; }
+    String themeRow() { return s(R.string.themeRow); }
     String themeHelp() {
-        return ar ? "للرئيسية والإعدادات · «تلقائي»: لازوردي نهارًا وفحمي بعد المغرب"
-                  : "Home and Settings · Automatic: lapis by day, charcoal after Maghrib";
+        return s(R.string.themeHelp);
     }
     String[] themes() {
-        return ar ? new String[] {"لازوردي", "زمردي", "عنّابي", "فحمي", "رقّ", "تلقائي"}
-                  : new String[] {"Lapis", "Emerald", "Burgundy", "Charcoal", "Parchment", "Automatic"};
+        return a(R.array.themes);
     }
 
     // Home's month (Hijri) and the coming occasion (Home's arch, the screensaver's Hijri line)
-    String calendarSource() { return ar ? "تقويم أم القرى" : "Umm al-Qura"; }
+    String calendarSource() { return s(R.string.calendarSource); }
     /** Sunday first, as Umm al-Qura's printed calendar. */
     String[] weekdaysShort() {
-        return ar ? new String[] {"أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"}
-                  : new String[] {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        return a(R.array.weekdaysShort);
     }
 
     /** "Ramadan in 23 days", "Eid al-Fitr tomorrow", "Eid Mubarak" (Hijri.RAMADAN, FITR, ARAFAH, ADHA). */
     String occasion(int kind, int days) {
         if (days == 0) {
-            if (ar) return new String[] {"رمضان مبارك", "عيد فطر مبارك", "اليوم يوم عرفة", "عيد أضحى مبارك"}[kind];
-            return new String[] {"Ramadan Mubarak", "Eid Mubarak", "The Day of Arafah", "Eid Mubarak"}[kind];
+            return a(R.array.occasionToday)[kind];
         }
-        String name = ar ? new String[] {"رمضان", "عيد الفطر", "يوم عرفة", "عيد الأضحى"}[kind]
-                         : new String[] {"Ramadan", "Eid al-Fitr", "The Day of Arafah", "Eid al-Adha"}[kind];
+        String name = a(R.array.occasion)[kind];
         if (!ar) return d(days == 1 ? name + " tomorrow" : name + " in " + days + " days");
         if (days == 1) return name + " غدًا";
         if (days == 2) return name + " بعد يومين";
@@ -1036,205 +1026,183 @@ final class Text {
 
     /** Tomorrow's sunnah fast (Hijri.MONDAY, THURSDAY, WHITE, TASUA, ASHURA). */
     String fastTomorrow(int kind) {
-        return ar ? new String[] {"غدًا صيام الاثنين", "غدًا صيام الخميس", "غدًا من الأيام البيض", "غدًا صيام تاسوعاء", "غدًا صيام عاشوراء"}[kind]
-                  : new String[] {"Tomorrow: the Monday fast", "Tomorrow: the Thursday fast", "Tomorrow: one of the White Days",
-                                  "Tomorrow: the fast of Tasu'a", "Tomorrow: the fast of Ashura"}[kind];
+        return a(R.array.fastTomorrow)[kind];
     }
-    String fastRow() { return ar ? "تذكير الصيام المسنون" : "Sunnah fast reminder"; }
+    String fastRow() { return s(R.string.fastRow); }
     String fastHelp() {
-        return ar ? "مساء اليوم السابق: الاثنين والخميس والأيام البيض وتاسوعاء وعاشوراء"
-                  : "The evening before: Mondays, Thursdays, the White Days, Tasu'a and Ashura";
+        return s(R.string.fastHelp);
     }
-    String middleRow() { return ar ? "وسط شاشة الاستراحة" : "Screensaver's middle"; }
+    String middleRow() { return s(R.string.middleRow); }
     String middleHelp() {
-        return d(ar ? "حديث يتغير كل 10 دقائق، وأذكار بعد الصلاة 10 دقائق بعد كل صلاة"
-                    : "A hadith every 10 min, and the adhkar for 10 min after each prayer");
+        return d(s(R.string.middleHelp));
     }
     String[] middleChoices() {
-        return ar ? new String[] {"الاثنان", "الحديث", "الأذكار", "لا شيء"} : new String[] {"Both", "Hadith", "Adhkar", "Nothing"};
+        return a(R.array.middleChoices);
     }
-    String afterPrayerLabel() { return ar ? "أذكار بعد الصلاة" : "Adhkar after the prayer"; }
-    String afterAdhanLabel() { return ar ? "الدعاء بعد الأذان" : "Supplication after the adhan"; }
-    String midnight() { return ar ? "منتصف الليل" : "Midnight"; }
-    String lastThird() { return ar ? "الثلث الأخير" : "Last third"; }
+    String afterPrayerLabel() { return s(R.string.afterPrayerLabel); }
+    String afterAdhanLabel() { return s(R.string.afterAdhanLabel); }
+    String midnight() { return s(R.string.midnight); }
+    String lastThird() { return s(R.string.lastThird); }
 
     // The screensaver's hadith (assets/hadith/hadith.json)
     // The remote's buttons by Android's names (Buttons.name)
-    String keyRed() { return ar ? "الزر الأحمر" : "Red button"; }
-    String keyGreen() { return ar ? "الزر الأخضر" : "Green button"; }
-    String keyYellow() { return ar ? "الزر الأصفر" : "Yellow button"; }
-    String keyBlue() { return ar ? "الزر الأزرق" : "Blue button"; }
-    String keySettings() { return ar ? "زر الإعدادات" : "Settings button"; }
-    String keyInput() { return ar ? "زر المصدر" : "Input button"; }
-    String keyGuide() { return ar ? "زر الدليل" : "Guide button"; }
-    String keyInfo() { return ar ? "زر المعلومات" : "Info button"; }
-    String keyBookmark() { return ar ? "زر المفضلة" : "Bookmark button"; }
-    String keyApps() { return ar ? "زر التطبيقات" : "Apps button"; }
-    String keyPlayPause() { return ar ? "زر التشغيل والإيقاف" : "Play/pause button"; }
-    String keyChannelUp() { return ar ? "القناة التالية" : "Channel up"; }
-    String keyChannelDown() { return ar ? "القناة السابقة" : "Channel down"; }
+    String keyRed() { return s(R.string.keyRed); }
+    String keyGreen() { return s(R.string.keyGreen); }
+    String keyYellow() { return s(R.string.keyYellow); }
+    String keyBlue() { return s(R.string.keyBlue); }
+    String keySettings() { return s(R.string.keySettings); }
+    String keyInput() { return s(R.string.keyInput); }
+    String keyGuide() { return s(R.string.keyGuide); }
+    String keyInfo() { return s(R.string.keyInfo); }
+    String keyBookmark() { return s(R.string.keyBookmark); }
+    String keyApps() { return s(R.string.keyApps); }
+    String keyPlayPause() { return s(R.string.keyPlayPause); }
+    String keyChannelUp() { return s(R.string.keyChannelUp); }
+    String keyChannelDown() { return s(R.string.keyChannelDown); }
     /** A button known only by its number ("Button 4020"); the caller puts the digits through d(). */
-    String keyNumbered(String number) { return ar ? "زر رقمه " + number : "Button " + number; }
+    String keyNumbered(String number) { return s(R.string.keyNumbered, number); }
     /** A digit key ("Number 5"); the caller puts the digits through d(). */
-    String keyDigit(String digit) { return (ar ? "الرقم " : "Number ") + digit; }
+    String keyDigit(String digit) { return (s(R.string.keyDigit)) + digit; }
     /** Any other key by Android's name, underscores as spaces ("MEDIA RECORD button"). */
-    String keyNamed(String name) { return (ar ? "زر " : "") + name + (ar ? "" : " button"); }
+    String keyNamed(String name) { return (s(R.string.keyNamed)) + name + (s(R.string.keyNamed_2)); }
     /** A surah downloading, how far ("45٪"): the Arabic percent sign in both languages, as before. */
     String percentDone(int percent) { return d(percent + "٪"); }
 
     String hadithSource(int bukhari, int muslim) {
         StringBuilder b = new StringBuilder();
-        if (bukhari > 0) b.append(ar ? "البخاري " : "Al-Bukhari ").append(bukhari);
-        if (muslim > 0) b.append(b.length() > 0 ? " · " : "").append(ar ? "مسلم " : "Muslim ").append(muslim);
+        if (bukhari > 0) b.append(s(R.string.hadithSource)).append(bukhari);
+        if (muslim > 0) b.append(b.length() > 0 ? " · " : "").append(s(R.string.hadithSource_2)).append(muslim);
         return d(b.toString());
     }
     // Background photos (Photos)
-    String backgroundRow() { return ar ? "خلفية الرئيسية" : "Home background"; }
-    String backgroundHelp() { return ar ? "الصور: من الحرمين والأقصى والمساجد والطبيعة، تحت لون الواجهة" : "Photos: the Haramain, al-Aqsa, mosques and nature, under the theme's colour"; }
-    String[] backgrounds() { return ar ? new String[] {"النقش", "صور"} : new String[] {"Pattern", "Photos"}; }
-    String saverPhotosRow() { return ar ? "صور في الاستراحة" : "Screensaver photos"; }
-    String saverPhotosHelp() { return ar ? "والداكنة فقط من العشاء حتى الفجر" : "Only the dark ones from Isha until Fajr"; }
-    String photoEveryRow() { return ar ? "تغيير الصورة" : "Photo change"; }
-    String photoEveryHelp() { return ar ? "للرئيسية والاستراحة · «تلقائي»: الرئيسية كل يوم، والاستراحة كل 10 دقائق" : "Home and the screensaver · Automatic: Home daily, the screensaver every 10 minutes"; }
+    String backgroundRow() { return s(R.string.backgroundRow); }
+    String backgroundHelp() { return s(R.string.backgroundHelp); }
+    String[] backgrounds() { return a(R.array.backgrounds); }
+    String saverPhotosRow() { return s(R.string.saverPhotosRow); }
+    String saverPhotosHelp() { return s(R.string.saverPhotosHelp); }
+    String photoEveryRow() { return s(R.string.photoEveryRow); }
+    String photoEveryHelp() { return s(R.string.photoEveryHelp); }
     String[] photoEveryChoices() {
-        return ar ? new String[] {"تلقائي", "كل 10 دقائق", "كل نصف ساعة", "كل ساعة", "مع كل صلاة", "كل يوم"}
-                  : new String[] {"Automatic", "Every 10 minutes", "Every half hour", "Every hour", "With each prayer", "Every day"};
+        return a(R.array.photoEveryChoices);
     }
-    String nightDimRow() { return ar ? "تخفيف الإضاءة ليلًا" : "Dim at night"; }
-    String nightDimHelp() { return ar ? "شاشة الاستراحة بعد العشاء بساعتين حتى الفجر" : "The screensaver, from two hours after Isha until Fajr"; }
+    String nightDimRow() { return s(R.string.nightDimRow); }
+    String nightDimHelp() { return s(R.string.nightDimHelp); }
 
     // Fajr's adhan level, the iqamah countdown over other apps, App status
-    String percent(int n) { return d(ar ? n + "٪" : n + "%"); }
-    String fullLevel() { return ar ? "كامل (كبقية الأذان)" : "Full (as the other adhans)"; }
-    String fajrLevelTitle() { return ar ? "مستوى أذان الفجر" : "Fajr adhan level"; }
-    String fajrLevelHelp() { return ar ? "نسبة من صوت التلفاز · يُسمع وأنت تتنقل" : "A share of the TV's sound · heard as you move"; }
-    String iqamaCounterRow() { return ar ? "عدّاد الإقامة فوق التطبيقات" : "Iqamah countdown over apps"; }
+    String percent(int n) { return d(s(R.string.percent, n)); }
+    String fullLevel() { return s(R.string.fullLevel); }
+    String fajrLevelTitle() { return s(R.string.fajrLevelTitle); }
+    String fajrLevelHelp() { return s(R.string.fajrLevelHelp); }
+    String iqamaCounterRow() { return s(R.string.iqamaCounterRow); }
     /** Under the countdown card its first times (PrayerWatch.HINT_TIMES): where it is turned off. */
-    String iqamaCounterOff() { return ar ? "تُطفأ من الإعدادات ← الإقامة" : "Turn it off in Settings › Iqamah"; }
+    String iqamaCounterOff() { return s(R.string.iqamaCounterOff); }
     // The settings file's last part (SettingsFile.write, 1.14.0).
-    String buttonsFileSection() { return ar ? "أزرار الريموت (لهذه الشاشة وحدها)" : "Remote buttons (this TV only)"; }
+    String buttonsFileSection() { return s(R.string.buttonsFileSection); }
     String buttonsFileNote() {
-        return ar ? "تعود إلى هذه الشاشة وحدها، وتُتجاهل إن أُرسل الملف إلى شاشة أخرى، فلكل ريموت أرقامه."
-            : "They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes.";
+        return s(R.string.buttonsFileNote);
     }
-    String iqamaCounterHelp() { return ar ? "بعد الأذان، في زاوية الشاشة حتى الإقامة" : "After the adhan, in a corner of the screen until the iqamah"; }
+    String iqamaCounterHelp() { return s(R.string.iqamaCounterHelp); }
     /** "الإقامة بعد 8 د" / "Iqamah in 8 min"; under a minute "الإقامة الآن". */
     String iqamaInMinutes(long minutes) {
-        if (minutes <= 0) return ar ? "الإقامة الآن" : "Iqamah now";
-        return d(ar ? "الإقامة بعد " + minutes + " د" : "Iqamah in " + minutes + " min");
+        if (minutes <= 0) return s(R.string.iqamaInMinutes);
+        return d(s(R.string.iqamaInMinutes_2, minutes));
     }
-    String statusRow() { return ar ? "حالة التطبيق" : "App status"; }
-    String statusHelp() { return ar ? "هل الخدمة والاستراحة والأذان تعمل على هذا الجهاز" : "Whether the service, the screensaver and the adhan work on this device"; }
-    String statusSection() { return ar ? "حول التطبيق ← حالة التطبيق" : "About › App status"; }
-    String hintBackAbout() { return ar ? "رجوع  حول التطبيق" : "Back  About"; }
-    String serviceRow() { return ar ? "خدمة Awan TV" : "Awan TV service"; }
-    String serviceHelp() { return ar ? "الرئيسية فوق واجهة الجهاز، والأذان فوق أي تطبيق" : "Home over the device's own, and the adhan over any app"; }
-    String running(boolean on) { return ar ? (on ? "تعمل" : "متوقفة") : (on ? "Running" : "Stopped"); }
-    String serviceOffHelp() { return ar ? "شغّلها من إعدادات الجهاز ← إمكانية الوصول ← Awan TV" : "Turn it on in the device's Settings › Accessibility › Awan TV"; }
-    String saverStatusRow() { return ar ? "شاشة الاستراحة" : "Screensaver"; }
+    String statusRow() { return s(R.string.statusRow); }
+    String statusHelp() { return s(R.string.statusHelp); }
+    String statusSection() { return s(R.string.statusSection); }
+    String hintBackAbout() { return s(R.string.hintBackAbout); }
+    String serviceRow() { return s(R.string.serviceRow); }
+    String serviceHelp() { return s(R.string.serviceHelp); }
+    String running(boolean on) { return (on ? s(R.string.running) : s(R.string.running_2)); }
+    String serviceOffHelp() { return s(R.string.serviceOffHelp); }
+    String saverStatusRow() { return s(R.string.saverStatusRow); }
     String saverStatusHelp(int state) {
-        return ar ? new String[] {"شاشة استراحة الجهاز هي Awan TV", "يفتحها Awan TV بنفسه من الرئيسية (لا صلاحية لضبط شاشة الجهاز)", "مطفأة في «تشغيل Awan TV»"}[state]
-                  : new String[] {"The device's screensaver is Awan TV", "Awan TV opens it itself from Home (no permission to set the device's)", "Off in Run Awan TV"}[state];
+        return a(R.array.saverStatusHelp)[state];
     }
-    String off() { return ar ? "مطفأ" : "Off"; }
-    String fromHome() { return ar ? "من الرئيسية" : "From Home"; }
-    String lastAdhanRow() { return ar ? "آخر أذان" : "Last adhan"; }
-    String noAdhanYet() { return ar ? "لم يُشغَّل أذان بعد على هذا الجهاز" : "No adhan has played on this device yet"; }
-    String played(boolean ok) { return ar ? (ok ? "شُغِّل" : "تعذّر التشغيل") : (ok ? "Played" : "Could not play"); }
-    String none() { return ar ? "لا شيء" : "None"; }
-    String nextAdhanRow() { return ar ? "الأذان القادم" : "Next adhan"; }
-    String adhanOn(boolean on) { return ar ? (on ? "مفعّل" : "مطفأ") : (on ? "On" : "Off"); }
-    String permissionRow() { return ar ? "صلاحية الإعدادات" : "Settings permission"; }
-    String permissionHelp() { return ar ? "لضبط شاشة الاستراحة وإعادة ربط الخدمة (تُمنح عند التثبيت)" : "To set the screensaver and bind the service again (granted at install)"; }
-    String granted(boolean on) { return ar ? (on ? "ممنوحة" : "غير ممنوحة") : (on ? "Granted" : "Not granted"); }
-    String weatherStatusHelp(CharSequence at) { return ar ? "آخر تحديث " + at + " · Open-Meteo" : "Last update " + at + " · Open-Meteo"; }
-    String weatherNone() { return ar ? "لم يصل تحديث خلال 3 ساعات (الشبكة أو الموقع)" : "No update within 3 hours (network or place)"; }
-    String works(boolean ok) { return ar ? (ok ? "يعمل" : "لا يصل") : (ok ? "Working" : "Not reaching"); }
-    String versionRow() { return ar ? "النسخة" : "Version"; }
-    String todayWord() { return ar ? "اليوم" : "today"; }
+    String off() { return s(R.string.off); }
+    String fromHome() { return s(R.string.fromHome); }
+    String lastAdhanRow() { return s(R.string.lastAdhanRow); }
+    String noAdhanYet() { return s(R.string.noAdhanYet); }
+    String played(boolean ok) { return (ok ? s(R.string.played) : s(R.string.played_2)); }
+    String none() { return s(R.string.none); }
+    String nextAdhanRow() { return s(R.string.nextAdhanRow); }
+    String adhanOn(boolean on) { return (on ? s(R.string.adhanOn) : s(R.string.adhanOn_2)); }
+    String permissionRow() { return s(R.string.permissionRow); }
+    String permissionHelp() { return s(R.string.permissionHelp); }
+    String granted(boolean on) { return (on ? s(R.string.granted) : s(R.string.granted_2)); }
+    String weatherStatusHelp(CharSequence at) { return s(R.string.weatherStatusHelp, at); }
+    String weatherNone() { return s(R.string.weatherNone); }
+    String works(boolean ok) { return (ok ? s(R.string.works) : s(R.string.works_2)); }
+    String versionRow() { return s(R.string.versionRow); }
+    String todayWord() { return s(R.string.todayWord); }
 
     // The settings file (SettingsFile), its comments; western digits there (values are JSON numbers)
     String sepPlain() { return " · "; }
     String[] fileHeader() {
-        return ar ? new String[] {
-            "إعدادات Awan TV: عدّل القيم ثم أرسلها إلى الشاشة:",
-            "  powershell -ExecutionPolicy Bypass -File tools\\AwanTV-settings.ps1 -Import -File <هذا الملف> -Device <الشاشة>",
-            "فوق كل إعداد: ما هو، وقيمه، وقيمته الافتراضية. الأسطر التي تبدأ بـ // شروح لا تُقرأ.",
-            "حذف إعداد من الملف يُبقيه على الشاشة كما هو. والملف يُفحص كاملًا: أي خطأ يوقف الاستيراد ولا يتغير شيء.",
-            "قبل الاستيراد تُحفظ إعدادات الشاشة نسخة احتياطية في state\\settings على الحاسب."}
-            : new String[] {
-            "Awan TV settings: change the values, then send them to the TV:",
-            "  powershell -ExecutionPolicy Bypass -File tools\\AwanTV-settings.ps1 -Import -File <this file> -Device <the TV>",
-            "Above each setting: what it is, its values and its default. Lines starting with // are notes, not read.",
-            "A setting left out of the file stays as it is on the TV. The whole file is checked: one mistake stops the import and nothing changes.",
-            "Before importing, the TV's settings are kept as a backup in state\\settings on the computer."};
+        return a(R.array.fileHeader);
     }
-    String boolValues() { return ar ? "القيم: true = نعم، false = لا" : "Values: true = on, false = off"; }
-    String rangeValues(int lo, int hi) { return ar ? "القيم: من " + lo + " إلى " + hi : "Values: " + lo + " to " + hi; }
-    String timeOrEmpty() { return ar ? "القيم: وقت \"HH:MM\" بنظام 24 ساعة، أو \"\" بلا وقت" : "Values: a time \"HH:MM\" (24-hour), or \"\" for none"; }
-    String timeBetween(String a, String b) { return ar ? "القيم: وقت \"HH:MM\" من " + a + " إلى " + b : "Values: a time \"HH:MM\" from " + a + " to " + b; }
-    String listValues() { return ar ? "القيم: قائمة أسماء حزم التطبيقات بالترتيب" : "Values: a list of the apps' package names, in order"; }
-    String cityValues() { return ar ? "يُنقل كما هو بين الشاشات؛ لتغيير الموقع اختره من التلفاز" : "Copied as it is between TVs; to change the location, pick it on the TV"; }
-    String textValue() { return ar ? "القيم: نص بين علامتي تنصيص" : "Values: text in quotes"; }
-    String defaultIs(String v) { return (ar ? "الافتراضي: " : "Default: ") + v; }
-    String cityFileHelp() { return ar ? "المدينة أو المكان بالإحداثيات" : "The city, or a place by its coordinates"; }
-    String byCity() { return ar ? "حسب الموقع" : "by the location"; }
-    String byCountry() { return ar ? "حسب الدولة إن كان لها معيار رسمي، وإلا 0 (إيقاف)" : "the country's, if it has an official one, else 0 (off)"; }
-    String byCountryOr(int n) { return ar ? "حسب الدولة، وإلا " + n : "the country's, else " + n; }
-    String byTvCountry() { return ar ? "\"f\" في الدول التي تقيس بالفهرنهايت، وإلا \"c\"" : "\"f\" in countries that use Fahrenheit, else \"c\""; }
-    String facingNote() { return ar ? "بالدرجات من الشمال، و-1 غير محدد" : "degrees from north, -1 not set"; }
-    String fridayFixedNote() { return ar ? "يُستعمل حين تكون صلاة الجمعة «موعد ثابت» (2)" : "Used when Friday prayer is Fixed time (2)"; }
-    String iqamaMinutesRow(String prayer) { return ar ? "دقائق إقامة " + prayer : prayer + " iqamah minutes"; }
-    String iqamaMinutesHelp() { return ar ? "بعد الأذان، حين تكون الإقامة «دقائق» (2)" : "After the adhan, when Iqamah is Minutes (2)"; }
-    String iqamaFixedRow(String prayer) { return ar ? "موعد إقامة " + prayer + " الثابت" : prayer + " fixed iqamah"; }
-    String iqamaFixedHelp() { return ar ? "حين تكون الإقامة «وقت ثابت» (3)" : "When Iqamah is Fixed (3)"; }
-    String iqamaRamadanRow(String prayer) { return ar ? "إقامة " + prayer + " في رمضان" : prayer + " iqamah in Ramadan"; }
-    String iqamaRamadanHelp() { return ar ? "دقائق بعد الأذان، و-1 كبقية الأيام" : "Minutes after the adhan, -1 as on other days"; }
-    String bellRow(String prayer) { return ar ? "تشغيل أذان " + prayer : prayer + " adhan on"; }
-    String notInstalledFile() { return ar ? "(غير مثبَّت على هذه الشاشة)" : "(not installed on this TV)"; }
-    String fajrVoiceFile() { return ar ? "صوت أذان الفجر" : "Fajr adhan voice"; }
-    String valuesWord() { return ar ? "القيم: " : "Values: "; }
-    String radioResumeRowFile() { return ar ? "الإذاعة بعد الأذان" : "The radio after the adhan"; }
-    String stationSavedFile() { return ar ? "تلاوة محفوظة على هذه الشاشة، فلا تُنقل؛ اخترها من التلفاز" : "a recitation saved on this TV, so not copied; pick it on the TV"; }
-    String voiceHelpFile() { return ar ? "لكل الصلوات عدا الفجر" : "Every prayer but Fajr"; }
-    String fajrLevelHelpFile() { return ar ? "نسبة من صوت التلفاز" : "A share of the TV's sound"; }
-    String stationFileHelp() { return ar ? "تُرسل إلى الشاشات المختارة؛ الشاشة التي لا توجد عليها تبقى محطتها" : "Sent to the chosen TVs; a TV that doesn't have it keeps its own"; }
-    String[] digitChoicesFile() { return ar ? new String[] {"حسب اللغة", "0123", "٠١٢٣"} : new String[] {"By language", "0123", "٠١٢٣"}; }
-    String hadithRowFile() { return ar ? "حديث في وسط شاشة الاستراحة" : "A hadith in the screensaver's middle"; }
-    String homeAppsFile() { return ar ? "تطبيقات الرئيسية والجهاز" : "Home's apps and the device"; }
-    String homeSectionFile() { return ar ? "الرئيسية" : "Home"; }
-    String homeAppsNoteFile() { return ar ? "في التلفاز تُرتَّب من الرئيسية نفسها" : "On the TV they are arranged on Home itself"; }
-    String bellsNoteFile() { return ar ? "في التلفاز: مواقيت اليوم والقبلة، زر الجرس بجانب كل صلاة" : "On the TV: Today & Qibla, the bell by each prayer"; }
-    String favouritesFile() { return ar ? "التطبيقات المفضلة في الرئيسية" : "Home's favourite apps"; }
-    String moreFile() { return ar ? "صف «المزيد» بترتيبك (فارغ: تلقائي)" : "The More row in your order (empty: automatic)"; }
-    String packagesHelp() { return ar ? "غير المثبَّت منها على هذه الشاشة يُتجاهل" : "Ones not installed on this TV are skipped"; }
-    String homeButtonFileHelp() { return ar ? "لأجهزة البث الموصولة بشاشة فقط (Google TV Streamer)" : "Only on boxes connected to a TV (Google TV Streamer)"; }
+    String boolValues() { return s(R.string.boolValues); }
+    String rangeValues(int lo, int hi) { return s(R.string.rangeValues, lo, hi); }
+    String timeOrEmpty() { return s(R.string.timeOrEmpty); }
+    String timeBetween(String a, String b) { return s(R.string.timeBetween, a, b); }
+    String listValues() { return s(R.string.listValues); }
+    String cityValues() { return s(R.string.cityValues); }
+    String textValue() { return s(R.string.textValue); }
+    String defaultIs(String v) { return (s(R.string.defaultIs)) + v; }
+    String cityFileHelp() { return s(R.string.cityFileHelp); }
+    String byCity() { return s(R.string.byCity); }
+    String byCountry() { return s(R.string.byCountry); }
+    String byCountryOr(int n) { return s(R.string.byCountryOr, n); }
+    String byTvCountry() { return s(R.string.byTvCountry); }
+    String facingNote() { return s(R.string.facingNote); }
+    String fridayFixedNote() { return s(R.string.fridayFixedNote); }
+    String iqamaMinutesRow(String prayer) { return s(R.string.iqamaMinutesRow, prayer); }
+    String iqamaMinutesHelp() { return s(R.string.iqamaMinutesHelp); }
+    String iqamaFixedRow(String prayer) { return s(R.string.iqamaFixedRow, prayer); }
+    String iqamaFixedHelp() { return s(R.string.iqamaFixedHelp); }
+    String iqamaRamadanRow(String prayer) { return s(R.string.iqamaRamadanRow, prayer); }
+    String iqamaRamadanHelp() { return s(R.string.iqamaRamadanHelp); }
+    String bellRow(String prayer) { return s(R.string.bellRow, prayer); }
+    String notInstalledFile() { return s(R.string.notInstalledFile); }
+    String fajrVoiceFile() { return s(R.string.fajrVoiceFile); }
+    String valuesWord() { return s(R.string.valuesWord); }
+    String radioResumeRowFile() { return s(R.string.radioResumeRowFile); }
+    String stationSavedFile() { return s(R.string.stationSavedFile); }
+    String voiceHelpFile() { return s(R.string.voiceHelpFile); }
+    String fajrLevelHelpFile() { return s(R.string.fajrLevelHelpFile); }
+    String stationFileHelp() { return s(R.string.stationFileHelp); }
+    String[] digitChoicesFile() { return a(R.array.digitChoicesFile); }
+    String hadithRowFile() { return s(R.string.hadithRowFile); }
+    String homeAppsFile() { return s(R.string.homeAppsFile); }
+    String homeSectionFile() { return s(R.string.homeSectionFile); }
+    String homeAppsNoteFile() { return s(R.string.homeAppsNoteFile); }
+    String bellsNoteFile() { return s(R.string.bellsNoteFile); }
+    String favouritesFile() { return s(R.string.favouritesFile); }
+    String moreFile() { return s(R.string.moreFile); }
+    String packagesHelp() { return s(R.string.packagesHelp); }
+    String homeButtonFileHelp() { return s(R.string.homeButtonFileHelp); }
 
     // Settings > About > Reset settings
-    String resetRow() { return ar ? "إعادة ضبط الإعدادات" : "Reset settings"; }
-    String resetHelp() { return ar ? "كل إعدادات Awan TV كما كانت عند التثبيت، ثم يبدأ من اختيار الموقع" : "Every Awan TV setting as on a new install, then it starts from the location"; }
-    String resetTitle() { return ar ? "إعادة ضبط الإعدادات؟" : "Reset settings?"; }
-    String resetGoesHead() { return ar ? "يعود إلى ما كان عليه عند التثبيت:" : "Back to a new install's:"; }
+    String resetRow() { return s(R.string.resetRow); }
+    String resetHelp() { return s(R.string.resetHelp); }
+    String resetTitle() { return s(R.string.resetTitle); }
+    String resetGoesHead() { return s(R.string.resetGoesHead); }
     String[] resetGoes() {
-        return ar ? new String[] {"الموقع وطريقة الحساب والإقامة والجمعة", "التنبيهات وأصوات الأذان ومستوى الفجر",
-                                  "الألوان والصور واللغة والطقس", "التطبيقات المفضلة وصف «المزيد»", "أزرار الريموت المخصصة"}
-                  : new String[] {"The location, the method, the iqamah and Friday", "Reminders, adhan voices and Fajr's level",
-                                  "Colours, photos, language and weather", "Favourite apps and the More row", "Custom remote buttons"};
+        return a(R.array.resetGoes);
     }
-    String resetStaysHead() { return ar ? "يبقى كما هو:" : "Stays as it is:"; }
+    String resetStaysHead() { return s(R.string.resetStaysHead); }
     String[] resetStays() {
-        return ar ? new String[] {"التلاوات المحفوظة", "شاشة استراحة التلفاز السابقة (لإزالة Awan TV لاحقًا)", "خدمة Awan TV وصلاحياتها"}
-                  : new String[] {"Saved recitations", "The TV's earlier screensaver (to remove Awan TV later)", "The Awan TV service and its permissions"};
+        return a(R.array.resetStays);
     }
-    String resetContinue() { return ar ? "متابعة" : "Continue"; }
-    String resetHoldTitle() { return ar ? "اضغط OK مطوّلًا للتأكيد" : "Hold OK to confirm"; }
-    String resetHoldHelp() { return ar ? "ثلاث ثوانٍ · رفع الإصبع قبلها يعيد العدّ، وأي زر آخر يلغي" : "Three seconds · letting go starts again, any other button cancels"; }
-    String resetBackupNote() { return ar ? "تُحفظ الإعدادات الحالية على الشاشة قبل المسح،\nويمكن استعادتها من الحاسب بالأداة:" : "The current settings are kept on the TV first,\nand can be brought back from a computer with:"; }
-    String hintHoldOk() { return ar ? "OK  اضغط مطوّلًا" : "OK  Hold"; }
+    String resetContinue() { return s(R.string.resetContinue); }
+    String resetHoldTitle() { return s(R.string.resetHoldTitle); }
+    String resetHoldHelp() { return s(R.string.resetHoldHelp); }
+    String resetBackupNote() { return s(R.string.resetBackupNote); }
+    String hintHoldOk() { return s(R.string.hintHoldOk); }
 
     // The editor's Identify on the TV
-    String identifyLabel() { return ar ? "هذه الشاشة" : "This TV"; }
-    String identifyDevice(String name) { return (ar ? "اسم الجهاز: " : "Device name: ") + name; }
-    String identifyNoName() { return ar ? "لم تُسمَّ في الحاسب بعد" : "Not named on the computer yet"; }
-    String identifyFoot(int seconds) { return d(ar ? "طلبها محرر الإعدادات من الحاسب · تختفي بعد " + seconds + " ثوانٍ" : "Asked for by the settings editor · goes in " + seconds + " seconds"); }
+    String identifyLabel() { return s(R.string.identifyLabel); }
+    String identifyDevice(String name) { return (s(R.string.identifyDevice)) + name; }
+    String identifyNoName() { return s(R.string.identifyNoName); }
+    String identifyFoot(int seconds) { return d(s(R.string.identifyFoot, seconds)); }
 }

@@ -334,7 +334,7 @@ final class SettingsFile {
     /** Western digits and the plain " · " in the file: the values are numbers JSON reads. */
     private static Text plainText(Context c) {
         Text shown = Screen.loadText(c);
-        Text t = new Text(shown.ar, false);
+        Text t = Text.of(c, shown.ar, false);
         t.cityName = shown.cityName;
         return t;
     }
@@ -390,7 +390,7 @@ final class SettingsFile {
      * its owner does not read).
      */
     static String schema(Context c, String version, boolean ar) throws JSONException {
-        Text t = new Text(ar, false);
+        Text t = Text.of(c, ar, false);
         t.cityName = Screen.loadText(c).cityName;
         return schema(c, version, t);
     }

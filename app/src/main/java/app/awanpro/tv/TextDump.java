@@ -44,7 +44,7 @@ final class TextDump {
 
     /** The only part that changes with the app: phase 1 builds Text from resources, phase 2 from a Lang. */
     static Text make(Context c, boolean ar, boolean eastern) {
-        Text t = new Text(ar, eastern);
+        Text t = Text.of(c, ar, eastern);
         t.cityName = ar ? "جدة" : "Jeddah";
         return t;
     }

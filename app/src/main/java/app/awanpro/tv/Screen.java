@@ -191,7 +191,7 @@ abstract class Screen extends Activity {
         boolean[] lang = language(p.getString("locale", "system"),
             c.getResources().getConfiguration().getLocales().get(0).getLanguage(), p.getString("digits", ""));
         boolean ar = lang[0];
-        Text t = new Text(ar, lang[1]);
+        Text t = Text.of(c, ar, lang[1]);
         Prefs.City city = Prefs.city(c);
         t.cityName = ar ? city.ar : city.en;
         return t;

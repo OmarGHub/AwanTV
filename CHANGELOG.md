@@ -12,12 +12,24 @@ history is in its repository.
   the remote's buttons, the adhan voices, countries, dates, the order of names, the language decision, the editor's
   descriptions and the settings file). The safety net of the languages plan: the strings move to Android's
   resources only when every line stays the same. A release answers "Unknown action".
+- No change on screen: the words of `Text` are in Android's resources now, `res/values/texts.xml` (English) and
+  `res/values-ar/texts.xml` (563 strings, 49 arrays; the languages plan, phase 1), read in the language chosen in
+  Settings whatever the TV's own (`Text.of`: one Resources per language, kept). Every value is between double quotes
+  (Android would merge spaces otherwise) and every part is filled by `Text.fill` (%1$s..., %% a percent sign), not
+  String.format, whose numbers in Arabic could be Eastern against the digits setting. Still in code: the crash
+  screen's texts (it must open even if the resources can't be read; `new Text(ar, eastern)` serves it alone), the
+  Arabic counting forms (phase 2), and the data in both languages. Checked with the text dump: every line the same.
 - No change on screen: the remote's button names (`Buttons.name`) and a download's percent (`LibraryActivity`) take
   their words from `Text`, like every other text (the languages plan, phase 1, step 1). Left for the language model
   (phase 2): the data written in both languages (cities, countries, stations, adhan voices, apps' Arabic names) and
   the editor's answers, which stay English.
 - No change on screen: the language decision (`Screen.language`), the dates' locale (`Screen.dateLocale`) and the
   order of names (`Apps.collator`) are each in one place now, so the dump checks the very code the screens use.
+
+### Build
+- `checkTexts` before every build (app/build.gradle) stops it on a text missing in a language, a value not between
+  double quotes or with a bare quote in it, a percent sign but %1$s... or %%, placeholders unlike English's, or an
+  array of another length. A language listed in `unannouncedTexts` (gradle property) only warns.
 
 ### Tools
 - `AwanTV-textdump` 1.0.0: takes the dump from a TV into state\textdump\<version>.txt and compares it with a golden

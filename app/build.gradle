@@ -96,6 +96,64 @@ tasks.configureEach { t ->
     if (t.name == 'preDebugBuild') t.dependsOn 'readMp3quranIfMissing'
 }
 
+// The screens' texts (res/values*/texts.xml, from Text.java: languages plan, phase 1) are checked before every build,
+// as Android's own lint lets a release through with some of these. The build stops on:
+//  - a key in one language and not in English (values/), or one in English missing from another language;
+//  - a value not wholly between double quotes (Android would merge spaces and drop leading and trailing ones), or a
+//    bare double quote inside one (Android drops it without a word);
+//  - in a string, a percent sign but %1$s... (a part) or %% (the sign itself): Text.fill writes the parts itself, never
+//    String.format, whose numbers in the resources' locale could be Eastern where d() wrote Western ones; in an
+//    array (read as written), any placeholder;
+//  - placeholders that differ from English's, or an array with another number of items.
+// A language not yet announced (a values-xx folder listed in unannouncedTexts) is checked as a warning only.
+def textsUnannounced = (project.findProperty('unannouncedTexts') ?: '').split(',').findAll { it }.collect { it.trim() }
+tasks.register('checkTexts') {
+    def resDir = file('src/main/res')
+    inputs.files(fileTree(resDir) { include 'values*/texts.xml' })
+    doLast {
+        def read = { File f ->
+            def raw = f.getText('UTF-8')
+            def strings = [:], arrays = [:], problems = []
+            (raw =~ /(?s)<string name="(\w+)"[^>]*>(.*?)<\/string>/).each { m -> strings[m[1]] = m[2] }
+            (raw =~ /(?s)<string-array name="(\w+)"[^>]*>(.*?)<\/string-array>/).each { m ->
+                arrays[m[1]] = (m[2] =~ /(?s)<item[^>]*>(.*?)<\/item>/).collect { it[1] }
+            }
+            def value = { String where, String v, boolean isArray ->
+                if (!(v.length() >= 2 && v.startsWith('"') && v.endsWith('"'))) { problems << "${where}: not between double quotes"; return }
+                def inner = v.substring(1, v.length() - 1)
+                if (inner =~ /(?<!\\)(\\\\)*"/) problems << "${where}: a double quote without a backslash"
+                if (isArray) {
+                    if (inner =~ '%\\d+\\$') problems << "${where}: a placeholder in an array (arrays are read as written)"
+                } else if (inner.replaceAll('%%|%\\d+\\$s', '').contains('%')) {
+                    problems << "${where}: a percent sign other than %1\$s... or %% (a percent sign is written %%; no %d or %f)"
+                }
+            }
+            strings.each { k, v -> value("string ${k}", v, false) }
+            arrays.each { k, items -> items.eachWithIndex { v, i -> value("array ${k}[${i}]", v, true) } }
+            [strings: strings, arrays: arrays, problems: problems]
+        }
+        def holes = { String v -> (v =~ '%(\\d+)\\$s').collect { it[1] }.toSet() }
+        def english = read(new File(resDir, 'values/texts.xml'))
+        def errors = english.problems.collect { "values/texts.xml ${it}" }
+        def warnings = []
+        resDir.listFiles().findAll { it.isDirectory() && it.name.startsWith('values-') && new File(it, 'texts.xml').exists() }.sort().each { dir ->
+            def lang = read(new File(dir, 'texts.xml'))
+            def found = lang.problems.collect { "${dir.name}/texts.xml ${it}" }
+            english.strings.keySet().findAll { !lang.strings.containsKey(it) }.each { found << "${dir.name}: string ${it} missing" }
+            lang.strings.keySet().findAll { !english.strings.containsKey(it) }.each { found << "${dir.name}: string ${it} not in English" }
+            english.arrays.keySet().findAll { !lang.arrays.containsKey(it) }.each { found << "${dir.name}: array ${it} missing" }
+            lang.arrays.keySet().findAll { !english.arrays.containsKey(it) }.each { found << "${dir.name}: array ${it} not in English" }
+            english.strings.each { k, v -> if (lang.strings[k] != null && holes(v) != holes(lang.strings[k])) found << "${dir.name}: string ${k} has other placeholders" }
+            english.arrays.each { k, v -> if (lang.arrays[k] != null && v.size() != lang.arrays[k].size()) found << "${dir.name}: array ${k} has ${lang.arrays[k].size()} items, English ${v.size()}" }
+            if (textsUnannounced.contains(dir.name)) warnings.addAll(found) else errors.addAll(found)
+        }
+        warnings.each { logger.warn("texts (not announced): ${it}") }
+        if (errors) throw new GradleException("The screens' texts have ${errors.size()} problem(s):\n  " + errors.join('\n  '))
+        logger.lifecycle("texts: ${english.strings.size()} strings and ${english.arrays.size()} arrays checked")
+    }
+}
+tasks.named('preBuild') { dependsOn 'checkTexts' }
+
 dependencies {
     // Offline prayer-time calculation (no network, no transitive dependencies).
     implementation 'com.batoulapps.adhan:adhan:1.2.1'
