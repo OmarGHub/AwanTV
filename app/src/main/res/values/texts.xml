@@ -697,6 +697,10 @@
         <item>"Saved recitations keep their names"</item>
         <item>"After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."</item>
     </string-array>
+    <string-array name="news_1_17_0">
+        <item>"Language from Home"</item>
+        <item>"The globe button beside Settings opens the list of languages, each by its own name. After a pick the screen asks Keep or Go back, and goes back by itself after ten seconds without an answer."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

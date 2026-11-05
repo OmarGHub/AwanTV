@@ -6,13 +6,15 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.17.0]
+
 ### The app
-- The language from Home (1.17.0a, languages plan): a globe button in Home's top bar, between Settings and Screen
+- The language from Home (languages plan): a globe button in Home's top bar, between Settings and Screen
   off, opens the list of languages: "TV (its language now)", then each language by its own name, under "اللغة ·
   Language" (the word in the screen's language, then "Language", so one who cannot read the screen still finds it).
   Settings > Display & language opens the same list in place of the row's choices. After a pick the screens change
   at once and ask "Keep this language?": Keep, or Go back; with no answer they go back by themselves after
-  10 seconds. In memory only: a restart in between keeps the language picked.
+  10 seconds. In memory only: a restart in between keeps the language picked. In What's new.
 
 ## [1.16.0]
 
