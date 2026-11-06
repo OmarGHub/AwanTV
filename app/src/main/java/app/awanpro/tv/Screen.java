@@ -682,18 +682,41 @@ abstract class Screen extends Activity {
      */
     static void fitWidth(TextView v, float minScale) {
         final float base = v.getTextSize();
+        // The letter spacing the screen asked for, and the one set here last (NaN: none): a spacing set by the
+        // screen afterwards (Home's cell tags, every minute) is the wanted one again.
+        final float[] spacing = {v.getLetterSpacing(), Float.NaN};
         v.setEllipsize(android.text.TextUtils.TruncateAt.END);
         v.addOnLayoutChangeListener((x, l, tp, r, b, ol, ot, or, ob) -> {
             int room = v.getWidth() - v.getTotalPaddingLeft() - v.getTotalPaddingRight();
             CharSequence s = v.getText();
             if (room <= 0 || s == null || s.length() == 0) return;
+            if (v.getLetterSpacing() != spacing[1]) spacing[0] = v.getLetterSpacing();
             android.text.TextPaint p = new android.text.TextPaint(v.getPaint());
             p.setTextSize(base);
+            p.setLetterSpacing(spacing[0]);
             float w = android.text.Layout.getDesiredWidth(s, p);
             // Two pixels to spare, and any change however small: a text 1-2% too wide skipped the half-pixel step
             // and kept its "…" (1.20.0c: French "Chourouq" and "MAINTENANT" in Home's cells).
-            float size = w > room ? base * Math.max(minScale, (room - 2) / w) : base;
-            if (Math.abs(v.getTextSize() - size) > 0.01f) v.post(() -> v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size));
+            float fit = room - 2;
+            float size = w > room ? base * Math.max(minScale, fit / w) : base;
+            // Still too wide at the smallest size: the letters closer first, as far as needed, before any "…"
+            // (1.20.0c: spaced capitals in a cell needed 70%; a safety net for the languages to come).
+            float ls = spacing[0];
+            if (ls > 0 && w * minScale > fit) {
+                p.setLetterSpacing(0);
+                float w0 = android.text.Layout.getDesiredWidth(s, p);
+                ls = w > w0 ? ls * Math.max(0f, Math.min(1f, (fit / minScale - w0) / (w - w0))) : 0f;
+            }
+            final float letters = ls;
+            final boolean newSize = Math.abs(v.getTextSize() - size) > 0.01f;
+            final boolean newLetters = Math.abs(v.getLetterSpacing() - letters) > 0.001f;
+            if (newSize || newLetters) v.post(() -> {
+                if (newLetters) {
+                    spacing[1] = letters;
+                    v.setLetterSpacing(letters);
+                }
+                if (newSize) v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+            });
         });
         // A new text in a view of set size lays nothing out again (TextView only redraws), so the fit above would
         // keep the old text's size: ask for a layout on every change (1.20.0b: Home's cell tags and Hijri date change

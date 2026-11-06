@@ -386,7 +386,7 @@
     <string name="nowHintMany" formatted="false">"Retour pour fermer · se ferme seul après %1$s min"</string>
     <string name="nowHintOne" formatted="false">"Retour pour fermer · se ferme seul après 1 min"</string>
     <string name="nowLabel" formatted="false">"HEURE DE LA PRIÈRE"</string>
-    <string name="nowTag" formatted="false">"MAINTENANT"</string>
+    <string name="nowTag" formatted="false">"EN COURS"</string>
     <string name="occasionInDays" formatted="false">"%1$s dans %2$s jours"</string>
     <string name="occasionTomorrow" formatted="false">"%1$s demain"</string>
     <string name="off" formatted="false">"Désactivé"</string>

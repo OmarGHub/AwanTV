@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"افطار تک"</string>
     <string name="iftarTag" formatted="false">"افطار"</string>
     <string name="imsakAt" formatted="false">"امساک "</string>
-    <string name="imsakHelp" formatted="false">"روزہ فجر کی اذان سے شروع ہوتا ہے · امساک اس سے پہلے اختیاری احتیاط ہے"</string>
+    <string name="imsakHelp" formatted="false">"روزہ اذانِ فجر سے شروع ہوتا ہے · امساک اختیاری احتیاط ہے"</string>
     <string name="imsakRow" formatted="false">"رمضان میں امساک"</string>
     <string name="in" formatted="false">"%1$s میں"</string>
     <string name="inMinutesOther" formatted="false">"%1$s منٹ میں"</string>

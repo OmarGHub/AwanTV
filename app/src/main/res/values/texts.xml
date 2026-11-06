@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"IFTAR IN"</string>
     <string name="iftarTag" formatted="false">"IFTAR"</string>
     <string name="imsakAt" formatted="false">"Imsak "</string>
-    <string name="imsakHelp" formatted="false">"The fast begins at the Fajr adhan · imsak is an optional caution before it"</string>
+    <string name="imsakHelp" formatted="false">"The fast starts at Fajr's adhan · imsak: an optional caution"</string>
     <string name="imsakRow" formatted="false">"Imsak in Ramadan"</string>
     <string name="in" formatted="false">"in %1$s"</string>
     <string name="inMinutesOther" formatted="false">"in %1$s min"</string>

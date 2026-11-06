@@ -20,7 +20,10 @@ history is in its repository.
   (a view of set size lays nothing out when only its text changes). Four French help lines shorter.
   `fitWidth` takes any step, two pixels to spare (1.20.0c: a text 1-2% too wide skipped the half-pixel step and kept
   its "…": French "Chourou…", "MAINTENA…"). Turkish "Tümünü gör" in Home's all-apps box ("Tüm uygulamalar" broke
-  mid-word).
+  mid-word). Still too wide at the smallest size, a text's letters come closer before any "…" (1.20.0d: the spaced
+  capitals of a cell tag); French's current prayer is "EN COURS" ("MAINTENANT" needed 70%).
+- The imsak hint in Settings > Prayer times shorter in English and Urdu, the same meaning (1.20.0c's crop check:
+  both ran past the minute choices): "The fast starts at Fajr's adhan · imsak: an optional caution".
 
 ### Tools
 - `CropCheck` (test builds) forgets what it has written once the list is cleared from the computer: a cut found
