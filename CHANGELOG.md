@@ -18,6 +18,13 @@ history is in its repository.
   date to 85%; and the lists over a screen to 75% (1.20.0b's crop check in French: "Chourouq", "MAINTENANT" on two
   lines, "26 Joumada al-oula 1448 H", mp3quran.net's French names). `Screen.fitWidth` fits again on every new text
   (a view of set size lays nothing out when only its text changes). Four French help lines shorter.
+  `fitWidth` takes any step, two pixels to spare (1.20.0c: a text 1-2% too wide skipped the half-pixel step and kept
+  its "…": French "Chourou…", "MAINTENA…"). Turkish "Tümünü gör" in Home's all-apps box ("Tüm uygulamalar" broke
+  mid-word).
+
+### Tools
+- `CropCheck` (test builds) forgets what it has written once the list is cleared from the computer: a cut found
+  before `AwanTV-textdump -Crops -Clear` was never written again.
 
 ## [1.19.0]
 

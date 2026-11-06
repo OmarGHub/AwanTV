@@ -49,6 +49,14 @@ final class CropCheck {
     /** Looks through one screen's views; a new finding is added to the file. Main thread. */
     static void scan(Context c, View root, String where, String lang) {
         if (root == null || !on(c) || !root.isShown()) return;
+        File dir0 = c.getExternalFilesDir(null);
+        // The list cleared from the computer (AwanTV-textdump -Crops -Clear deletes the file): forget what was seen,
+        // or a cut found before the clearing is never written again (1.20.0c).
+        if (dir0 != null && !new File(dir0, "crop.txt").exists()) {
+            synchronized (SEEN) {
+                SEEN.clear();
+            }
+        }
         StringBuilder found = new StringBuilder();
         walk(root, false, where + "|" + lang, found);
         if (found.length() == 0) return;

@@ -690,8 +690,10 @@ abstract class Screen extends Activity {
             android.text.TextPaint p = new android.text.TextPaint(v.getPaint());
             p.setTextSize(base);
             float w = android.text.Layout.getDesiredWidth(s, p);
-            float size = w > room ? base * Math.max(minScale, room / w) : base;
-            if (Math.abs(v.getTextSize() - size) > 0.5f) v.post(() -> v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size));
+            // Two pixels to spare, and any change however small: a text 1-2% too wide skipped the half-pixel step
+            // and kept its "…" (1.20.0c: French "Chourouq" and "MAINTENANT" in Home's cells).
+            float size = w > room ? base * Math.max(minScale, (room - 2) / w) : base;
+            if (Math.abs(v.getTextSize() - size) > 0.01f) v.post(() -> v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size));
         });
         // A new text in a view of set size lays nothing out again (TextView only redraws), so the fit above would
         // keep the old text's size: ask for a layout on every change (1.20.0b: Home's cell tags and Hijri date change
