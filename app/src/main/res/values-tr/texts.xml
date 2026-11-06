@@ -714,6 +714,10 @@
         <item>"Türkçe"</item>
         <item>"Her ekran Türkçe, Diyanet'in terimleriyle; kâriler ve sureler de Türkçe adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
     </string-array>
+    <string-array name="news_1_20_0">
+        <item>"Fransızca"</item>
+        <item>"Her ekran Fransızca, Fransızca konuşan camilerin terimleriyle; kâriler ve sureler de Fransızca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

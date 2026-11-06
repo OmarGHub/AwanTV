@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.20.0]
+
 ### The app
 - French (Français), the third language added to Arabic and English (test builds from 1.20.0a): every screen's
   words (res/values-fr), in the terms of French mosques and Mawaqit (Fajr, Chourouq, Dhuhr, Asr, Maghrib, Isha;

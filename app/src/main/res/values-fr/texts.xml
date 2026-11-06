@@ -714,6 +714,10 @@
         <item>"Turc"</item>
         <item>"Tous les écrans en turc, dans les termes de la Diyanet, avec les récitateurs et les sourates nommés en turc. Choisissez cette langue avec le bouton globe de l'accueil."</item>
     </string-array>
+    <string-array name="news_1_20_0">
+        <item>"Français"</item>
+        <item>"Tous les écrans en français, dans les termes des mosquées francophones, avec les récitateurs et les sourates nommés en français. Choisissez cette langue avec le bouton globe de l'accueil."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
