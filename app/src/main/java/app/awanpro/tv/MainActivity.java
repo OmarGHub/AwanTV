@@ -507,6 +507,7 @@ public class MainActivity extends Screen {
         gdate.setGravity(Gravity.END);
         for (TextView v : new TextView[] {hdate, cityLine, gdate}) v.setSingleLine(true);
         dates.addView(hdate, new LinearLayout.LayoutParams(0, -2, 1));
+        fitWidth(hdate, 0.85f); // French "26 Joumada al-oula 1448 H" ran 9 px past it (1.20.0b)
         LinearLayout.LayoutParams plpd = new LinearLayout.LayoutParams(-2, -2);
         plpd.setMarginStart(Ui.ipx(24));
         plpd.setMarginEnd(Ui.ipx(24));
@@ -553,7 +554,10 @@ public class MainActivity extends Screen {
             cellTime[i].setSingleLine(true);
             // One line, smaller where a name is wide for its cell (Urdu's "طلوعِ آفتاب" took two lines).
             cellName[i].setSingleLine(true);
-            fitWidth(cellName[i], 0.8f);
+            fitWidth(cellName[i], 0.75f);
+            // The tag (NEXT, NOW, IFTAR...) too: French "MAINTENANT" took two lines (1.20.0b).
+            cellTag[i].setSingleLine(true);
+            fitWidth(cellTag[i], 0.75f);
             v.addView(cellTag[i], new LinearLayout.LayoutParams(-1, 0, 1));
             v.addView(cellName[i], new LinearLayout.LayoutParams(-1, -2));
             v.addView(cellTime[i], new LinearLayout.LayoutParams(-1, -2));

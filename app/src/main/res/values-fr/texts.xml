@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"IFTAR DANS"</string>
     <string name="iftarTag" formatted="false">"IFTAR"</string>
     <string name="imsakAt" formatted="false">"Imsak "</string>
-    <string name="imsakHelp" formatted="false">"Le jeûne commence à l'adhan du Fajr · l'imsak est une précaution facultative avant"</string>
+    <string name="imsakHelp" formatted="false">"Jeûne dès le Fajr · l'imsak : une précaution facultative"</string>
     <string name="imsakRow" formatted="false">"Imsak pendant le Ramadan"</string>
     <string name="in" formatted="false">"dans %1$s"</string>
     <string name="inMinutesOther" formatted="false">"dans %1$s min"</string>
@@ -328,7 +328,7 @@
     <string name="methodName_7" formatted="false">"ISNA, Amérique du Nord"</string>
     <string name="methodName_8" formatted="false">"Moonsighting Committee"</string>
     <string name="methodName_9" formatted="false">"Singapour"</string>
-    <string name="middleHelp" formatted="false">"Un hadith toutes les 10 min · des invocations 10 min après chaque prière"</string>
+    <string name="middleHelp" formatted="false">"Hadith toutes les 10 min · invocations 10 min après chaque prière"</string>
     <string name="middleRow" formatted="false">"Centre de l'économiseur"</string>
     <string name="midnight" formatted="false">"Minuit"</string>
     <string name="minutesAfterOther" formatted="false">"%1$s min"</string>
@@ -466,7 +466,7 @@
     <string name="resetBackupNote" formatted="false">"Les paramètres actuels sont d'abord gardés sur le téléviseur,\net peuvent être restaurés depuis un ordinateur avec :"</string>
     <string name="resetContinue" formatted="false">"Continuer"</string>
     <string name="resetGoesHead" formatted="false">"Revient à l'état d'une nouvelle installation :"</string>
-    <string name="resetHelp" formatted="false">"Chaque paramètre d'Awan TV comme à une nouvelle installation, puis il redémarre par le lieu"</string>
+    <string name="resetHelp" formatted="false">"Chaque paramètre d'Awan TV comme à l'installation, puis il redémarre par le lieu"</string>
     <string name="resetHoldHelp" formatted="false">"Trois secondes · relâcher recommence, tout autre bouton annule"</string>
     <string name="resetHoldTitle" formatted="false">"Maintenez OK pour confirmer"</string>
     <string name="resetRow" formatted="false">"Réinitialiser les paramètres"</string>
@@ -480,7 +480,7 @@
     <string name="roomTitle" formatted="false">"Orientation de la pièce"</string>
     <string name="rowNow" formatted="false">"maintenant"</string>
     <string name="runHelp" formatted="false">"L'accueil nécessite le service Awan TV activé (Accessibilité, plus bas)"</string>
-    <string name="runHelp_2" formatted="false">"Accueil et économiseur avec horaires et invocations"</string>
+    <string name="runHelp_2" formatted="false">"Accueil et économiseur, horaires et invocations"</string>
     <string name="runHelp_3" formatted="false">"Accueil seul · ni économiseur ni invocations"</string>
     <string name="runHelp_4" formatted="false">"Économiseur seul · l'accueil du téléviseur"</string>
     <string name="runHelp_5" formatted="false">"Désactivé · l'adhan et les rappels gardent leurs propres réglages"</string>

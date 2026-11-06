@@ -693,6 +693,14 @@ abstract class Screen extends Activity {
             float size = w > room ? base * Math.max(minScale, room / w) : base;
             if (Math.abs(v.getTextSize() - size) > 0.5f) v.post(() -> v.setTextSize(TypedValue.COMPLEX_UNIT_PX, size));
         });
+        // A new text in a view of set size lays nothing out again (TextView only redraws), so the fit above would
+        // keep the old text's size: ask for a layout on every change (1.20.0b: Home's cell tags and Hijri date change
+        // in place every minute and day).
+        v.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence c, int a, int n, int d) { }
+            @Override public void onTextChanged(CharSequence c, int a, int n, int d) { }
+            @Override public void afterTextChanged(android.text.Editable e) { v.requestLayout(); }
+        });
     }
 
     /**

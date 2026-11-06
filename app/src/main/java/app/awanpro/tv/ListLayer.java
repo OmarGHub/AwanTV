@@ -76,9 +76,9 @@ final class ListLayer {
             TextView v = s.text(chosen ? s.ui500 : s.ui400, 26, Tokens.PLASTER_100);
             v.setText(items[i]);
             v.setSingleLine(true);
-            // Smaller where a name is wider than the row, to 80%, then "…" (1.19.0b: mp3quran.net's reciter
-            // channels in Turkish ran past it by up to 185 px).
-            Screen.fitWidth(v, 0.8f);
+            // Smaller where a name is wider than the row, to 75%, then "…" (1.19.0b: mp3quran.net's reciter
+            // channels in Turkish ran past it by up to 185 px; 1.20.0b: French ones by a few px at 80%).
+            Screen.fitWidth(v, 0.75f);
             v.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             v.setPadding(Ui.ipx(24), 0, Ui.ipx(24), 0);
             TextView tick = null;

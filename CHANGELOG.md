@@ -14,6 +14,10 @@ history is in its repository.
   precaution minutes before Fajr, as in Arabic. Reciters and surahs in French by mp3quran.net ("fr"); the adhkar's
   counts and the hadiths' references in French (`tools/labels-fr.tsv`, "Rapporté par …"). Checked by Gemini before
   the build, each item against the code. Counts: 0 takes the singular in French alone ("0 minute", `Text.one`).
+- Home's cells keep one line each, the prayer's name and its tag (NEXT, NOW...) smaller to fit, to 75%; the Hijri
+  date to 85%; and the lists over a screen to 75% (1.20.0b's crop check in French: "Chourouq", "MAINTENANT" on two
+  lines, "26 Joumada al-oula 1448 H", mp3quran.net's French names). `Screen.fitWidth` fits again on every new text
+  (a view of set size lays nothing out when only its text changes). Four French help lines shorter.
 
 ## [1.19.0]
 
