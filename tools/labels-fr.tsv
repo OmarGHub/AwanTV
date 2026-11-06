@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in French (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then French. AwanTV-apply-labels.py writes them as countFr / refFr.
+# "Rapporté par", as French hadith collections write it.
+Once	Une fois
+Three times	Trois fois
+Four times	Quatre fois
+Seven times	Sept fois
+Ten times or once when lazy	Dix fois, ou une fois en cas de paresse
+Ten times	Dix fois
+One hundred times	Cent fois
+One hundred times a day	Cent fois par jour
+3 times	3 fois
+33 times	33 fois
+To make it 100	Pour compléter à 100
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	Rapporté par Al-Hakim, An-Nasa'i et At-Tabarani
+Reported by Al-Bukhari and Muslim	Rapporté par Al-Bukhari et Muslim
+Reported by Abu Dawud and At-Tirmidhi	Rapporté par Abu Dawud et At-Tirmidhi
+Reported by Muslim	Rapporté par Muslim
+Reported by At-Tirmidhi	Rapporté par At-Tirmidhi
+Reported by Al-Bukhari	Rapporté par Al-Bukhari
+Reported by Abu Dawud and An-Nasa'i	Rapporté par Abu Dawud et An-Nasa'i
+Reported by Abu Dawud and Ahmad	Rapporté par Abu Dawud et Ahmad
+Reported by Ibn as-Sunni and Abu Dawud	Rapporté par Ibn as-Sunni et Abu Dawud
+Reported by Abu Dawud and Ibn Majah	Rapporté par Abu Dawud et Ibn Majah
+Reported by At-Tirmidhi and Abu Dawud	Rapporté par At-Tirmidhi et Abu Dawud
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	Rapporté par Abu Dawud, At-Tirmidhi et Ibn Majah
+Reported by Ahmad and An-Nasa'i	Rapporté par Ahmad et An-Nasa'i
+Reported by Al-Hakim	Rapporté par Al-Hakim
+Reported by Abu Dawud	Rapporté par Abu Dawud
+Reported by Ahmad and Ibn as-Sunni	Rapporté par Ahmad et Ibn as-Sunni
+Reported by Ibn as-Sunni and Ibn Majah	Rapporté par Ibn as-Sunni et Ibn Majah
+Reported by At-Tabarani	Rapporté par At-Tabarani
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	Rapporté par An-Nasa'i, 'Amal al-Yawm wal-Laylah
+Abu Dawud and an-Nasa'i	Rapporté par Abu Dawud et An-Nasa'i

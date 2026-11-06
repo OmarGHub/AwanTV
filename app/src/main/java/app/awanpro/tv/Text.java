@@ -106,6 +106,14 @@ final class Text {
     }
 
     /** A text: %% in it is a percent sign (every string is written for fill). */
+    /**
+     * The singular of a count (xxxOne, else xxxOther): 1 in English, Urdu and Turkish; 0 and 1 in French (CLDR's
+     * "one", "0 minute"). Arabic keeps its own forms in code.
+     */
+    private boolean one(long n) {
+        return n == 1 || (n == 0 && "fr".equals(lang));
+    }
+
     private String s(int id) {
         return fill(res.string(id));
     }
@@ -225,7 +233,7 @@ final class Text {
     String apLabel() { return s(R.string.apLabel); }
     /** "Asr in 13 minutes". */
     String apTitle(String prayer, long minutes, String hoursAndMinutes) {
-        if (!ar && minutes < 60) return d(s(minutes == 1 ? R.string.apTitleOne : R.string.apTitleOther, prayer, minutes));
+        if (!ar && minutes < 60) return d(s(one(minutes) ? R.string.apTitleOne : R.string.apTitleOther, prayer, minutes));
         return prayer + " " + inMinutes(minutes, hoursAndMinutes);
     }
     String apSub(CharSequence time) { return d((s(R.string.apSub)) + time + (s(R.string.apSub_2))); }
@@ -262,7 +270,7 @@ final class Text {
     String libraryRow() { return s(R.string.libraryRow); }
     String libraryHelp(int recordings, String size) {
         if (recordings == 0) return s(R.string.libraryHelp);
-        return d(s(recordings == 1 ? R.string.libraryHelpOne : R.string.libraryHelpMany, recordings, size));
+        return d(s(one(recordings) ? R.string.libraryHelpOne : R.string.libraryHelpMany, recordings, size));
     }
     String libraryIntro() {
         return s(R.string.libraryIntro);
@@ -280,7 +288,7 @@ final class Text {
     String complete() { return s(R.string.complete); }
     String someOf(int have, int of) { return s(R.string.someOf, have, of); }
     /** Arabic counts by surahsAr (its grammar in code until the plural forms move, phase 2); the Arabic values are unused. */
-    String surahCount(int n) { return ar ? surahsAr(n) : s(n == 1 ? R.string.surahOne : R.string.surahMany, n); }
+    String surahCount(int n) { return ar ? surahsAr(n) : s(one(n) ? R.string.surahOne : R.string.surahMany, n); }
     /** "سورة واحدة", "سورتان", "3 سور", "11 سورة", "103 سور": Arabic counts by the last two digits. */
     static String surahsAr(int n) {
         if (n == 1) return "سورة واحدة";
@@ -654,7 +662,7 @@ final class Text {
         // No adjustment reads as such, not "0 يوم".
         if (n == 0) return s(R.string.days);
         String sign = n > 0 ? "+" : "";
-        if (!ar) return d(s(Math.abs(n) == 1 ? R.string.daysOne : R.string.daysOther, sign + n));
+        if (!ar) return d(s(one(Math.abs(n)) ? R.string.daysOne : R.string.daysOther, sign + n));
         return d(sign + n + (Math.abs(n) == 2 ? " يومان" : " يوم"));
     }
     String roomRow() { return roomTitle(); }
@@ -715,7 +723,7 @@ final class Text {
     String buttonsRow() { return s(R.string.buttonsRow); }
     String buttonsHelp(int n) {
         if (n == 0) return s(R.string.buttonsHelp);
-        if (!ar) return d(s(n == 1 ? R.string.buttonsHelpOne : R.string.buttonsHelpOther, n));
+        if (!ar) return d(s(one(n) ? R.string.buttonsHelpOne : R.string.buttonsHelpOther, n));
         if (n == 1) return "زر واحد مخصص";
         if (n == 2) return "زران مخصصان";
         return d(n <= 10 ? n + " أزرار مخصصة" : n + " زرًا مخصصًا");
@@ -752,7 +760,7 @@ final class Text {
     String pressTitle() { return s(R.string.pressTitle); }
     String pressHelp() { return s(R.string.pressHelp); }
     String pressWaiting(int seconds) {
-        if (!ar) return d(s(seconds == 1 ? R.string.pressWaitingOne : R.string.pressWaitingOther, seconds));
+        if (!ar) return d(s(one(seconds) ? R.string.pressWaitingOne : R.string.pressWaitingOther, seconds));
         if (seconds == 1) return "ينتظر ثانية واحدة";
         if (seconds == 2) return "ينتظر ثانيتين";
         return d("ينتظر " + seconds + " ثوانٍ");

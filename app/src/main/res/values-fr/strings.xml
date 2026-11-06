@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">Affiche Awan TV chaque fois que l\'écran d\'accueil du téléviseur apparaît, et appelle l\'adhan à l\'heure de la prière par-dessus ce qui est en cours. Rien n\'est désactivé sur le téléviseur : désactivez ce service pour retrouver l\'accueil du téléviseur.</string>
+</resources>

@@ -16,7 +16,8 @@
    "refEn": "",
    "night": false,
    "countUr": "ایک بار",
-   "countTr": "Bir kez"
+   "countTr": "Bir kez",
+   "countFr": "Une fois"
   },
   {
    "order": 2,
@@ -31,7 +32,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: حاکم، نسائی اور طبرانی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Hâkim, Nesâî ve Taberânî"
+   "refTr": "Rivayet: Hâkim, Nesâî ve Taberânî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Al-Hakim, An-Nasa'i et At-Tabarani"
   },
   {
    "order": 3,
@@ -46,7 +49,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: بخاری و مسلم",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Buhârî ve Müslim"
+   "refTr": "Rivayet: Buhârî ve Müslim",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Al-Bukhari et Muslim"
   },
   {
    "order": 4,
@@ -61,7 +66,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: ابو داؤد و ترمذی",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
   },
   {
    "order": 5,
@@ -76,7 +83,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: ابو داؤد و ترمذی",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
   },
   {
    "order": 6,
@@ -91,7 +100,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: ابو داؤد و ترمذی",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
   },
   {
    "order": 7,
@@ -106,7 +117,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: مسلم",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Müslim"
+   "refTr": "Rivayet: Müslim",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Muslim"
   },
   {
    "order": 8,
@@ -121,7 +134,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: مسلم",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Müslim"
+   "refTr": "Rivayet: Müslim",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Muslim"
   },
   {
    "order": 9,
@@ -136,7 +151,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ترمذی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Tirmizî"
+   "refTr": "Rivayet: Tirmizî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par At-Tirmidhi"
   },
   {
    "order": 10,
@@ -151,7 +168,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ترمذی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Tirmizî"
+   "refTr": "Rivayet: Tirmizî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par At-Tirmidhi"
   },
   {
    "order": 11,
@@ -166,7 +185,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: بخاری",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Buhârî"
+   "refTr": "Rivayet: Buhârî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Al-Bukhari"
   },
   {
    "order": 12,
@@ -181,7 +202,9 @@
    "countUr": "چار بار",
    "refUr": "روایت: ابو داؤد و نسائی",
    "countTr": "Dört kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
+   "countFr": "Quatre fois",
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
   },
   {
    "order": 13,
@@ -196,7 +219,9 @@
    "countUr": "چار بار",
    "refUr": "روایت: ابو داؤد و نسائی",
    "countTr": "Dört kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
+   "countFr": "Quatre fois",
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
   },
   {
    "order": 14,
@@ -211,7 +236,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابو داؤد و نسائی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
   },
   {
    "order": 15,
@@ -226,7 +253,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابو داؤد و نسائی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî"
+   "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
   },
   {
    "order": 16,
@@ -241,7 +270,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: ابو داؤد و احمد",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve Ahmed"
+   "refTr": "Rivayet: Ebû Dâvûd ve Ahmed",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Abu Dawud et Ahmad"
   },
   {
    "order": 17,
@@ -256,7 +287,9 @@
    "countUr": "سات بار",
    "refUr": "روایت: ابن السنی و ابو داؤد",
    "countTr": "Yedi kez",
-   "refTr": "Rivayet: İbnü's-Sünnî ve Ebû Dâvûd"
+   "refTr": "Rivayet: İbnü's-Sünnî ve Ebû Dâvûd",
+   "countFr": "Sept fois",
+   "refFr": "Rapporté par Ibn as-Sunni et Abu Dawud"
   },
   {
    "order": 18,
@@ -271,7 +304,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابو داؤد و ابن ماجہ",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ebû Dâvûd ve İbn Mâce"
+   "refTr": "Rivayet: Ebû Dâvûd ve İbn Mâce",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Abu Dawud et Ibn Majah"
   },
   {
    "order": 19,
@@ -286,7 +321,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ترمذی و ابو داؤد",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Tirmizî ve Ebû Dâvûd"
+   "refTr": "Rivayet: Tirmizî ve Ebû Dâvûd",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par At-Tirmidhi et Abu Dawud"
   },
   {
    "order": 20,
@@ -301,7 +338,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: ابو داؤد، ترمذی اور ابن ماجہ",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ebû Dâvûd, Tirmizî ve İbn Mâce"
+   "refTr": "Rivayet: Ebû Dâvûd, Tirmizî ve İbn Mâce",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Abu Dawud, At-Tirmidhi et Ibn Majah"
   },
   {
    "order": 21,
@@ -316,7 +355,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: احمد و نسائی",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ahmed ve Nesâî"
+   "refTr": "Rivayet: Ahmed ve Nesâî",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Ahmad et An-Nasa'i"
   },
   {
    "order": 22,
@@ -331,7 +372,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: حاکم",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Hâkim"
+   "refTr": "Rivayet: Hâkim",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Al-Hakim"
   },
   {
    "order": 23,
@@ -346,7 +389,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابو داؤد",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ebû Dâvûd"
+   "refTr": "Rivayet: Ebû Dâvûd",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Abu Dawud"
   },
   {
    "order": 24,
@@ -361,7 +406,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابو داؤد",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ebû Dâvûd"
+   "refTr": "Rivayet: Ebû Dâvûd",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Abu Dawud"
   },
   {
    "order": 25,
@@ -376,7 +423,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: احمد و ابن السنی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî"
+   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Ahmad et Ibn as-Sunni"
   },
   {
    "order": 26,
@@ -391,7 +440,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: احمد و ابن السنی",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî"
+   "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Ahmad et Ibn as-Sunni"
   },
   {
    "order": 27,
@@ -406,7 +457,9 @@
    "countUr": "ایک بار",
    "refUr": "روایت: ابن السنی و ابن ماجہ",
    "countTr": "Bir kez",
-   "refTr": "Rivayet: İbnü's-Sünnî ve İbn Mâce"
+   "refTr": "Rivayet: İbnü's-Sünnî ve İbn Mâce",
+   "countFr": "Une fois",
+   "refFr": "Rapporté par Ibn as-Sunni et Ibn Majah"
   },
   {
    "order": 28,
@@ -421,7 +474,9 @@
    "countUr": "دس بار، یا سستی ہو تو ایک بار",
    "refUr": "روایت: بخاری و مسلم",
    "countTr": "On kez, ya da üşenince bir kez",
-   "refTr": "Rivayet: Buhârî ve Müslim"
+   "refTr": "Rivayet: Buhârî ve Müslim",
+   "countFr": "Dix fois, ou une fois en cas de paresse",
+   "refFr": "Rapporté par Al-Bukhari et Muslim"
   },
   {
    "order": 29,
@@ -436,7 +491,9 @@
    "countUr": "دس بار",
    "refUr": "روایت: طبرانی",
    "countTr": "On kez",
-   "refTr": "Rivayet: Taberânî"
+   "refTr": "Rivayet: Taberânî",
+   "countFr": "Dix fois",
+   "refFr": "Rapporté par At-Tabarani"
   },
   {
    "order": 30,
@@ -451,7 +508,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: احمد و نسائی",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Ahmed ve Nesâî"
+   "refTr": "Rivayet: Ahmed ve Nesâî",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Ahmad et An-Nasa'i"
   },
   {
    "order": 31,
@@ -466,7 +525,9 @@
    "countUr": "تین بار",
    "refUr": "روایت: مسلم",
    "countTr": "Üç kez",
-   "refTr": "Rivayet: Müslim"
+   "refTr": "Rivayet: Müslim",
+   "countFr": "Trois fois",
+   "refFr": "Rapporté par Muslim"
   },
   {
    "order": 32,
@@ -481,7 +542,9 @@
    "countUr": "سو بار",
    "refUr": "روایت: بخاری و مسلم",
    "countTr": "Yüz kez",
-   "refTr": "Rivayet: Buhârî ve Müslim"
+   "refTr": "Rivayet: Buhârî ve Müslim",
+   "countFr": "Cent fois",
+   "refFr": "Rapporté par Al-Bukhari et Muslim"
   },
   {
    "order": 33,
@@ -496,7 +559,9 @@
    "countUr": "دن میں سو بار",
    "refUr": "روایت: بخاری و مسلم",
    "countTr": "Günde yüz kez",
-   "refTr": "Rivayet: Buhârî ve Müslim"
+   "refTr": "Rivayet: Buhârî ve Müslim",
+   "countFr": "Cent fois par jour",
+   "refFr": "Rapporté par Al-Bukhari et Muslim"
   },
   {
    "order": 34,
@@ -511,7 +576,9 @@
    "countUr": "سو بار",
    "refUr": "روایت: مسلم",
    "countTr": "Yüz kez",
-   "refTr": "Rivayet: Müslim"
+   "refTr": "Rivayet: Müslim",
+   "countFr": "Cent fois",
+   "refFr": "Rapporté par Muslim"
   }
  ]
 }

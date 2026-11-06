@@ -6,6 +6,15 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- French (Français), the third language added to Arabic and English (test builds from 1.20.0a): every screen's
+  words (res/values-fr), in the terms of French mosques and Mawaqit (Fajr, Chourouq, Dhuhr, Asr, Maghrib, Isha;
+  Iqama; Jumua; Khutba) and Android's own French for the settings words; French typography (a no-break space before
+  ":" ";" "?" and inside « », "45 %", Mo and Go). Ramadan's Fajr cell says "JEÛNE": in French timetables imsak is the
+  precaution minutes before Fajr, as in Arabic. Reciters and surahs in French by mp3quran.net ("fr"); the adhkar's
+  counts and the hadiths' references in French (`tools/labels-fr.tsv`, "Rapporté par …"). Checked by Gemini before
+  the build, each item against the code. Counts: 0 takes the singular in French alone ("0 minute", `Text.one`).
+
 ## [1.19.0]
 
 ### The app
