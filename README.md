@@ -43,7 +43,151 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. **الأذان فوق أي تطبيق**، والتذكير قبل الصلاة، وعدّاد الإقامة.
 4. **أي موقع في العالم**، والمواقيت تُحسب على التلفاز دون إنترنت.
 5. **إذاعة القرآن الكريم**، والتلاوات المحفوظة للاستماع دون إنترنت.
-6. **العربية والإنجليزية**، وست سمات للألوان.
+6. **خمس لغات**: العربية والإنجليزية والأردية والتركية والفرنسية، وست سمات للألوان.
+
+## اللغات
+
+يدعم Awan TV عدة لغات: اختر لغتك المفضلة، أو اتركه يتبع لغة التلفاز. والآيات والأذكار والأحاديث بنصها العربي في كل اللغات.
+
+<div dir="rtl">
+
+### العربية
+
+مواقيت الصلاة والأذان وشاشة الاستراحة لأجهزة Google TV وتلفاز أندرويد، بالعربية
+
+<p align="center"><img src="docs/images/lang/home-ar.webp" alt="الرئيسية بالعربية" width="80%"></p>
+
+<details>
+<summary>المزيد: مواقيت اليوم والقبلة، الإعدادات، شاشة الاستراحة</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ar.webp" alt="مواقيت اليوم والقبلة"></td>
+<td><img src="docs/images/lang/settings-ar.webp" alt="الإعدادات"></td>
+<td><img src="docs/images/lang/saver-ar.webp" alt="شاشة الاستراحة"></td>
+</tr>
+<tr>
+<td align="center">مواقيت اليوم والقبلة</td>
+<td align="center">الإعدادات</td>
+<td align="center">شاشة الاستراحة</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### English
+
+Prayer times, the adhan and a screensaver for Android TV and Google TV, in English
+
+<p align="center"><img src="docs/images/lang/home-en.webp" alt="Home in English" width="80%"></p>
+
+<details>
+<summary>More: Today & Qibla, Settings, the screensaver</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-en.webp" alt="Today & Qibla"></td>
+<td><img src="docs/images/lang/settings-en.webp" alt="Settings"></td>
+<td><img src="docs/images/lang/saver-en.webp" alt="The screensaver"></td>
+</tr>
+<tr>
+<td align="center">Today & Qibla</td>
+<td align="center">Settings</td>
+<td align="center">The screensaver</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="rtl">
+
+### اردو
+
+اینڈرائیڈ ٹی وی اور گوگل ٹی وی کے لیے نماز کے اوقات، اذان اور اسکرین سیور، اردو میں
+
+<p align="center"><img src="docs/images/lang/home-ur.webp" alt="ہوم اردو میں" width="80%"></p>
+
+<details>
+<summary>مزید: آج کی نمازیں اور قبلہ، ترتیبات، اسکرین سیور</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ur.webp" alt="آج کی نمازیں اور قبلہ"></td>
+<td><img src="docs/images/lang/settings-ur.webp" alt="ترتیبات"></td>
+<td><img src="docs/images/lang/saver-ur.webp" alt="اسکرین سیور"></td>
+</tr>
+<tr>
+<td align="center">آج کی نمازیں اور قبلہ</td>
+<td align="center">ترتیبات</td>
+<td align="center">اسکرین سیور</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Türkçe
+
+Android TV ve Google TV için namaz vakitleri, ezan ve ekran koruyucu, Türkçe
+
+<p align="center"><img src="docs/images/lang/home-tr.webp" alt="Türkçe ana ekran" width="80%"></p>
+
+<details>
+<summary>Daha fazla: Bugün ve Kıble, Ayarlar, ekran koruyucu</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-tr.webp" alt="Bugün ve Kıble"></td>
+<td><img src="docs/images/lang/settings-tr.webp" alt="Ayarlar"></td>
+<td><img src="docs/images/lang/saver-tr.webp" alt="Ekran koruyucu"></td>
+</tr>
+<tr>
+<td align="center">Bugün ve Kıble</td>
+<td align="center">Ayarlar</td>
+<td align="center">Ekran koruyucu</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Français
+
+Horaires de prière, adhan et économiseur d'écran pour Android TV et Google TV, en français
+
+<p align="center"><img src="docs/images/lang/home-fr.webp" alt="L'accueil en français" width="80%"></p>
+
+<details>
+<summary>Plus : Aujourd'hui et qibla, Paramètres, l'économiseur d'écran</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-fr.webp" alt="Aujourd'hui et qibla"></td>
+<td><img src="docs/images/lang/settings-fr.webp" alt="Paramètres"></td>
+<td><img src="docs/images/lang/saver-fr.webp" alt="L'économiseur d'écran"></td>
+</tr>
+<tr>
+<td align="center">Aujourd'hui et qibla</td>
+<td align="center">Paramètres</td>
+<td align="center">L'économiseur d'écran</td>
+</tr>
+</table>
+
+</details>
+
+</div>
 
 ## التثبيت
 
@@ -312,7 +456,151 @@ That is what **Awan TV** brings you, and more.
 3. **The adhan over any app**, reminders before the prayer, and the iqamah countdown.
 4. **Any location in the world**; the times are worked out on the TV, offline.
 5. **Quran radio**, and saved recitations to listen to offline.
-6. **Arabic and English**, and six colour themes.
+6. **Five languages**: Arabic, English, Urdu, Turkish and French, and six colour themes.
+
+## Languages
+
+Awan TV speaks several languages: pick your favourite, or let it follow the TV's language. The verses, adhkar and hadiths are shown in their Arabic text in every language.
+
+<div dir="rtl">
+
+### العربية
+
+مواقيت الصلاة والأذان وشاشة الاستراحة لأجهزة Google TV وتلفاز أندرويد، بالعربية
+
+<p align="center"><img src="docs/images/lang/home-ar.webp" alt="الرئيسية بالعربية" width="80%"></p>
+
+<details>
+<summary>المزيد: مواقيت اليوم والقبلة، الإعدادات، شاشة الاستراحة</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ar.webp" alt="مواقيت اليوم والقبلة"></td>
+<td><img src="docs/images/lang/settings-ar.webp" alt="الإعدادات"></td>
+<td><img src="docs/images/lang/saver-ar.webp" alt="شاشة الاستراحة"></td>
+</tr>
+<tr>
+<td align="center">مواقيت اليوم والقبلة</td>
+<td align="center">الإعدادات</td>
+<td align="center">شاشة الاستراحة</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### English
+
+Prayer times, the adhan and a screensaver for Android TV and Google TV, in English
+
+<p align="center"><img src="docs/images/lang/home-en.webp" alt="Home in English" width="80%"></p>
+
+<details>
+<summary>More: Today & Qibla, Settings, the screensaver</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-en.webp" alt="Today & Qibla"></td>
+<td><img src="docs/images/lang/settings-en.webp" alt="Settings"></td>
+<td><img src="docs/images/lang/saver-en.webp" alt="The screensaver"></td>
+</tr>
+<tr>
+<td align="center">Today & Qibla</td>
+<td align="center">Settings</td>
+<td align="center">The screensaver</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="rtl">
+
+### اردو
+
+اینڈرائیڈ ٹی وی اور گوگل ٹی وی کے لیے نماز کے اوقات، اذان اور اسکرین سیور، اردو میں
+
+<p align="center"><img src="docs/images/lang/home-ur.webp" alt="ہوم اردو میں" width="80%"></p>
+
+<details>
+<summary>مزید: آج کی نمازیں اور قبلہ، ترتیبات، اسکرین سیور</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ur.webp" alt="آج کی نمازیں اور قبلہ"></td>
+<td><img src="docs/images/lang/settings-ur.webp" alt="ترتیبات"></td>
+<td><img src="docs/images/lang/saver-ur.webp" alt="اسکرین سیور"></td>
+</tr>
+<tr>
+<td align="center">آج کی نمازیں اور قبلہ</td>
+<td align="center">ترتیبات</td>
+<td align="center">اسکرین سیور</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Türkçe
+
+Android TV ve Google TV için namaz vakitleri, ezan ve ekran koruyucu, Türkçe
+
+<p align="center"><img src="docs/images/lang/home-tr.webp" alt="Türkçe ana ekran" width="80%"></p>
+
+<details>
+<summary>Daha fazla: Bugün ve Kıble, Ayarlar, ekran koruyucu</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-tr.webp" alt="Bugün ve Kıble"></td>
+<td><img src="docs/images/lang/settings-tr.webp" alt="Ayarlar"></td>
+<td><img src="docs/images/lang/saver-tr.webp" alt="Ekran koruyucu"></td>
+</tr>
+<tr>
+<td align="center">Bugün ve Kıble</td>
+<td align="center">Ayarlar</td>
+<td align="center">Ekran koruyucu</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Français
+
+Horaires de prière, adhan et économiseur d'écran pour Android TV et Google TV, en français
+
+<p align="center"><img src="docs/images/lang/home-fr.webp" alt="L'accueil en français" width="80%"></p>
+
+<details>
+<summary>Plus : Aujourd'hui et qibla, Paramètres, l'économiseur d'écran</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-fr.webp" alt="Aujourd'hui et qibla"></td>
+<td><img src="docs/images/lang/settings-fr.webp" alt="Paramètres"></td>
+<td><img src="docs/images/lang/saver-fr.webp" alt="L'économiseur d'écran"></td>
+</tr>
+<tr>
+<td align="center">Aujourd'hui et qibla</td>
+<td align="center">Paramètres</td>
+<td align="center">L'économiseur d'écran</td>
+</tr>
+</table>
+
+</details>
+
+</div>
 
 ## Install
 
