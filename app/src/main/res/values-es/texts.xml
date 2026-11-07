@@ -438,7 +438,7 @@
     <string name="radioDarkHelp" formatted="false">"Pantalla oscura, radio activa · un botón la enciende"</string>
     <string name="radioDarkRow" formatted="false">"Pantalla apagada al escuchar"</string>
     <string name="radioNote" formatted="false">"Sigue sonando en inicio y en el salvapantallas · se detiene cuando otra app reproduce sonido"</string>
-    <string name="radioPlay" formatted="false">"Reproducir"</string>
+    <string name="radioPlay" formatted="false">"Escuchar"</string>
     <string name="radioResumeRowFile" formatted="false">"The radio after the adhan"</string>
     <string name="radioRowHelp" formatted="false">" · necesita internet"</string>
     <string name="radioStatus" formatted="false">"En emisión"</string>
@@ -499,7 +499,7 @@
     <string name="saverStatusRow" formatted="false">"Salvapantallas"</string>
     <string name="school" formatted="false">"Asr: hanafí"</string>
     <string name="school_2" formatted="false">"Asr: mayoría (shafií)"</string>
-    <string name="screenOff" formatted="false">"Pantalla apagada"</string>
+    <string name="screenOff" formatted="false">"Solo audio"</string>
     <string name="screenOffNote" formatted="false">"Pantalla apagada, radio sonando · pulsa cualquier botón para volver"</string>
     <string name="searchCity" formatted="false">"Buscar una ciudad"</string>
     <string name="searchReciter" formatted="false">"Buscar un recitador"</string>

@@ -17,6 +17,8 @@ history is in its repository.
   item against the code.
   1.22.0b: Home's prayer times grow smaller to their cell when the 12-hour marker is longer than AM/PM ("12:04 p. m."
   was 8 px too wide); times that fit keep their size.
+  1.22.0c: the radio card's buttons in Spanish "Escuchar" and "Solo audio" ("Pantalla apagada" took two lines: the
+  three buttons share one row).
 
 ### Tools
 - AwanTV-texts-sheet 1.1.2: Spanish's column named.
