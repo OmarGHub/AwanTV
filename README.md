@@ -43,7 +43,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. **الأذان فوق أي تطبيق**، والتذكير قبل الصلاة، وعدّاد الإقامة.
 4. **أي موقع في العالم**، والمواقيت تُحسب على التلفاز دون إنترنت.
 5. **إذاعة القرآن الكريم**، والتلاوات المحفوظة للاستماع دون إنترنت.
-6. **ست لغات**: العربية والإنجليزية والأردية والتركية والفرنسية والملايوية، وست سمات للألوان.
+6. **سبع لغات**: العربية والإنجليزية والأردية والتركية والفرنسية والملايوية والإسبانية، وست سمات للألوان.
 
 ## اللغات
 
@@ -210,6 +210,34 @@ Waktu solat, azan dan penyelamat skrin untuk Android TV dan Google TV, dalam bah
 <td align="center">Hari ini &amp; Kiblat</td>
 <td align="center">Tetapan</td>
 <td align="center">Penyelamat skrin</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Español
+
+Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en español
+
+<p align="center"><img src="docs/images/lang/home-es.webp" alt="Inicio en español" width="80%"></p>
+
+<details>
+<summary>Más: Hoy y qibla, Ajustes, salvapantallas</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-es.webp" alt="Hoy y qibla"></td>
+<td><img src="docs/images/lang/settings-es.webp" alt="Ajustes"></td>
+<td><img src="docs/images/lang/saver-es.webp" alt="Salvapantallas"></td>
+</tr>
+<tr>
+<td align="center">Hoy y qibla</td>
+<td align="center">Ajustes</td>
+<td align="center">Salvapantallas</td>
 </tr>
 </table>
 
@@ -484,7 +512,7 @@ That is what **Awan TV** brings you, and more.
 3. **The adhan over any app**, reminders before the prayer, and the iqamah countdown.
 4. **Any location in the world**; the times are worked out on the TV, offline.
 5. **Quran radio**, and saved recitations to listen to offline.
-6. **Six languages**: Arabic, English, Urdu, Turkish, French and Malay, and six colour themes.
+6. **Seven languages**: Arabic, English, Urdu, Turkish, French, Malay and Spanish, and six colour themes.
 
 ## Languages
 
@@ -651,6 +679,34 @@ Waktu solat, azan dan penyelamat skrin untuk Android TV dan Google TV, dalam bah
 <td align="center">Hari ini &amp; Kiblat</td>
 <td align="center">Tetapan</td>
 <td align="center">Penyelamat skrin</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Español
+
+Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en español
+
+<p align="center"><img src="docs/images/lang/home-es.webp" alt="Inicio en español" width="80%"></p>
+
+<details>
+<summary>Más: Hoy y qibla, Ajustes, salvapantallas</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-es.webp" alt="Hoy y qibla"></td>
+<td><img src="docs/images/lang/settings-es.webp" alt="Ajustes"></td>
+<td><img src="docs/images/lang/saver-es.webp" alt="Salvapantallas"></td>
+</tr>
+<tr>
+<td align="center">Hoy y qibla</td>
+<td align="center">Ajustes</td>
+<td align="center">Salvapantallas</td>
 </tr>
 </table>
 
