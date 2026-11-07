@@ -6,6 +6,19 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Spanish (Español), the fifth language added to Arabic and English (test builds from 1.22.0a): every screen's words
+  (res/values-es), Spain's Spanish: the prayers as Spanish mosques and Mawaqit write them (Fajr, Shuruq, Dhuhr, Asr,
+  Maghrib, Isha; adhan, iqama, qibla), Spanish spelling where Spanish Muslims use it (jutba, Yumu'a, hadiz, Ramadán)
+  and Android's own Spanish for the settings words; "45 %" and "2 GB" as the RAE writes them. Ramadan's Fajr cell
+  says "AYUNO". Reciters and surahs in Spanish by mp3quran.net ("es"); the adhkar's counts and the hadiths'
+  references in Spanish (`tools/labels-es.tsv`, "Narrado por …", "e Ibn" before an i sound). Every hint beside choices
+  measured against the room the tested languages proved before the build. Checked by Gemini before the build, each
+  item against the code.
+
+### Tools
+- AwanTV-texts-sheet 1.1.2: Spanish's column named.
+
 ## [1.21.0]
 
 ### The app

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">Muestra Awan TV cada vez que aparece la pantalla de inicio del televisor y llama al adhan a la hora de la oración sobre lo que se esté viendo. No se desactiva nada en el televisor: desactiva este servicio para volver al inicio del televisor.</string>
+</resources>

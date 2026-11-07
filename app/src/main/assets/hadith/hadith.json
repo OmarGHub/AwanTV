@@ -339,7 +339,8 @@
    "countUr": "3 بار",
    "countTr": "3 kez",
    "countFr": "3 fois",
-   "countMs": "3 kali"
+   "countMs": "3 kali",
+   "countEs": "3 veces"
   },
   {
    "text": "اللَّهُمَّ أَنْتَ السَّلاَمُ وَمِنْكَ السَّلاَمُ تَبَارَكْتَ ذَا الْجَلاَلِ وَالإِكْرَامِ",
@@ -365,7 +366,8 @@
    "countUr": "33 بار",
    "countTr": "33 kez",
    "countFr": "33 fois",
-   "countMs": "33 kali"
+   "countMs": "33 kali",
+   "countEs": "33 veces"
   },
   {
    "text": "لاَ إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
@@ -376,7 +378,8 @@
    "countUr": "سو پورا کرنے کے لیے",
    "countTr": "Yüze tamamlamak için",
    "countFr": "Pour compléter à 100",
-   "countMs": "Untuk menggenapkan 100"
+   "countMs": "Untuk menggenapkan 100",
+   "countEs": "Para completar 100"
   },
   {
    "text": "أَعُوذُ بِاللَّهِ مِنَ الشَّيطَانِ الرَّجِيمِ ﴿اللَّهُ لاَ إِلَهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ لاَ تَأْخُذُهُ سِنَةٌ وَلاَ نَوْمٌ لَّهُ مَا فِي السَّمَوَاتِ وَمَا فِي الأَرْضِ مَن ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلاَّ بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلاَ يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلاَّ بِمَا شَاء وَسِعَ كُرْسِيُّهُ السَّمَوَاتِ وَالْأَرْضَ وَلاَ يَؤُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ﴾",
@@ -393,7 +396,9 @@
    "countFr": "Une fois",
    "refFr": "Rapporté par An-Nasa'i, 'Amal al-Yawm wal-Laylah",
    "countMs": "Sekali",
-   "refMs": "Riwayat An-Nasa'i, 'Amal al-Yawm wal-Laylah"
+   "refMs": "Riwayat An-Nasa'i, 'Amal al-Yawm wal-Laylah",
+   "countEs": "Una vez",
+   "refEs": "Narrado por An-Nasa'i, 'Amal al-Yawm wal-Laylah"
   },
   {
    "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nقُلْ هُوَ ٱللَّهُ أَحَدٌ، ٱللَّهُ ٱلصَّمَدُ، لَمْ يَلِدْ وَلَمْ يُولَدْ، وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
@@ -410,7 +415,9 @@
    "countFr": "Une fois",
    "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
    "countMs": "Sekali",
-   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
+   "countEs": "Una vez",
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
   },
   {
    "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ، مِن شَرِّ مَا خَلَقَ، وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ، وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ، وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
@@ -427,7 +434,9 @@
    "countFr": "Une fois",
    "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
    "countMs": "Sekali",
-   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
+   "countEs": "Una vez",
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
   },
   {
    "text": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ\nقُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ، مَلِكِ ٱلنَّاسِ، إِلَٰهِ ٱلنَّاسِ، مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ، ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ، مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
@@ -444,7 +453,9 @@
    "countFr": "Une fois",
    "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
    "countMs": "Sekali",
-   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
+   "countEs": "Una vez",
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
   }
  ]
 }

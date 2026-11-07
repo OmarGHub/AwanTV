@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in Spanish (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Spanish. AwanTV-apply-labels.py writes them as countEs / refEs.
+# "Narrado por", as Spanish hadith collections write it; the names in Spanish spelling (Al-Bujari, At-Tirmidi, Ibn Mayah).
+Once	Una vez
+Three times	Tres veces
+Four times	Cuatro veces
+Seven times	Siete veces
+Ten times or once when lazy	Diez veces, o una vez si hay pereza
+Ten times	Diez veces
+One hundred times	Cien veces
+One hundred times a day	Cien veces al día
+3 times	3 veces
+33 times	33 veces
+To make it 100	Para completar 100
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	Narrado por Al-Hakim, An-Nasa'i y At-Tabarani
+Reported by Al-Bukhari and Muslim	Narrado por Al-Bujari y Muslim
+Reported by Abu Dawud and At-Tirmidhi	Narrado por Abu Dawud y At-Tirmidi
+Reported by Muslim	Narrado por Muslim
+Reported by At-Tirmidhi	Narrado por At-Tirmidi
+Reported by Al-Bukhari	Narrado por Al-Bujari
+Reported by Abu Dawud and An-Nasa'i	Narrado por Abu Dawud y An-Nasa'i
+Reported by Abu Dawud and Ahmad	Narrado por Abu Dawud y Ahmad
+Reported by Ibn as-Sunni and Abu Dawud	Narrado por Ibn as-Sunni y Abu Dawud
+Reported by Abu Dawud and Ibn Majah	Narrado por Abu Dawud e Ibn Mayah
+Reported by At-Tirmidhi and Abu Dawud	Narrado por At-Tirmidi y Abu Dawud
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	Narrado por Abu Dawud, At-Tirmidi e Ibn Mayah
+Reported by Ahmad and An-Nasa'i	Narrado por Ahmad y An-Nasa'i
+Reported by Al-Hakim	Narrado por Al-Hakim
+Reported by Abu Dawud	Narrado por Abu Dawud
+Reported by Ahmad and Ibn as-Sunni	Narrado por Ahmad e Ibn as-Sunni
+Reported by Ibn as-Sunni and Ibn Majah	Narrado por Ibn as-Sunni e Ibn Mayah
+Reported by At-Tabarani	Narrado por At-Tabarani
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	Narrado por An-Nasa'i, 'Amal al-Yawm wal-Laylah
+Abu Dawud and an-Nasa'i	Narrado por Abu Dawud y An-Nasa'i
