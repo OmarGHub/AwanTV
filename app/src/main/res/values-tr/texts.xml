@@ -722,6 +722,10 @@
         <item>"Malayca"</item>
         <item>"Her ekran Malayca, Malezya'daki JAKIM'in terimleriyle. Ana ekrandaki dünya düğmesinden seçin."</item>
     </string-array>
+    <string-array name="news_1_22_0">
+        <item>"İspanyolca"</item>
+        <item>"Her ekran İspanyolca, İspanya'daki camilerin terimleriyle; kâriler ve sureler de İspanyolca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

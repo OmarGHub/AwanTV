@@ -722,6 +722,10 @@
         <item>"Malayo"</item>
         <item>"Todas las pantallas en malayo, con los términos del JAKIM de Malasia. Elígelo con el botón del globo en inicio."</item>
     </string-array>
+    <string-array name="news_1_22_0">
+        <item>"Español"</item>
+        <item>"Todas las pantallas en español, con los términos de las mezquitas de España, y los recitadores y las suras con sus nombres en español. Elígelo con el botón del globo en inicio."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

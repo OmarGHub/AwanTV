@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.22.0]
+
 ### The app
 - Spanish (Español), the fifth language added to Arabic and English (test builds from 1.22.0a): every screen's words
   (res/values-es), Spain's Spanish: the prayers as Spanish mosques and Mawaqit write them (Fajr, Shuruq, Dhuhr, Asr,
@@ -19,6 +21,7 @@ history is in its repository.
   was 8 px too wide); times that fit keep their size.
   1.22.0c: the radio card's buttons in Spanish "Escuchar" and "Solo audio" ("Pantalla apagada" took two lines: the
   three buttons share one row).
+  In What's new, in the seven languages.
 
 ### Tools
 - AwanTV-texts-sheet 1.1.2: Spanish's column named.

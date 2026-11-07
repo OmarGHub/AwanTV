@@ -722,6 +722,10 @@
         <item>"Bahasa Melayu"</item>
         <item>"Setiap skrin dalam bahasa Melayu, mengikut istilah JAKIM. Pilih dari butang glob pada Skrin Utama."</item>
     </string-array>
+    <string-array name="news_1_22_0">
+        <item>"Bahasa Sepanyol"</item>
+        <item>"Setiap skrin dalam bahasa Sepanyol, mengikut istilah masjid di Sepanyol, dengan nama qari dan surah dalam bahasa Sepanyol. Pilih dari butang glob pada Skrin Utama."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

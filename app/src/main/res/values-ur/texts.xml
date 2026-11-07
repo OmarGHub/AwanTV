@@ -722,6 +722,10 @@
         <item>"ملائی"</item>
         <item>"ہر اسکرین ملائی میں، ملائیشیا کے ادارے JAKIM کی اصطلاحات کے ساتھ۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
     </string-array>
+    <string-array name="news_1_22_0">
+        <item>"ہسپانوی"</item>
+        <item>"ہر اسکرین ہسپانوی میں، اسپین کی مساجد کی اصطلاحات کے ساتھ، قاریوں اور سورتوں کے نام بھی۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

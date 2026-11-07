@@ -722,6 +722,10 @@
         <item>"Malay"</item>
         <item>"Every screen in Malay, in the terms of Malaysia's JAKIM. Pick it from the globe button on Home."</item>
     </string-array>
+    <string-array name="news_1_22_0">
+        <item>"Spanish"</item>
+        <item>"Every screen in Spanish, in the terms of Spain's mosques, with reciters and surahs named in Spanish. Pick it from the globe button on Home."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
