@@ -15,6 +15,8 @@ history is in its repository.
   references in Spanish (`tools/labels-es.tsv`, "Narrado por …", "e Ibn" before an i sound). Every hint beside choices
   measured against the room the tested languages proved before the build. Checked by Gemini before the build, each
   item against the code.
+  1.22.0b: Home's prayer times grow smaller to their cell when the 12-hour marker is longer than AM/PM ("12:04 p. m."
+  was 8 px too wide); times that fit keep their size.
 
 ### Tools
 - AwanTV-texts-sheet 1.1.2: Spanish's column named.

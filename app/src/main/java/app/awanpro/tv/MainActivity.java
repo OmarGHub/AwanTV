@@ -1068,12 +1068,21 @@ public class MainActivity extends Screen {
             // English 12-hour ("12:41 PM") is too wide for a cell at 34px; Arabic's ص/م is narrow enough. Urdu writes
             // AM/PM too (1.18.0d's crop check: "12:07 PM" 10 px too wide), so only Arabic keeps 34.
             float timeSize = Ui.px(!h24 && !t.ar ? 30 : 34);
-            if (cellTime[i].getTextSize() != timeSize) {
+            CharSequence clock = time(day.times[i], 0.55f);
+            Typeface tf = bold ? ui600 : ui400;
+            // A marker longer than AM/PM (Spanish "p. m.": 1.22.0a's crop check, 8 px too wide at 30) makes the time
+            // smaller to the cell's room, to 85%; the times that fit today keep their size.
+            android.text.TextPaint tp = new android.text.TextPaint(cellTime[i].getPaint());
+            tp.setTypeface(tf);
+            tp.setTextSize(timeSize);
+            float need = android.text.Layout.getDesiredWidth(clock, tp);
+            float room = Ui.px((Tokens.COURT_W - 5 * 12) / 6f - 40) - 2;
+            if (need > room) timeSize = Math.max(timeSize * 0.85f, timeSize * room / need);
+            if (Math.abs(cellTime[i].getTextSize() - timeSize) > 0.01f) {
                 cellTime[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, timeSize);
                 lineHeight(cellTime[i], 1.1f);
             }
-            cellTime[i].setText(time(day.times[i], 0.55f));
-            Typeface tf = bold ? ui600 : ui400;
+            cellTime[i].setText(clock);
             for (TextView v : new TextView[] {cellTag[i], cellName[i], cellTime[i]}) v.setTextColor(fg);
             cellTag[i].setTypeface(ui400);
             cellName[i].setTypeface(tf);
