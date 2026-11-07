@@ -6,6 +6,15 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- The weather asks Open-Meteo with the location to two decimals (about a kilometre) instead of four (about ten
+  metres): enough for the weather, and a home's exact point never leaves the TV (test builds from 1.22.1a).
+
+### Tools
+- AwanTV-textdump 1.4.0: a TV that stops answering adb is said so ("The TV stopped answering adb (error: closed)…")
+  instead of "Cannot index into a null array"; a -Golden file that is not there is named with the dumps saved; a dump
+  taken without -Golden names the newest one before it to compare with.
+
 ## [1.22.0]
 
 ### The app

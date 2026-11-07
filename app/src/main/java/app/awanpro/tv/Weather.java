@@ -93,8 +93,10 @@ final class Weather {
     }
 
     private static void read(Context c, double lat, double lng) throws Exception {
+        // Two decimals (about a kilometre): enough for the weather, and the home's own point never leaves the TV
+        // (1.22.1; four before, about ten metres).
         URL url = new URL(String.format(Locale.US,
-            "https://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f&current=temperature_2m,weather_code,is_day",
+            "https://api.open-meteo.com/v1/forecast?latitude=%.2f&longitude=%.2f&current=temperature_2m,weather_code,is_day",
             lat, lng));
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setConnectTimeout(TIMEOUT_MS);

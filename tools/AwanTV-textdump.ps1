@@ -1,4 +1,4 @@
-# AwanTV-textdump.ps1 - Version 1.3.1
+# AwanTV-textdump.ps1 - Version 1.4.0
 # The languages plan's safety net (claude/awan-languages-plan.md, phase 0). A test build of Awan TV (a version ending
 # in a letter) writes every text it shows, in Arabic and English with both kinds of digits (TextDump.java); this tool
 # asks the TV for that file, keeps it in state\textdump\<version>.txt, and compares it with a golden one.
@@ -23,11 +23,14 @@
 # added near the top would move every one after it: from 1.3.0 they are matched by their text first (the lines both
 # have alike, then the changed ones in the order they come), and only a line really added, gone or changed is listed.
 # Exit code: 0 the same, 1 a golden line changed or is missing, 2 the dump failed.
+# 1.4.0: a TV that stops answering adb (asleep, "error: closed") is said so in words, not as a PowerShell error; a
+# -Golden file that is not there is named with the dumps saved; a dump taken without -Golden names the newest one
+# saved before it to compare with.
 
 param([string]$Device = "", [string]$Golden = "", [string]$File = "", [switch]$Crops, [switch]$Clear)
 
 $ErrorActionPreference = "Continue"  # native adb output on stderr must not abort; failures throw explicitly
-$ScriptVersion = "1.3.1"
+$ScriptVersion = "1.4.0"
 $Pkg = "app.awanpro.tv"
 $Receiver = "$Pkg/app.awanpro.tv.SettingsTransfer"
 $Remote = "/sdcard/Android/data/$Pkg/files/text-dump.txt"
@@ -213,10 +216,20 @@ function Compare-Dumps([string]$goldenPath, [string]$newPath) {
     return 0
 }
 
+# A -Golden path that exists, or a failure that names it and the dumps saved (1.4.0).
+function Golden-Path([string]$path) {
+    if (Test-Path $path) { return (Resolve-Path $path).Path }
+    $saved = @(Get-ChildItem -Path $Dir -Filter "*.txt" -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -notlike "crops-*" -and $_.Name -notlike "*-vs-*" } |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 3 | ForEach-Object { $_.Name })
+    $list = if ($saved.Count) { " Saved in state\textdump: " + ($saved -join ", ") } else { "" }
+    throw "Golden file not found: $path.$list"
+}
+
 try {
     if ($File) {
         if (-not $Golden) { throw "-File compares with -Golden: give both." }
-        exit (Compare-Dumps (Resolve-Path $Golden).Path (Resolve-Path $File).Path)
+        exit (Compare-Dumps (Golden-Path $Golden) (Resolve-Path $File).Path)
     }
 
     $AdbExe = Find-Adb
@@ -224,7 +237,12 @@ try {
     $Serial = Select-Device $AdbExe $Device
     function Adb { & $AdbExe -s $Serial @args }
 
-    $version = ((Adb shell "dumpsys package $Pkg" | Select-String -Pattern "versionName=(\S+)" | Select-Object -First 1).Matches.Groups[1].Value)
+    # The TV may have stopped answering since adb listed it (asleep, the connection closed: 1.4.0).
+    $info = @(Adb shell "dumpsys package $Pkg" 2>&1 | ForEach-Object { "$_" })
+    $said = ($info | Where-Object { $_ -match '^(error|adb: )' } | Select-Object -First 1)
+    if ($said) { throw "The TV stopped answering adb ($said). Wake it, check 'adb devices', reconnect (adb connect) and run again." }
+    $found = $info | Select-String -Pattern "versionName=(\S+)" | Select-Object -First 1
+    $version = if ($found) { $found.Matches[0].Groups[1].Value } else { "" }
     if (-not $version) { throw "Awan TV is not installed on this TV." }
     if ($version -notmatch '\d[a-z]+$') { throw "Awan TV $version is a release: the dump is in test builds only (a version ending in a letter)." }
 
@@ -266,7 +284,11 @@ try {
     $lines = @([IO.File]::ReadAllLines($dest, [Text.Encoding]::UTF8)).Count
     Write-Host "Saved: $dest ($lines lines)"
 
-    if ($Golden) { exit (Compare-Dumps (Resolve-Path $Golden).Path $dest) }
+    if ($Golden) { exit (Compare-Dumps (Golden-Path $Golden) $dest) }
+    $before = Get-ChildItem -Path $Dir -Filter "*.txt" -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -ne $dest -and $_.Name -notlike "crops-*" -and $_.Name -notlike "*-vs-*" } |
+        Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($before) { Write-Host "Not compared. To compare with the newest dump before it: -Golden state\textdump\$($before.Name)" }
     exit 0
 } catch {
     Write-Host "Failed: $($_.Exception.Message)"
