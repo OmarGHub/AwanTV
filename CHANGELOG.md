@@ -13,6 +13,8 @@ history is in its repository.
   "PUASA": in JAKIM's timetables Imsak is its own column, ten minutes before Subuh. Reciters and surahs stay in English
   (mp3quran.net has no Malay); the adhkar's counts and the hadiths' references in Malay (`tools/labels-ms.tsv`,
   "Riwayat …"). Checked by Gemini before the build, each item against the code.
+  1.21.0b: three settings hints shorter, as 1.21.0a's crop check found (Runs, Screen off while listening with
+  narrower choices, Imsak in Ramadan: "imsak: ihtiyat pilihan", JAKIM's own word for the margin).
 
 ### Tools
 - AwanTV-texts-sheet 1.1.1: Malay's column named.

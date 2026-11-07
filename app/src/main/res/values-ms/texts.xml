@@ -231,7 +231,7 @@
     <string name="iftarIn" formatted="false">"BERBUKA DALAM"</string>
     <string name="iftarTag" formatted="false">"BERBUKA"</string>
     <string name="imsakAt" formatted="false">"Imsak "</string>
-    <string name="imsakHelp" formatted="false">"Puasa bermula pada azan Subuh · imsak: langkah berjaga-jaga pilihan"</string>
+    <string name="imsakHelp" formatted="false">"Puasa bermula pada azan Subuh · imsak: ihtiyat pilihan"</string>
     <string name="imsakRow" formatted="false">"Imsak dalam Ramadan"</string>
     <string name="in" formatted="false">"dalam %1$s"</string>
     <string name="inMinutesOther" formatted="false">"dalam %1$s min"</string>
@@ -435,7 +435,7 @@
     <string name="qrHint" formatted="false">"Imbas dengan kamera telefon anda"</string>
     <string name="queuedOnly" formatted="false">"%1$s menunggu selepas rakaman lain"</string>
     <string name="radio" formatted="false">"Radio"</string>
-    <string name="radioDarkHelp" formatted="false">"Skrin gelap, radio hidup · mana-mana butang mengembalikannya"</string>
+    <string name="radioDarkHelp" formatted="false">"Skrin gelap, radio hidup · tekan butang"</string>
     <string name="radioDarkRow" formatted="false">"Skrin mati semasa mendengar"</string>
     <string name="radioNote" formatted="false">"Terus dimainkan pada Skrin Utama dan penyelamat skrin · berhenti apabila apl lain memainkan bunyi"</string>
     <string name="radioPlay" formatted="false">"Main"</string>
@@ -480,7 +480,7 @@
     <string name="roomTitle" formatted="false">"Arah bilik"</string>
     <string name="rowNow" formatted="false">"sekarang"</string>
     <string name="runHelp" formatted="false">"Skrin Utama memerlukan perkhidmatan Awan TV dihidupkan (Kebolehcapaian, di bawah)"</string>
-    <string name="runHelp_2" formatted="false">"Skrin Utama dan penyelamat skrin dengan waktu solat dan zikir"</string>
+    <string name="runHelp_2" formatted="false">"Skrin Utama dan penyelamat skrin, waktu dan zikir"</string>
     <string name="runHelp_3" formatted="false">"Skrin Utama sahaja · tiada penyelamat skrin atau zikir"</string>
     <string name="runHelp_4" formatted="false">"Penyelamat skrin sahaja · skrin utama TV sendiri"</string>
     <string name="runHelp_5" formatted="false">"Mati · azan dan peringatan mengekalkan tetapan sendiri"</string>
@@ -811,8 +811,8 @@
         <item>"di depan, kiri anda"</item>
     </string-array>
     <string-array name="radioDarkChoices">
-        <item>"Dengan penyelamat skrin"</item>
-        <item>"15 min kemudian"</item>
+        <item>"Ikut penyelamat skrin"</item>
+        <item>"Selepas 15 min"</item>
         <item>"Tidak sekali-kali"</item>
     </string-array>
     <string-array name="regions">
