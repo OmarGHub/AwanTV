@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.21.0]
+
 ### The app
 - Malay (Bahasa Melayu), the fourth language added to Arabic and English (test builds from 1.21.0a): every screen's
   words (res/values-ms), in JAKIM's terms (Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak; azan, iqamah, kiblat, Jumaat;
@@ -16,9 +18,13 @@ history is in its repository.
   1.21.0b: three settings hints shorter, as 1.21.0a's crop check found (Runs, Screen off while listening with
   narrower choices, Imsak in Ramadan: "imsak: ihtiyat pilihan", JAKIM's own word for the margin).
   1.21.0c: Screen off while listening's hint is "Skrin gelap, radio hidup" (fits without growing smaller).
+  In What's new, in the six languages.
 
 ### Tools
 - AwanTV-texts-sheet 1.1.1: Malay's column named.
+- The crop check (test builds) writes a cut only when two checks in a row see it: a row caught as it was drawn,
+  before it grew smaller, was taken for a cut (1.21.0c). mp3quran.net's names of the reciter channels are not
+  checked: their data as it comes, which changes, not Awan TV's words.
 
 ## [1.20.0]
 

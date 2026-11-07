@@ -718,6 +718,10 @@
         <item>"Français"</item>
         <item>"Tous les écrans en français, dans les termes des mosquées francophones, avec les récitateurs et les sourates nommés en français. Choisissez cette langue avec le bouton globe de l'accueil."</item>
     </string-array>
+    <string-array name="news_1_21_0">
+        <item>"Malais"</item>
+        <item>"Tous les écrans en malais, dans les termes du JAKIM de Malaisie. Choisissez cette langue avec le bouton globe de l'accueil."</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

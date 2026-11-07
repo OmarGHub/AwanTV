@@ -23,6 +23,11 @@ import java.util.Set;
  * <p>Found: a line ending in "…", more lines than the view shows, a single line wider than its view, text taller
  * than its view, or a view cut by its parent (not inside a list, which scrolls on purpose). One line each, once per
  * process: version|screen|language|why|text.
+ *
+ * <p>Since 1.21.0: a finding is written only when two checks in a row see it (within {@link #AGAIN_MS}), so a row
+ * caught as it is drawn, before {@link Screen#fitWidth} makes it smaller, is not taken for a cut (1.21.0c: names
+ * written at their full size, whole on the screen). mp3quran.net's own names (the reciter channels, {@link Radios})
+ * are not checked: their data as it comes, not Awan TV's words (Omar).
  */
 final class CropCheck {
     private CropCheck() {}
@@ -31,6 +36,11 @@ final class CropCheck {
     private static String version = "";
     private static final Set<String> SEEN = new HashSet<>();
     private static final Rect R = new Rect();
+    /** A finding is written when the check before saw it too, at most this long ago (checks run every 2 s). */
+    private static final long AGAIN_MS = 5000;
+    private static final java.util.Map<String, Long> LAST = new java.util.HashMap<>();
+    private static Set<String> data = new HashSet<>();
+    private static Object dataFrom;
 
     static boolean on(Context c) {
         if (on == null) {
@@ -58,7 +68,7 @@ final class CropCheck {
             }
         }
         StringBuilder found = new StringBuilder();
-        walk(root, false, where + "|" + lang, found);
+        walk(root, false, where + "|" + lang, dataNames(c), found);
         if (found.length() == 0) return;
         File dir = c.getExternalFilesDir(null);
         if (dir == null) return;
@@ -69,13 +79,36 @@ final class CropCheck {
         }
     }
 
-    private static void walk(View v, boolean inList, String where, StringBuilder found) {
+    /** mp3quran.net's names of the reciter channels in every language, read again when Radios reads its list. */
+    private static Set<String> dataNames(Context c) {
+        java.util.List<Radio.Station> extra = Radios.extra(c);
+        if (extra != dataFrom) {
+            Set<String> names = new HashSet<>();
+            for (Radio.Station st : extra) {
+                names.add(plain(st.ar));
+                names.add(plain(st.en));
+                for (String n : st.more.values()) names.add(plain(n));
+            }
+            data = names;
+            dataFrom = extra;
+        }
+        return data;
+    }
+
+    /** Without the direction marks Text.d adds. */
+    private static String plain(CharSequence t) {
+        return t == null ? "" : t.toString().replaceAll("[\\u200E\\u200F\\u202A-\\u202E\\u2066-\\u2069]", "").trim();
+    }
+
+    private static void walk(View v, boolean inList, String where, Set<String> data, StringBuilder found) {
         if (v.getVisibility() != View.VISIBLE) return;
-        if (v instanceof TextView) check((TextView) v, inList, where, found);
+        if (v instanceof TextView && !data.contains(plain(((TextView) v).getText()))) {
+            check((TextView) v, inList, where, found);
+        }
         if (v instanceof ViewGroup) {
             ViewGroup g = (ViewGroup) v;
             boolean list = inList || v instanceof ScrollView || v instanceof android.widget.HorizontalScrollView;
-            for (int i = 0; i < g.getChildCount(); i++) walk(g.getChildAt(i), list, where, found);
+            for (int i = 0; i < g.getChildCount(); i++) walk(g.getChildAt(i), list, where, data, found);
         }
     }
 
@@ -108,7 +141,12 @@ final class CropCheck {
         }
         if (why == null) return;
         String line = where + "|" + why + "|" + text.toString().replace("\n", "\\n").replace("|", "/");
+        // The text alone (its width may differ between the two checks): seen by the check before, it stays cut.
+        String key = where + "|" + text;
+        long now = android.os.SystemClock.uptimeMillis();
         synchronized (SEEN) {
+            Long before = LAST.put(key, now);
+            if (before == null || now - before > AGAIN_MS) return;
             if (!SEEN.add(line)) return;
         }
         found.append(version).append('|').append(line).append('\n');

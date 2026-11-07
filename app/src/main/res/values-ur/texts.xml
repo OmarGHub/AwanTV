@@ -718,6 +718,10 @@
         <item>"فرانسیسی"</item>
         <item>"ہر اسکرین فرانسیسی میں، فرانسیسی بولنے والی مساجد کی اصطلاحات کے ساتھ، قاریوں اور سورتوں کے نام بھی۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
     </string-array>
+    <string-array name="news_1_21_0">
+        <item>"ملائی"</item>
+        <item>"ہر اسکرین ملائی میں، ملائیشیا کے ادارے JAKIM کی اصطلاحات کے ساتھ۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+    </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
         <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>

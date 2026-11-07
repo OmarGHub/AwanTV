@@ -544,6 +544,8 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.21.0":
+                return pairs(a(R.array.news_1_21_0), 2);
             case "1.20.0":
                 return pairs(a(R.array.news_1_20_0), 2);
             case "1.19.0":
