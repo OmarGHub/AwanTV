@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.22.1]
+
 ### The app
 - The weather asks Open-Meteo with the location to two decimals (about a kilometre) instead of four (about ten
   metres): enough for the weather, and a home's exact point never leaves the TV (test builds from 1.22.1a).
