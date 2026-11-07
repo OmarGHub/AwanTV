@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in Malay (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Malay. AwanTV-apply-labels.py writes them as countMs / refMs.
+# "Riwayat", as Malaysian hadith books and JAKIM write it.
+Once	Sekali
+Three times	Tiga kali
+Four times	Empat kali
+Seven times	Tujuh kali
+Ten times or once when lazy	Sepuluh kali, atau sekali ketika malas
+Ten times	Sepuluh kali
+One hundred times	Seratus kali
+One hundred times a day	Seratus kali sehari
+3 times	3 kali
+33 times	33 kali
+To make it 100	Untuk menggenapkan 100
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	Riwayat Al-Hakim, An-Nasa'i dan At-Tabarani
+Reported by Al-Bukhari and Muslim	Riwayat Al-Bukhari dan Muslim
+Reported by Abu Dawud and At-Tirmidhi	Riwayat Abu Dawud dan At-Tirmidhi
+Reported by Muslim	Riwayat Muslim
+Reported by At-Tirmidhi	Riwayat At-Tirmidhi
+Reported by Al-Bukhari	Riwayat Al-Bukhari
+Reported by Abu Dawud and An-Nasa'i	Riwayat Abu Dawud dan An-Nasa'i
+Reported by Abu Dawud and Ahmad	Riwayat Abu Dawud dan Ahmad
+Reported by Ibn as-Sunni and Abu Dawud	Riwayat Ibn as-Sunni dan Abu Dawud
+Reported by Abu Dawud and Ibn Majah	Riwayat Abu Dawud dan Ibn Majah
+Reported by At-Tirmidhi and Abu Dawud	Riwayat At-Tirmidhi dan Abu Dawud
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	Riwayat Abu Dawud, At-Tirmidhi dan Ibn Majah
+Reported by Ahmad and An-Nasa'i	Riwayat Ahmad dan An-Nasa'i
+Reported by Al-Hakim	Riwayat Al-Hakim
+Reported by Abu Dawud	Riwayat Abu Dawud
+Reported by Ahmad and Ibn as-Sunni	Riwayat Ahmad dan Ibn as-Sunni
+Reported by Ibn as-Sunni and Ibn Majah	Riwayat Ibn as-Sunni dan Ibn Majah
+Reported by At-Tabarani	Riwayat At-Tabarani
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	Riwayat An-Nasa'i, 'Amal al-Yawm wal-Laylah
+Abu Dawud and an-Nasa'i	Riwayat Abu Dawud dan An-Nasa'i

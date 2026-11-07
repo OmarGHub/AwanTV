@@ -17,7 +17,8 @@
    "night": false,
    "countUr": "ایک بار",
    "countTr": "Bir kez",
-   "countFr": "Une fois"
+   "countFr": "Une fois",
+   "countMs": "Sekali"
   },
   {
    "order": 2,
@@ -34,7 +35,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Hâkim, Nesâî ve Taberânî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Al-Hakim, An-Nasa'i et At-Tabarani"
+   "refFr": "Rapporté par Al-Hakim, An-Nasa'i et At-Tabarani",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Al-Hakim, An-Nasa'i dan At-Tabarani"
   },
   {
    "order": 3,
@@ -51,7 +54,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Buhârî ve Müslim",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Al-Bukhari et Muslim"
+   "refFr": "Rapporté par Al-Bukhari et Muslim",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Al-Bukhari dan Muslim"
   },
   {
    "order": 4,
@@ -68,7 +73,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Abu Dawud dan At-Tirmidhi"
   },
   {
    "order": 5,
@@ -85,7 +92,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Abu Dawud dan At-Tirmidhi"
   },
   {
    "order": 6,
@@ -102,7 +111,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Tirmizî",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi"
+   "refFr": "Rapporté par Abu Dawud et At-Tirmidhi",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Abu Dawud dan At-Tirmidhi"
   },
   {
    "order": 7,
@@ -119,7 +130,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Müslim",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Muslim"
+   "refFr": "Rapporté par Muslim",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Muslim"
   },
   {
    "order": 8,
@@ -136,7 +149,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Müslim",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Muslim"
+   "refFr": "Rapporté par Muslim",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Muslim"
   },
   {
    "order": 9,
@@ -153,7 +168,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Tirmizî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par At-Tirmidhi"
+   "refFr": "Rapporté par At-Tirmidhi",
+   "countMs": "Sekali",
+   "refMs": "Riwayat At-Tirmidhi"
   },
   {
    "order": 10,
@@ -170,7 +187,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Tirmizî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par At-Tirmidhi"
+   "refFr": "Rapporté par At-Tirmidhi",
+   "countMs": "Sekali",
+   "refMs": "Riwayat At-Tirmidhi"
   },
   {
    "order": 11,
@@ -187,7 +206,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Buhârî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Al-Bukhari"
+   "refFr": "Rapporté par Al-Bukhari",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Al-Bukhari"
   },
   {
    "order": 12,
@@ -204,7 +225,9 @@
    "countTr": "Dört kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
    "countFr": "Quatre fois",
-   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
+   "countMs": "Empat kali",
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 13,
@@ -221,7 +244,9 @@
    "countTr": "Dört kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
    "countFr": "Quatre fois",
-   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
+   "countMs": "Empat kali",
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 14,
@@ -238,7 +263,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 15,
@@ -255,7 +282,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Nesâî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Abu Dawud et An-Nasa'i"
+   "refFr": "Rapporté par Abu Dawud et An-Nasa'i",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 16,
@@ -272,7 +301,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ebû Dâvûd ve Ahmed",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Abu Dawud et Ahmad"
+   "refFr": "Rapporté par Abu Dawud et Ahmad",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Abu Dawud dan Ahmad"
   },
   {
    "order": 17,
@@ -289,7 +320,9 @@
    "countTr": "Yedi kez",
    "refTr": "Rivayet: İbnü's-Sünnî ve Ebû Dâvûd",
    "countFr": "Sept fois",
-   "refFr": "Rapporté par Ibn as-Sunni et Abu Dawud"
+   "refFr": "Rapporté par Ibn as-Sunni et Abu Dawud",
+   "countMs": "Tujuh kali",
+   "refMs": "Riwayat Ibn as-Sunni dan Abu Dawud"
   },
   {
    "order": 18,
@@ -306,7 +339,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ebû Dâvûd ve İbn Mâce",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Abu Dawud et Ibn Majah"
+   "refFr": "Rapporté par Abu Dawud et Ibn Majah",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Abu Dawud dan Ibn Majah"
   },
   {
    "order": 19,
@@ -323,7 +358,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Tirmizî ve Ebû Dâvûd",
    "countFr": "Une fois",
-   "refFr": "Rapporté par At-Tirmidhi et Abu Dawud"
+   "refFr": "Rapporté par At-Tirmidhi et Abu Dawud",
+   "countMs": "Sekali",
+   "refMs": "Riwayat At-Tirmidhi dan Abu Dawud"
   },
   {
    "order": 20,
@@ -340,7 +377,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ebû Dâvûd, Tirmizî ve İbn Mâce",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Abu Dawud, At-Tirmidhi et Ibn Majah"
+   "refFr": "Rapporté par Abu Dawud, At-Tirmidhi et Ibn Majah",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Abu Dawud, At-Tirmidhi dan Ibn Majah"
   },
   {
    "order": 21,
@@ -357,7 +396,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ahmed ve Nesâî",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Ahmad et An-Nasa'i"
+   "refFr": "Rapporté par Ahmad et An-Nasa'i",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Ahmad dan An-Nasa'i"
   },
   {
    "order": 22,
@@ -374,7 +415,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Hâkim",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Al-Hakim"
+   "refFr": "Rapporté par Al-Hakim",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Al-Hakim"
   },
   {
    "order": 23,
@@ -391,7 +434,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ebû Dâvûd",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Abu Dawud"
+   "refFr": "Rapporté par Abu Dawud",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Abu Dawud"
   },
   {
    "order": 24,
@@ -408,7 +453,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ebû Dâvûd",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Abu Dawud"
+   "refFr": "Rapporté par Abu Dawud",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Abu Dawud"
   },
   {
    "order": 25,
@@ -425,7 +472,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Ahmad et Ibn as-Sunni"
+   "refFr": "Rapporté par Ahmad et Ibn as-Sunni",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Ahmad dan Ibn as-Sunni"
   },
   {
    "order": 26,
@@ -442,7 +491,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: Ahmed ve İbnü's-Sünnî",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Ahmad et Ibn as-Sunni"
+   "refFr": "Rapporté par Ahmad et Ibn as-Sunni",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Ahmad dan Ibn as-Sunni"
   },
   {
    "order": 27,
@@ -459,7 +510,9 @@
    "countTr": "Bir kez",
    "refTr": "Rivayet: İbnü's-Sünnî ve İbn Mâce",
    "countFr": "Une fois",
-   "refFr": "Rapporté par Ibn as-Sunni et Ibn Majah"
+   "refFr": "Rapporté par Ibn as-Sunni et Ibn Majah",
+   "countMs": "Sekali",
+   "refMs": "Riwayat Ibn as-Sunni dan Ibn Majah"
   },
   {
    "order": 28,
@@ -476,7 +529,9 @@
    "countTr": "On kez, ya da üşenince bir kez",
    "refTr": "Rivayet: Buhârî ve Müslim",
    "countFr": "Dix fois, ou une fois en cas de paresse",
-   "refFr": "Rapporté par Al-Bukhari et Muslim"
+   "refFr": "Rapporté par Al-Bukhari et Muslim",
+   "countMs": "Sepuluh kali, atau sekali ketika malas",
+   "refMs": "Riwayat Al-Bukhari dan Muslim"
   },
   {
    "order": 29,
@@ -493,7 +548,9 @@
    "countTr": "On kez",
    "refTr": "Rivayet: Taberânî",
    "countFr": "Dix fois",
-   "refFr": "Rapporté par At-Tabarani"
+   "refFr": "Rapporté par At-Tabarani",
+   "countMs": "Sepuluh kali",
+   "refMs": "Riwayat At-Tabarani"
   },
   {
    "order": 30,
@@ -510,7 +567,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Ahmed ve Nesâî",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Ahmad et An-Nasa'i"
+   "refFr": "Rapporté par Ahmad et An-Nasa'i",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Ahmad dan An-Nasa'i"
   },
   {
    "order": 31,
@@ -527,7 +586,9 @@
    "countTr": "Üç kez",
    "refTr": "Rivayet: Müslim",
    "countFr": "Trois fois",
-   "refFr": "Rapporté par Muslim"
+   "refFr": "Rapporté par Muslim",
+   "countMs": "Tiga kali",
+   "refMs": "Riwayat Muslim"
   },
   {
    "order": 32,
@@ -544,7 +605,9 @@
    "countTr": "Yüz kez",
    "refTr": "Rivayet: Buhârî ve Müslim",
    "countFr": "Cent fois",
-   "refFr": "Rapporté par Al-Bukhari et Muslim"
+   "refFr": "Rapporté par Al-Bukhari et Muslim",
+   "countMs": "Seratus kali",
+   "refMs": "Riwayat Al-Bukhari dan Muslim"
   },
   {
    "order": 33,
@@ -561,7 +624,9 @@
    "countTr": "Günde yüz kez",
    "refTr": "Rivayet: Buhârî ve Müslim",
    "countFr": "Cent fois par jour",
-   "refFr": "Rapporté par Al-Bukhari et Muslim"
+   "refFr": "Rapporté par Al-Bukhari et Muslim",
+   "countMs": "Seratus kali sehari",
+   "refMs": "Riwayat Al-Bukhari dan Muslim"
   },
   {
    "order": 34,
@@ -578,7 +643,9 @@
    "countTr": "Yüz kez",
    "refTr": "Rivayet: Müslim",
    "countFr": "Cent fois",
-   "refFr": "Rapporté par Muslim"
+   "refFr": "Rapporté par Muslim",
+   "countMs": "Seratus kali",
+   "refMs": "Riwayat Muslim"
   }
  ]
 }

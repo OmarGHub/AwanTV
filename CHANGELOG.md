@@ -6,6 +6,17 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Malay (Bahasa Melayu), the fourth language added to Arabic and English (test builds from 1.21.0a): every screen's
+  words (res/values-ms), in JAKIM's terms (Subuh, Syuruk, Zohor, Asar, Maghrib, Isyak; azan, iqamah, kiblat, Jumaat;
+  the Hijri months as Malaysia spells them) and Android's own Malay for the settings words. Ramadan's Fajr cell says
+  "PUASA": in JAKIM's timetables Imsak is its own column, ten minutes before Subuh. Reciters and surahs stay in English
+  (mp3quran.net has no Malay); the adhkar's counts and the hadiths' references in Malay (`tools/labels-ms.tsv`,
+  "Riwayat …"). Checked by Gemini before the build, each item against the code.
+
+### Tools
+- AwanTV-texts-sheet 1.1.1: Malay's column named.
+
 ## [1.20.0]
 
 ### The app
