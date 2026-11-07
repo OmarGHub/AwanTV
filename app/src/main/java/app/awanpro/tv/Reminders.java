@@ -11,8 +11,8 @@ import java.util.Date;
 final class Reminders {
     private Reminders() {}
 
-    /** How long after a prayer time the call screen may still open (the check runs every 15 s). */
-    static final long CALL_WINDOW_MS = 120_000;
+    /** How long after a prayer time the call screen may still open (the check runs every 15 s; PrayerDay's). */
+    static final long CALL_WINDOW_MS = PrayerDay.CALL_WINDOW_MS;
 
     /** Set by Home while it is in front: the reminder becomes Home's own card instead of the banner. */
     interface HomeCard {

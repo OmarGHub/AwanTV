@@ -66,8 +66,8 @@ final class PrayerDay {
     /**
      * night: the prayer day is the one whose night is still going on. Far north in summer (Reykjavik, Nuuk, Oulu,
      * Fairbanks, Anchorage, Trondheim...) a day's Maghrib or Isha comes after midnight, and at 00:00 the new date's
-     * times dropped it: no adhan, a wrong next prayer (1.23.0). Before today's Fajr, while yesterday's Isha has not
-     * come, the times are yesterday's; from its Isha on, today's. The prayers are moments in one line through
+     * times dropped it: no adhan, a wrong next prayer (1.23.0). Before today's Fajr, when yesterday's Isha came after
+     * midnight, the times are yesterday's (its Isha "now" and called, then today's Fajr next); from Fajr on, today's. The prayers are moments in one line through
      * yesterday, today and tomorrow, as Mawaqit's and adhan's SunnahTimes take the night; adhan-java gives each
      * day's late times on the right instant already. The dates shown, the Hijri day and Friday still follow the clock.
      */
@@ -92,7 +92,16 @@ final class PrayerDay {
             Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params);
             Date yIsha = minute(yesterday[ISHA]);
             if (method == Method.UMM_AL_QURA && ramadanNight(y, hijriOffset)) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
-            if (yIsha.after(now)) {
+            // Yesterday's Isha came after midnight: its night runs to today's Fajr. Up to Isha its Maghrib and Isha
+            // are still to come; from Isha on, that Isha is the one whose adhan, iqamah and "now" are due (1.23.0b:
+            // switching to today's times at that Isha left it out of the day, and its adhan never came).
+            Calendar midnight = (Calendar) base.clone();
+            midnight.set(Calendar.HOUR_OF_DAY, 0);
+            midnight.set(Calendar.MINUTE, 0);
+            midnight.set(Calendar.SECOND, 0);
+            midnight.set(Calendar.MILLISECOND, 0);
+            // An Isha a minute or two before midnight too: its call is due until CALL_WINDOW_MS after it.
+            if (yIsha.getTime() > midnight.getTimeInMillis() - CALL_WINDOW_MS) {
                 today = yesterday;
                 base = y;
             }
@@ -174,7 +183,10 @@ final class PrayerDay {
     static Date lastIsha(Context c, PrayerDay day, Date now) {
         Date isha = day.times[ISHA];
         if (!isha.after(now)) return isha;
-        return ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).times[ISHA];
+        // Far north in summer yesterday's own Isha may still be ahead (after midnight): then the one before it.
+        Date yesterday = ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).times[ISHA];
+        if (!yesterday.after(now)) return yesterday;
+        return ofDate(c, new Date(now.getTime() - 48 * 3600_000L)).times[ISHA];
     }
 
     /**
@@ -191,6 +203,9 @@ final class PrayerDay {
      * gave three prayers in 34 minutes near midsummer. Days that have sunrise and sunset keep the place's own times.
      */
     static final double POLAR_FALLBACK_LATITUDE = 45;
+
+    /** How long after a prayer time its call is still due (Reminders): a day keeps its prayers for that long. */
+    static final long CALL_WINDOW_MS = 120_000;
 
     /**
      * The six times (FAJR..ISHA). Morocco's method by {@link Habous} at its locality's point and horizons (or the

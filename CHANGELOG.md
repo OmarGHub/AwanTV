@@ -9,11 +9,13 @@ history is in its repository.
 ### The app
 - The prayer day follows the night, not the calendar date (test builds from 1.23.0a): where Isha (or, at the height
   of summer, Maghrib) comes after midnight, as in Reykjavik, Nuuk, Anchorage, Fairbanks, Oulu, Luleå and Trondheim in
-  May–July, the hours after midnight still belong to the evening that began it until that Isha has come, so the next
-  prayer, its countdown and the adhan are that late Isha, not the next morning's Fajr. The night's hadiths, the night
-  dimming and the last third use each calendar day's own times. Checked by a simulation of every minute of 2027 in 18
-  cities: the next prayer is right at every minute in the seven cities above, and nothing changes in Makkah, Jeddah,
-  Cairo, London, Oslo, Helsinki, Madrid, Kuala Lumpur, Istanbul or Karachi.
+  May–July, the hours after midnight still belong to the evening that began it until the next Fajr, so the next
+  prayer, its countdown and the adhan are that late Maghrib and Isha, not the next morning's Fajr; from that Isha on
+  it is the prayer now, with its adhan and iqamah (1.23.0b: in 1.23.0a the day turned at that Isha and its adhan never
+  came). The night's hadiths, the night dimming and the last third use each calendar day's own times. Checked by a
+  simulation of every minute of 2027 in 18 cities: the next prayer is right at every minute, and every prayer's time
+  is the day's own when it comes, in the seven cities above, and nothing changes in Makkah, Jeddah, Cairo, London,
+  Oslo, Helsinki, Madrid, Kuala Lumpur, Istanbul or Karachi.
 
 ## [1.22.1]
 
