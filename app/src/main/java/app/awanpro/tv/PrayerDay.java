@@ -39,8 +39,20 @@ final class PrayerDay {
 
     /** With the saved location, method, Asr school, the times' adjustments and the Hijri adjustment (Settings). */
     PrayerDay(Context c, Date now) {
+        this(c, now, true);
+    }
+
+    /**
+     * The calendar day's own times, never the night still going on from the day before ({@link #PrayerDay(Date,
+     * Coordinates, Method, Madhab, int[], int, Habous.Locality, boolean)}): for "yesterday's" Maghrib or Isha.
+     */
+    static PrayerDay ofDate(Context c, Date at) {
+        return new PrayerDay(c, at, false);
+    }
+
+    private PrayerDay(Context c, Date now, boolean night) {
         this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c), Prefs.hijriOffset(c),
-            Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null);
+            Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night);
     }
 
     /**
@@ -48,6 +60,19 @@ final class PrayerDay {
      * horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon).
      */
     PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table) {
+        this(now, where, method, madhab, adjust, hijriOffset, table, true);
+    }
+
+    /**
+     * night: the prayer day is the one whose night is still going on. Far north in summer (Reykjavik, Nuuk, Oulu,
+     * Fairbanks, Anchorage, Trondheim...) a day's Maghrib or Isha comes after midnight, and at 00:00 the new date's
+     * times dropped it: no adhan, a wrong next prayer (1.23.0). Before today's Fajr, while yesterday's Isha has not
+     * come, the times are yesterday's; from its Isha on, today's. The prayers are moments in one line through
+     * yesterday, today and tomorrow, as Mawaqit's and adhan's SunnahTimes take the night; adhan-java gives each
+     * day's late times on the right instant already. The dates shown, the Hijri day and Friday still follow the clock.
+     */
+    private PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset,
+                      Habous.Locality table, boolean night) {
         CalculationParameters params = Prefs.parameters(method);
         params.madhab = madhab;
         // The viewer's minutes on each time (Prefs.adjustments): the adhan, iqamah, reminders and screens all follow.
@@ -57,7 +82,21 @@ final class PrayerDay {
         // before sunrise and Isha no later than a seventh after Maghrib (as meypod/al-azan and Afnon 0.8), not
         // adhan-java's default middle of the night, which put both near 1 a.m.
         if (Math.abs(where.latitude) > 48) params.highLatitudeRule = HighLatitudeRule.SEVENTH_OF_THE_NIGHT;
+        // The prayer day: the clock's date, or yesterday while its night is still going on (night).
+        Calendar base = Calendar.getInstance();
+        base.setTime(now);
         Date[] today = times(method, table, where, DateComponents.from(now), params);
+        if (night && now.before(minute(today[FAJR]))) {
+            Calendar y = (Calendar) base.clone();
+            y.add(Calendar.DAY_OF_MONTH, -1);
+            Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params);
+            Date yIsha = minute(yesterday[ISHA]);
+            if (method == Method.UMM_AL_QURA && ramadanNight(y, hijriOffset)) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
+            if (yIsha.after(now)) {
+                today = yesterday;
+                base = y;
+            }
+        }
         for (int i = 0; i < 6; i++) times[i] = minute(today[i]);
 
         IslamicCalendar h = new IslamicCalendar();
@@ -70,14 +109,10 @@ final class PrayerDay {
         ramadan = hijriMonth == IslamicCalendar.RAMADAN;
         // Tonight belongs to tomorrow's Hijri day (the date shown still turns at midnight): the first night of
         // Ramadan is the evening of Sha'ban's last day, and the night of Eid is not Ramadan.
-        Calendar c = Calendar.getInstance();
-        c.setTime(now);
+        // The day after the prayer day (tomorrow, or today while yesterday's night goes on).
+        Calendar c = (Calendar) base.clone();
         c.add(Calendar.DAY_OF_MONTH, 1);
-        IslamicCalendar tomorrowHijri = new IslamicCalendar();
-        tomorrowHijri.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);
-        tomorrowHijri.setTime(c.getTime());
-        if (hijriOffset != 0) tomorrowHijri.add(IslamicCalendar.DAY_OF_MONTH, hijriOffset);
-        ishaRamadan = tomorrowHijri.get(IslamicCalendar.MONTH) == IslamicCalendar.RAMADAN;
+        ishaRamadan = ramadanNight(base, hijriOffset);
         // Umm al-Qura's Isha is 90 minutes after Maghrib, and 120 on Ramadan's nights (the Ministry of Islamic
         // Affairs, after Umm al-Qura). adhan-java leaves the Ramadan half hour to the caller
         // (CalculationMethod.UMM_AL_QURA: "add a +30 minute custom adjustment").
@@ -112,10 +147,21 @@ final class PrayerDay {
      * {the middle of the night, the start of its last third}, the night being Maghrib to Fajr: tonight's,
      * or before dawn the one still going (yesterday's Maghrib to today's Fajr), as adhan-java's SunnahTimes counts it.
      */
+    /** The night after day is one of Ramadan (the next day's Hijri date is in Ramadan). */
+    private static boolean ramadanNight(Calendar day, int hijriOffset) {
+        Calendar next = (Calendar) day.clone();
+        next.add(Calendar.DAY_OF_MONTH, 1);
+        IslamicCalendar h = new IslamicCalendar();
+        h.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);
+        h.setTime(next.getTime());
+        if (hijriOffset != 0) h.add(IslamicCalendar.DAY_OF_MONTH, hijriOffset);
+        return h.get(IslamicCalendar.MONTH) == IslamicCalendar.RAMADAN;
+    }
+
     static Date[] night(Context c, PrayerDay day, Date now) {
         Date fajr = day.suhoorEnd;   // the coming Fajr: today's before dawn, otherwise tomorrow's
         boolean beforeDawn = now.before(day.times[FAJR]) && !now.after(fajr) && day.times[ISHA].after(now);
-        Date maghrib = beforeDawn ? new PrayerDay(c, new Date(now.getTime() - 24 * 3600_000L)).times[MAGHRIB] : day.times[MAGHRIB];
+        Date maghrib = beforeDawn ? ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).times[MAGHRIB] : day.times[MAGHRIB];
         long span = fajr.getTime() - maghrib.getTime();
         return new Date[] {minute(new Date(maghrib.getTime() + span / 2 + 30_000)),
                            minute(new Date(maghrib.getTime() + span * 2 / 3 + 30_000))};
@@ -128,7 +174,7 @@ final class PrayerDay {
     static Date lastIsha(Context c, PrayerDay day, Date now) {
         Date isha = day.times[ISHA];
         if (!isha.after(now)) return isha;
-        return new PrayerDay(c, new Date(now.getTime() - 24 * 3600_000L)).times[ISHA];
+        return ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).times[ISHA];
     }
 
     /**

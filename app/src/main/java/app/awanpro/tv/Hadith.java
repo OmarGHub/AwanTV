@@ -108,7 +108,7 @@ final class Hadith {
         }
         // After midnight, the night's Isha is yesterday's: a late one (or its iqamah) runs into the new day.
         if (day.times[PrayerDay.ISHA].after(now)) {
-            PrayerDay yesterday = new PrayerDay(c, new java.util.Date(t - 24 * 3600_000L));
+            PrayerDay yesterday = PrayerDay.ofDate(c, new java.util.Date(t - 24 * 3600_000L));
             long start = afterPrayerStart(c, yesterday, PrayerDay.ISHA);
             if (start >= 0 && t >= start && t < start + AFTER_PRAYER_MS) return start;
         }
