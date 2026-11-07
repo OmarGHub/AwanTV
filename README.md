@@ -43,7 +43,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. **الأذان فوق أي تطبيق**، والتذكير قبل الصلاة، وعدّاد الإقامة.
 4. **أي موقع في العالم**، والمواقيت تُحسب على التلفاز دون إنترنت.
 5. **إذاعة القرآن الكريم**، والتلاوات المحفوظة للاستماع دون إنترنت.
-6. **خمس لغات**: العربية والإنجليزية والأردية والتركية والفرنسية، وست سمات للألوان.
+6. **ست لغات**: العربية والإنجليزية والأردية والتركية والفرنسية والملايوية، وست سمات للألوان.
 
 ## اللغات
 
@@ -182,6 +182,34 @@ Horaires de prière, adhan et économiseur d'écran pour Android TV et Google TV
 <td align="center">Aujourd'hui et qibla</td>
 <td align="center">Paramètres</td>
 <td align="center">L'économiseur d'écran</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Bahasa Melayu
+
+Waktu solat, azan dan penyelamat skrin untuk Android TV dan Google TV, dalam bahasa Melayu
+
+<p align="center"><img src="docs/images/lang/home-ms.webp" alt="Skrin Utama dalam bahasa Melayu" width="80%"></p>
+
+<details>
+<summary>Lagi: Hari ini &amp; Kiblat, Tetapan, penyelamat skrin</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ms.webp" alt="Hari ini & Kiblat"></td>
+<td><img src="docs/images/lang/settings-ms.webp" alt="Tetapan"></td>
+<td><img src="docs/images/lang/saver-ms.webp" alt="Penyelamat skrin"></td>
+</tr>
+<tr>
+<td align="center">Hari ini &amp; Kiblat</td>
+<td align="center">Tetapan</td>
+<td align="center">Penyelamat skrin</td>
 </tr>
 </table>
 
@@ -456,7 +484,7 @@ That is what **Awan TV** brings you, and more.
 3. **The adhan over any app**, reminders before the prayer, and the iqamah countdown.
 4. **Any location in the world**; the times are worked out on the TV, offline.
 5. **Quran radio**, and saved recitations to listen to offline.
-6. **Five languages**: Arabic, English, Urdu, Turkish and French, and six colour themes.
+6. **Six languages**: Arabic, English, Urdu, Turkish, French and Malay, and six colour themes.
 
 ## Languages
 
@@ -595,6 +623,34 @@ Horaires de prière, adhan et économiseur d'écran pour Android TV et Google TV
 <td align="center">Aujourd'hui et qibla</td>
 <td align="center">Paramètres</td>
 <td align="center">L'économiseur d'écran</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="ltr">
+
+### Bahasa Melayu
+
+Waktu solat, azan dan penyelamat skrin untuk Android TV dan Google TV, dalam bahasa Melayu
+
+<p align="center"><img src="docs/images/lang/home-ms.webp" alt="Skrin Utama dalam bahasa Melayu" width="80%"></p>
+
+<details>
+<summary>Lagi: Hari ini &amp; Kiblat, Tetapan, penyelamat skrin</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-ms.webp" alt="Hari ini & Kiblat"></td>
+<td><img src="docs/images/lang/settings-ms.webp" alt="Tetapan"></td>
+<td><img src="docs/images/lang/saver-ms.webp" alt="Penyelamat skrin"></td>
+</tr>
+<tr>
+<td align="center">Hari ini &amp; Kiblat</td>
+<td align="center">Tetapan</td>
+<td align="center">Penyelamat skrin</td>
 </tr>
 </table>
 
