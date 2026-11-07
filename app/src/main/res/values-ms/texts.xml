@@ -435,7 +435,7 @@
     <string name="qrHint" formatted="false">"Imbas dengan kamera telefon anda"</string>
     <string name="queuedOnly" formatted="false">"%1$s menunggu selepas rakaman lain"</string>
     <string name="radio" formatted="false">"Radio"</string>
-    <string name="radioDarkHelp" formatted="false">"Skrin gelap, radio hidup · tekan butang"</string>
+    <string name="radioDarkHelp" formatted="false">"Skrin gelap, radio hidup"</string>
     <string name="radioDarkRow" formatted="false">"Skrin mati semasa mendengar"</string>
     <string name="radioNote" formatted="false">"Terus dimainkan pada Skrin Utama dan penyelamat skrin · berhenti apabila apl lain memainkan bunyi"</string>
     <string name="radioPlay" formatted="false">"Main"</string>

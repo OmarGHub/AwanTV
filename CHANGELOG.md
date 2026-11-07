@@ -15,6 +15,7 @@ history is in its repository.
   "Riwayat …"). Checked by Gemini before the build, each item against the code.
   1.21.0b: three settings hints shorter, as 1.21.0a's crop check found (Runs, Screen off while listening with
   narrower choices, Imsak in Ramadan: "imsak: ihtiyat pilihan", JAKIM's own word for the margin).
+  1.21.0c: Screen off while listening's hint is "Skrin gelap, radio hidup" (fits without growing smaller).
 
 ### Tools
 - AwanTV-texts-sheet 1.1.1: Malay's column named.
