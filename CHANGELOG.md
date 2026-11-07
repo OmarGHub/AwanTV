@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.23.0]
+
 ### The app
 - The prayer day follows the night, not the calendar date (test builds from 1.23.0a): where Isha (or, at the height
   of summer, Maghrib) comes after midnight, as in Reykjavik, Nuuk, Anchorage, Fairbanks, Oulu, Luleå and Trondheim in
