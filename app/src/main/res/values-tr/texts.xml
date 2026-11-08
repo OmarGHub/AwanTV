@@ -90,6 +90,34 @@
     <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
     <string name="bytes" formatted="false">"%1$s MB"</string>
     <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"Bugün %1$s · her basışta yarım derece"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"Yarın %1$s · her basışta yarım derece"</string>
+    <string name="calcBaseHelp" formatted="false">"Aşağıdaki açıları doldurur; sonra istediğinizi değiştirin"</string>
+    <string name="calcBaseRow" formatted="false">"Başlangıç yöntemi"</string>
+    <string name="calcFajrRow" formatted="false">"Sabah açısı"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"Yalnızca 48° üstünde · konumunuzda etkisi yok"</string>
+    <string name="calcHighMsc" formatted="false">"Ay Gözlem Komitesi yöntemi kendi kuralını uygular"</string>
+    <string name="calcHighRow" formatted="false">"Yüksek enlemler"</string>
+    <string name="calcIshaAngleRow" formatted="false">"Yatsı açısı"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"Akşamdan sonra yatsı"</string>
+    <string name="calcIshaRow" formatted="false">"Yatsı"</string>
+    <string name="calcIshaRowHelp" formatted="false">"Güneşin açısıyla veya akşamdan sonra sabit süreyle"</string>
+    <string name="calcItem" formatted="false">"Özel hesaplama…"</string>
+    <string name="calcKeepHelp" formatted="false">"Dakika ayarlarını da · kapalıyken yeni konum ülkesinin yöntemini alır"</string>
+    <string name="calcKeepRow" formatted="false">"Yeni konum bu hesabı değiştirmez"</string>
+    <string name="calcKept" formatted="false">"yeni konumda korunur"</string>
+    <string name="calcMinutesHelp" formatted="false">"Bugün %1$s · her basışta 5 dakika"</string>
+    <string name="calcName" formatted="false">"Özel hesaplama"</string>
+    <string name="calcOffNote" formatted="false">"Açıldığında “%1$s” yöntemiyle başlar; sonra caminizin vakit cetveline uyacak şekilde değiştirin."</string>
+    <string name="calcRamadan" formatted="false">" · Ramazan'da 30 dakika fazla"</string>
+    <string name="calcReset" formatted="false">"Yeni konum: ülkesinin yöntemi, dakika ayarları sıfırlandı"</string>
+    <string name="calcRow" formatted="false">"Özel hesaplama"</string>
+    <string name="calcRowHelp" formatted="false">"Sabah ve yatsı açıları ile 48° üstü kuralı sizin seçiminiz"</string>
+    <string name="calcSection" formatted="false">"Namaz vakitleri › Özel hesaplama"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"Bugün bu ayarlarla: %1$s. Ezan, kamet, hatırlatıcılar ve ekran koruyucu bunlara uyar."</string>
     <string name="calendarSource" formatted="false">"Ümmü'l-Kurâ"</string>
     <string name="callCloseHelp" formatted="false">"Sonra izlediğiniz şeye dönülür"</string>
     <string name="callCloseRow" formatted="false">"Ezan ekranını kapat"</string>
@@ -603,6 +631,22 @@
     <string-array name="backgrounds">
         <item>"Desen"</item>
         <item>"Fotoğraflar"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"Akşamdan sonra ve güneş doğuşundan önce gecenin yedide biri · uygulamanın şimdiye kadarki kuralı"</item>
+        <item>"Akşamdan sonra ve güneş doğuşundan önce en fazla gecenin yarısı · adhan kütüphanelerinin varsayılanı"</item>
+        <item>"Açı, gecenin payı olarak (18° = 18/60) · AlAdhan varsayılanı, PrayTimes önerisi"</item>
+        <item>"45°'deki gece oranları · İslam Fıkıh Akademisi, 1406 H"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"Gecenin yedide biri"</item>
+        <item>"Gece yarısı"</item>
+        <item>"Alacakaranlık açısı"</item>
+        <item>"45°'deki gece oranı"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"Açıyla"</item>
+        <item>"Akşamdan sonra"</item>
     </string-array>
     <string-array name="callCloseChoices">
         <item>"Ezandan sonra"</item>

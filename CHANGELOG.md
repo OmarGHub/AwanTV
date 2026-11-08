@@ -6,6 +6,21 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Custom calculation (test builds from 1.24.0a): Settings > Prayer times > Calculation method has a last choice,
+  Custom calculation…, for a mosque whose timetable no listed method matches (Muslim Pro's Fixed calculation, Pillars'
+  Custom angles, PrayWatch's Custom). Its page: on or off; the method it starts from (all but Morocco's, whose ministry
+  tables have no angles), which fills the fields; Fajr's angle and Isha's angle, or Isha a set time after Maghrib, in
+  half degrees (10° to 20°) and 5 minutes (60 to 150); the rule above 48° (the seventh of the night, as until now; the
+  middle of the night; the twilight angle; or the share of the night at 45°, the Islamic Fiqh Council's resolution of
+  1406 AH, used where the twilight never ends or Isha would come after the first third of the night); and "A new
+  location keeps this". Each angle shows the time it gives today, and the note under the page today's six times. A
+  method picked from the list turns it off. The Asr school stays its own row, as it was. Starting from Umm al-Qura with
+  Isha after Maghrib keeps Ramadan's half hour. In the settings file and the editor (calc_* keys).
+- A new location now clears the times' minutes (Adjust the times and the date) and the custom calculation, so the new
+  place starts from its country's method, unless the custom calculation's "A new location keeps this" is on; the
+  method's row says so until Settings is left (Omar's choice).
+
 ## [1.23.0]
 
 ### The app

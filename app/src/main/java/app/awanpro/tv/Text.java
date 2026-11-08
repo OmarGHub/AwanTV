@@ -662,6 +662,77 @@ final class Text {
         return s(R.string.adjustNote);
     }
     String adjustFileLabel(String prayer) { return s(R.string.adjustFileLabel, prayer); }
+
+    // Prayer times > Calculation method > Custom calculation (1.24.0, Prefs.Calc)
+    String calcItem() { return s(R.string.calcItem); }
+    String calcName() { return s(R.string.calcName); }
+    String calcSection() { return s(R.string.calcSection); }
+    String calcRow() { return s(R.string.calcRow); }
+    String calcRowHelp() { return s(R.string.calcRowHelp); }
+    /** Off: what turning it on starts from. */
+    String calcOffNote(String method) { return d(s(R.string.calcOffNote, method)); }
+    String calcBaseRow() { return s(R.string.calcBaseRow); }
+    String calcBaseHelp() { return s(R.string.calcBaseHelp); }
+    String calcFajrRow() { return s(R.string.calcFajrRow); }
+    /** Under an angle: the time it gives today (Fajr is tomorrow's after Isha), and the step. */
+    String calcAngleHelp(String time, boolean tomorrow) {
+        return d(s(tomorrow ? R.string.calcAngleHelpTomorrow : R.string.calcAngleHelp, time));
+    }
+    String calcIshaRow() { return s(R.string.calcIshaRow); }
+    String calcIshaRowHelp() { return s(R.string.calcIshaRowHelp); }
+    String[] calcIshaModes() { return a(R.array.calcIshaModes); }
+    String calcIshaAngleRow() { return s(R.string.calcIshaAngleRow); }
+    String calcIshaMinutesRow() { return s(R.string.calcIshaMinutesRow); }
+    /** Under Isha's minutes: today's Isha and the step; Umm al-Qura's Ramadan half hour when it starts from it. */
+    String calcMinutesHelp(String time, boolean ummAlQura) {
+        return d(s(R.string.calcMinutesHelp, time) + (ummAlQura ? s(R.string.calcRamadan) : ""));
+    }
+    /** A stepper's minutes: "90 min". */
+    String calcMinutes(int n) {
+        // Arabic: 105 and 110 count as 5 and 10 do ("١٠٥ دقائق"); 60 to 100 and the rest take دقيقة.
+        if (ar) return d(n + (n % 100 >= 3 && n % 100 <= 10 ? " دقائق" : " دقيقة"));
+        return d(s(R.string.minutesAfterOther, n));
+    }
+    /** An angle in tenths of a degree: "18°", "18.5°" (the language's decimal sign; the Arabic one with Eastern digits). */
+    String degrees(int tenths) {
+        String v = tenths % 10 == 0 ? String.valueOf(tenths / 10) : (tenths / 10) + "." + (tenths % 10);
+        if (arabicScript()) v = decimal(v);
+        else v = v.replace('.', new java.text.DecimalFormatSymbols(java.util.Locale.forLanguageTag(lang)).getDecimalSeparator());
+        return d(v + "°");
+    }
+    String calcHighRow() { return s(R.string.calcHighRow); }
+    String[] calcHighNames() {
+        String[] names = a(R.array.calcHighNames);
+        for (int i = 0; i < names.length; i++) names[i] = d(names[i]);
+        return names;
+    }
+    /** Each rule's one line: what it does and whose it is (HighLatitude). */
+    String[] calcHighAbout() {
+        String[] about = a(R.array.calcHighAbout);
+        for (int i = 0; i < about.length; i++) about[i] = d(about[i]);
+        return about;
+    }
+    String calcHighHere() { return d(s(R.string.calcHighHere)); }
+    String calcHighMsc() { return s(R.string.calcHighMsc); }
+    String calcKeepRow() { return s(R.string.calcKeepRow); }
+    String calcKeepHelp() { return s(R.string.calcKeepHelp); }
+    /** The method row while it is on: its angles (as a method's), and "kept" when a new location leaves it. */
+    String calcSummary(Prefs.Calc k) {
+        String fajr = s(R.string.methodAngles) + degrees(k.fajrTenths);
+        String isha = k.ishaAfterMaghrib ? s(R.string.methodAngles_2, k.ishaMinutes) : s(R.string.methodAngles_3) + degrees(k.ishaTenths);
+        return d(fajr + " · " + isha + (k.keep ? " · " + s(R.string.calcKept) : ""));
+    }
+    /** The method row once a new location took the custom calculation or the minutes away. */
+    String calcReset() { return s(R.string.calcReset); }
+    /** The page's note: today's six times with these settings. */
+    String calcTimesNote(java.util.List<String> times) {
+        StringBuilder b = new StringBuilder();
+        for (String time : times) b.append(b.length() == 0 ? "" : " · ").append(time);
+        return d(s(R.string.calcTimesNote, b.toString()));
+    }
+    String calcFileHelp() { return s(R.string.calcFileHelp); }
+    String calcTenthsHelp() { return s(R.string.calcTenthsHelp); }
+    String calcFromMethod() { return s(R.string.calcFromMethod); }
     String adjustFileHelp() { return s(R.string.adjustFileHelp); }
     String hijriToday(String date) { return (s(R.string.hijriToday)) + date; }
     String days(int n) {

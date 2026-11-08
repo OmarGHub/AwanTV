@@ -363,7 +363,9 @@ final class Prefs {
         Method known = Places.method(cc);
         Method m = known != null ? known : method(c);
         Madhab h = known != null ? Places.madhab(cc) : madhab(c);
-        of(c).edit().putString("city", CUSTOM).putString("custom_name", name).putString("custom_cc", cc == null ? "" : cc)
+        SharedPreferences.Editor e = of(c).edit();
+        placeReset = leavePlace(c, e);
+        e.putString("city", CUSTOM).putString("custom_name", name).putString("custom_cc", cc == null ? "" : cc)
             .putLong("custom_lat", Double.doubleToLongBits(lat)).putLong("custom_lng", Double.doubleToLongBits(lng))
             .putString("method", methodId(m)).putString("madhab", h == Madhab.HANAFI ? "hanafi" : "shafi")
             .remove(Habous.PREF).apply();   // a new place: Morocco's table found again for it
@@ -375,7 +377,9 @@ final class Prefs {
     /** A new city also takes that city's usual method and Asr school; their rows can still override them after. */
     static void setCity(Context c, int index) {
         City city = CITIES[index];
-        of(c).edit().putString("city", city.id).putString("method", methodId(city.method))
+        SharedPreferences.Editor e = of(c).edit();
+        placeReset = leavePlace(c, e);
+        e.putString("city", city.id).putString("method", methodId(city.method))
             .putString("madhab", city.madhab == Madhab.HANAFI ? "hanafi" : "shafi").remove(Habous.PREF).apply();
     }
 
@@ -432,9 +436,179 @@ final class Prefs {
         return city(c).method;
     }
 
+    /** A method from the list picked again: the custom calculation, if on, gives way to it. */
     static void setMethod(Context c, Method m) {
-        of(c).edit().putString("method", methodId(m)).apply();
+        of(c).edit().putString("method", methodId(m)).putBoolean("calc_custom", false).apply();
     }
+
+    // ---------------------------------------------------------------- custom calculation (1.24.0)
+
+    /**
+     * The high-latitude rules of the custom calculation (above 48°): the seventh of the night (Awan TV's since 1.0 and
+     * still the only one without the custom calculation), the middle of the night (adhan-java's and adhan-js's
+     * default), the twilight angle (AlAdhan's default, PrayTimes' advice): adhan-java's own three; and the share of
+     * the night at 45° ({@link HighLatitude}: the Islamic Fiqh Council, 1406 AH).
+     */
+    static final String HIGH_SEVENTH = "seventh", HIGH_MIDDLE = "middle", HIGH_ANGLE = "angle", HIGH_PROPORTION = "proportion";
+    static final String[] HIGH_RULES = {HIGH_SEVENTH, HIGH_MIDDLE, HIGH_ANGLE, HIGH_PROPORTION};
+
+    /** adhan-java's rule for a saved one (the share at 45° starts from the seventh, then HighLatitude). */
+    static com.batoulapps.adhan.HighLatitudeRule adhanRule(String high) {
+        if (HIGH_MIDDLE.equals(high)) return com.batoulapps.adhan.HighLatitudeRule.MIDDLE_OF_THE_NIGHT;
+        if (HIGH_ANGLE.equals(high)) return com.batoulapps.adhan.HighLatitudeRule.TWILIGHT_ANGLE;
+        return com.batoulapps.adhan.HighLatitudeRule.SEVENTH_OF_THE_NIGHT;
+    }
+
+    /** The custom angles' range in tenths of a degree, and Isha's minutes after Maghrib. */
+    static final int CALC_ANGLE_MIN = 100, CALC_ANGLE_MAX = 200, CALC_MINUTES_MIN = 60, CALC_MINUTES_MAX = 150;
+    /** The keys of the custom calculation (a new place without "keep" takes them away). */
+    static final String[] CALC_KEYS = {"calc_custom", "calc_base", "calc_fajr", "calc_isha_mode", "calc_isha_angle",
+        "calc_isha_min", "calc_high", "calc_keep"};
+
+    /**
+     * Settings > Prayer times > Calculation method > Custom calculation (Muslim Pro's Fixed calculation, Pillars'
+     * Custom angles): a method to start from, Fajr's angle, Isha by an angle or minutes after Maghrib, the rule above
+     * 48°, and whether a new location leaves it (and the times' minutes) as they are.
+     */
+    static final class Calc {
+        final Method base;
+        final int fajrTenths, ishaTenths, ishaMinutes;
+        final boolean ishaAfterMaghrib, keep;
+        final String high;
+
+        Calc(Method base, int fajrTenths, boolean ishaAfterMaghrib, int ishaTenths, int ishaMinutes, String high, boolean keep) {
+            this.base = base;
+            this.fajrTenths = fajrTenths;
+            this.ishaAfterMaghrib = ishaAfterMaghrib;
+            this.ishaTenths = ishaTenths;
+            this.ishaMinutes = ishaMinutes;
+            this.high = high;
+            this.keep = keep;
+        }
+
+        /** The base method's parameters (its own minutes and season rules) with these angles. */
+        com.batoulapps.adhan.CalculationParameters parameters() {
+            com.batoulapps.adhan.CalculationParameters p = base.parameters();
+            p.fajrAngle = fajrTenths / 10.0;
+            p.ishaAngle = ishaTenths / 10.0;
+            p.ishaInterval = ishaAfterMaghrib ? ishaMinutes : 0;
+            return p;
+        }
+    }
+
+    /** The methods a custom calculation can start from: all but Morocco's, whose ministry tables have no angles to set. */
+    static Method[] calcBases() {
+        java.util.List<Method> out = new java.util.ArrayList<>();
+        for (Method m : METHODS) if (m != Method.MOROCCO_HABOUS) out.add(m);
+        return out.toArray(new Method[0]);
+    }
+
+    static boolean calcOn(Context c) {
+        return of(c).getBoolean("calc_custom", false);
+    }
+
+    /** The custom calculation while it is on; null while the method's own times are used. */
+    static Calc calc(Context c) {
+        return calcOn(c) ? calcSaved(c) : null;
+    }
+
+    /** What the custom page shows: the saved values, or those of the method in use where none is saved yet. */
+    static Calc calcSaved(Context c) {
+        SharedPreferences p = of(c);
+        Method base = null;
+        String id = p.getString("calc_base", null);
+        for (Method m : calcBases()) if (methodId(m).equals(id)) base = m;
+        if (base == null) base = method(c) == Method.MOROCCO_HABOUS ? MWL : method(c);
+        com.batoulapps.adhan.CalculationParameters m = base.parameters();
+        int fajr = clampAngle(p.getInt("calc_fajr", tenths(m.fajrAngle)));
+        boolean after = "minutes".equals(p.getString("calc_isha_mode", m.ishaInterval > 0 ? "minutes" : "angle"));
+        int isha = clampAngle(p.getInt("calc_isha_angle", tenths(m.ishaInterval > 0 ? 17 : m.ishaAngle)));
+        int minutes = Math.max(CALC_MINUTES_MIN, Math.min(CALC_MINUTES_MAX,
+            p.getInt("calc_isha_min", m.ishaInterval > 0 ? m.ishaInterval : 90)));
+        String high = p.getString("calc_high", HIGH_SEVENTH);
+        if (!java.util.Arrays.asList(HIGH_RULES).contains(high)) high = HIGH_SEVENTH;
+        return new Calc(base, fajr, after, isha, minutes, high, p.getBoolean("calc_keep", false));
+    }
+
+    private static int tenths(double degrees) {
+        return (int) Math.round(degrees * 10);
+    }
+
+    private static int clampAngle(int tenths) {
+        return Math.max(CALC_ANGLE_MIN, Math.min(CALC_ANGLE_MAX, tenths));
+    }
+
+    /** On: from what the page showed (saved, or the method in use), written down so it no longer follows the method. */
+    static void setCalcOn(Context c, boolean on) {
+        if (on) saveCalc(c, calcSaved(c), true);
+        else of(c).edit().putBoolean("calc_custom", false).apply();
+    }
+
+    private static void saveCalc(Context c, Calc k, boolean on) {
+        of(c).edit().putBoolean("calc_custom", on).putString("calc_base", methodId(k.base))
+            .putInt("calc_fajr", k.fajrTenths).putString("calc_isha_mode", k.ishaAfterMaghrib ? "minutes" : "angle")
+            .putInt("calc_isha_angle", k.ishaTenths).putInt("calc_isha_min", k.ishaMinutes)
+            .putString("calc_high", k.high).putBoolean("calc_keep", k.keep).apply();
+    }
+
+    /** Start again from a method: its angles (or minutes) in the fields, the rule and "keep" as they were. */
+    static void setCalcBase(Context c, Method m) {
+        Calc k = calcSaved(c);
+        com.batoulapps.adhan.CalculationParameters p = m.parameters();
+        boolean after = p.ishaInterval > 0;
+        saveCalc(c, new Calc(m, clampAngle(tenths(p.fajrAngle)), after, after ? k.ishaTenths : clampAngle(tenths(p.ishaAngle)),
+            after ? p.ishaInterval : k.ishaMinutes, k.high, k.keep), calcOn(c));
+    }
+
+    static void setCalcFajr(Context c, int tenths) {
+        of(c).edit().putInt("calc_fajr", clampAngle(tenths)).apply();
+    }
+
+    static void setCalcIshaAfterMaghrib(Context c, boolean after) {
+        of(c).edit().putString("calc_isha_mode", after ? "minutes" : "angle").apply();
+    }
+
+    static void setCalcIshaAngle(Context c, int tenths) {
+        of(c).edit().putInt("calc_isha_angle", clampAngle(tenths)).apply();
+    }
+
+    static void setCalcIshaMinutes(Context c, int minutes) {
+        of(c).edit().putInt("calc_isha_min", Math.max(CALC_MINUTES_MIN, Math.min(CALC_MINUTES_MAX, minutes))).apply();
+    }
+
+    static void setCalcHigh(Context c, String rule) {
+        of(c).edit().putString("calc_high", rule).apply();
+    }
+
+    static void setCalcKeep(Context c, boolean keep) {
+        of(c).edit().putBoolean("calc_keep", keep).apply();
+    }
+
+    /**
+     * A new location (Omar, 1.24.0): the custom calculation and the times' minutes go with the old one, so the new
+     * place starts from its country's method, unless the custom page's "keep" is ticked. True when anything went.
+     */
+    private static boolean leavePlace(Context c, SharedPreferences.Editor e) {
+        SharedPreferences p = of(c);
+        if (calcOn(c) && p.getBoolean("calc_keep", false)) return false;
+        boolean any = calcOn(c);
+        for (int i = 0; i < 6; i++) {
+            if (p.getInt("adjust_" + i, 0) != 0) any = true;
+            e.remove("adjust_" + i);
+        }
+        for (String k : CALC_KEYS) e.remove(k);
+        return any;
+    }
+
+    /** The custom calculation's part of {@link #key}: "" while off. */
+    private static String calcKey(Context c) {
+        Calc k = calc(c);
+        return k == null ? "" : k.base + "," + k.fajrTenths + "," + k.ishaAfterMaghrib + "," + k.ishaTenths + ","
+            + k.ishaMinutes + "," + k.high;
+    }
+
+    /** The last change of location took the custom calculation or the minutes away (Settings says so, once). */
+    static volatile boolean placeReset;
 
     static Madhab madhab(Context c) {
         String m = of(c).getString("madhab", null);
@@ -797,6 +971,7 @@ final class Prefs {
         return p.getString("locale", "") + "|" + p.getString("digits", "") + "|" + clock24(c) + "|" + city(c).id + "|" + city(c).lat + "," + city(c).lng
             + "|" + city(c).ar
             + "|" + method(c) + "|" + p.getInt(Habous.PREF, 0) + "|" + madhab(c) + "|" + hijriOffset(c) + "|" + java.util.Arrays.toString(adjustments(c))
+            + "|" + calcKey(c)
             + "|" + p.getInt("facing", -1) + "|" + theme(c)
             + "|" + background(c) + "|" + photoEvery(c)
             // Set or still guessed: Home's reminder comes and goes with it (the guessed city may be the one chosen).

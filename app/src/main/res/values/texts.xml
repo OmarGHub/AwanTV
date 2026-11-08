@@ -90,6 +90,34 @@
     <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
     <string name="bytes" formatted="false">"%1$s MB"</string>
     <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"Today %1$s · half a degree a press"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"Tomorrow %1$s · half a degree a press"</string>
+    <string name="calcBaseHelp" formatted="false">"Fills in the angles below; then change what you need"</string>
+    <string name="calcBaseRow" formatted="false">"Start from"</string>
+    <string name="calcFajrRow" formatted="false">"Fajr angle"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"Only above 48° · none where you are"</string>
+    <string name="calcHighMsc" formatted="false">"The Moonsighting Committee's method keeps its own rule"</string>
+    <string name="calcHighRow" formatted="false">"High latitudes"</string>
+    <string name="calcIshaAngleRow" formatted="false">"Isha angle"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"Isha after Maghrib"</string>
+    <string name="calcIshaRow" formatted="false">"Isha"</string>
+    <string name="calcIshaRowHelp" formatted="false">"By the sun's angle, or a set time after Maghrib"</string>
+    <string name="calcItem" formatted="false">"Custom calculation…"</string>
+    <string name="calcKeepHelp" formatted="false">"And the minute adjustments · off: a new location takes its country's method"</string>
+    <string name="calcKeepRow" formatted="false">"A new location keeps this"</string>
+    <string name="calcKept" formatted="false">"kept with a new location"</string>
+    <string name="calcMinutesHelp" formatted="false">"Today %1$s · 5 minutes a press"</string>
+    <string name="calcName" formatted="false">"Custom calculation"</string>
+    <string name="calcOffNote" formatted="false">"On, it starts from “%1$s”; then change what you need to match your mosque's timetable."</string>
+    <string name="calcRamadan" formatted="false">" · 30 more in Ramadan"</string>
+    <string name="calcReset" formatted="false">"New location: its country's method, and the minute adjustments cleared"</string>
+    <string name="calcRow" formatted="false">"Custom calculation"</string>
+    <string name="calcRowHelp" formatted="false">"Your own Fajr and Isha angles and rule above 48°"</string>
+    <string name="calcSection" formatted="false">"Prayer times › Custom calculation"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"Today with these settings: %1$s. The adhan, the iqamah, the reminders and the screensaver all follow them."</string>
     <string name="calendarSource" formatted="false">"Umm al-Qura"</string>
     <string name="callCloseHelp" formatted="false">"Then back to what you were watching"</string>
     <string name="callCloseRow" formatted="false">"Close the call screen"</string>
@@ -603,6 +631,22 @@
     <string-array name="backgrounds">
         <item>"Pattern"</item>
         <item>"Photos"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"A seventh of the night after Maghrib and before sunrise · the app's rule so far"</item>
+        <item>"Half the night after Maghrib and before sunrise at most · the adhan libraries' default"</item>
+        <item>"The angle as a share of the night (18° = 18/60) · AlAdhan's default, PrayTimes' advice"</item>
+        <item>"Their share of the night at 45° · Islamic Fiqh Council, 1406 AH"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"Seventh of the night"</item>
+        <item>"Middle of the night"</item>
+        <item>"Twilight angle"</item>
+        <item>"Night's share at 45°"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"By angle"</item>
+        <item>"After Maghrib"</item>
     </string-array>
     <string-array name="callCloseChoices">
         <item>"After adhan"</item>

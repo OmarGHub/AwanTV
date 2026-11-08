@@ -90,6 +90,34 @@
     <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
     <string name="bytes" formatted="false">"%1$s MB"</string>
     <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"Hoy %1$s · medio grado por pulsación"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"Mañana %1$s · medio grado por pulsación"</string>
+    <string name="calcBaseHelp" formatted="false">"Rellena los ángulos de abajo; luego cambia lo que necesites"</string>
+    <string name="calcBaseRow" formatted="false">"Método de partida"</string>
+    <string name="calcFajrRow" formatted="false">"Ángulo de Fajr"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"Solo por encima de 48° · sin efecto donde estás"</string>
+    <string name="calcHighMsc" formatted="false">"El método del Moonsighting Committee mantiene su propia regla"</string>
+    <string name="calcHighRow" formatted="false">"Latitudes altas"</string>
+    <string name="calcIshaAngleRow" formatted="false">"Ángulo de Isha"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"Isha tras el Maghrib"</string>
+    <string name="calcIshaRow" formatted="false">"Isha"</string>
+    <string name="calcIshaRowHelp" formatted="false">"Por el ángulo del sol, o un tiempo fijo tras el Maghrib"</string>
+    <string name="calcItem" formatted="false">"Cálculo personalizado…"</string>
+    <string name="calcKeepHelp" formatted="false">"Y el ajuste de minutos · desactivado, una nueva ubicación toma el método de su país"</string>
+    <string name="calcKeepRow" formatted="false">"Una nueva ubicación lo mantiene"</string>
+    <string name="calcKept" formatted="false">"se mantiene con una nueva ubicación"</string>
+    <string name="calcMinutesHelp" formatted="false">"Hoy %1$s · 5 minutos por pulsación"</string>
+    <string name="calcName" formatted="false">"Cálculo personalizado"</string>
+    <string name="calcOffNote" formatted="false">"Al activarlo, parte de «%1$s»; luego cambia lo que necesites para seguir el horario de tu mezquita."</string>
+    <string name="calcRamadan" formatted="false">" · 30 más en Ramadán"</string>
+    <string name="calcReset" formatted="false">"Nueva ubicación: el método de su país, y el ajuste de minutos a cero"</string>
+    <string name="calcRow" formatted="false">"Cálculo personalizado"</string>
+    <string name="calcRowHelp" formatted="false">"Tus propios ángulos de Fajr e Isha y la regla por encima de 48°"</string>
+    <string name="calcSection" formatted="false">"Horarios de oración › Cálculo personalizado"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"Hoy con estos ajustes: %1$s. El adhan, la iqama, los avisos y el salvapantallas los siguen."</string>
     <string name="calendarSource" formatted="false">"Umm al-Qura"</string>
     <string name="callCloseHelp" formatted="false">"Y vuelve a lo que estabas viendo"</string>
     <string name="callCloseRow" formatted="false">"Cerrar la pantalla del adhan"</string>
@@ -603,6 +631,22 @@
     <string-array name="backgrounds">
         <item>"Motivo"</item>
         <item>"Fotos"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"Un séptimo de la noche tras el Maghrib y antes del Shuruq · la regla de la app hasta ahora"</item>
+        <item>"Como mucho la mitad de la noche tras el Maghrib y antes del Shuruq · por defecto en adhan"</item>
+        <item>"El ángulo como parte de la noche (18° = 18/60) · AlAdhan por defecto, recomendado por PrayTimes"</item>
+        <item>"Su proporción de la noche a 45° · Academia Islámica de Fiqh, 1406 H"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"Séptimo de la noche"</item>
+        <item>"Mitad de la noche"</item>
+        <item>"Ángulo del crepúsculo"</item>
+        <item>"Proporción de la noche a 45°"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"Por ángulo"</item>
+        <item>"Tras el Maghrib"</item>
     </string-array>
     <string-array name="callCloseChoices">
         <item>"Tras el adhan"</item>

@@ -357,7 +357,7 @@ public class PrayerDayActivity extends Screen {
         if (day.friday) names[PrayerDay.DHUHR] = t.jumuah();
         archLabel.setText(day.friday && day.nextIndex == PrayerDay.DHUHR ? t.jumuahLabel() : t.nextPrayer());
         archName.setText(names[day.nextIndex]);
-        archSub.setText(t.methodName(Prefs.method(this)));
+        archSub.setText(Prefs.calcOn(this) ? t.calcName() : t.methodName(Prefs.method(this)));
         archSub2.setText(t.school(Prefs.madhab(this)));
 
         for (int i = 0; i < ROWS; i++) {

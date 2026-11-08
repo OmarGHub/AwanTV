@@ -79,8 +79,13 @@ public class SettingsActivity extends Screen {
 
         void select(int i) {}
 
-        /** STEP rows: the saved amount, its range, and how an amount reads. */
+        /** VALUE rows: the help line is a warning (gold, full strength). */
+        boolean warn() { return false; }
+
+        /** STEP rows: the saved amount, its range, how far one press moves it, and how an amount reads. */
         int amount() { return 0; }
+
+        int step() { return 1; }
 
         void setAmount(int n) {}
 
@@ -137,6 +142,8 @@ public class SettingsActivity extends Screen {
     private boolean buttonsOpen;
     /** Prayer times shows the times' and the Hijri date's adjustments instead of its own rows (Back returns). */
     private boolean adjustOpen;
+    /** Prayer times shows the custom calculation instead of its own rows (Back returns to the method's row). */
+    private boolean calcOpen;
     /** The note under a sub-page's rows (remote buttons, adjustments); null elsewhere. */
     private TextView pageNote;
     /** At most this many custom buttons: the rows, Add a button and the note fit above the hints. */
@@ -497,15 +504,19 @@ public class SettingsActivity extends Screen {
         if (creditsOpen) sectionLabel.setText(t.creditsSection());
         if (section != DEVICE) buttonsOpen = false;
         if (buttonsOpen) sectionLabel.setText(t.buttonsSection());
-        if (section != PRAYER) adjustOpen = false;
+        if (section != PRAYER) {
+            adjustOpen = false;
+            calcOpen = false;
+        }
         if (adjustOpen) sectionLabel.setText(t.adjustSection());
+        if (calcOpen) sectionLabel.setText(t.calcSection());
         for (int i = 0; i < SECTIONS; i++) styleNav(i);
         rows.addAll(rowsFor(section));
         for (int i = 0; i < rows.size(); i++) addRow(rows.get(i), i);
         if (qrPanel != null) root.removeView(qrPanel);
         qrPanel = qrShown() ? qrPanel() : null;
         if (pageNote != null) root.removeView(pageNote);
-        pageNote = buttonsOpen ? buttonsNote() : adjustOpen ? note(t.adjustNote()) : null;
+        pageNote = buttonsOpen ? buttonsNote() : adjustOpen ? note(t.adjustNote()) : calcOpen ? note(calcNote()) : null;
         refresh();
     }
 
@@ -726,6 +737,7 @@ public class SettingsActivity extends Screen {
         Context c = this;
         switch (s) {
             case PRAYER: if (adjustOpen) return adjustRows();
+                if (calcOpen) return calcRows();
                 return withHabous(Arrays.asList(
                 new Row(VALUE) {
                     String label() { return t.location(); }
@@ -754,18 +766,34 @@ public class SettingsActivity extends Screen {
                 new Row(VALUE) {
                     String label() { return t.method(); }
                     String help() {
+                        // A new location just took the custom calculation or the minutes away: said here, once.
+                        if (Prefs.placeReset) return t.calcReset();
+                        Prefs.Calc k = Prefs.calc(c);
+                        if (k != null) return t.calcSummary(k);
                         Method m = Prefs.method(c);
                         return m == Method.MOROCCO_HABOUS ? t.habousAngles(Habous.table(c) != null) : t.methodAngles(m);
                     }
-                    String value() { return t.methodName(Prefs.method(c)); }
+                    boolean warn() { return Prefs.placeReset; }
+                    String value() { return Prefs.calcOn(c) ? t.calcName() : t.methodName(Prefs.method(c)); }
                     void open() {
-                        String[] names = new String[Prefs.METHODS.length];
+                        // The methods, then Custom calculation (Muslim Pro's and Pillars' place for it: the list's end).
+                        String[] names = new String[Prefs.METHODS.length + 1];
                         int sel = 0;
-                        for (int i = 0; i < names.length; i++) {
+                        for (int i = 0; i < Prefs.METHODS.length; i++) {
                             names[i] = t.methodName(Prefs.METHODS[i]);
                             if (Prefs.METHODS[i] == Prefs.method(c)) sel = i;
                         }
+                        names[Prefs.METHODS.length] = t.calcItem();
+                        if (Prefs.calcOn(c)) sel = Prefs.METHODS.length;
                         openChooser(t.method(), names, sel, i -> {
+                            Prefs.placeReset = false;
+                            if (i == Prefs.METHODS.length) {
+                                // Its page, on: from the method in use, or as it was last set.
+                                Prefs.setCalcOn(c, true);
+                                calcOpen = true;
+                                root.post(() -> { showSection(); focusRow(0); });
+                                return;
+                            }
                             Prefs.setMethod(c, Prefs.METHODS[i]);
                             showSaved();
                             // Morocco's method brings its Ministry table row, another takes it away.
@@ -1233,7 +1261,7 @@ public class SettingsActivity extends Screen {
             if (statusOpen && !onNav) {
                 showSection();
                 focusRow(Math.min(rowIndex, rows.size() - 1));
-            } else if (section == PRAYER && !adjustOpen && habousShown != (habousTable() != null)) {
+            } else if (section == PRAYER && !adjustOpen && !calcOpen && habousShown != (habousTable() != null)) {
                 // Back from Another place with a place in Morocco (or out of it): the Ministry table row comes or goes.
                 showSection();
                 focusRow(Math.min(rowIndex, rows.size() - 1));
@@ -1359,7 +1387,7 @@ public class SettingsActivity extends Screen {
 
     /** The ministry's table the place takes when Morocco's method is chosen; null otherwise. */
     private Habous.Locality habousTable() {
-        return Prefs.method(this) == Method.MOROCCO_HABOUS ? Habous.table(this) : null;
+        return Prefs.method(this) == Method.MOROCCO_HABOUS && !Prefs.calcOn(this) ? Habous.table(this) : null;
     }
 
     /** Prayer times' rows, with Morocco's Ministry table after the method when it applies, then Friday and imsak. */
@@ -1626,6 +1654,8 @@ public class SettingsActivity extends Screen {
     @Override
     protected void onPause() {
         stopPreview();
+        // The method row's word on a new location is for this visit only.
+        Prefs.placeReset = false;
         // Never leave the remote waiting for a button (and keys filtered for it) behind another screen.
         if (resetStage == PRESS) closePress();
         super.onPause();
@@ -1724,6 +1754,8 @@ public class SettingsActivity extends Screen {
     private void refresh() {
         day = new PrayerDay(this, new Date());
         for (Row r : rows) render(r, r.tile.isFocused());
+        // The custom calculation's note holds today's six times.
+        if (calcOpen && pageNote != null) pageNote.setText(calcNote());
         previewValue.setText(time(day.times[PrayerDay.ASR], 1f));
     }
 
@@ -1735,8 +1767,8 @@ public class SettingsActivity extends Screen {
         String help = r.help();
         r.help.setText(help);
         r.help.setVisibility(help.isEmpty() ? View.GONE : View.VISIBLE);
-        r.help.setTextColor(ink);
-        r.help.setAlpha(0.75f);
+        r.help.setTextColor(r.warn() && !focused ? Tokens.GOLD_400 : ink);
+        r.help.setAlpha(r.warn() ? 1f : 0.75f);
         r.control.removeAllViews();
         boolean edit = r == editing;
         if (edit) {
@@ -1860,7 +1892,8 @@ public class SettingsActivity extends Screen {
         List<String> h = new ArrayList<>();
         h.add(t.hintMove());
         if (r.kind != INFO) h.add(r.kind == VALUE ? t.hintChoose() : r.kind == TOGGLE ? t.hintSwitch() : t.hintEdit());
-        h.add(statusOpen || creditsOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice() : adjustOpen ? t.hintBackPrayer() : t.hintBackMenu());
+        h.add(statusOpen || creditsOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice()
+            : adjustOpen || calcOpen ? t.hintBackPrayer() : t.hintBackMenu());
         setHints(hints, h);
         styleNav(section);
     }
@@ -1951,6 +1984,12 @@ public class SettingsActivity extends Screen {
                     showSection();
                     focusRow(ADJUST_ROW + (habousShown ? 1 : 0));
                 }
+                else if (calcOpen) {
+                    // The custom calculation back to Prayer times, on the method's row.
+                    calcOpen = false;
+                    showSection();
+                    focusRow(METHOD_ROW);
+                }
                 else if (buttonsOpen) {
                     // The remote buttons back to Device settings, on their row (the last).
                     buttonsOpen = false;
@@ -1986,7 +2025,8 @@ public class SettingsActivity extends Screen {
                 Row r = editing;
                 int lo = r.kind == SEG ? 0 : r.lowest();
                 int hi = r.kind == SEG ? r.segs().length - 1 : r.highest();
-                int to = Math.max(lo, Math.min(hi, draft + (toEnd ? 1 : -1)));
+                int by = r.kind == SEG ? 1 : r.step();
+                int to = Math.max(lo, Math.min(hi, draft + (toEnd ? by : -by)));
                 if (to != draft) {
                     draft = to;
                     render(r, true);
@@ -2295,6 +2335,128 @@ public class SettingsActivity extends Screen {
             String valueOf(int n) { return t.days(n); }
         });
         return out;
+    }
+
+    // ---------------------------------------------------------------- custom calculation (1.24.0)
+
+    /** Prayer times' row of the method (Back from the custom calculation's page lands on it). */
+    private static final int METHOD_ROW = 1;
+
+    /**
+     * Prayer times > Calculation method > Custom calculation (Prefs.Calc; Muslim Pro's Fixed calculation, Pillars'
+     * Custom angles, PrayWatch's Custom): on or off, the method it starts from, Fajr's angle, Isha by an angle or by
+     * minutes after Maghrib, the rule above 48° (HighLatitude), and whether a new location keeps it. Off, the switch
+     * alone. Each time under its row as it comes out today; the six of them in the note.
+     */
+    private List<Row> calcRows() {
+        Context c = this;
+        List<Row> out = new ArrayList<>();
+        out.add(new Row(TOGGLE) {
+            String label() { return t.calcRow(); }
+            String help() { return t.calcRowHelp(); }
+            boolean on() { return Prefs.calcOn(c); }
+            void set(boolean on) {
+                Prefs.setCalcOn(c, on);
+                // Its rows come or go.
+                root.post(() -> { showSection(); focusRow(0); });
+            }
+        });
+        if (!Prefs.calcOn(c)) return out;
+        out.add(new Row(VALUE) {
+            String label() { return t.calcBaseRow(); }
+            String help() { return t.calcBaseHelp(); }
+            String value() { return t.methodName(Prefs.calcSaved(c).base); }
+            void open() {
+                Method[] bases = Prefs.calcBases();
+                String[] names = new String[bases.length];
+                int sel = 0;
+                for (int i = 0; i < bases.length; i++) {
+                    names[i] = t.methodName(bases[i]);
+                    if (bases[i] == Prefs.calcSaved(c).base) sel = i;
+                }
+                openChooser(t.calcBaseRow(), names, sel, i -> { Prefs.setCalcBase(c, bases[i]); showSaved(); });
+            }
+        });
+        out.add(new Row(STEP) {
+            String label() { return t.calcFajrRow(); }
+            String help() {
+                boolean tomorrow = day.times[PrayerDay.FAJR].after(day.times[PrayerDay.ISHA]);
+                return t.calcAngleHelp(time(day.times[PrayerDay.FAJR], 1f).toString(), tomorrow);
+            }
+            int amount() { return Prefs.calcSaved(c).fajrTenths; }
+            void setAmount(int n) { Prefs.setCalcFajr(c, n); calcChanged(); }
+            int step() { return 5; }
+            int lowest() { return Prefs.CALC_ANGLE_MIN; }
+            int highest() { return Prefs.CALC_ANGLE_MAX; }
+            String valueOf(int n) { return t.degrees(n); }
+        });
+        out.add(new Row(SEG) {
+            String label() { return t.calcIshaRow(); }
+            String help() { return t.calcIshaRowHelp(); }
+            String[] segs() { return t.calcIshaModes(); }
+            int selected() { return Prefs.calcSaved(c).ishaAfterMaghrib ? 1 : 0; }
+            void select(int i) { Prefs.setCalcIshaAfterMaghrib(c, i == 1); calcChanged(); }
+        });
+        out.add(new Row(STEP) {
+            boolean minutes() { return Prefs.calcSaved(c).ishaAfterMaghrib; }
+            String label() { return minutes() ? t.calcIshaMinutesRow() : t.calcIshaAngleRow(); }
+            String help() {
+                String isha = time(day.times[PrayerDay.ISHA], 1f).toString();
+                return minutes() ? t.calcMinutesHelp(isha, Prefs.calcSaved(c).base == Method.UMM_AL_QURA)
+                                 : t.calcAngleHelp(isha, false);
+            }
+            int amount() { Prefs.Calc k = Prefs.calcSaved(c); return minutes() ? k.ishaMinutes : k.ishaTenths; }
+            void setAmount(int n) {
+                if (minutes()) Prefs.setCalcIshaMinutes(c, n);
+                else Prefs.setCalcIshaAngle(c, n);
+                calcChanged();
+            }
+            int step() { return 5; }
+            int lowest() { return minutes() ? Prefs.CALC_MINUTES_MIN : Prefs.CALC_ANGLE_MIN; }
+            int highest() { return minutes() ? Prefs.CALC_MINUTES_MAX : Prefs.CALC_ANGLE_MAX; }
+            String valueOf(int n) { return minutes() ? t.calcMinutes(n) : t.degrees(n); }
+        });
+        out.add(new Row(VALUE) {
+            int index() { return java.util.Arrays.asList(Prefs.HIGH_RULES).indexOf(Prefs.calcSaved(c).high); }
+            String label() { return t.calcHighRow(); }
+            String help() {
+                if (Math.abs(Prefs.where(c).latitude) <= HighLatitude.FROM) return t.calcHighHere();
+                if (Prefs.calcSaved(c).base == Method.MOON_SIGHTING_COMMITTEE) return t.calcHighMsc();
+                return t.calcHighAbout()[index()];
+            }
+            String value() { return t.calcHighNames()[index()]; }
+            void open() {
+                openChooser(t.calcHighRow(), t.calcHighNames(), index(), i -> {
+                    Prefs.setCalcHigh(c, Prefs.HIGH_RULES[i]);
+                    calcChanged();
+                    showSaved();
+                });
+            }
+        });
+        out.add(new Row(TOGGLE) {
+            String label() { return t.calcKeepRow(); }
+            String help() { return t.calcKeepHelp(); }
+            boolean on() { return Prefs.calcSaved(c).keep; }
+            void set(boolean on) { Prefs.setCalcKeep(c, on); }
+        });
+        return out;
+    }
+
+    /** The custom calculation's note: today's six times as they come out, or what turning it on starts from. */
+    private CharSequence calcNote() {
+        if (!Prefs.calcOn(this)) {
+            Method m = Prefs.calcSaved(this).base;
+            return t.calcOffNote(t.methodName(m));
+        }
+        String[] names = t.prayerNames();
+        List<String> parts = new ArrayList<>();
+        for (int i = 0; i < 6; i++) parts.add(names[i] + " " + time(day.times[i], 1f));
+        return t.calcTimesNote(parts);
+    }
+
+    /** A changed angle, mode or rule: the call and the iqamah countdown follow at once (refresh redraws the note). */
+    private void calcChanged() {
+        if (RemoteKeys.watch != null) RemoteKeys.watch.refreshCounter();
     }
 
     /** A note under a sub-page's rows, lined up with their words. */

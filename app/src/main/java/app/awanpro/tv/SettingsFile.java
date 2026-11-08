@@ -118,6 +118,31 @@ final class SettingsFile {
         }
         out.add(new Item(Habous.PREF, INT_CHOICE, t.habousRow()).help(t.habousFileHelp()).choices(tables, tableNames).def(0)
             .when("method", Method.MOROCCO_HABOUS.id));
+        // The custom calculation (1.24.0): on, it stands in for the method; its values start as the method's.
+        out.add(new Item("calc_custom", BOOL, t.calcRow()).help(t.calcFileHelp()).def(false));
+        Method[] bases = Prefs.calcBases();
+        String[] baseIds = new String[bases.length], baseNames = new String[bases.length];
+        for (int i = 0; i < bases.length; i++) {
+            baseIds[i] = Prefs.methodId(bases[i]);
+            baseNames[i] = t.methodName(bases[i]);
+        }
+        out.add(new Item("calc_base", STR_CHOICE, t.calcBaseRow()).help(t.calcBaseHelp()).choices(baseIds, baseNames)
+            .depends(t.calcFromMethod(), x -> Prefs.methodId(Prefs.calcSaved(x).base)).when("calc_custom", true));
+        out.add(new Item("calc_fajr", INT_RANGE, t.calcFajrRow()).help(t.calcTenthsHelp())
+            .range(Prefs.CALC_ANGLE_MIN, Prefs.CALC_ANGLE_MAX)
+            .depends(t.calcFromMethod(), x -> Prefs.calcSaved(x).fajrTenths).when("calc_custom", true));
+        out.add(new Item("calc_isha_mode", STR_CHOICE, t.calcIshaRow()).help(t.calcIshaRowHelp())
+            .choices(new String[] {"angle", "minutes"}, t.calcIshaModes())
+            .depends(t.calcFromMethod(), x -> Prefs.calcSaved(x).ishaAfterMaghrib ? "minutes" : "angle").when("calc_custom", true));
+        out.add(new Item("calc_isha_angle", INT_RANGE, t.calcIshaAngleRow()).help(t.calcTenthsHelp())
+            .range(Prefs.CALC_ANGLE_MIN, Prefs.CALC_ANGLE_MAX)
+            .depends(t.calcFromMethod(), x -> Prefs.calcSaved(x).ishaTenths).when("calc_isha_mode", "angle"));
+        out.add(new Item("calc_isha_min", INT_RANGE, t.calcIshaMinutesRow())
+            .range(Prefs.CALC_MINUTES_MIN, Prefs.CALC_MINUTES_MAX)
+            .depends(t.calcFromMethod(), x -> Prefs.calcSaved(x).ishaMinutes).when("calc_isha_mode", "minutes"));
+        out.add(new Item("calc_high", STR_CHOICE, t.calcHighRow()).choices(Prefs.HIGH_RULES, t.calcHighNames())
+            .def(Prefs.HIGH_SEVENTH).when("calc_custom", true));
+        out.add(new Item("calc_keep", BOOL, t.calcKeepRow()).help(t.calcKeepHelp()).def(false).when("calc_custom", true));
         out.add(new Item("madhab", STR_CHOICE, t.asrSchool()).help(t.asrSchoolHelp())
             .choices(new String[] {"shafi", "hanafi"}, t.asrSchools())
             .depends(t.byCity(), x -> Prefs.madhab(x) == com.batoulapps.adhan.Madhab.HANAFI ? "hanafi" : "shafi"));

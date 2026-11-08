@@ -51,8 +51,13 @@ final class PrayerDay {
     }
 
     private PrayerDay(Context c, Date now, boolean night) {
-        this(now, Prefs.where(c), Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c), Prefs.hijriOffset(c),
-            Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night);
+        this(c, now, night, Prefs.calc(c));
+    }
+
+    /** calc: the custom calculation (its base method in place of the chosen one), or null. */
+    private PrayerDay(Context c, Date now, boolean night, Prefs.Calc calc) {
+        this(now, Prefs.where(c), calc != null ? calc.base : Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c),
+            Prefs.hijriOffset(c), calc == null && Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night, calc);
     }
 
     /**
@@ -60,7 +65,12 @@ final class PrayerDay {
      * horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon).
      */
     PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table) {
-        this(now, where, method, madhab, adjust, hijriOffset, table, true);
+        this(now, where, method, madhab, adjust, hijriOffset, table, true, null);
+    }
+
+    /** With a custom calculation (Settings > Prayer times > Calculation method > Custom calculation). */
+    PrayerDay(Date now, Coordinates where, Prefs.Calc calc, Madhab madhab, int[] adjust, int hijriOffset) {
+        this(now, where, calc.base, madhab, adjust, hijriOffset, null, true, calc);
     }
 
     /**
@@ -72,8 +82,10 @@ final class PrayerDay {
      * day's late times on the right instant already. The dates shown, the Hijri day and Friday still follow the clock.
      */
     private PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset,
-                      Habous.Locality table, boolean night) {
-        CalculationParameters params = Prefs.parameters(method);
+                      Habous.Locality table, boolean night, Prefs.Calc calc) {
+        CalculationParameters params = calc != null ? calc.parameters() : Prefs.parameters(method);
+        // Above 48°: the seventh of the night below, or the custom calculation's rule (HighLatitude).
+        String high = calc != null ? calc.high : Prefs.HIGH_SEVENTH;
         params.madhab = madhab;
         // The viewer's minutes on each time (Prefs.adjustments): the adhan, iqamah, reminders and screens all follow.
         params.adjustments = new PrayerAdjustments(adjust[FAJR], adjust[SUNRISE], adjust[DHUHR], adjust[ASR],
@@ -81,17 +93,18 @@ final class PrayerDay {
         // Above 48°, where summer nights never reach the method's angles: Fajr no earlier than a seventh of the night
         // before sunrise and Isha no later than a seventh after Maghrib (as meypod/al-azan and Afnon 0.8), not
         // adhan-java's default middle of the night, which put both near 1 a.m.
-        if (Math.abs(where.latitude) > 48) params.highLatitudeRule = HighLatitudeRule.SEVENTH_OF_THE_NIGHT;
+        // The custom calculation may choose adhan-java's middle of the night or twilight angle instead (Prefs.adhanRule).
+        if (Math.abs(where.latitude) > 48) params.highLatitudeRule = Prefs.adhanRule(high);
         // The prayer day: the clock's date, or yesterday while its night is still going on (night).
         Calendar base = Calendar.getInstance();
         base.setTime(now);
-        Date[] today = times(method, table, where, DateComponents.from(now), params);
+        Date[] today = times(method, table, where, DateComponents.from(now), params, high);
         if (night && now.before(minute(today[FAJR]))) {
             Calendar y = (Calendar) base.clone();
             y.add(Calendar.DAY_OF_MONTH, -1);
-            Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params);
+            Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params, high);
             Date yIsha = minute(yesterday[ISHA]);
-            if (method == Method.UMM_AL_QURA && ramadanNight(y, hijriOffset)) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
+            if (ummAlQuraRamadan(method, params) && ramadanNight(y, hijriOffset)) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
             // Yesterday's Isha came after midnight: its night runs to today's Fajr. Up to Isha its Maghrib and Isha
             // are still to come; from Isha on, that Isha is the one whose adhan, iqamah and "now" are due (1.23.0b:
             // switching to today's times at that Isha left it out of the day, and its adhan never came).
@@ -125,7 +138,7 @@ final class PrayerDay {
         // Umm al-Qura's Isha is 90 minutes after Maghrib, and 120 on Ramadan's nights (the Ministry of Islamic
         // Affairs, after Umm al-Qura). adhan-java leaves the Ramadan half hour to the caller
         // (CalculationMethod.UMM_AL_QURA: "add a +30 minute custom adjustment").
-        if (ishaRamadan && method == Method.UMM_AL_QURA) times[ISHA] = new Date(times[ISHA].getTime() + 30 * 60_000L);
+        if (ishaRamadan && ummAlQuraRamadan(method, params)) times[ISHA] = new Date(times[ISHA].getTime() + 30 * 60_000L);
 
         int latest = -1;
         for (int i = 0; i < 6; i++) if (!times[i].after(now)) latest = i;
@@ -135,7 +148,7 @@ final class PrayerDay {
         for (int i = 0; i < 6; i++) {
             if (i != SUNRISE && times[i].after(now)) { next = i; break; }
         }
-        Date tomorrowFajr = minute(times(method, table, where, DateComponents.from(c.getTime()), params)[FAJR]);
+        Date tomorrowFajr = minute(times(method, table, where, DateComponents.from(c.getTime()), params, high)[FAJR]);
         boolean tomorrowsFajr = next == -1;
         if (next == -1) {
             next = FAJR;
@@ -156,6 +169,14 @@ final class PrayerDay {
      * {the middle of the night, the start of its last third}, the night being Maghrib to Fajr: tonight's,
      * or before dawn the one still going (yesterday's Maghrib to today's Fajr), as adhan-java's SunnahTimes counts it.
      */
+    /**
+     * Umm al-Qura's Ramadan half hour: its Isha by minutes after Maghrib, as the method's own or a custom calculation
+     * from it that keeps minutes (not one that moved Isha to an angle).
+     */
+    private static boolean ummAlQuraRamadan(Method method, CalculationParameters params) {
+        return method == Method.UMM_AL_QURA && params.ishaInterval > 0;
+    }
+
     /** The night after day is one of Ramadan (the next day's Hijri date is in Ramadan). */
     private static boolean ramadanNight(Calendar day, int hijriOffset) {
         Calendar next = (Calendar) day.clone();
@@ -213,7 +234,7 @@ final class PrayerDay {
      * where the sun doesn't reach 19°/17° (far north, chosen by hand), adhan-java's way below.
      */
     private static Date[] times(Method method, Habous.Locality table, Coordinates where, DateComponents date,
-                                CalculationParameters params) {
+                                CalculationParameters params, String high) {
         if (method == Method.MOROCCO_HABOUS) {
             Coordinates at = table != null ? new Coordinates(table.lat, table.lng) : where;
             Date[] t = Habous.times(at, date, params.madhab, table != null ? table.horizon : Habous.COAST);
@@ -225,7 +246,9 @@ final class PrayerDay {
             }
         }
         PrayerTimes p = adhan(where, date, params);
-        return new Date[] {p.fajr, p.sunrise, p.dhuhr, p.asr, p.maghrib, p.isha};
+        // The custom calculation's rule above 48° (a polar day or night keeps 45°'s: HighLatitude finds no sunset).
+        Date[] fi = HighLatitude.fajrIsha(high, where, date, params, p);
+        return new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]};
     }
 
     private static PrayerTimes adhan(Coordinates where, DateComponents date, CalculationParameters params) {

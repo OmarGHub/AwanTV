@@ -90,6 +90,34 @@
     <string name="byTvCountry" formatted="false">"\"f\" في الدول التي تقيس بالفهرنهايت، وإلا \"c\""</string>
     <string name="bytes" formatted="false">"%1$s ميجابايت"</string>
     <string name="bytesGb" formatted="false">"%1$s جيجابايت"</string>
+    <string name="calcAngleHelp" formatted="false">"اليوم %1$s · نصف درجة في كل ضغطة"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"غدًا %1$s · نصف درجة في كل ضغطة"</string>
+    <string name="calcBaseHelp" formatted="false">"تملأ الزوايا تحته، ثم عدّل ما تشاء"</string>
+    <string name="calcBaseRow" formatted="false">"يبدأ من طريقة"</string>
+    <string name="calcFajrRow" formatted="false">"زاوية الفجر"</string>
+    <string name="calcFileHelp" formatted="false">"يُستعمل بدل طريقة الحساب ما دام مُشغَّلًا"</string>
+    <string name="calcFromMethod" formatted="false">"كطريقة الحساب"</string>
+    <string name="calcHighHere" formatted="false">"فوق 48° فقط · لا أثر لها في موقعك"</string>
+    <string name="calcHighMsc" formatted="false">"طريقة لجنة رؤية الهلال تتبع قاعدتها الخاصة"</string>
+    <string name="calcHighRow" formatted="false">"خطوط العرض العليا"</string>
+    <string name="calcIshaAngleRow" formatted="false">"زاوية العشاء"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"العشاء بعد المغرب"</string>
+    <string name="calcIshaRow" formatted="false">"العشاء"</string>
+    <string name="calcIshaRowHelp" formatted="false">"بزاوية الشمس أو بوقت ثابت بعد المغرب"</string>
+    <string name="calcItem" formatted="false">"حساب مخصّص…"</string>
+    <string name="calcKeepHelp" formatted="false">"ولا تعديل الدقائق · بدونه يعود الحساب لطريقة البلد الجديد"</string>
+    <string name="calcKeepRow" formatted="false">"تغيير المدينة لا يغيّر هذا الحساب"</string>
+    <string name="calcKept" formatted="false">"ثابت مع تغيير المدينة"</string>
+    <string name="calcMinutesHelp" formatted="false">"اليوم %1$s · 5 دقائق في كل ضغطة"</string>
+    <string name="calcName" formatted="false">"حساب مخصّص"</string>
+    <string name="calcOffNote" formatted="false">"عند تشغيله يبدأ من «%1$s»، ثم عدّل ما تشاء ليوافق إمساكية مسجدك."</string>
+    <string name="calcRamadan" formatted="false">" · وفي رمضان 30 دقيقة أكثر"</string>
+    <string name="calcReset" formatted="false">"تغيّرت المدينة: الحساب بطريقة بلدها، وصُفّر تعديل الدقائق"</string>
+    <string name="calcRow" formatted="false">"الحساب المخصّص"</string>
+    <string name="calcRowHelp" formatted="false">"زاويتا الفجر والعشاء وقاعدة ما فوق 48° باختيارك"</string>
+    <string name="calcSection" formatted="false">"مواقيت الصلاة ← حساب مخصّص"</string>
+    <string name="calcTenthsHelp" formatted="false">"بأعشار الدرجة: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"اليوم بهذا الضبط: %1$s. والأذان والإقامة والتنبيهات وشاشة الاستراحة كلها تتبعها."</string>
     <string name="calendarSource" formatted="false">"تقويم أم القرى"</string>
     <string name="callCloseHelp" formatted="false">"ثم تعود إلى ما كنت تشاهده"</string>
     <string name="callCloseRow" formatted="false">"إغلاق شاشة الأذان"</string>
@@ -603,6 +631,22 @@
     <string-array name="backgrounds">
         <item>"النقش"</item>
         <item>"صور"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"سُبع الليل بعد المغرب وقبل الشروق · قاعدة التطبيق حتى الآن"</item>
+        <item>"نصف الليل بعد المغرب وقبل الشروق على الأكثر · افتراضي مكتبات adhan"</item>
+        <item>"الزاوية جزءًا من الليل (18° = 18 من 60) · افتراضي AlAdhan وتوصية PrayTimes"</item>
+        <item>"كنسبتهما من الليل عند خط 45 · المجمع الفقهي الإسلامي 1406هـ"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"سُبع الليل"</item>
+        <item>"منتصف الليل"</item>
+        <item>"زاوية الشفق"</item>
+        <item>"نسبة الليل عند 45°"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"بالزاوية"</item>
+        <item>"بعد المغرب"</item>
     </string-array>
     <string-array name="callCloseChoices">
         <item>"بعد الأذان"</item>

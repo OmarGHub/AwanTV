@@ -90,6 +90,34 @@
     <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
     <string name="bytes" formatted="false">"%1$s MB"</string>
     <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"آج %1$s · ہر دباؤ پر آدھا درجہ"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"کل %1$s · ہر دباؤ پر آدھا درجہ"</string>
+    <string name="calcBaseHelp" formatted="false">"نیچے کے زاویے بھرتا ہے؛ پھر جو چاہیں بدلیں"</string>
+    <string name="calcBaseRow" formatted="false">"شروع کا طریقہ"</string>
+    <string name="calcFajrRow" formatted="false">"فجر کا زاویہ"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"صرف 48° سے اوپر · آپ کے مقام پر اثر نہیں"</string>
+    <string name="calcHighMsc" formatted="false">"رؤیتِ ہلال کمیٹی کا طریقہ اپنے خاص قاعدے پر چلتا ہے"</string>
+    <string name="calcHighRow" formatted="false">"بلند عرضِ بلد"</string>
+    <string name="calcIshaAngleRow" formatted="false">"عشاء کا زاویہ"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"مغرب کے بعد عشاء"</string>
+    <string name="calcIshaRow" formatted="false">"عشاء"</string>
+    <string name="calcIshaRowHelp" formatted="false">"سورج کے زاویے سے، یا مغرب کے بعد مقررہ وقت"</string>
+    <string name="calcItem" formatted="false">"مخصوص حساب…"</string>
+    <string name="calcKeepHelp" formatted="false">"اور نہ منٹوں کی ایڈجسٹمنٹ کو · بند ہو تو نیا مقام اپنے ملک کا طریقہ لیتا ہے"</string>
+    <string name="calcKeepRow" formatted="false">"نیا مقام اس حساب کو نہیں بدلتا"</string>
+    <string name="calcKept" formatted="false">"نئے مقام پر برقرار"</string>
+    <string name="calcMinutesHelp" formatted="false">"آج %1$s · ہر دباؤ پر 5 منٹ"</string>
+    <string name="calcName" formatted="false">"مخصوص حساب"</string>
+    <string name="calcOffNote" formatted="false">"آن کرنے پر یہ «%1$s» سے شروع ہوتا ہے؛ پھر اپنی مسجد کے نظام الاوقات کے مطابق جو چاہیں بدلیں۔"</string>
+    <string name="calcRamadan" formatted="false">" · رمضان میں 30 منٹ زیادہ"</string>
+    <string name="calcReset" formatted="false">"نیا مقام: اس کے ملک کا طریقہ، اور منٹوں کی ایڈجسٹمنٹ صفر"</string>
+    <string name="calcRow" formatted="false">"مخصوص حساب"</string>
+    <string name="calcRowHelp" formatted="false">"فجر اور عشاء کے زاویے اور 48° سے اوپر کا قاعدہ آپ کی پسند کا"</string>
+    <string name="calcSection" formatted="false">"اوقاتِ نماز › مخصوص حساب"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"آج اس ترتیب سے: %1$s۔ اذان، اقامت، یاد دہانیاں اور اسکرین سیور سب انہی پر چلتے ہیں۔"</string>
     <string name="calendarSource" formatted="false">"ام القریٰ"</string>
     <string name="callCloseHelp" formatted="false">"پھر واپس وہیں جو آپ دیکھ رہے تھے"</string>
     <string name="callCloseRow" formatted="false">"اذان کی اسکرین بند کریں"</string>
@@ -603,6 +631,22 @@
     <string-array name="backgrounds">
         <item>"نقش"</item>
         <item>"تصاویر"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"مغرب کے بعد اور طلوعِ آفتاب سے پہلے رات کا ساتواں حصہ · اب تک ایپ کا قاعدہ"</item>
+        <item>"مغرب کے بعد اور طلوعِ آفتاب سے پہلے زیادہ سے زیادہ رات کا آدھا حصہ · adhan لائبریریوں کا طے شدہ"</item>
+        <item>"زاویہ رات کے حصے کے طور پر (18° = 60 میں 18) · AlAdhan کا طے شدہ، PrayTimes کی سفارش"</item>
+        <item>"45° پر رات میں ان کا تناسب · اسلامی فقہ اکیڈمی، 1406ھ"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"رات کا ساتواں حصہ"</item>
+        <item>"آدھی رات"</item>
+        <item>"شفق کا زاویہ"</item>
+        <item>"45° پر رات کا تناسب"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"زاویے سے"</item>
+        <item>"مغرب کے بعد"</item>
     </string-array>
     <string-array name="callCloseChoices">
         <item>"اذان کے بعد"</item>

@@ -288,6 +288,14 @@ public class PlaceActivity extends Screen {
 
     /** The method line: the country's, or today's when the country is not known. And the iqamah, where it has one. */
     private void showMethod(String cc) {
+        // The custom calculation kept with a new location (its "keep"): the place takes no method of its own.
+        Prefs.Calc kept = Prefs.calc(this);
+        if (kept != null && kept.keep) {
+            setMethod(t.placeMethod(t.calcName(), null));
+            boolean preset = cc != null && Iqama.presetFor(Prefs.countryName(cc, false)) != null;
+            iqama.setText(preset ? t.placeIqama(Prefs.countryName(cc, t)) : "");
+            return;
+        }
         Method m = Places.method(cc);
         String country = Prefs.countryName(cc, t);
         if (m != null) {
