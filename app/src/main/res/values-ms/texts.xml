@@ -637,12 +637,16 @@
         <item>"Maksimum separuh malam selepas Maghrib dan sebelum Syuruk · lalai pustaka adhan"</item>
         <item>"Sudut sebagai bahagian malam (18° = 18/60) · lalai AlAdhan, saranan PrayTimes"</item>
         <item>"Nisbahnya daripada malam pada 45° · Majma' Fiqh Islami, 1406 H"</item>
+        <item>"Satu pertiga malam syarie dari hari terakhir fajar terbit · Diyanet dan Majlis Fatwa Eropah, 2021"</item>
+        <item>"Jam Makkah jika puasa melebihi 20 jam atau matahari tidak terbit · masjid utara Norway, 2012"</item>
     </string-array>
     <string-array name="calcHighNames">
         <item>"Satu pertujuh malam"</item>
         <item>"Tengah malam"</item>
         <item>"Sudut senja"</item>
         <item>"Nisbah malam pada 45°"</item>
+        <item>"Kongres Istanbul 2021"</item>
+        <item>"Waktu Makkah"</item>
     </string-array>
     <string-array name="calcIshaModes">
         <item>"Ikut sudut"</item>
@@ -769,6 +773,12 @@
     <string-array name="news_1_22_0">
         <item>"Bahasa Sepanyol"</item>
         <item>"Setiap skrin dalam bahasa Sepanyol, mengikut istilah masjid di Sepanyol, dengan nama qari dan surah dalam bahasa Sepanyol. Pilih dari butang glob pada Skrin Utama."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Pengiraan tersuai"</item>
+        <item>"Tetapan › Waktu solat › Kaedah pengiraan › Pengiraan tersuai: bermula daripada mana-mana kaedah, kemudian tetapkan sudut Subuh, dan Isyak ikut sudut atau minit selepas Maghrib. Ia boleh kekal apabila anda menukar bandar."</item>
+        <item>"Latitud tinggi"</item>
+        <item>"Melebihi 48°, pengiraan tersuai memilih peraturan Subuh dan Isyak apabila tandanya hilang: satu pertujuh malam, tengah malam, sudut senja, nisbah malam pada 45°, Kongres Istanbul 2021, atau waktu Makkah seperti di utara Norway."</item>
     </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>

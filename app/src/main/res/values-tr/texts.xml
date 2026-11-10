@@ -637,12 +637,16 @@
         <item>"Akşamdan sonra ve güneş doğuşundan önce en fazla gecenin yarısı · adhan kütüphanelerinin varsayılanı"</item>
         <item>"Açı, gecenin payı olarak (18° = 18/60) · AlAdhan varsayılanı, PrayTimes önerisi"</item>
         <item>"45°'deki gece oranları · İslam Fıkıh Akademisi, 1406 H"</item>
+        <item>"Fecrin oluştuğu son günden şer'i gecenin üçte biri · Diyanet ve Avrupa Fetva Konseyi, 2021"</item>
+        <item>"Oruç 20 saati aşınca veya güneş doğmayınca Mekke saati · Kuzey Norveç camileri, 2012"</item>
     </string-array>
     <string-array name="calcHighNames">
         <item>"Gecenin yedide biri"</item>
         <item>"Gece yarısı"</item>
         <item>"Alacakaranlık açısı"</item>
         <item>"45°'deki gece oranı"</item>
+        <item>"İstanbul Kongresi 2021"</item>
+        <item>"Mekke vakitleri"</item>
     </string-array>
     <string-array name="calcIshaModes">
         <item>"Açıyla"</item>
@@ -769,6 +773,12 @@
     <string-array name="news_1_22_0">
         <item>"İspanyolca"</item>
         <item>"Her ekran İspanyolca, İspanya'daki camilerin terimleriyle; kâriler ve sureler de İspanyolca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Özel hesaplama"</item>
+        <item>"Ayarlar › Namaz vakitleri › Hesaplama yöntemi › Özel hesaplama: herhangi bir yöntemden başlayın, sonra sabah açısını, yatsıyı da açıyla ya da akşamdan sonra dakikayla belirleyin. Şehir değişince de korunabilir."</item>
+        <item>"Yüksek enlemler"</item>
+        <item>"48° üstünde özel hesaplama, alametleri kaybolunca sabah ve yatsı için kuralı seçer: gecenin yedide biri, gece yarısı, alacakaranlık açısı, 45°'deki gece oranı, İstanbul Kongresi 2021 ya da Kuzey Norveç'teki gibi Mekke vakitleri."</item>
     </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>

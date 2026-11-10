@@ -637,12 +637,16 @@
         <item>"Half the night after Maghrib and before sunrise at most · the adhan libraries' default"</item>
         <item>"The angle as a share of the night (18° = 18/60) · AlAdhan's default, PrayTimes' advice"</item>
         <item>"Their share of the night at 45° · Islamic Fiqh Council, 1406 AH"</item>
+        <item>"A third of the night from the last day with dawn · Diyanet and the European Council for Fatwa, 2021"</item>
+        <item>"Makkah's clock when the fast passes 20 hours or the sun doesn't rise · northern Norway's mosques, 2012"</item>
     </string-array>
     <string-array name="calcHighNames">
         <item>"Seventh of the night"</item>
         <item>"Middle of the night"</item>
         <item>"Twilight angle"</item>
         <item>"Night's share at 45°"</item>
+        <item>"Istanbul congress 2021"</item>
+        <item>"Makkah times"</item>
     </string-array>
     <string-array name="calcIshaModes">
         <item>"By angle"</item>
@@ -769,6 +773,12 @@
     <string-array name="news_1_22_0">
         <item>"Spanish"</item>
         <item>"Every screen in Spanish, in the terms of Spain's mosques, with reciters and surahs named in Spanish. Pick it from the globe button on Home."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Custom calculation"</item>
+        <item>"Settings › Prayer times › Calculation method › Custom calculation: start from any method, then set Fajr's angle, and Isha by angle or by minutes after Maghrib. It can stay when you change the city."</item>
+        <item>"High latitudes"</item>
+        <item>"Above 48°, the custom calculation chooses the rule for Fajr and Isha where their signs fade: a seventh of the night, its middle, the twilight angle, the night's share at 45°, the Istanbul congress 2021, or Makkah times as in northern Norway."</item>
     </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>

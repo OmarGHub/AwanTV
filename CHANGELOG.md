@@ -17,6 +17,19 @@ history is in its repository.
   location keeps this". Each angle shows the time it gives today, and the note under the page today's six times. A
   method picked from the list turns it off. The Asr school stays its own row, as it was. Starting from Umm al-Qura with
   Isha after Maghrib keeps Ramadan's half hour. In the settings file and the editor (calc_* keys).
+- Two more rules above 48° in the custom calculation (1.24.0b), from bodies that publish timetables:
+  - The Istanbul congress 2021 (Turkey's Diyanet with the European Council for Fatwa and Research): where the dawn
+    stops forming around midsummer, the share of the night that a third of the shar'i night took on the last day it
+    formed is carried, Isha that share after Maghrib and Fajr that share times Fajr's angle over Isha's before
+    sunrise, moving to it over the days within twenty minutes of it. Read from the description in mihrab-methods'
+    docs (MPL-2.0, no code taken); with Fajr 18°, Isha 16° and Diyanet's precaution minutes as the times' minutes it
+    gives Diyanet's printed Longyearbyen times of March 2027 to the minute, and Oslo's and Stockholm's within two.
+    Its five-hour floor on the day and the night is not taken; days with no sunrise or sunset keep 45°'s.
+  - Makkah times as in northern Norway (Tromsø's Alnor Senter and seven towns, 2012): on days the local fast would
+    pass twenty hours, or the sun doesn't rise or set, all six times are Makkah's clock times by Umm al-Qura, read on
+    the local clock; other days carry the share above, one share on both sides. Alnor's August and November tables
+    come out within a minute or two, the switch a day earlier than theirs in August.
+- What's new for 1.24.0: the custom calculation and the high-latitude rules.
 - A new location now clears the times' minutes (Adjust the times and the date) and the custom calculation, so the new
   place starts from its country's method, unless the custom calculation's "A new location keeps this" is on; the
   method's row says so until Settings is left (Omar's choice).

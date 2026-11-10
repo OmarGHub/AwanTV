@@ -447,12 +447,14 @@ final class Prefs {
      * The high-latitude rules of the custom calculation (above 48°): the seventh of the night (Awan TV's since 1.0 and
      * still the only one without the custom calculation), the middle of the night (adhan-java's and adhan-js's
      * default), the twilight angle (AlAdhan's default, PrayTimes' advice): adhan-java's own three; and the share of
-     * the night at 45° ({@link HighLatitude}: the Islamic Fiqh Council, 1406 AH).
+     * the night at 45° ({@link HighLatitude}: the Islamic Fiqh Council, 1406 AH); the Istanbul congress's carried share
+     * (HighLatitude.Congress, 1.24.0b) and Makkah's times past a twenty-hour fast (HighLatitude.makkah, 1.24.0b).
      */
-    static final String HIGH_SEVENTH = "seventh", HIGH_MIDDLE = "middle", HIGH_ANGLE = "angle", HIGH_PROPORTION = "proportion";
-    static final String[] HIGH_RULES = {HIGH_SEVENTH, HIGH_MIDDLE, HIGH_ANGLE, HIGH_PROPORTION};
+    static final String HIGH_SEVENTH = "seventh", HIGH_MIDDLE = "middle", HIGH_ANGLE = "angle", HIGH_PROPORTION = "proportion",
+        HIGH_CONGRESS = "congress", HIGH_MAKKAH = "makkah";
+    static final String[] HIGH_RULES = {HIGH_SEVENTH, HIGH_MIDDLE, HIGH_ANGLE, HIGH_PROPORTION, HIGH_CONGRESS, HIGH_MAKKAH};
 
-    /** adhan-java's rule for a saved one (the share at 45° starts from the seventh, then HighLatitude). */
+    /** adhan-java's rule for a saved one (HighLatitude's own start from the seventh). */
     static com.batoulapps.adhan.HighLatitudeRule adhanRule(String high) {
         if (HIGH_MIDDLE.equals(high)) return com.batoulapps.adhan.HighLatitudeRule.MIDDLE_OF_THE_NIGHT;
         if (HIGH_ANGLE.equals(high)) return com.batoulapps.adhan.HighLatitudeRule.TWILIGHT_ANGLE;

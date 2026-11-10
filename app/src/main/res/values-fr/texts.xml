@@ -637,12 +637,16 @@
         <item>"Au plus la moitié de la nuit après le Maghrib et avant le lever du soleil · par défaut des bibliothèques adhan"</item>
         <item>"L'angle en part de la nuit (18° = 18/60) · par défaut d'AlAdhan, conseillé par PrayTimes"</item>
         <item>"Leur part de la nuit à 45° · Académie islamique du fiqh, 1406 H"</item>
+        <item>"Un tiers de la nuit du dernier jour où l'aube apparaît · Diyanet et Conseil européen de la fatwa, 2021"</item>
+        <item>"Heure de La Mecque après 20 h de jeûne ou sans lever du soleil · mosquées du Nord norvégien, 2012"</item>
     </string-array>
     <string-array name="calcHighNames">
         <item>"Septième de la nuit"</item>
         <item>"Milieu de la nuit"</item>
         <item>"Angle du crépuscule"</item>
         <item>"Part de la nuit à 45°"</item>
+        <item>"Congrès d'Istanbul 2021"</item>
+        <item>"Horaires de La Mecque"</item>
     </string-array>
     <string-array name="calcIshaModes">
         <item>"Par l'angle"</item>
@@ -769,6 +773,12 @@
     <string-array name="news_1_22_0">
         <item>"Espagnol"</item>
         <item>"Tous les écrans en espagnol, dans les termes des mosquées d'Espagne, avec les récitateurs et les sourates nommés en espagnol. Choisissez cette langue avec le bouton globe de l'accueil."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Calcul personnalisé"</item>
+        <item>"Paramètres › Horaires de prière › Méthode de calcul › Calcul personnalisé : partez de n'importe quelle méthode, puis réglez l'angle du Fajr, et l'Isha par l'angle ou en minutes après le Maghrib. Il peut rester quand vous changez de ville."</item>
+        <item>"Hautes latitudes"</item>
+        <item>"Au-delà de 48°, le calcul personnalisé choisit la règle du Fajr et de l'Isha quand leurs signes s'effacent : un septième de la nuit, son milieu, l'angle du crépuscule, la part de la nuit à 45°, le congrès d'Istanbul 2021 ou les horaires de La Mecque comme dans le nord de la Norvège."</item>
     </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>

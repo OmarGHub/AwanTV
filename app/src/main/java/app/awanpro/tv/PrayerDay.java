@@ -245,15 +245,24 @@ final class PrayerDay {
                 return t;
             }
         }
-        PrayerTimes p = adhan(where, date, params);
-        // The custom calculation's rule above 48° (a polar day or night keeps 45°'s: HighLatitude finds no sunset).
-        Date[] fi = HighLatitude.fajrIsha(high, where, date, params, p);
-        return new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]};
+        PrayerTimes p = new PrayerTimes(where, date, params);
+        Date[] local = null;
+        if (p.fajr != null) {
+            // The custom calculation's rule above 48° (HighLatitude).
+            Date[] fi = HighLatitude.fajrIsha(high, where, date, params, p);
+            local = new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]};
+        }
+        // Makkah's clock times where the fast would pass twenty hours, or on a day adhan-java can't work out there (no
+        // sunrise, sunset or Asr: HighLatitude.makkah).
+        Date[] makkah = HighLatitude.makkah(high, where, date, params, local);
+        if (makkah != null) return makkah;
+        if (local != null) return local;
+        p = at45(where, date, params);
+        return new Date[] {p.fajr, p.sunrise, p.dhuhr, p.asr, p.maghrib, p.isha};
     }
 
-    private static PrayerTimes adhan(Coordinates where, DateComponents date, CalculationParameters params) {
-        PrayerTimes p = new PrayerTimes(where, date, params);
-        if (p.fajr != null) return p;
+    /** A day with no sunrise, sunset or Asr at the place (adhan-java gives none of its times): 45°'s, whatever the rule. */
+    private static PrayerTimes at45(Coordinates where, DateComponents date, CalculationParameters params) {
         // 45° is below the seventh-of-the-night band: its own times, by the method's angles as anywhere below 48°.
         HighLatitudeRule rule = params.highLatitudeRule;
         params.highLatitudeRule = HighLatitudeRule.MIDDLE_OF_THE_NIGHT;

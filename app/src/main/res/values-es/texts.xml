@@ -637,12 +637,16 @@
         <item>"Como mucho la mitad de la noche tras el Maghrib y antes del Shuruq · por defecto en adhan"</item>
         <item>"El ángulo como parte de la noche (18° = 18/60) · AlAdhan por defecto, recomendado por PrayTimes"</item>
         <item>"Su proporción de la noche a 45° · Academia Islámica de Fiqh, 1406 H"</item>
+        <item>"Un tercio de la noche del último día con Fajr · Diyanet y Consejo Europeo de la Fatwa, 2021"</item>
+        <item>"La hora de La Meca si el ayuno pasa de 20 h o no sale el sol · mezquitas del norte de Noruega, 2012"</item>
     </string-array>
     <string-array name="calcHighNames">
         <item>"Séptimo de la noche"</item>
         <item>"Mitad de la noche"</item>
         <item>"Ángulo del crepúsculo"</item>
         <item>"Proporción de la noche a 45°"</item>
+        <item>"Congreso de Estambul 2021"</item>
+        <item>"Horarios de La Meca"</item>
     </string-array>
     <string-array name="calcIshaModes">
         <item>"Por ángulo"</item>
@@ -769,6 +773,12 @@
     <string-array name="news_1_22_0">
         <item>"Español"</item>
         <item>"Todas las pantallas en español, con los términos de las mezquitas de España, y los recitadores y las suras con sus nombres en español. Elígelo con el botón del globo en inicio."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Cálculo personalizado"</item>
+        <item>"Ajustes › Horarios de oración › Método de cálculo › Cálculo personalizado: parte de cualquier método y elige el ángulo de Fajr, y el Isha por ángulo o en minutos tras el Maghrib. Puede mantenerse al cambiar de ciudad."</item>
+        <item>"Latitudes altas"</item>
+        <item>"Por encima de 48°, el cálculo personalizado elige la regla de Fajr e Isha cuando sus señales se pierden: un séptimo de la noche, su mitad, el ángulo del crepúsculo, la proporción de la noche a 45°, el congreso de Estambul 2021 o los horarios de La Meca como en el norte de Noruega."</item>
     </string-array>
     <string-array name="news_1_1_0">
         <item>"Remote buttons"</item>
