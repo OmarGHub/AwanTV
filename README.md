@@ -315,7 +315,7 @@ Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en esp
    **وشاشة أمان** (من 1.13.0): إن توقف التطبيق على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية، مع تفاصيل
    للإبلاغ. وإن تكرر التوقف خلال دقيقتين يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل.
 8. **الطقس** بجانب الساعة: الحرارة الآن وأيقونة للحالة (صافٍ، غائم، مطر...)، من Open-Meteo للمكان المختار، ويختفي دون إنترنت. يُوقف أو يُختار °م / °ف من الإعدادات.
-9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة.
+9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة. ولمسجد لا تطابق جداوله أي طريقة في القائمة: «حساب مخصّص» في آخر قائمة طرق الحساب، بزاويتي الفجر والعشاء أو العشاء بعد المغرب بدقائق، وقاعدة ما فوق 48°، ومنها مؤتمر إسطنبول 2021 (ديانت والمجلس الأوروبي للإفتاء) وأوقات مكة كما في شمال النرويج.
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها، وتعود بأسمائها بعد إعادة التثبيت ولو دون إنترنت.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
 12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
@@ -798,7 +798,10 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    coordinates for a smaller place. Each time can be moved up to 30 minutes earlier or later to match your masjid
    (Prayer times > Adjust the times and the date). In Morocco the times follow the Ministry of Habous and Islamic
    Affairs, with your locality's table out of its 191 (Prayer times > Ministry table): the ministry's published minute
-   for 99% of times, the rest a minute off.
+   for 99% of times, the rest a minute off. For a masjid whose timetable no listed method matches: Custom calculation,
+   the last item of the calculation methods, with Fajr's and Isha's angles or Isha minutes after Maghrib, and the
+   rule above 48°, among them the Istanbul congress 2021 (Diyanet and the European Council for Fatwa) and Makkah
+   times as in northern Norway.
 9. **Saved recitations**: download a reciter's surahs, or the whole Quran, from mp3quran.net and play them from the
    radio without internet; 2 GB are always left free for the TV. They are kept in `Music/Awan TV` on the TV, so they
    stay if you remove the app, unless you choose to delete them, and come back with their names after a reinstall,

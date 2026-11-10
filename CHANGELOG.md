@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.24.0]
+
 ### The app
 - Custom calculation (test builds from 1.24.0a): Settings > Prayer times > Calculation method has a last choice,
   Custom calculation…, for a mosque whose timetable no listed method matches (Muslim Pro's Fixed calculation, Pillars'
