@@ -90,7 +90,7 @@ final class Iqama {
      * seeds every prayer with it the first time FIXED is chosen.
      */
     static int suggestedFixed(Context c, PrayerDay day, int prayer) {
-        Date at = afterAdhan(day, prayer, waitFor(c, prayer));
+        Date at = afterAdhan(day.times[prayer], waitFor(c, prayer));
         Calendar cal = Calendar.getInstance();
         cal.setTime(at);
         int m = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE);
@@ -101,31 +101,40 @@ final class Iqama {
     static Date at(Context c, PrayerDay day, int prayer) {
         if (prayer == PrayerDay.SUNRISE) return null;
         if (day.friday && prayer == PrayerDay.DHUHR) return null;
+        boolean ramadan = prayer == PrayerDay.FAJR ? day.fajrRamadan : prayer == PrayerDay.ISHA ? day.ishaRamadan : day.ramadan;
+        return at(c, prayer, day.times[prayer], ramadan);
+    }
+
+    /**
+     * The iqamah of one prayer whose adhan is at {@code adhan}, or null when none is shown; ramadan: that prayer's own
+     * Ramadan (for Isha, tonight's). Also asked by {@link PrayerDay} before it exists: does last night's Isha
+     * iqamah still lie ahead after midnight.
+     */
+    static Date at(Context c, int prayer, Date adhan, boolean ramadan) {
         int mode = mode(c);
         // Ramadan's own wait, where one is set, in every mode but off.
-        boolean ramadan = prayer == PrayerDay.FAJR ? day.fajrRamadan : prayer == PrayerDay.ISHA ? day.ishaRamadan : day.ramadan;
-        if (mode != OFF && ramadan && ramadanMinutes(c, prayer) >= 0) return afterAdhan(day, prayer, ramadanMinutes(c, prayer));
+        if (mode != OFF && ramadan && ramadanMinutes(c, prayer) >= 0) return afterAdhan(adhan, ramadanMinutes(c, prayer));
         switch (mode) {
             case COUNTRY: {
                 int[] p = preset(c);
-                return p == null ? null : afterAdhan(day, prayer, p[prayer]);
+                return p == null ? null : afterAdhan(adhan, p[prayer]);
             }
             case MINUTES:
-                return afterAdhan(day, prayer, minutes(c, prayer));
+                return afterAdhan(adhan, minutes(c, prayer));
             case FIXED: {
                 int m = fixed(c, prayer);
                 if (m < 0) return null;
                 // On the adhan's own day (after Isha the Fajr slot holds tomorrow's Fajr).
                 Calendar cal = Calendar.getInstance();
-                cal.setTime(day.times[prayer]);
+                cal.setTime(adhan);
                 cal.set(Calendar.HOUR_OF_DAY, m / 60);
                 cal.set(Calendar.MINUTE, m % 60);
                 cal.set(Calendar.SECOND, 0);
                 cal.set(Calendar.MILLISECOND, 0);
                 Date at = cal.getTime();
-                if (at.before(day.times[prayer])) {
+                if (at.before(adhan)) {
                     // Far before the adhan is after midnight (a late Isha in summer at high latitudes): next day.
-                    if (day.times[prayer].getTime() - at.getTime() > 12 * 3600_000L) at = new Date(at.getTime() + 24 * 3600_000L);
+                    if (adhan.getTime() - at.getTime() > 12 * 3600_000L) at = new Date(at.getTime() + 24 * 3600_000L);
                     // Shortly before it, the season has moved past the set time: showing it would be wrong.
                     else return null;
                 }
@@ -142,7 +151,7 @@ final class Iqama {
         return p[prayer];
     }
 
-    private static Date afterAdhan(PrayerDay day, int prayer, int minutes) {
-        return new Date(day.times[prayer].getTime() + minutes * 60_000L);
+    private static Date afterAdhan(Date adhan, int minutes) {
+        return new Date(adhan.getTime() + minutes * 60_000L);
     }
 }

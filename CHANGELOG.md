@@ -6,6 +6,15 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- The iqamah countdown of an Isha whose adhan comes before midnight and its iqamah after it no longer goes at 00:00
+  (test builds from 1.24.1a): as 1.23.0 keeps the night's times until Fajr when Isha comes after midnight, it now also
+  does when that Isha's iqamah does, whatever sets it (minutes, a fixed time, Ramadan's own minutes); with the iqamah
+  off, as before. With an iqamah of 20 minutes it touches summer nights in 723 of the 9,480 GeoNames cities checked
+  (every one above 45° and one in ten below), from Trondheim, Reykjavik and Anchorage to Madrid, southern France,
+  Switzerland and northern Italy, where Isha comes near midnight; on every other night of 2027 the times, the prayer
+  now and the next prayer are 1.24.0's exactly.
+
 ## [1.24.0]
 
 ### The app

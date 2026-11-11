@@ -57,7 +57,13 @@ final class PrayerDay {
     /** calc: the custom calculation (its base method in place of the chosen one), or null. */
     private PrayerDay(Context c, Date now, boolean night, Prefs.Calc calc) {
         this(now, Prefs.where(c), calc != null ? calc.base : Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c),
-            Prefs.hijriOffset(c), calc == null && Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night, calc);
+            Prefs.hijriOffset(c), calc == null && Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night, calc,
+            (adhan, ramadan) -> Iqama.at(c, ISHA, adhan, ramadan));
+    }
+
+    /** Tonight's Isha iqamah for an Isha adhan (Iqama.at), or null when none is shown. */
+    interface IshaIqamah {
+        Date at(Date adhan, boolean ramadan);
     }
 
     /**
@@ -65,12 +71,18 @@ final class PrayerDay {
      * horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon).
      */
     PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table) {
-        this(now, where, method, madhab, adjust, hijriOffset, table, true, null);
+        this(now, where, method, madhab, adjust, hijriOffset, table, true, null, null);
+    }
+
+    /** With an Isha iqamah (the checks' own, in place of Settings > Iqamah). */
+    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table,
+              IshaIqamah iqamah) {
+        this(now, where, method, madhab, adjust, hijriOffset, table, true, null, iqamah);
     }
 
     /** With a custom calculation (Settings > Prayer times > Calculation method > Custom calculation). */
     PrayerDay(Date now, Coordinates where, Prefs.Calc calc, Madhab madhab, int[] adjust, int hijriOffset) {
-        this(now, where, calc.base, madhab, adjust, hijriOffset, null, true, calc);
+        this(now, where, calc.base, madhab, adjust, hijriOffset, null, true, calc, null);
     }
 
     /**
@@ -80,9 +92,10 @@ final class PrayerDay {
      * midnight, the times are yesterday's (its Isha "now" and called, then today's Fajr next); from Fajr on, today's. The prayers are moments in one line through
      * yesterday, today and tomorrow, as Mawaqit's and adhan's SunnahTimes take the night; adhan-java gives each
      * day's late times on the right instant already. The dates shown, the Hijri day and Friday still follow the clock.
+     * The same holds when only that Isha's iqamah comes after midnight (1.24.1a: its countdown went at 00:00).
      */
     private PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset,
-                      Habous.Locality table, boolean night, Prefs.Calc calc) {
+                      Habous.Locality table, boolean night, Prefs.Calc calc, IshaIqamah iqamah) {
         CalculationParameters params = calc != null ? calc.parameters() : Prefs.parameters(method);
         // Above 48°: the seventh of the night below, or the custom calculation's rule (HighLatitude).
         String high = calc != null ? calc.high : Prefs.HIGH_SEVENTH;
@@ -104,7 +117,8 @@ final class PrayerDay {
             y.add(Calendar.DAY_OF_MONTH, -1);
             Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params, high);
             Date yIsha = minute(yesterday[ISHA]);
-            if (ummAlQuraRamadan(method, params) && ramadanNight(y, hijriOffset)) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
+            boolean yRamadan = ramadanNight(y, hijriOffset);
+            if (ummAlQuraRamadan(method, params) && yRamadan) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
             // Yesterday's Isha came after midnight: its night runs to today's Fajr. Up to Isha its Maghrib and Isha
             // are still to come; from Isha on, that Isha is the one whose adhan, iqamah and "now" are due (1.23.0b:
             // switching to today's times at that Isha left it out of the day, and its adhan never came).
@@ -113,8 +127,12 @@ final class PrayerDay {
             midnight.set(Calendar.MINUTE, 0);
             midnight.set(Calendar.SECOND, 0);
             midnight.set(Calendar.MILLISECOND, 0);
-            // An Isha a minute or two before midnight too: its call is due until CALL_WINDOW_MS after it.
-            if (yIsha.getTime() > midnight.getTimeInMillis() - CALL_WINDOW_MS) {
+            // An Isha a minute or two before midnight too: its call is due until CALL_WINDOW_MS after it. And an Isha
+            // before midnight whose iqamah comes after it: its countdown runs until the iqamah (1.24.1a).
+            long until = yIsha.getTime();
+            Date yIqamah = iqamah != null ? iqamah.at(yIsha, yRamadan) : null;
+            if (yIqamah != null && yIqamah.getTime() > until) until = yIqamah.getTime();
+            if (until > midnight.getTimeInMillis() - CALL_WINDOW_MS) {
                 today = yesterday;
                 base = y;
             }
