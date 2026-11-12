@@ -43,7 +43,7 @@ TV Box مثل Xiaomi Mi Box، وشاشته الرئيسية صامتة لا تق
 3. **الأذان فوق أي تطبيق**، والتذكير قبل الصلاة، وعدّاد الإقامة.
 4. **أي موقع في العالم**، والمواقيت تُحسب على التلفاز دون إنترنت.
 5. **إذاعة القرآن الكريم**، والتلاوات المحفوظة للاستماع دون إنترنت.
-6. **سبع لغات**: العربية والإنجليزية والأردية والتركية والفرنسية والملايوية والإسبانية، وست سمات للألوان.
+6. **تسع لغات**: العربية والإنجليزية والأردية والتركية والفرنسية والملايوية والإسبانية والإندونيسية والفارسية، وست سمات للألوان.
 
 ## اللغات
 
@@ -245,6 +245,62 @@ Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en esp
 
 </div>
 
+<div dir="ltr">
+
+### Bahasa Indonesia
+
+Waktu salat, azan, dan screensaver untuk Android TV dan Google TV, dalam bahasa Indonesia
+
+<p align="center"><img src="docs/images/lang/home-id.webp" alt="Layar Utama dalam bahasa Indonesia" width="80%"></p>
+
+<details>
+<summary>Lainnya: Hari ini &amp; Kiblat, Setelan, screensaver</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-id.webp" alt="Hari ini & Kiblat"></td>
+<td><img src="docs/images/lang/settings-id.webp" alt="Setelan"></td>
+<td><img src="docs/images/lang/saver-id.webp" alt="Screensaver"></td>
+</tr>
+<tr>
+<td align="center">Hari ini &amp; Kiblat</td>
+<td align="center">Setelan</td>
+<td align="center">Screensaver</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="rtl">
+
+### فارسی
+
+اوقات شرعی، اذان و محافظ صفحه برای Android TV و Google TV، به فارسی
+
+<p align="center"><img src="docs/images/lang/home-fa.webp" alt="صفحه اصلی به فارسی" width="80%"></p>
+
+<details>
+<summary>بیشتر: اوقات نماز امروز و قبله، تنظیمات، محافظ صفحه</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-fa.webp" alt="اوقات نماز امروز و قبله"></td>
+<td><img src="docs/images/lang/settings-fa.webp" alt="تنظیمات"></td>
+<td><img src="docs/images/lang/saver-fa.webp" alt="محافظ صفحه"></td>
+</tr>
+<tr>
+<td align="center">اوقات نماز امروز و قبله</td>
+<td align="center">تنظیمات</td>
+<td align="center">محافظ صفحه</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
 ## التثبيت
 
 ثلاث طرق، اختر واحدة منها. الملفات كلها في [صفحة الإصدارات](../../releases/latest).
@@ -315,7 +371,7 @@ Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en esp
    **وشاشة أمان** (من 1.13.0): إن توقف التطبيق على غير المتوقع تظهر شاشة تعيد تشغيله أو تفتح شاشة التلفاز الأصلية، مع تفاصيل
    للإبلاغ. وإن تكرر التوقف خلال دقيقتين يترك التلفاز يعمل بشاشته نصف ساعة، فلا يتعطل.
 8. **الطقس** بجانب الساعة: الحرارة الآن وأيقونة للحالة (صافٍ، غائم، مطر...)، من Open-Meteo للمكان المختار، ويختفي دون إنترنت. يُوقف أو يُختار °م / °ف من الإعدادات.
-9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة. ولمسجد لا تطابق جداوله أي طريقة في القائمة: «حساب مخصّص» في آخر قائمة طرق الحساب، بزاويتي الفجر والعشاء أو العشاء بعد المغرب بدقائق، وقاعدة ما فوق 48°، ومنها مؤتمر إسطنبول 2021 (ديانت والمجلس الأوروبي للإفتاء) وأوقات مكة كما في شمال النرويج.
+9. **أي موقع في العالم**: في أول تشغيل يقترح التطبيق موقع الشاشة من خدمة الموقع فيها، أو ابحث بالعربية أو الإنجليزية في 34 ألف مدينة (من GeoNames)، فتُضبط طريقة الحساب حسب دولتها، أو أدخل الإحداثيات لمكان أصغر. ويُعدَّل كل وقت حتى 30 دقيقة قبله أو بعده ليطابق مسجدك (مواقيت الصلاة ← تعديل المواقيت والتاريخ). وفي المغرب تُحسب المواقيت بطريقة وزارة الأوقاف والشؤون الإسلامية، بجدول مدينتك من مدنها الـ 191 (مواقيت الصلاة ← جدول الوزارة): تطابق ما تنشره الوزارة بالدقيقة في 99% من الأوقات، والباقي بفرق دقيقة. وفي إيران بطريقتها الرسمية، معهد الجيوفيزياء في جامعة طهران (المغرب حين تنزل الشمس 4.5° تحت الأفق). ولمسجد لا تطابق جداوله أي طريقة في القائمة: «حساب مخصّص» في آخر قائمة طرق الحساب، بزاويتي الفجر والعشاء أو العشاء بعد المغرب بدقائق، وقاعدة ما فوق 48°، ومنها مؤتمر إسطنبول 2021 (ديانت والمجلس الأوروبي للإفتاء) وأوقات مكة كما في شمال النرويج.
 10. **التلاوات المحفوظة**: حمّل سور قارئك أو المصحف كاملًا من mp3quran.net لتُسمع من الإذاعة دون إنترنت، مع ترك 2 جيجابايت فارغة للتلفاز دائمًا. تُحفظ في مجلد `Music/Awan TV` على التلفاز، فتبقى إن أزلت التطبيق إلا إذا اخترت حذفها، وتعود بأسمائها بعد إعادة التثبيت ولو دون إنترنت.
 11. **التحكم في التشغيل** (الإعدادات ← تشغيل Awan TV): الكل، أو الرئيسية فقط، أو شاشة الاستراحة فقط، أو إيقاف. الأذكار تتبع شاشة الاستراحة، والأذان والتذكير لهما إعداداتهما.
 12. **أزرار الريموت** (الإعدادات ← إعدادات الجهاز ← أزرار الريموت): اجعل زرًا في أي ريموت، الأصلي أو ريموت بلوتوث، يفتح تطبيقًا أو شاشة الاستراحة أو مواقيت اليوم والقبلة أو الإذاعة، أو عطّله. على شاشات TCL تُخصَّص بنظام TCL نفسه دون أي أثر جانبي؛ وعلى غيرها، ما دام زر مخصصًا، يتحرك الصوت درجة مع كل ضغطة لا بالضغط المطوّل.
@@ -512,7 +568,7 @@ That is what **Awan TV** brings you, and more.
 3. **The adhan over any app**, reminders before the prayer, and the iqamah countdown.
 4. **Any location in the world**; the times are worked out on the TV, offline.
 5. **Quran radio**, and saved recitations to listen to offline.
-6. **Seven languages**: Arabic, English, Urdu, Turkish, French, Malay and Spanish, and six colour themes.
+6. **Nine languages**: Arabic, English, Urdu, Turkish, French, Malay, Spanish, Indonesian and Persian, and six colour themes.
 
 ## Languages
 
@@ -714,6 +770,62 @@ Horarios de oración, adhan y salvapantallas para Android TV y Google TV, en esp
 
 </div>
 
+<div dir="ltr">
+
+### Bahasa Indonesia
+
+Waktu salat, azan, dan screensaver untuk Android TV dan Google TV, dalam bahasa Indonesia
+
+<p align="center"><img src="docs/images/lang/home-id.webp" alt="Layar Utama dalam bahasa Indonesia" width="80%"></p>
+
+<details>
+<summary>Lainnya: Hari ini &amp; Kiblat, Setelan, screensaver</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-id.webp" alt="Hari ini & Kiblat"></td>
+<td><img src="docs/images/lang/settings-id.webp" alt="Setelan"></td>
+<td><img src="docs/images/lang/saver-id.webp" alt="Screensaver"></td>
+</tr>
+<tr>
+<td align="center">Hari ini &amp; Kiblat</td>
+<td align="center">Setelan</td>
+<td align="center">Screensaver</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
+<div dir="rtl">
+
+### فارسی
+
+اوقات شرعی، اذان و محافظ صفحه برای Android TV و Google TV، به فارسی
+
+<p align="center"><img src="docs/images/lang/home-fa.webp" alt="صفحه اصلی به فارسی" width="80%"></p>
+
+<details>
+<summary>بیشتر: اوقات نماز امروز و قبله، تنظیمات، محافظ صفحه</summary>
+
+<table>
+<tr>
+<td><img src="docs/images/lang/today-fa.webp" alt="اوقات نماز امروز و قبله"></td>
+<td><img src="docs/images/lang/settings-fa.webp" alt="تنظیمات"></td>
+<td><img src="docs/images/lang/saver-fa.webp" alt="محافظ صفحه"></td>
+</tr>
+<tr>
+<td align="center">اوقات نماز امروز و قبله</td>
+<td align="center">تنظیمات</td>
+<td align="center">محافظ صفحه</td>
+</tr>
+</table>
+
+</details>
+
+</div>
+
 ## Install
 
 Three ways; choose one. Every file is on the [releases page](../../releases/latest).
@@ -798,7 +910,9 @@ the TV's own settings, the TV goes back to its default screensaver by itself.
    coordinates for a smaller place. Each time can be moved up to 30 minutes earlier or later to match your masjid
    (Prayer times > Adjust the times and the date). In Morocco the times follow the Ministry of Habous and Islamic
    Affairs, with your locality's table out of its 191 (Prayer times > Ministry table): the ministry's published minute
-   for 99% of times, the rest a minute off. For a masjid whose timetable no listed method matches: Custom calculation,
+   for 99% of times, the rest a minute off. In Iran by its official method, the Institute of Geophysics, University
+   of Tehran (Maghrib when the sun is 4.5° below the horizon). For a masjid whose timetable no listed method matches:
+   Custom calculation,
    the last item of the calculation methods, with Fajr's and Isha's angles or Isha minutes after Maghrib, and the
    rule above 48°, among them the Istanbul congress 2021 (Diyanet and the European Council for Fatwa) and Makkah
    times as in northern Norway.

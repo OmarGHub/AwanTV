@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.25.0]
+
 ### The app
 - Indonesian and Persian (test builds from 1.25.0a): every screen in each (res/values-in, res/values-fa), with
   reciters and surahs by mp3quran.net in each, and the adhkar's counts and hadiths' references from
@@ -24,6 +26,10 @@ history is in its repository.
   chooser showed ISNA's row on the left, reversed).
 - The note under the method row after a new location is shorter in English and Spanish (it fits beside Tehran's
   longer name).
+
+### The repository
+- README: nine languages, Indonesian's and Persian's own sections with their pictures (the Wi-Fi name covered), and
+  Tehran's method among the countries' own.
 
 ## [1.24.2]
 
