@@ -62,7 +62,7 @@ final class Weather {
     static String temperature(Context c, Text t, Now n) {
         double v = "f".equals(Prefs.weather(c)) ? n.celsius * 9 / 5 + 32 : n.celsius;
         long r = Math.round(v);
-        return t.d(String.valueOf(r == 0 ? 0 : r)) + "°";
+        return t.d((r == 0 ? 0 : r) + "°");
     }
 
     /**

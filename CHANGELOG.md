@@ -6,6 +6,28 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Asr above 48° (test builds from 1.25.1a). adhan-java takes the noon shadow from the sun's declination at 0h UT of
+  the date but Asr's moment from the declination at noon; near the polar night that mismatch is hours. In 34,006
+  cities, every day of 2027: Asr before Dhuhr or after Maghrib on 374 days in 36 cities (the Hanafi Asr: 274), more
+  than two minutes off on 13,811 (Murmansk, 16 January: twelve hours). Now, above 48°, the classical rule as
+  Morocco's ministry and PrayTimes.org take it: the noon shadow from the declination at the transit, and Asr when the
+  shadow is one length (Hanafi: two) more, on the sun as it moves. Where the sun is below the true horizon at noon
+  (seen only by refraction) the shadow never forms, and Asr is at Dhuhr, Diyanet's published rule.
+  - Against Diyanet's printed times (Harstad, Kirkenes, Oslo, Reykjavik, Anchorage; 52 days of 2027 with the sun
+    up): within 3 minutes, and at Dhuhr or a minute after on Diyanet's five days with Asr at Dhuhr. 1.25.0 was up to
+    ten hours off (Kirkenes, 20 January: 21:03 for Diyanet's 11:16).
+  - Every city, every day of 2027, against 1.25.0 (Muslim World League, the country's own method, the Hanafi Asr,
+    and above 48° each custom rule: 47 million days): only Asr changed, only above 48°. Asr out of Dhuhr..Maghrib:
+    4,572 days in 1.25.0, none now. Within a minute of the rule worked out independently (noon declination, the sun
+    scanned minute by minute) on every day but the midnight-sun days the 45° fallback decides, as before (Murmansk,
+    Bodø, Inta, May to July); 1.25.0 was more than two minutes off on 12,740 of the others.
+- The degree sign keeps one side in right-to-left lines. Unicode's bidi put it by the kind of digits and what came
+  before them, so the same screen had "°18" in a sentence and "21.53°" at the start of a line. Arabic: always left of
+  the number, as Saudi Arabia's National Center for Meteorology writes it; Persian and Urdu: always right, as Persian
+  Calendar and CLDR's Urdu. A negative temperature keeps its minus before the digits ("-5", not "5-"). Other languages
+  unchanged.
+
 ## [1.25.0]
 
 ### The app

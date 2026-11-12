@@ -115,12 +115,12 @@ final class Text {
     }
 
     private String s(int id) {
-        return fill(res.string(id));
+        return degreeSide(fill(res.string(id)));
     }
 
     /** A text with its parts: %1$s, %2$s… by position, %% a percent sign. */
     private String s(int id, Object... parts) {
-        return fill(res.string(id), parts);
+        return degreeSide(fill(res.string(id), parts));
     }
 
     /**
@@ -150,7 +150,14 @@ final class Text {
     }
 
     private String[] a(int id) {
-        return res.array(id);
+        String[] items = res.array(id), out = items;
+        for (int i = 0; i < items.length; i++) {
+            String v = degreeSide(items[i]);
+            if (v == items[i]) continue;
+            if (out == items) out = items.clone();
+            out[i] = v;
+        }
+        return out;
     }
 
     /** An array written row after row (title, line, title, line…) as rows of width. */
@@ -161,6 +168,28 @@ final class Text {
     }
 
     String d(String s) {
+        return degreeSide(digits(s));
+    }
+
+    /**
+     * A number with its degree sign, in a right-to-left line. Unicode's bidi puts the sign by the kind of digits and by
+     * what comes before them ("°18" after a word, "18°" at the start of a line with Western digits), so the same screen
+     * had it on both sides. Arabic: always left of the number, as Saudi Arabia's National Center for Meteorology writes
+     * it (the number in a left-to-right isolate, the sign after it outside: a minus stays before the digits). Persian and
+     * Urdu: always right, as Persian Calendar and CLDR's Urdu (the number and its sign in one isolate). Other languages
+     * as written. Once only: a number already marked doesn't match again.
+     */
+    String degreeSide(String s) {
+        if (s == null || s.indexOf('°') < 0 || !rtl()) return s;
+        return DEGREES.matcher(s).replaceAll(ar ? "\u2066$1\u2069°" : "\u2066$1°\u2069");
+    }
+
+    private static final java.util.regex.Pattern DEGREES = java.util.regex.Pattern.compile(
+        "(?<![\\u2066\\-0-9\\u0660-\\u0669\\u06F0-\\u06F9.\\u066B])"
+        + "(-?[0-9\\u0660-\\u0669\\u06F0-\\u06F9]+(?:[.\\u066B][0-9\\u0660-\\u0669\\u06F0-\\u06F9]+)?)°");
+
+    /** The screen's digits and the punctuation that goes with them. */
+    private String digits(String s) {
         if (!eastern) return s;
         // "·" beside Eastern digits reads as a zero (٠); Arabic punctuation takes its own comma instead. Awan TV
         // English with Eastern digits takes the Latin comma ("Cairo, Friday", not "Cairo، Friday").

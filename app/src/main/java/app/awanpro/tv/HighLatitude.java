@@ -3,6 +3,7 @@ package app.awanpro.tv;
 import com.batoulapps.adhan.CalculationMethod;
 import com.batoulapps.adhan.CalculationParameters;
 import com.batoulapps.adhan.Coordinates;
+import com.batoulapps.adhan.Madhab;
 import com.batoulapps.adhan.PrayerAdjustments;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.data.CalendarUtil;
@@ -345,6 +346,65 @@ final class HighLatitude {
         }
     }
 
+
+    /**
+     * Asr above 48°, where adhan-java's goes wrong near the polar night: it takes the noon shadow from the sun's
+     * declination at 0h UT of the date but the moment from the declination at noon, and with the sun a degree or two
+     * above the horizon that mismatch is hours (Murmansk, 16 January 2027: twelve hours). In 34,006 cities, every day
+     * of 2027: Asr before Dhuhr or after Maghrib on 374 days in 36 cities, more than two minutes off on 13,811.
+     * Here, the classical rule as Morocco's ministry and PrayTimes.org take it: the noon shadow from the declination at
+     * the transit, and Asr when the shadow is one length (Hanafi: two) more, on the sun as it moves. Where the sun is
+     * below the true horizon at noon (seen only by refraction) the shadow never forms: Asr at Dhuhr, as Diyanet's
+     * published rule prints it. Checked against Diyanet's printed times (Harstad, Kirkenes, Oslo, Reykjavik, Anchorage,
+     * 52 days of 2027): within 3 minutes, where adhan-java's was up to ten hours off. With the viewer's and the
+     * method's minutes, rounded as adhan-java rounds, between Dhuhr and Maghrib. At 48° and below adhan-java's own,
+     * unchanged (a minute off there at most); days adhan-java can't work out keep 45°'s times (PrayerDay.at45).
+     */
+    static Date asr(Coordinates where, DateComponents date, CalculationParameters params, PrayerTimes p) {
+        if (Math.abs(where.latitude) <= FROM || p.asr == null) return p.asr;
+        SolarTime sun = new SolarTime(date, where);
+        double jd0 = LocalDate.of(date.year, date.month, date.day).toEpochDay() + 2440587.5;   // 0h UT of the date
+        double lat = where.latitude;
+        double zenith = Math.abs(lat - declination(jd0 + sun.transit / 24));
+        if (zenith >= 90) return p.dhuhr;
+        double shadow = params.madhab == Madhab.HANAFI ? 2 : 1;
+        double altitude = Math.toDegrees(Math.atan(1 / (shadow + Math.tan(Math.toRadians(zenith)))));
+        // The sun goes down from the transit to the sunset, through that altitude once: halve the interval to it.
+        double lo = sun.transit, hi = Double.isNaN(sun.sunset) ? sun.transit + 12 : sun.sunset;
+        for (int i = 0; i < 40; i++) {
+            double mid = (lo + hi) / 2;
+            if (altitude(lat, declination(jd0 + mid / 24), (mid - sun.transit) * 15) > altitude) lo = mid;
+            else hi = mid;
+        }
+        TimeComponents at = TimeComponents.fromDouble(hi);
+        if (at == null) return p.asr;
+        long minute = 60_000L;
+        long raw = at.dateComponents(date).getTime() + (params.adjustments.asr + params.methodAdjustments.asr) * minute;
+        Date asr = new Date((raw + 30_000L) / minute * minute);
+        if (asr.before(p.dhuhr)) return p.dhuhr;
+        if (asr.after(p.maghrib)) return p.maghrib;
+        return asr;
+    }
+
+    /** The sun's apparent declination in degrees at a Julian day (Meeus, Astronomical Algorithms, ch. 25, as adhan-java). */
+    static double declination(double jd) {
+        double t = (jd - 2451545.0) / 36525;
+        double l0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
+        double m = Math.toRadians(357.52911 + t * (35999.05029 - 0.0001537 * t));
+        double c = (1.914602 - t * (0.004817 + 0.000014 * t)) * Math.sin(m) + (0.019993 - 0.000101 * t) * Math.sin(2 * m)
+            + 0.000289 * Math.sin(3 * m);
+        double omega = Math.toRadians(125.04 - 1934.136 * t);
+        double lambda = Math.toRadians(l0 + c - 0.00569 - 0.00478 * Math.sin(omega));
+        double eps0 = 23 + (26 + (21.448 - t * (46.815 + t * (0.00059 - 0.001813 * t))) / 60) / 60;
+        double eps = Math.toRadians(eps0 + 0.00256 * Math.cos(omega));
+        return Math.toDegrees(Math.asin(Math.sin(eps) * Math.sin(lambda)));
+    }
+
+    /** The sun's altitude in degrees at a latitude, for its declination and hour angle (degrees). */
+    private static double altitude(double latitude, double declination, double hourAngle) {
+        double f = Math.toRadians(latitude), d = Math.toRadians(declination);
+        return Math.toDegrees(Math.asin(Math.sin(f) * Math.sin(d) + Math.cos(f) * Math.cos(d) * Math.cos(Math.toRadians(hourAngle))));
+    }
 
     /** Makkah (al-Masjid al-Haram). */
     private static final Coordinates MAKKAH = new Coordinates(21.4225, 39.8262);

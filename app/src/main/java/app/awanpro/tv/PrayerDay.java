@@ -320,10 +320,10 @@ final class PrayerDay {
         PrayerTimes p = new PrayerTimes(where, date, params);
         Date[] local = null;
         if (p.fajr != null) {
-            // The custom calculation's rule above 48° (HighLatitude).
+            // The custom calculation's rule above 48°, and Asr there (HighLatitude).
             Date[] fi = HighLatitude.fajrIsha(high, where, date, params, p);
             local = withMaghrib(method, where, date, params,
-                new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]});
+                new Date[] {fi[0], p.sunrise, p.dhuhr, HighLatitude.asr(where, date, params, p), p.maghrib, fi[1]});
         }
         // Makkah's clock times where the fast would pass twenty hours, or on a day adhan-java can't work out there (no
         // sunrise, sunset or Asr: HighLatitude.makkah).

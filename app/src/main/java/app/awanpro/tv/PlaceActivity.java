@@ -348,6 +348,7 @@ public class PlaceActivity extends Screen {
             else if (ch == '٫') b.append('.');
             else if (ch == '−' || ch == '–') b.append('-');
             else if (ch == '،' || ch == ';') b.append(',');
+            else if (ch == '\u2066' || ch == '\u2069' || ch == '\u061C' || ch == '\u200E' || ch == '\u200F') continue;
             else b.append(ch);
         }
         String clean = b.toString().replace("°", "").trim();
