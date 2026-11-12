@@ -26,7 +26,8 @@ history is in its repository.
   before them, so the same screen had "°18" in a sentence and "21.53°" at the start of a line. Arabic: always left of
   the number, as Saudi Arabia's National Center for Meteorology writes it; Persian and Urdu: always right, as Persian
   Calendar and CLDR's Urdu. A negative temperature keeps its minus before the digits ("-5", not "5-"). Other languages
-  unchanged.
+  unchanged. Today & Qibla's large qibla degrees had their own left-to-right direction and kept "139°" in Arabic: they
+  take the screen's direction since 1.25.1b.
 
 ## [1.25.0]
 

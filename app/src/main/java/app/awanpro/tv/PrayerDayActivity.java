@@ -190,7 +190,8 @@ public class PrayerDayActivity extends Screen {
         northLabel = text(ui400, 20, Tokens.MIST_400);
         degrees = text(sacred, 64, Tokens.GOLD_400);
         degrees.setIncludeFontPadding(false);
-        degrees.setTextDirection(View.TEXT_DIRECTION_LTR);
+        // The screen's own direction, so the degree sign takes the language's side (Text.degreeSide: Arabic's left).
+        degrees.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
         direction = text(ui400, 24, Tokens.PLASTER_100);
         direction.setGravity(Gravity.CENTER_HORIZONTAL);
         qiblaHint = text(ui400, 20, Tokens.MIST_400);
