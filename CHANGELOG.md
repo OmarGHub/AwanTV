@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.24.1]
+
 ### The app
 - The iqamah countdown of an Isha whose adhan comes before midnight and its iqamah after it no longer goes at 00:00
   (test builds from 1.24.1a): as 1.23.0 keeps the night's times until Fajr when Isha comes after midnight, it now also
