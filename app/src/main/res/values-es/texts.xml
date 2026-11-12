@@ -112,7 +112,7 @@
     <string name="calcName" formatted="false">"Cálculo personalizado"</string>
     <string name="calcOffNote" formatted="false">"Al activarlo, parte de «%1$s»; luego cambia lo que necesites para seguir el horario de tu mezquita."</string>
     <string name="calcRamadan" formatted="false">" · 30 más en Ramadán"</string>
-    <string name="calcReset" formatted="false">"Nueva ubicación: el método de su país, y el ajuste de minutos a cero"</string>
+    <string name="calcReset" formatted="false">"Nueva ubicación: método de su país y ajuste de minutos a cero"</string>
     <string name="calcRow" formatted="false">"Cálculo personalizado"</string>
     <string name="calcRowHelp" formatted="false">"Tus propios ángulos de Fajr e Isha y la regla por encima de 48°"</string>
     <string name="calcSection" formatted="false">"Horarios de oración › Cálculo personalizado"</string>
@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"Ángulo de Fajr "</string>
     <string name="methodAngles_2" formatted="false">"Isha %1$s min después de Maghrib"</string>
     <string name="methodAngles_3" formatted="false">"Isha "</string>
+    <string name="methodAngles_4" formatted="false">"Maghrib "</string>
     <string name="methodName" formatted="false">"Umm al-Qura, La Meca"</string>
     <string name="methodName_10" formatted="false">"Ministerio de Awqaf, Omán"</string>
     <string name="methodName_11" formatted="false">"Ministerio de Habices, Marruecos"</string>
     <string name="methodName_12" formatted="false">"Autoridad General Egipcia de Topografía"</string>
+    <string name="methodName_13" formatted="false">"Instituto de Geofísica, Universidad de Teherán"</string>
     <string name="methodName_2" formatted="false">"Liga del Mundo Islámico"</string>
     <string name="methodName_3" formatted="false">"Universidad de Ciencias Islámicas, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubái"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"Español"</item>
         <item>"Todas las pantallas en español, con los términos de las mezquitas de España, y los recitadores y las suras con sus nombres en español. Elígelo con el botón del globo en inicio."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"Indonesio y persa"</item>
+        <item>"Todas las pantallas en indonesio y en persa, con los recitadores y las suras con sus nombres en cada idioma. Elige uno con el botón del globo en inicio."</item>
+        <item>"Los horarios oficiales de Irán"</item>
+        <item>"Un método nuevo: el Instituto de Geofísica de la Universidad de Teherán, que siguen las mezquitas y la radiotelevisión de Irán: Fajr 17,7°, Maghrib cuando el sol está 4,5° bajo el horizonte, Isha 14°. Una ubicación en Irán empieza con él."</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"Cálculo personalizado"</item>

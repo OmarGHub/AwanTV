@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The screens' texts, from Text.java (languages plan, phase 1). Every value is quoted so its spaces stay;
+     %1$s... are filled by Text.fill itself, not String.format, hence formatted="false"; %% is a percent sign.
+     Arrays are read as written: no %1$s in them. Checked before every build (app/build.gradle checkTexts). -->
+<resources>
+    <string name="accessibilityHelp" formatted="false">"Untuk mengaktifkan layanan Awan TV: Layar Utama dan azan"</string>
+    <string name="accessibilityRow" formatted="false">"Setelan aksesibilitas"</string>
+    <string name="addButtonHelp" formatted="false">"Lalu tekan tombol apa saja pada remote mana pun yang terhubung ke TV"</string>
+    <string name="addButtonRow" formatted="false">"Tambah tombol"</string>
+    <string name="adhanAt" formatted="false">"Azan"</string>
+    <string name="adhanCredit" formatted="false">"Rekaman: github.com/abodehq/Athan-MP3 dan github.com/meypod/audio_files · mana pun dihapus atas permintaan pemegang haknya"</string>
+    <string name="adhanHelp" formatted="false">"Berkumandang saat masuk waktu · bisa dimatikan per salat"</string>
+    <string name="adhanOn" formatted="false">"Aktif"</string>
+    <string name="adhanOn_2" formatted="false">"Nonaktif"</string>
+    <string name="adhanRow" formatted="false">"Azan"</string>
+    <string name="adhanToday" formatted="false">"Azan hari ini "</string>
+    <string name="adhkarHelp" formatted="false">"Di screensaver: Subuh sampai Zuhur, Asar sampai Isya"</string>
+    <string name="adhkarHelp_2" formatted="false">"Di screensaver: Subuh sampai terbit, Asar sampai Magrib"</string>
+    <string name="adhkarHelp_3" formatted="false">"Tanpa zikir di screensaver"</string>
+    <string name="adhkarRow" formatted="false">"Zikir pagi dan petang"</string>
+    <string name="adjustFileHelp" formatted="false">"Minutes added to the calculated time; negative is earlier"</string>
+    <string name="adjustFileLabel" formatted="false">"%1$s adjustment (minutes)"</string>
+    <string name="adjustNote" formatted="false">"Untuk masjid yang sedikit berbeda dari perhitungan. Azan, iqamah, pengingat, dan screensaver semuanya mengikuti waktu yang disesuaikan."</string>
+    <string name="adjustRow" formatted="false">"Sesuaikan waktu dan tanggal"</string>
+    <string name="adjustRowHelp" formatted="false">"Tiap waktu hingga 30 menit lebih awal atau lambat, dan tanggal Hijriah"</string>
+    <string name="adjustSection" formatted="false">"Waktu salat › Sesuaikan waktu dan tanggal"</string>
+    <string name="adjustSummary" formatted="false">"Hijriah "</string>
+    <string name="adjustSummary_2" formatted="false">"Tidak ada"</string>
+    <string name="adjustSummary_3" formatted="false">", "</string>
+    <string name="adjustTimeHelpToday" formatted="false">"Hari ini %1$s · dalam menit, hingga 30 lebih awal atau lambat"</string>
+    <string name="adjustTimeHelpTomorrow" formatted="false">"Besok %1$s · dalam menit, hingga 30 lebih awal atau lambat"</string>
+    <string name="afterAdhanHelp" formatted="false">"Radio dijeda saat azan, lalu…"</string>
+    <string name="afterAdhanLabel" formatted="false">"Doa setelah azan"</string>
+    <string name="afterAdhanRow" formatted="false">"Setelah azan"</string>
+    <string name="afterPrayerLabel" formatted="false">"Zikir setelah salat"</string>
+    <string name="all" formatted="false">"Semua aplikasi"</string>
+    <string name="allSaved" formatted="false">"Semua surah sudah tersimpan · putar dari Radio"</string>
+    <string name="allTitle" formatted="false">"Semua aplikasi"</string>
+    <string name="ampm" formatted="false">"AM"</string>
+    <string name="ampm_2" formatted="false">"PM"</string>
+    <string name="announceHelp" formatted="false">"Mengucapkan «حان الآن موعد صلاة …» saat azan suatu salat dimatikan"</string>
+    <string name="announceRow" formatted="false">"Umumkan waktu salat"</string>
+    <string name="apLabel" formatted="false">"SALAT SEGERA TIBA"</string>
+    <string name="apOk" formatted="false">"Mengerti"</string>
+    <string name="apSub" formatted="false">"Azan pukul "</string>
+    <string name="apSub_2" formatted="false">" · Kembali: tutup"</string>
+    <string name="apTitleOne" formatted="false">"%1$s dalam %2$s menit"</string>
+    <string name="apTitleOther" formatted="false">"%1$s dalam %2$s menit"</string>
+    <string name="asUsual" formatted="false">"Seperti biasa"</string>
+    <string name="asrSchool" formatted="false">"Mazhab Asar"</string>
+    <string name="asrSchoolHelp" formatted="false">"Hanya mengubah waktu Asar"</string>
+    <string name="backgroundHelp" formatted="false">"Foto: Haramain, al-Aqsa, masjid, dan alam, di bawah warna tema"</string>
+    <string name="backgroundRow" formatted="false">"Latar Layar Utama"</string>
+    <string name="bannerSub" formatted="false">"Azan "</string>
+    <string name="bannerSub_2" formatted="false">" · hilang dalam %1$s dtk"</string>
+    <string name="basedOn" formatted="false">"Dibangun di atas Afnon dan Masjid TV"</string>
+    <string name="bell" formatted="false">"Azan aktif"</string>
+    <string name="bellRow" formatted="false">"%1$s adhan on"</string>
+    <string name="bellToggle" formatted="false">"Azan aktif/nonaktif untuk salat ini"</string>
+    <string name="bell_2" formatted="false">"Azan nonaktif"</string>
+    <string name="bellsNoteFile" formatted="false">"On the TV: Today &amp; Qibla, the bell by each prayer"</string>
+    <string name="boolValues" formatted="false">"Values: true = on, false = off"</string>
+    <string name="buttonFrom" formatted="false">"Dari “%1$s”"</string>
+    <string name="buttonLongIs" formatted="false">"Tahan: "</string>
+    <string name="buttonLongNone" formatted="false">"Tanpa aksi saat ditahan"</string>
+    <string name="buttonLongNote" formatted="false">"Menahan berarti setengah detik atau lebih"</string>
+    <string name="buttonLongShort" formatted="false">"Ditahan: "</string>
+    <string name="buttonLongTitle" formatted="false">"%1$s, ditahan"</string>
+    <string name="buttonNone" formatted="false">"Tidak ada (tombol nonaktif)"</string>
+    <string name="buttonOff" formatted="false">"Tidak ada (nonaktif)"</string>
+    <string name="buttonOpens" formatted="false">"%1$s membuka"</string>
+    <string name="buttonOriginal" formatted="false">"Fungsi aslinya (tidak disesuaikan)"</string>
+    <string name="buttonPressIs" formatted="false">"Tekan: "</string>
+    <string name="buttonRadio" formatted="false">"Radio (putar dan berhenti)"</string>
+    <string name="buttonsFileNote" formatted="false">"They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes."</string>
+    <string name="buttonsFileSection" formatted="false">"Remote buttons (this TV only)"</string>
+    <string name="buttonsHelp" formatted="false">"Jadikan tombol di remote mana pun membuka pilihan Anda"</string>
+    <string name="buttonsHelpOne" formatted="false">"%1$s tombol disesuaikan"</string>
+    <string name="buttonsHelpOther" formatted="false">"%1$s tombol disesuaikan"</string>
+    <string name="buttonsInfoHelp" formatted="false">"Selama satu tombol disesuaikan, setiap tekanan remote melewati Awan TV, jadi menahan Volume hanya menggesernya satu langkah. Tombol ini tidak pernah disesuaikan: panah, OK, Kembali, Layar Utama, Volume, Daya."</string>
+    <string name="buttonsInfoHelpTcl" formatted="false">"Di TV ini tombol disesuaikan lewat pemetaan ulang milik TCL, jadi tekanan remote tidak melewati Awan TV dan Volume tetap seperti biasa. Tombol ini tidak pernah disesuaikan: panah, OK, Kembali, Layar Utama, Volume, Daya."</string>
+    <string name="buttonsInfoRow" formatted="false">"Tentang tombol khusus"</string>
+    <string name="buttonsRow" formatted="false">"Tombol remote"</string>
+    <string name="buttonsSection" formatted="false">"Setelan perangkat › Tombol remote"</string>
+    <string name="buttonsServiceOff" formatted="false">"Layanan Awan TV nonaktif: tombol khusus berfungsi setelah diaktifkan"</string>
+    <string name="byAwan" formatted="false">"Dikembangkan oleh OMAR A ALHWAIRTH"</string>
+    <string name="byCity" formatted="false">"by the location"</string>
+    <string name="byCountry" formatted="false">"the country's, if it has an official one, else 0 (off)"</string>
+    <string name="byCountryOr" formatted="false">"the country's, else %1$s"</string>
+    <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
+    <string name="bytes" formatted="false">"%1$s MB"</string>
+    <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"Hari ini %1$s · setengah derajat per tekanan"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"Besok %1$s · setengah derajat per tekanan"</string>
+    <string name="calcBaseHelp" formatted="false">"Mengisi sudut di bawah; lalu ubah sesuai kebutuhan"</string>
+    <string name="calcBaseRow" formatted="false">"Mulai dari"</string>
+    <string name="calcFajrRow" formatted="false">"Sudut Subuh"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"Hanya di atas 48° · tidak berlaku di lokasi Anda"</string>
+    <string name="calcHighMsc" formatted="false">"Metode Moonsighting Committee memakai aturannya sendiri"</string>
+    <string name="calcHighRow" formatted="false">"Lintang tinggi"</string>
+    <string name="calcIshaAngleRow" formatted="false">"Sudut Isya"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"Isya setelah Magrib"</string>
+    <string name="calcIshaRow" formatted="false">"Isya"</string>
+    <string name="calcIshaRowHelp" formatted="false">"Menurut sudut matahari, atau waktu tetap setelah Magrib"</string>
+    <string name="calcItem" formatted="false">"Perhitungan khusus…"</string>
+    <string name="calcKeepHelp" formatted="false">"Juga penyesuaian menit · nonaktif: lokasi baru memakai metode negaranya"</string>
+    <string name="calcKeepRow" formatted="false">"Lokasi baru tetap memakai ini"</string>
+    <string name="calcKept" formatted="false">"tetap di lokasi baru"</string>
+    <string name="calcMinutesHelp" formatted="false">"Hari ini %1$s · 5 menit per tekanan"</string>
+    <string name="calcName" formatted="false">"Perhitungan khusus"</string>
+    <string name="calcOffNote" formatted="false">"Saat aktif, dimulai dari “%1$s”; lalu ubah sesuai jadwal masjid Anda."</string>
+    <string name="calcRamadan" formatted="false">" · tambah 30 menit saat Ramadan"</string>
+    <string name="calcReset" formatted="false">"Lokasi baru: metode negaranya, dan penyesuaian menit dinolkan"</string>
+    <string name="calcRow" formatted="false">"Perhitungan khusus"</string>
+    <string name="calcRowHelp" formatted="false">"Sudut Subuh dan Isya serta aturan di atas 48° pilihan Anda"</string>
+    <string name="calcSection" formatted="false">"Waktu salat › Perhitungan khusus"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"Hari ini dengan setelan ini: %1$s. Azan, iqamah, pengingat, dan screensaver semuanya mengikutinya."</string>
+    <string name="calendarSource" formatted="false">"Ummul Qura"</string>
+    <string name="callCloseHelp" formatted="false">"Lalu kembali ke tayangan Anda"</string>
+    <string name="callCloseRow" formatted="false">"Tutup layar azan"</string>
+    <string name="cancel" formatted="false">"Batal"</string>
+    <string name="checkFailed" formatted="false">"Tidak dapat menghubungi GitHub"</string>
+    <string name="checkNowHelp" formatted="false">"Bertanya ke GitHub sekarang, tanpa menunggu pemeriksaan hariannya"</string>
+    <string name="checkNowRow" formatted="false">"Periksa pembaruan sekarang"</string>
+    <string name="checking" formatted="false">"Memeriksa…"</string>
+    <string name="chip" formatted="false">"%1$s dalam"</string>
+    <string name="chooseFavSlot" formatted="false">"Pilih tempatnya di favorit"</string>
+    <string name="chooseLocation" formatted="false">"Pilih lokasi Anda"</string>
+    <string name="chooseMoreSlot" formatted="false">"Pilih tempatnya di Lainnya"</string>
+    <string name="chosenPlace" formatted="false">"Tempat terpilih"</string>
+    <string name="citiesCredit" formatted="false">"Kota: GeoNames.org"</string>
+    <string name="citiesCreditLong" formatted="false">"Daftar kota: GeoNames.org (CC BY 4.0)"</string>
+    <string name="cityFileHelp" formatted="false">"The city, or a place by its coordinates"</string>
+    <string name="cityValues" formatted="false">"Copied as it is between TVs; to change the location, pick it on the TV"</string>
+    <string name="clockHelp" formatted="false">"“TV” mengikuti setelan waktu TV"</string>
+    <string name="clockRow" formatted="false">"Jam"</string>
+    <string name="close" formatted="false">"Tutup"</string>
+    <string name="comingSoon" formatted="false">"Layar ini hadir di pembaruan berikutnya"</string>
+    <string name="complete" formatted="false">"✓ Lengkap"</string>
+    <string name="coordinates" formatted="false">"LU"</string>
+    <string name="coordinates_2" formatted="false">"LS"</string>
+    <string name="coordinates_3" formatted="false">"BT"</string>
+    <string name="coordinates_4" formatted="false">"BB"</string>
+    <string name="country" formatted="false">"Negara"</string>
+    <string name="creditsHelp" formatted="false">"Afnon, cuaca, kota, bacaan Al-Qur'an, azan"</string>
+    <string name="creditsRow" formatted="false">"Sumber dan lisensi"</string>
+    <string name="creditsSection" formatted="false">"Tentang › Sumber dan lisensi"</string>
+    <string name="dayTitle" formatted="false">"Waktu salat hari ini"</string>
+    <string name="days" formatted="false">"Tidak ada"</string>
+    <string name="daysOne" formatted="false">"%1$s hari"</string>
+    <string name="daysOther" formatted="false">"%1$s hari"</string>
+    <string name="defaultIs" formatted="false">"Default: "</string>
+    <string name="deleteAsk" formatted="false">"Hapus?"</string>
+    <string name="deleteSaved" formatted="false">"Hapus yang tersimpan"</string>
+    <string name="deviceHelp" formatted="false">"Gambar, suara, aplikasi, dan sistem"</string>
+    <string name="deviceRow" formatted="false">"Setelan TV"</string>
+    <string name="digits" formatted="false">"Angka"</string>
+    <string name="dismiss" formatted="false">"Tutup"</string>
+    <string name="downloadAll" formatted="false">"Unduh semua (%1$s)"</string>
+    <string name="downloadRest" formatted="false">"Unduh sisanya (%1$s)"</string>
+    <string name="downloadingNow" formatted="false">" · lalu %1$s menunggu"</string>
+    <string name="downloadingNow_2" formatted="false">"Mengunduh: "</string>
+    <string name="downloadingPercent" formatted="false">"%1$s%%"</string>
+    <string name="eveningAdhkar" formatted="false">"Zikir petang"</string>
+    <string name="facingLine" formatted="false">"Anda menghadap: "</string>
+    <string name="facingNote" formatted="false">"degrees from north, -1 not set"</string>
+    <string name="fajrAt" formatted="false">"Subuh "</string>
+    <string name="fajrLevelHelp" formatted="false">"Bagian dari suara TV · terdengar saat Anda menelusuri daftar"</string>
+    <string name="fajrLevelHelpFile" formatted="false">"A share of the TV's sound"</string>
+    <string name="fajrLevelTitle" formatted="false">"Volume azan Subuh"</string>
+    <string name="fajrVoiceFile" formatted="false">"Fajr adhan voice"</string>
+    <string name="fajrVoiceHelp" formatted="false">"Suaranya, lalu volumenya · sebaiknya dengan “salat lebih baik daripada tidur”"</string>
+    <string name="fajrVoiceRow" formatted="false">"Azan Subuh"</string>
+    <string name="fastHelp" formatted="false">"Malam sebelumnya: Senin, Kamis, Ayyamul Bidh, Tasua, dan Asyura"</string>
+    <string name="fastRow" formatted="false">"Pengingat puasa sunah"</string>
+    <string name="fav" formatted="false">"FAVORIT"</string>
+    <string name="favNote" formatted="false">"Di favorit · posisi %1$s"</string>
+    <string name="favourite" formatted="false">"Favorit"</string>
+    <string name="favouritesFile" formatted="false">"Home's favourite apps"</string>
+    <string name="freeSize" formatted="false">"Kosong "</string>
+    <string name="fridayEveLine" formatted="false">"Malam Jumat · Al-Kahfi · Selawat ﷺ"</string>
+    <string name="fridayFixedNote" formatted="false">"Used when Friday prayer is Fixed time (2)"</string>
+    <string name="fridayHelp" formatted="false">"Waktu khotbah di bawah"</string>
+    <string name="fridayHelp_2" formatted="false">"Khotbah saat azan Zuhur"</string>
+    <string name="fridayHelp_3" formatted="false">"Menurut negara: khotbah saat azan Zuhur"</string>
+    <string name="fridayHelp_4" formatted="false">"Menurut negara: %1$s %2$s · otoritas urusan Islam"</string>
+    <string name="fridayLine" formatted="false">"Al-Kahfi · Selawat ﷺ"</string>
+    <string name="fridayNote" formatted="false">"Pada hari Jumat, khotbah sebagai gantinya"</string>
+    <string name="fridayRow" formatted="false">"Salat Jumat"</string>
+    <string name="fridayTimeHelp" formatted="false">"Setiap Jumat · hitung mundur hari Jumat menuju ke sana"</string>
+    <string name="fridayTimeRow" formatted="false">"Waktu khotbah"</string>
+    <string name="fromHome" formatted="false">"Dari Layar Utama"</string>
+    <string name="fullLevel" formatted="false">"Penuh (seperti azan lain)"</string>
+    <string name="granted" formatted="false">"Diberikan"</string>
+    <string name="granted_2" formatted="false">"Tidak diberikan"</string>
+    <string name="habousAngles" formatted="false">"Subuh 19° · Isya 17° · seperti jadwal kementerian"</string>
+    <string name="habousAngles_2" formatted="false">"Di luar Maroko: Subuh 19° · Isya 17° · dengan margin kementerian"</string>
+    <string name="habousAuto" formatted="false">"Automatic: the nearest"</string>
+    <string name="habousChooser" formatted="false">"Kementerian menerbitkan jadwal untuk tiap 191 lokasi. Inilah yang terdekat dengan lokasi Anda."</string>
+    <string name="habousCredit" formatted="false">"Disesuaikan dengan jadwal Kementerian Habous dan Urusan Islam Maroko (habous.gov.ma)"</string>
+    <string name="habousCreditRow" formatted="false">"Waktu Maroko"</string>
+    <string name="habousFileHelp" formatted="false">"Which of the Moroccan ministry's tables the TV follows in Morocco"</string>
+    <string name="habousHelp" formatted="false">"Dipilih oleh Anda, %1$s km dari lokasi Anda"</string>
+    <string name="habousHelp_2" formatted="false">"Lokasi kementerian terdekat, %1$s km jauhnya"</string>
+    <string name="habousItem" formatted="false">" km"</string>
+    <string name="habousRow" formatted="false">"Jadwal kementerian"</string>
+    <string name="hadithRowFile" formatted="false">"A hadith in the screensaver's middle"</string>
+    <string name="hadithSource" formatted="false">"Al-Bukhari "</string>
+    <string name="hadithSource_2" formatted="false">"Muslim "</string>
+    <string name="hijriAdjust" formatted="false">"Penyesuaian tanggal Hijriah"</string>
+    <string name="hijriSuffix" formatted="false">" H"</string>
+    <string name="hijriToday" formatted="false">"Hari ini: "</string>
+    <string name="hintApps" formatted="false">"▶  Aplikasi"</string>
+    <string name="hintBackAbout" formatted="false">"Kembali  Tentang"</string>
+    <string name="hintBackCancel" formatted="false">"Kembali  Batal"</string>
+    <string name="hintBackClose" formatted="false">"Kembali  Tutup"</string>
+    <string name="hintBackDevice" formatted="false">"Kembali  Setelan perangkat"</string>
+    <string name="hintBackHome" formatted="false">"Kembali  Layar Utama"</string>
+    <string name="hintBackLater" formatted="false">"Kembali  Nanti"</string>
+    <string name="hintBackLocate" formatted="false">"Kembali  Atur lokasi"</string>
+    <string name="hintBackMenu" formatted="false">"Kembali  Menu"</string>
+    <string name="hintBackPrayer" formatted="false">"Kembali  Waktu salat"</string>
+    <string name="hintBackSettings" formatted="false">"Kembali  Setelan"</string>
+    <string name="hintBackUndo" formatted="false">"Kembali  Bahasa sebelumnya"</string>
+    <string name="hintCancel" formatted="false">"Kembali  Batal"</string>
+    <string name="hintChange" formatted="false">"◀▶  Ubah nilai"</string>
+    <string name="hintChoose" formatted="false">"OK  Pilih"</string>
+    <string name="hintChooseWord" formatted="false">"Pilih"</string>
+    <string name="hintClose" formatted="false">"Kembali  Tutup"</string>
+    <string name="hintEdit" formatted="false">"OK  Edit"</string>
+    <string name="hintFavs" formatted="false">"▲  Favorit"</string>
+    <string name="hintHold" formatted="false">"Tahan OK  Atur Layar Utama"</string>
+    <string name="hintHoldOk" formatted="false">"OK  Tahan"</string>
+    <string name="hintMore" formatted="false">"▼  Lainnya"</string>
+    <string name="hintMove" formatted="false">"▲▼  Pindah"</string>
+    <string name="hintOpen" formatted="false">"OK  Buka"</string>
+    <string name="hintPick" formatted="false">"OK  Pilih kota"</string>
+    <string name="hintQibla" formatted="false">"▶  Kiblat"</string>
+    <string name="hintSave" formatted="false">"OK  Simpan"</string>
+    <string name="hintSwitch" formatted="false">"OK  Aktif/Nonaktif"</string>
+    <string name="hintTimes" formatted="false">"◀  Waktu"</string>
+    <string name="hintToChosen" formatted="false">"▶  Ke tempat terpilih"</string>
+    <string name="hintToSurahs" formatted="false">"▶  Ke surah"</string>
+    <string name="home" formatted="false">"Layar Utama"</string>
+    <string name="homeAppsFile" formatted="false">"Home's apps and the device"</string>
+    <string name="homeAppsNoteFile" formatted="false">"On the TV they are arranged on Home itself"</string>
+    <string name="homeButtonFileHelp" formatted="false">"Only on boxes connected to a TV (Google TV Streamer)"</string>
+    <string name="homeButtonHelp" formatted="false">"Aktifkan jika soundbar diam setelah tombol Layar Utama · tahan: layar utama perangkat sendiri"</string>
+    <string name="homeButtonRow" formatted="false">"Tombol Layar Utama langsung membuka Awan TV"</string>
+    <string name="homeSectionFile" formatted="false">"Home"</string>
+    <string name="identifyDevice" formatted="false">"Nama perangkat: "</string>
+    <string name="identifyFoot" formatted="false">"Diminta oleh editor setelan · hilang dalam %1$s detik"</string>
+    <string name="identifyLabel" formatted="false">"TV ini"</string>
+    <string name="identifyNoName" formatted="false">"Belum diberi nama di komputer"</string>
+    <string name="iftar" formatted="false">"Buka puasa"</string>
+    <string name="iftarIn" formatted="false">"BERBUKA DALAM"</string>
+    <string name="iftarTag" formatted="false">"BERBUKA"</string>
+    <string name="imsakAt" formatted="false">"Imsak "</string>
+    <string name="imsakHelp" formatted="false">"Puasa mulai azan Subuh · imsak: ihtiyat opsional"</string>
+    <string name="imsakRow" formatted="false">"Imsak saat Ramadan"</string>
+    <string name="in" formatted="false">"dalam %1$s"</string>
+    <string name="inMinutesOther" formatted="false">"dalam %1$s mnt"</string>
+    <string name="inPlaceOf" formatted="false">"Menggantikan %1$s"</string>
+    <string name="iqama" formatted="false">"Iqamah"</string>
+    <string name="iqamaAt" formatted="false">"Iqamah "</string>
+    <string name="iqamaCounterHelp" formatted="false">"Setelah azan, di sudut layar hingga iqamah"</string>
+    <string name="iqamaCounterOff" formatted="false">"Nonaktifkan di Setelan › Iqamah"</string>
+    <string name="iqamaCounterRow" formatted="false">"Hitung mundur iqamah di atas aplikasi"</string>
+    <string name="iqamaFixedHelp" formatted="false">"When Iqamah is Fixed (3)"</string>
+    <string name="iqamaFixedRow" formatted="false">"%1$s fixed iqamah"</string>
+    <string name="iqamaInMinutes" formatted="false">"Iqamah sekarang"</string>
+    <string name="iqamaInMinutes_2" formatted="false">"Iqamah dalam %1$s mnt"</string>
+    <string name="iqamaMinutesHelp" formatted="false">"After the adhan, when Iqamah is Minutes (2)"</string>
+    <string name="iqamaMinutesRow" formatted="false">"%1$s iqamah minutes"</string>
+    <string name="iqamaModeHelp" formatted="false">"Jeda resmi di %1$s"</string>
+    <string name="iqamaModeHelp_2" formatted="false">"Menit setelah azan, per salat"</string>
+    <string name="iqamaModeHelp_3" formatted="false">"Waktu tetap per salat, seperti di masjid Anda"</string>
+    <string name="iqamaModeHelp_4" formatted="false">"Iqamah tidak ditampilkan"</string>
+    <string name="iqamaModeHelp_5" formatted="false">"Belum ada ketentuan resmi untuk negara ini"</string>
+    <string name="iqamaPeriodHelp" formatted="false">"Menit setelah azan saat Ramadan · “Seperti biasa” mengikuti hari lain"</string>
+    <string name="iqamaPeriodHelp_2" formatted="false">"Ramadan punya setelannya sendiri"</string>
+    <string name="iqamaPeriodRow" formatted="false">"Iqamah untuk"</string>
+    <string name="iqamaRamadanHelp" formatted="false">"Minutes after the adhan, -1 as on other days"</string>
+    <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
+    <string name="iqamaRow" formatted="false">"Waktu iqamah"</string>
+    <string name="iqamaToday" formatted="false">"Iqamah hari ini "</string>
+    <string name="jumuah" formatted="false">"Jumat"</string>
+    <string name="jumuahLabel" formatted="false">"JUMAT"</string>
+    <string name="kahf" formatted="false">"Surah Al-Kahfi hari ini"</string>
+    <string name="kahfTonight" formatted="false">"Malam Jumat · Surah Al-Kahfi"</string>
+    <string name="keyApps" formatted="false">"Tombol aplikasi"</string>
+    <string name="keyBlue" formatted="false">"Tombol biru"</string>
+    <string name="keyBookmark" formatted="false">"Tombol bookmark"</string>
+    <string name="keyChannelDown" formatted="false">"Saluran turun"</string>
+    <string name="keyChannelUp" formatted="false">"Saluran naik"</string>
+    <string name="keyDigit" formatted="false">"Angka "</string>
+    <string name="keyGreen" formatted="false">"Tombol hijau"</string>
+    <string name="keyGuide" formatted="false">"Tombol panduan"</string>
+    <string name="keyInfo" formatted="false">"Tombol info"</string>
+    <string name="keyInput" formatted="false">"Tombol input"</string>
+    <string name="keyNamed" formatted="false">"Tombol "</string>
+    <string name="keyNamed_2" formatted="false">""</string>
+    <string name="keyNumbered" formatted="false">"Tombol %1$s"</string>
+    <string name="keyPlayPause" formatted="false">"Tombol putar/jeda"</string>
+    <string name="keyRed" formatted="false">"Tombol merah"</string>
+    <string name="keySettings" formatted="false">"Tombol setelan"</string>
+    <string name="keyYellow" formatted="false">"Tombol kuning"</string>
+    <string name="khutbah" formatted="false">"Khotbah"</string>
+    <string name="khutbahAt" formatted="false">"Khotbah "</string>
+    <string name="khutbahIn" formatted="false">"Khotbah dalam"</string>
+    <string name="language" formatted="false">"Bahasa"</string>
+    <string name="languageGoesBack" formatted="false">"Kembali ke %2$s dalam %1$s dtk"</string>
+    <string name="languageHelp" formatted="false">"“TV” mengikuti bahasa TV"</string>
+    <string name="languageKeep" formatted="false">"Pakai"</string>
+    <string name="languageKeepTitle" formatted="false">"Pakai bahasa ini?"</string>
+    <string name="languageTv" formatted="false">"TV (sekarang %1$s)"</string>
+    <string name="languageUndo" formatted="false">"Kembali"</string>
+    <string name="languages" formatted="false">"TV"</string>
+    <string name="lastAdhanRow" formatted="false">"Azan terakhir"</string>
+    <string name="lastCrashRow" formatted="false">"Terakhir kali aplikasi berhenti"</string>
+    <string name="lastThird" formatted="false">"Sepertiga terakhir"</string>
+    <string name="later" formatted="false">"Nanti"</string>
+    <string name="latitude" formatted="false">"Lintang"</string>
+    <string name="libraryHelp" formatted="false">"Simpan bacaan untuk didengar tanpa internet"</string>
+    <string name="libraryHelpMany" formatted="false">"%1$s qari · %2$s"</string>
+    <string name="libraryHelpOne" formatted="false">"%1$s qari · %2$s"</string>
+    <string name="libraryIntro" formatted="false">"Diunduh dari mp3quran.net untuk diputar tanpa internet: Radio › Stasiun › Tersimpan di TV"</string>
+    <string name="libraryLegend" formatted="false">"✓ tersimpan · ↓ menunggu · OK pada surah: unduh atau batalkan, dua kali untuk menghapusnya"</string>
+    <string name="libraryRow" formatted="false">"Bacaan tersimpan"</string>
+    <string name="listValues" formatted="false">"Values: a list of the apps' package names, in order"</string>
+    <string name="loadingCities" formatted="false">"Memuat kota…"</string>
+    <string name="loadingReciters" formatted="false">"Memuat qari…"</string>
+    <string name="locating" formatted="false">"Mencari lokasi Anda…"</string>
+    <string name="location" formatted="false">"Lokasi"</string>
+    <string name="locationAskBody" formatted="false">"Waktu kini untuk “%1$s”, menurut zona waktu TV, dan bisa berbeda dari lokasi Anda. Azan dikumandangkan mengikutinya."</string>
+    <string name="locationAskTitle" formatted="false">"Lokasi Anda belum diatur"</string>
+    <string name="locationHelp" formatted="false">" · menurut koordinat"</string>
+    <string name="locationHelp_2" formatted="false">" · dipilih dari daftar"</string>
+    <string name="longitude" formatted="false">"Bujur"</string>
+    <string name="method" formatted="false">"Metode perhitungan"</string>
+    <string name="methodAngles" formatted="false">"Sudut Subuh "</string>
+    <string name="methodAngles_2" formatted="false">"Isya %1$s mnt setelah Magrib"</string>
+    <string name="methodAngles_3" formatted="false">"Isya "</string>
+    <string name="methodAngles_4" formatted="false">"Magrib "</string>
+    <string name="methodName" formatted="false">"Ummul Qura, Makkah"</string>
+    <string name="methodName_10" formatted="false">"Kementerian Wakaf, Oman"</string>
+    <string name="methodName_11" formatted="false">"Kementerian Habous, Maroko"</string>
+    <string name="methodName_12" formatted="false">"Otoritas Survei Umum Mesir"</string>
+    <string name="methodName_13" formatted="false">"Institut Geofisika, Universitas Teheran"</string>
+    <string name="methodName_2" formatted="false">"Liga Muslim Dunia"</string>
+    <string name="methodName_3" formatted="false">"Universitas Ilmu Islam, Karachi"</string>
+    <string name="methodName_4" formatted="false">"Dubai"</string>
+    <string name="methodName_5" formatted="false">"Kuwait"</string>
+    <string name="methodName_6" formatted="false">"Qatar"</string>
+    <string name="methodName_7" formatted="false">"ISNA, Amerika Utara"</string>
+    <string name="methodName_8" formatted="false">"Moonsighting Committee"</string>
+    <string name="methodName_9" formatted="false">"Singapura"</string>
+    <string name="middleHelp" formatted="false">"Satu hadis tiap 10 mnt · zikir selama 10 mnt setelah tiap salat"</string>
+    <string name="middleRow" formatted="false">"Bagian tengah screensaver"</string>
+    <string name="midnight" formatted="false">"Tengah malam"</string>
+    <string name="minutesAfterOther" formatted="false">"%1$s mnt"</string>
+    <string name="mitLicence" formatted="false">"(lisensi MIT)"</string>
+    <string name="more" formatted="false">"LAINNYA"</string>
+    <string name="moreFile" formatted="false">"The More row in your order (empty: automatic)"</string>
+    <string name="moreNote" formatted="false">"Di Lainnya · posisi %1$s"</string>
+    <string name="morningAdhkar" formatted="false">"Zikir pagi"</string>
+    <string name="moveEarlier" formatted="false">"Majukan di favorit"</string>
+    <string name="moveEarlierMore" formatted="false">"Majukan di Lainnya"</string>
+    <string name="moveLater" formatted="false">"Mundurkan di favorit"</string>
+    <string name="moveLaterMore" formatted="false">"Mundurkan di Lainnya"</string>
+    <string name="moveToFav" formatted="false">"Pindah ke favorit…"</string>
+    <string name="moveToMore" formatted="false">"Pindah ke Lainnya…"</string>
+    <string name="near" formatted="false">"Dekat %1$s"</string>
+    <string name="netNoInternet" formatted="false">"Terhubung, tanpa internet"</string>
+    <string name="netOff" formatted="false">"Tidak terhubung"</string>
+    <string name="netWired" formatted="false">"Terhubung lewat kabel"</string>
+    <string name="network" formatted="false">"Setelan jaringan"</string>
+    <string name="networkHelp" formatted="false">"Wi-Fi dan Ethernet"</string>
+    <string name="networkRow" formatted="false">"Setelan jaringan TV"</string>
+    <string name="newVersion" formatted="false">"Versi baru tersedia: "</string>
+    <string name="newsAll" formatted="false">"Yang baru"</string>
+    <string name="newsAlso" formatted="false">"Dan sejak %1$s"</string>
+    <string name="newsLater" formatted="false">"Temukan nanti di Setelan › Tentang › Yang baru."</string>
+    <string name="newsOk" formatted="false">"OK"</string>
+    <string name="newsRow" formatted="false">"Yang baru"</string>
+    <string name="newsRowHelp" formatted="false">"Yang ditambahkan tiap versi"</string>
+    <string name="newsTitle" formatted="false">"Baru di Awan TV %1$s"</string>
+    <string name="nextAdhanRow" formatted="false">"Azan berikutnya"</string>
+    <string name="nextIn" formatted="false">"%1$s dalam"</string>
+    <string name="nextPrayer" formatted="false">"SALAT BERIKUTNYA"</string>
+    <string name="nextTag" formatted="false">"BERIKUTNYA"</string>
+    <string name="nightDimHelp" formatted="false">"Screensaver, dari dua jam setelah Isya hingga Subuh"</string>
+    <string name="nightDimRow" formatted="false">"Redupkan saat malam"</string>
+    <string name="noAdhanYet" formatted="false">"Belum ada azan yang diputar di perangkat ini"</string>
+    <string name="noCity" formatted="false">"Tidak ada hasil · coba ejaan lain, atau ketik koordinatnya"</string>
+    <string name="noCrash" formatted="false">"Tidak ada henti yang tercatat"</string>
+    <string name="noDownloads" formatted="false">"Unduhan terhenti: pengelola unduhan TV tidak menjawab (mungkin dinonaktifkan di Aplikasi)"</string>
+    <string name="noIqama" formatted="false">"Tanpa iqamah"</string>
+    <string name="noLocation" formatted="false">"Lokasi Anda belum diatur"</string>
+    <string name="noReciter" formatted="false">"Tidak ada qari dengan nama itu"</string>
+    <string name="noStorage" formatted="false">"TV ini tidak punya penyimpanan untuk aplikasi"</string>
+    <string name="none" formatted="false">"Tidak ada"</string>
+    <string name="noneBody" formatted="false">"10 detik berlalu dan tidak ada yang sampai ke Awan TV."</string>
+    <string name="noneTitle" formatted="false">"Tidak ada tombol masuk"</string>
+    <string name="noneWhy" formatted="false">"TV mengambil beberapa tombol sebelum aplikasi mana pun melihatnya, jadi tombol itu tidak bisa disesuaikan di sini. Coba tombol lain."</string>
+    <string name="north" formatted="false">"▲ Utara"</string>
+    <string name="notFav" formatted="false">"Tahan OK untuk menaruhnya di Layar Utama"</string>
+    <string name="notInstalledFile" formatted="false">"(not installed on this TV)"</string>
+    <string name="notOnHome" formatted="false">"Tidak di Layar Utama"</string>
+    <string name="notSet" formatted="false">"Belum diatur"</string>
+    <string name="nothingSaved" formatted="false">"Belum ada yang tersimpan · Radio › Bacaan tersimpan"</string>
+    <string name="nowHint" formatted="false">"Kembali untuk menutup · tertutup sendiri setelah azan"</string>
+    <string name="nowHintMany" formatted="false">"Kembali untuk menutup · tertutup sendiri setelah %1$s mnt"</string>
+    <string name="nowHintOne" formatted="false">"Kembali untuk menutup · tertutup sendiri setelah 1 mnt"</string>
+    <string name="nowLabel" formatted="false">"TELAH MASUK WAKTU"</string>
+    <string name="nowTag" formatted="false">"SEKARANG"</string>
+    <string name="occasionInDays" formatted="false">"%1$s dalam %2$s hari"</string>
+    <string name="occasionTomorrow" formatted="false">"%1$s besok"</string>
+    <string name="off" formatted="false">"Nonaktif"</string>
+    <string name="open" formatted="false">"Buka %1$s"</string>
+    <string name="otherLocation" formatted="false">"Lokasi lain"</string>
+    <string name="otherPlace" formatted="false">"Tempat mana pun di dunia (cari atau koordinat)"</string>
+    <string name="packagesHelp" formatted="false">"Ones not installed on this TV are skipped"</string>
+    <string name="palestine" formatted="false">"Palestina"</string>
+    <string name="passed" formatted="false">"lewat"</string>
+    <string name="passedSunrise" formatted="false">"lewat"</string>
+    <string name="percent" formatted="false">"%1$s%%"</string>
+    <string name="permissionHelp" formatted="false">"Untuk mengatur screensaver dan menghubungkan layanan lagi (diberikan saat instalasi)"</string>
+    <string name="permissionRow" formatted="false">"Izin setelan"</string>
+    <string name="photoEveryHelp" formatted="false">"Layar Utama dan screensaver · Otomatis: Layar Utama tiap hari, screensaver tiap 10 menit"</string>
+    <string name="photoEveryRow" formatted="false">"Pergantian foto"</string>
+    <string name="pickReciter" formatted="false">"Pilih qari dari daftar"</string>
+    <string name="place" formatted="false">", "</string>
+    <string name="placeAfter" formatted="false">"Lalu pilih metode perhitungan masjid di tempat itu"</string>
+    <string name="placeBad" formatted="false">"Periksa angkanya: lintang −90 hingga 90, bujur −180 hingga 180"</string>
+    <string name="placeCancel" formatted="false">"Batal"</string>
+    <string name="placeIntro" formatted="false">"Cari menurut nama dalam bahasa Arab atau Inggris, lalu simpan · atau ketik koordinat untuk tempat yang lebih kecil"</string>
+    <string name="placeIqama" formatted="false">"Iqamah: jeda resmi di %1$s"</string>
+    <string name="placeMethod" formatted="false">"Metode: %1$s · periksa setelah menyimpan"</string>
+    <string name="placeMethod_2" formatted="false">"Metode: "</string>
+    <string name="placeMethod_3" formatted="false">"Metode: %1$s · seperti di %2$s"</string>
+    <string name="placeName" formatted="false">"Nama tempat (bisa diubah)"</string>
+    <string name="placeNoName" formatted="false">"Beri nama tempat ini"</string>
+    <string name="placeSave" formatted="false">"Simpan"</string>
+    <string name="placeTitle" formatted="false">"Tempat mana pun di dunia"</string>
+    <string name="play" formatted="false">"Putar azan"</string>
+    <string name="played" formatted="false">"Diputar"</string>
+    <string name="played_2" formatted="false">"Gagal diputar"</string>
+    <string name="population" formatted="false">"%1$s ribu"</string>
+    <string name="populationMillion" formatted="false">"%1$s juta"</string>
+    <string name="pressHelp" formatted="false">"Pada remote TV sendiri atau remote Bluetooth mana pun yang terhubung dengannya."</string>
+    <string name="pressTitle" formatted="false">"Tekan tombol yang akan disesuaikan"</string>
+    <string name="pressWaitingOne" formatted="false">"Menunggu %1$s detik"</string>
+    <string name="pressWaitingOther" formatted="false">"Menunggu %1$s detik"</string>
+    <string name="preview" formatted="false">"Asar hari ini dengan setelan ini"</string>
+    <string name="putInFav" formatted="false">"Taruh di favorit…"</string>
+    <string name="putInMore" formatted="false">"Taruh di Lainnya…"</string>
+    <string name="qibla" formatted="false">"KIBLAT"</string>
+    <string name="qiblaDirection" formatted="false">" · dari "</string>
+    <string name="qiblaHint" formatted="false">"Sejajarkan utara kompas dengan utara sebenarnya"</string>
+    <string name="qiblaRelative_2" formatted="false">"Kiblat "</string>
+    <string name="qrHint" formatted="false">"Pindai dengan kamera ponsel Anda"</string>
+    <string name="queuedOnly" formatted="false">"%1$s menunggu setelah rekaman lain"</string>
+    <string name="radio" formatted="false">"Radio"</string>
+    <string name="radioDarkHelp" formatted="false">"Layar gelap, radio tetap menyala"</string>
+    <string name="radioDarkRow" formatted="false">"Matikan layar saat mendengarkan"</string>
+    <string name="radioNote" formatted="false">"Tetap diputar di Layar Utama dan screensaver · berhenti saat aplikasi lain memutar suara"</string>
+    <string name="radioPlay" formatted="false">"Putar"</string>
+    <string name="radioResumeRowFile" formatted="false">"The radio after the adhan"</string>
+    <string name="radioRowHelp" formatted="false">" · perlu internet"</string>
+    <string name="radioStatus" formatted="false">"Mengudara"</string>
+    <string name="radioStatus_2" formatted="false">"Menyambung…"</string>
+    <string name="radioStatus_3" formatted="false">"Sinyal hilang · mencoba lagi"</string>
+    <string name="radioStatus_4" formatted="false">"Dijeda untuk azan"</string>
+    <string name="radioStatus_5" formatted="false">"Nonaktif"</string>
+    <string name="radioStop" formatted="false">"Hentikan"</string>
+    <string name="ramadanDay" formatted="false">"Hari ke-%1$s Ramadan"</string>
+    <string name="rangeValues" formatted="false">"Values: %1$s to %2$s"</string>
+    <string name="recitationsCredit" formatted="false">"Bacaan: mp3quran.net · milik para qarinya"</string>
+    <string name="recitationsCreditLong" formatted="false">"Bacaan: mp3quran.net (terbuka untuk pengembang mana pun) · milik para qarinya"</string>
+    <string name="recitersOffline" formatted="false">"Tidak dapat menghubungi mp3quran.net · periksa internet dan buka layar ini lagi"</string>
+    <string name="ref" formatted="false">"An-Nisa' 4:103"</string>
+    <string name="region" formatted="false">"Wilayah"</string>
+    <string name="remind" formatted="false">"Ingatkan sebelum salat"</string>
+    <string name="remindHelp" formatted="false">"Di Layar Utama dan di atas video"</string>
+    <string name="remindVoiceHelp" formatted="false">"Mengucapkan «اقترب موعد صلاة …» bersama pengingat"</string>
+    <string name="remindVoiceRow" formatted="false">"Pengingat suara"</string>
+    <string name="removeHelp" formatted="false">"Mengembalikan screensaver lama, lalu menguninstal"</string>
+    <string name="removeRecitationsSub" formatted="false">"%1$s di Music/Awan TV · disimpan untuk instalasi berikutnya jika Anda mempertahankannya"</string>
+    <string name="removeRecitationsTitle" formatted="false">"Hapus juga bacaan yang tersimpan?"</string>
+    <string name="removeRow" formatted="false">"Hapus Awan TV"</string>
+    <string name="reserveNote" formatted="false">"2 GB selalu dibiarkan kosong untuk TV"</string>
+    <string name="resetBackupNote" formatted="false">"Setelan saat ini disimpan dulu di TV,\ndan bisa dikembalikan dari komputer dengan:"</string>
+    <string name="resetContinue" formatted="false">"Lanjutkan"</string>
+    <string name="resetGoesHead" formatted="false">"Kembali seperti instalasi baru:"</string>
+    <string name="resetHelp" formatted="false">"Semua setelan Awan TV seperti instalasi baru, lalu dimulai dari lokasi"</string>
+    <string name="resetHoldHelp" formatted="false">"Tiga detik · melepasnya mengulang dari awal, tombol lain membatalkan"</string>
+    <string name="resetHoldTitle" formatted="false">"Tahan OK untuk mengonfirmasi"</string>
+    <string name="resetRow" formatted="false">"Reset setelan"</string>
+    <string name="resetStaysHead" formatted="false">"Tetap seperti adanya:"</string>
+    <string name="resetTitle" formatted="false">"Reset setelan?"</string>
+    <string name="roomButton" formatted="false">"Ubah arah ruangan"</string>
+    <string name="roomButton_2" formatted="false">"Atur arah ruangan"</string>
+    <string name="roomHelp" formatted="false">"Agar kiblat ditunjukkan dari tempat Anda duduk"</string>
+    <string name="roomKeys" formatted="false">"◀ ▶  5°     ▲ ▼  45°     OK  Simpan     Kembali  Batal"</string>
+    <string name="roomTip" formatted="false">"Berdirilah menghadap TV, buka aplikasi kompas di ponsel Anda dan pegang mendatar di depan Anda, lalu atur angka di sini sesuai bacaannya. Sekali saja cukup selama TV tetap di tempatnya."</string>
+    <string name="roomTitle" formatted="false">"Arah ruangan"</string>
+    <string name="rowNow" formatted="false">"sekarang"</string>
+    <string name="runHelp" formatted="false">"Layar Utama memerlukan layanan Awan TV aktif (Aksesibilitas, di bawah)"</string>
+    <string name="runHelp_2" formatted="false">"Layar Utama dan screensaver dengan waktu dan zikir"</string>
+    <string name="runHelp_3" formatted="false">"Layar Utama saja · tanpa screensaver dan zikir"</string>
+    <string name="runHelp_4" formatted="false">"Screensaver saja · layar utama TV sendiri"</string>
+    <string name="runHelp_5" formatted="false">"Nonaktif · azan dan pengingat tetap memakai setelannya sendiri"</string>
+    <string name="runRow" formatted="false">"Mode operasi"</string>
+    <string name="running" formatted="false">"Berjalan"</string>
+    <string name="running_2" formatted="false">"Berhenti"</string>
+    <string name="saved" formatted="false">"✓  Tersimpan"</string>
+    <string name="savedSize" formatted="false">"Tersimpan "</string>
+    <string name="saverIdleHelp" formatted="false">"TV memulainya setelah batas waktunya sendiri · ini untuk Layar Utama"</string>
+    <string name="saverIdleHelp_2" formatted="false">"Di Layar Utama tanpa tombol ditekan · lalu mati sesuai setelan TV"</string>
+    <string name="saverIdleRow" formatted="false">"Screensaver setelah"</string>
+    <string name="saverNowHelp" formatted="false">"Tampil seketika · tombol apa saja menutupnya"</string>
+    <string name="saverNowRow" formatted="false">"Screensaver sekarang"</string>
+    <string name="saverPhotosHelp" formatted="false">"Hanya yang gelap dari Isya hingga Subuh"</string>
+    <string name="saverPhotosRow" formatted="false">"Foto screensaver"</string>
+    <string name="saverStatusRow" formatted="false">"Screensaver"</string>
+    <string name="school" formatted="false">"Asar: Hanafi"</string>
+    <string name="school_2" formatted="false">"Asar: jumhur (Syafi'i)"</string>
+    <string name="screenOff" formatted="false">"Matikan layar"</string>
+    <string name="screenOffNote" formatted="false">"Layar mati, radio diputar · tekan tombol apa saja untuk kembali"</string>
+    <string name="searchCity" formatted="false">"Cari kota"</string>
+    <string name="searchReciter" formatted="false">"Cari qari"</string>
+    <string name="sectionAbout" formatted="false">"Tentang"</string>
+    <string name="sectionDevice" formatted="false">"Setelan perangkat"</string>
+    <string name="sectionDisplay" formatted="false">"Tampilan &amp; bahasa"</string>
+    <string name="sectionIqama" formatted="false">"Iqamah"</string>
+    <string name="sectionNetwork" formatted="false">"Jaringan"</string>
+    <string name="sectionNetwork_2" formatted="false">"Jaringan · "</string>
+    <string name="sectionPrayer" formatted="false">"Waktu salat"</string>
+    <string name="sectionRadio" formatted="false">"Radio"</string>
+    <string name="sectionReminders" formatted="false">"Pengingat &amp; azan"</string>
+    <string name="sectionRun" formatted="false">"Awan TV"</string>
+    <string name="serviceHelp" formatted="false">"Layar Utama menggantikan milik perangkat, dan azan di atas aplikasi apa pun"</string>
+    <string name="serviceOffHelp" formatted="false">"Aktifkan di Setelan perangkat › Aksesibilitas › Awan TV"</string>
+    <string name="serviceRow" formatted="false">"Layanan Awan TV"</string>
+    <string name="setLocation" formatted="false">"Atur lokasi"</string>
+    <string name="setYourLocation" formatted="false">"Atur lokasi Anda"</string>
+    <string name="settings" formatted="false">"Setelan"</string>
+    <string name="someOf" formatted="false">"%1$s dari %2$s"</string>
+    <string name="sourceRow" formatted="false">"Sumber dan pembaruan"</string>
+    <string name="stationAroundClock" formatted="false">"Bacaan Al-Qur'an, sepanjang waktu"</string>
+    <string name="stationFileHelp" formatted="false">"Sent to the chosen TVs; a TV that doesn't have it keeps its own"</string>
+    <string name="stationRow" formatted="false">"Stasiun"</string>
+    <string name="stationSaved" formatted="false">"Tersimpan di TV"</string>
+    <string name="stationSavedFile" formatted="false">"a recitation saved on this TV, so not copied; pick it on the TV"</string>
+    <string name="statusHelp" formatted="false">"Apakah layanan, screensaver, dan azan berfungsi di perangkat ini"</string>
+    <string name="statusRow" formatted="false">"Status aplikasi"</string>
+    <string name="statusSection" formatted="false">"Tentang › Status aplikasi"</string>
+    <string name="stockHelp" formatted="false">"Tetap tampil sampai Anda membuka aplikasi lain"</string>
+    <string name="stockRow" formatted="false">"Layar utama TV sendiri"</string>
+    <string name="stop" formatted="false">"Hentikan azan"</string>
+    <string name="suhoorEnds" formatted="false">"Sahur hingga %1$s"</string>
+    <string name="suhoorEndsIn" formatted="false">"Sahur berakhir dalam"</string>
+    <string name="suhoorTag" formatted="false">"PUASA"</string>
+    <string name="surahMany" formatted="false">"%1$s surah"</string>
+    <string name="surahOne" formatted="false">"%1$s surah"</string>
+    <string name="textValue" formatted="false">"Values: text in quotes"</string>
+    <string name="themeHelp" formatted="false">"Layar Utama dan Setelan · Otomatis: lapis saat siang, arang setelah Magrib"</string>
+    <string name="themeRow" formatted="false">"Warna"</string>
+    <string name="timeBetween" formatted="false">"Values: a time \"HH:MM\" from %1$s to %2$s"</string>
+    <string name="timeOrEmpty" formatted="false">"Values: a time \"HH:MM\" (24-hour), or \"\" for none"</string>
+    <string name="today" formatted="false">"Hari ini &amp; Kiblat"</string>
+    <string name="todayWord" formatted="false">"hari ini"</string>
+    <string name="tryAgain" formatted="false">"Coba lagi"</string>
+    <string name="tvMarker" formatted="false">"▲ TV"</string>
+    <string name="upToDate" formatted="false">"Anda memakai versi terbaru"</string>
+    <string name="updateAgain" formatted="false">"Kami akan mengingatkan Anda tiap minggu sampai Anda memperbarui; ini juga ada di Setelan › Tentang."</string>
+    <string name="updateConfirm" formatted="false">"Jika Android bertanya apakah akan memperbarui aplikasi ini, pindah ke Perbarui dan tekan OK. Layar Utama yang baru lalu kembali."</string>
+    <string name="updateContinue" formatted="false">"Lanjutkan instalasi"</string>
+    <string name="updateDownloading" formatted="false">"Mengunduh versi "</string>
+    <string name="updateDownloading_2" formatted="false">"… "</string>
+    <string name="updateDownloading_3" formatted="false">"%%"</string>
+    <string name="updateFailed" formatted="false">"Pembaruan tidak berhasil. Periksa koneksi internet TV lalu coba lagi, atau pindai kodenya dan perbarui dari halaman unduhan."</string>
+    <string name="updateHave" formatted="false">"TV ini memakai %1$s."</string>
+    <string name="updateHow" formatted="false">"Pindai kodenya dengan kamera ponsel untuk membuka halaman unduhan, lalu perbarui dengan penginstal di ponsel atau dari komputer Windows. Setelan dan bacaan yang tersimpan tetap ada."</string>
+    <string name="updateHowSelf" formatted="false">"“Perbarui sekarang” mengunduh versi itu dan menginstalnya di TV ini; setelan dan bacaan yang tersimpan tetap ada. Atau pindai kodenya dengan ponsel untuk membuka halaman unduhan."</string>
+    <string name="updateInstalling" formatted="false">"Menginstal…"</string>
+    <string name="updateLater" formatted="false">"Nanti"</string>
+    <string name="updateLeave" formatted="false">"Anda bisa meninggalkan jendela ini; unduhan tetap berjalan."</string>
+    <string name="updateManual" formatted="false">"Untuk mendapatkan semua fitur aplikasi, termasuk pembaruan dengan sekali tekan di TV, instal dengan penginstal di ponsel atau dari komputer Windows, cara 1 dan 2 di halaman unduhan."</string>
+    <string name="updateMute" formatted="false">"Jangan ingatkan saya tentang versi ini"</string>
+    <string name="updateNow" formatted="false">"Perbarui sekarang"</string>
+    <string name="updateOpen" formatted="false">"Buka halaman rilis"</string>
+    <string name="updateRetry" formatted="false">"Coba lagi"</string>
+    <string name="updateThen" formatted="false">"Lalu Android bertanya apakah akan memperbarui aplikasi ini: pindah ke Perbarui dan tekan OK, dan Layar Utama yang baru kembali dalam beberapa detik."</string>
+    <string name="updateTitle" formatted="false">"Versi baru: Awan TV %1$s"</string>
+    <string name="updateWhy" formatted="false">"Ada versi aplikasi yang lebih baru daripada yang Anda pakai. Perbarui untuk mendapatkan fitur dan perbaikan baru; kami sarankan selalu memperbarui ke versi terbaru yang tersedia."</string>
+    <string name="valuesWord" formatted="false">"Values: "</string>
+    <string name="version" formatted="false">"Versi "</string>
+    <string name="versionRow" formatted="false">"Versi"</string>
+    <string name="voiceHelp" formatted="false">"Semua salat kecuali Subuh · berbunyi saat Anda menelusuri daftar"</string>
+    <string name="voiceHelpFile" formatted="false">"Every prayer but Fajr"</string>
+    <string name="voiceRow" formatted="false">"Suara azan"</string>
+    <string name="waitingSpace" formatted="false">"Menunggu: ruang kosong kurang dari 2 GB · hapus sesuatu untuk melanjutkan"</string>
+    <string name="warnBody" formatted="false">"Agar Awan TV tahu tombol yang Anda tekan, setiap tekanan remote melewatinya selama satu tombol disesuaikan."</string>
+    <string name="warnTitle" formatted="false">"Sebelum menyesuaikan tombol pertama"</string>
+    <string name="warnUndo" formatted="false">"Hapus semua tombol khusus dan remote kembali seperti semula."</string>
+    <string name="warnVolume" formatted="false">"Di kebanyakan TV Anda tidak merasakan bedanya. Tetapi menahan Volume hanya menggesernya satu langkah, jadi tekanlah beberapa kali."</string>
+    <string name="weatherCredit" formatted="false">"Data cuaca: Open-Meteo.com (CC BY 4.0)"</string>
+    <string name="weatherHelp" formatted="false">"Di samping jam · dari Open-Meteo tiap 30 menit, disembunyikan saat offline"</string>
+    <string name="weatherHelp_2" formatted="false">"Tidak ada koneksi untuk cuaca"</string>
+    <string name="weatherNone" formatted="false">"Tak ada pembaruan dalam 3 jam (jaringan atau tempat)"</string>
+    <string name="weatherRow" formatted="false">"Cuaca"</string>
+    <string name="weatherStatusHelp" formatted="false">"Pembaruan terakhir %1$s · Open-Meteo"</string>
+    <string name="works" formatted="false">"Berfungsi"</string>
+    <string name="works_2" formatted="false">"Tidak sampai"</string>
+    <string-array name="adhkarModes">
+        <item>"Nonaktif"</item>
+        <item>"Diperluas"</item>
+        <item>"Utama"</item>
+    </string-array>
+    <string-array name="afterAdhanChoices">
+        <item>"Lanjut"</item>
+        <item>"Tetap mati"</item>
+    </string-array>
+    <string-array name="asrSchools">
+        <item>"Jumhur"</item>
+        <item>"Hanafi"</item>
+    </string-array>
+    <string-array name="backgrounds">
+        <item>"Pola"</item>
+        <item>"Foto"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"Sepertujuh malam setelah Magrib dan sebelum terbit · aturan aplikasi selama ini"</item>
+        <item>"Maksimal separuh malam setelah Magrib dan sebelum terbit · bawaan pustaka azan"</item>
+        <item>"Sudut sebagai bagian malam (18° = 18/60) · bawaan AlAdhan, saran PrayTimes"</item>
+        <item>"Bagiannya dari malam pada 45° · Majma' Fiqih Islami, 1406 H"</item>
+        <item>"Sepertiga malam syar'i dari hari terakhir fajar terbit · Diyanet dan Dewan Fatwa Eropa, 2021"</item>
+        <item>"Jam Makkah jika puasa melebihi 20 jam atau matahari tak terbit · masjid Norwegia utara, 2012"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"Sepertujuh malam"</item>
+        <item>"Tengah malam"</item>
+        <item>"Sudut senja"</item>
+        <item>"Bagian malam pada 45°"</item>
+        <item>"Kongres Istanbul 2021"</item>
+        <item>"Waktu Makkah"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"Dengan sudut"</item>
+        <item>"Setelah Magrib"</item>
+    </string-array>
+    <string-array name="callCloseChoices">
+        <item>"Setelah azan"</item>
+        <item>"1 mnt"</item>
+        <item>"5 mnt"</item>
+        <item>"10 mnt"</item>
+    </string-array>
+    <string-array name="clocks">
+        <item>"TV"</item>
+        <item>"12 jam"</item>
+        <item>"24 jam"</item>
+    </string-array>
+    <string-array name="digitChoicesFile">
+        <item>"By language"</item>
+        <item>"0123"</item>
+        <item>"٠١٢٣"</item>
+    </string-array>
+    <string-array name="fastTomorrow">
+        <item>"Besok: puasa Senin"</item>
+        <item>"Besok: puasa Kamis"</item>
+        <item>"Besok: salah satu Ayyamul Bidh"</item>
+        <item>"Besok: puasa Tasua"</item>
+        <item>"Besok: puasa Asyura"</item>
+    </string-array>
+    <string-array name="fileHeader">
+        <item>"Awan TV settings: change the values, then send them to the TV:"</item>
+        <item>"  powershell -ExecutionPolicy Bypass -File tools\\AwanTV-settings.ps1 -Import -File &lt;this file&gt; -Device &lt;the TV&gt;"</item>
+        <item>"Above each setting: what it is, its values and its default. Lines starting with // are notes, not read."</item>
+        <item>"A setting left out of the file stays as it is on the TV. The whole file is checked: one mistake stops the import and nothing changes."</item>
+        <item>"Before importing, the TV's settings are kept as a backup in state\\settings on the computer."</item>
+    </string-array>
+    <string-array name="fridayChoices">
+        <item>"Per negara"</item>
+        <item>"Saat Zuhur"</item>
+        <item>"Waktu tetap"</item>
+    </string-array>
+    <string-array name="hijriMonths">
+        <item>"Muharam"</item>
+        <item>"Safar"</item>
+        <item>"Rabiulawal"</item>
+        <item>"Rabiulakhir"</item>
+        <item>"Jumadilawal"</item>
+        <item>"Jumadilakhir"</item>
+        <item>"Rajab"</item>
+        <item>"Syakban"</item>
+        <item>"Ramadan"</item>
+        <item>"Syawal"</item>
+        <item>"Zulkaidah"</item>
+        <item>"Zulhijah"</item>
+    </string-array>
+    <string-array name="imsakChoices">
+        <item>"Tidak ada"</item>
+        <item>"5 mnt"</item>
+        <item>"10 mnt"</item>
+        <item>"15 mnt"</item>
+        <item>"20 mnt"</item>
+    </string-array>
+    <string-array name="iqamaModes">
+        <item>"Nonaktif"</item>
+        <item>"Negara"</item>
+        <item>"Menit"</item>
+        <item>"Tetap"</item>
+    </string-array>
+    <string-array name="iqamaPeriods">
+        <item>"Hari lain"</item>
+        <item>"Ramadan"</item>
+    </string-array>
+    <string-array name="middleChoices">
+        <item>"Keduanya"</item>
+        <item>"Hadis"</item>
+        <item>"Zikir"</item>
+        <item>"Tidak ada"</item>
+    </string-array>
+    <string-array name="news_1_10_0">
+        <item>"The radio on your TVs from the computer"</item>
+        <item>"From the settings editor: see what each TV is playing now, and start or stop the radio on one TV or on all of them. A TV playing something else is not cut off unless you choose to."</item>
+    </string-array>
+    <string-array name="news_1_13_0">
+        <item>"A safety screen if it stops"</item>
+        <item>"If Awan TV stops unexpectedly, a screen restarts it or opens the TV's own home. If it stops again, the TV runs on its own home for half an hour, so it stays usable."</item>
+        <item>"Put a TV right from the phone or the computer"</item>
+        <item>"Tick an up-to-date TV in the installer's My TVs or the editor's Update TVs, and it is set up again without sending the app anew."</item>
+    </string-array>
+    <string-array name="news_1_14_0">
+        <item>"The iqamah countdown over apps"</item>
+        <item>"From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."</item>
+        <item>"Photos in the screensaver"</item>
+        <item>"A photo every ten minutes behind the times, only dark ones from Isha until Fajr. Turn them off in Settings › Display &amp; language."</item>
+    </string-array>
+    <string-array name="news_1_14_1">
+        <item>"Colours that follow the time"</item>
+        <item>"Lapis by day and Charcoal after Maghrib, easier on the eyes at night. One colour all day in Settings › Display &amp; language › Colours."</item>
+    </string-array>
+    <string-array name="news_1_14_2">
+        <item>"Saved recitations keep their names"</item>
+        <item>"After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."</item>
+    </string-array>
+    <string-array name="news_1_17_0">
+        <item>"Bahasa dari Layar Utama"</item>
+        <item>"Tombol globe di samping Setelan membuka daftar bahasa, masing-masing dengan namanya sendiri. Setelah memilih, layar bertanya Pakai atau Kembali, dan kembali sendiri setelah sepuluh detik tanpa jawaban."</item>
+    </string-array>
+    <string-array name="news_1_18_0">
+        <item>"Bahasa Urdu"</item>
+        <item>"Semua layar dalam bahasa Urdu, dengan nama qari dan surah dalam bahasa Urdu. Pilih dari tombol globe di Layar Utama."</item>
+        <item>"Kapan puasa dimulai"</item>
+        <item>"Saat Ramadan, kotak Subuh menyebutkan puasa dimulai. Imsak, kehati-hatian opsional sebelumnya, diatur di Setelan."</item>
+    </string-array>
+    <string-array name="news_1_19_0">
+        <item>"Bahasa Turki"</item>
+        <item>"Semua layar dalam bahasa Turki, dengan istilah Diyanet, dengan nama qari dan surah dalam bahasa Turki. Pilih dari tombol globe di Layar Utama."</item>
+    </string-array>
+    <string-array name="news_1_20_0">
+        <item>"Bahasa Prancis"</item>
+        <item>"Semua layar dalam bahasa Prancis, dengan istilah masjid berbahasa Prancis, dengan nama qari dan surah dalam bahasa Prancis. Pilih dari tombol globe di Layar Utama."</item>
+    </string-array>
+    <string-array name="news_1_21_0">
+        <item>"Bahasa Melayu"</item>
+        <item>"Semua layar dalam bahasa Melayu, dengan istilah JAKIM Malaysia. Pilih dari tombol globe di Layar Utama."</item>
+    </string-array>
+    <string-array name="news_1_22_0">
+        <item>"Bahasa Spanyol"</item>
+        <item>"Semua layar dalam bahasa Spanyol, dengan istilah masjid di Spanyol, dengan nama qari dan surah dalam bahasa Spanyol. Pilih dari tombol globe di Layar Utama."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"Bahasa Indonesia dan Persia"</item>
+        <item>"Semua layar dalam bahasa Indonesia dan Persia, dengan nama qari dan surah dalam masing-masing bahasa. Pilih dari tombol globe di Layar Utama."</item>
+        <item>"Waktu resmi Iran"</item>
+        <item>"Metode baru: Institut Geofisika, Universitas Teheran, yang diikuti masjid dan siaran di Iran: Subuh 17,7°, Magrib saat matahari 4,5° di bawah ufuk, Isya 14°. Lokasi di Iran dimulai dengan metode ini."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"Perhitungan khusus"</item>
+        <item>"Setelan › Waktu salat › Metode perhitungan › Perhitungan khusus: mulai dari metode mana pun, lalu atur sudut Subuh, dan Isya menurut sudut atau menit setelah Magrib. Bisa tetap dipakai saat Anda mengganti kota."</item>
+        <item>"Lintang tinggi"</item>
+        <item>"Di atas 48°, perhitungan khusus memilih aturan Subuh dan Isya saat tandanya hilang: sepertujuh malam, tengah malam, sudut senja, bagian malam pada 45°, Kongres Istanbul 2021, atau waktu Makkah seperti di Norwegia utara."</item>
+    </string-array>
+    <string-array name="news_1_1_0">
+        <item>"Remote buttons"</item>
+        <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
+    </string-array>
+    <string-array name="news_1_2_0">
+        <item>"Adjust the times by minutes"</item>
+        <item>"Settings › Prayer times › Adjust the times and the date: each time up to 30 minutes earlier or later, to match your masjid."</item>
+        <item>"A new version's QR code"</item>
+        <item>"When a newer version is out, About opens a window with a code to scan with a phone to reach its page."</item>
+        <item>"What's new"</item>
+        <item>"This window, once after each update, and in About."</item>
+    </string-array>
+    <string-array name="news_1_3_0">
+        <item>"Oman's Ministry of Awqaf method"</item>
+        <item>"Oman's prayer times by its Ministry of Awqaf, chosen for its cities by themselves."</item>
+        <item>"Three radio stations"</item>
+        <item>"Oman's Holy Quran Radio, and Saudi Arabia's Quran Radio and Nida Al-Islam, in Settings › Radio."</item>
+        <item>"The phone installer"</item>
+        <item>"It tells you of a newer installer, and says why it couldn't reach the TV and what to do."</item>
+    </string-array>
+    <string-array name="news_1_4_0">
+        <item>"The station from Home"</item>
+        <item>"The radio card has a Station button: change the station or recitation without opening Settings."</item>
+        <item>"Hold a button"</item>
+        <item>"Each button you customised in Remote buttons can open something else when held."</item>
+        <item>"Two adhan voices"</item>
+        <item>"The adhan of Al-Masjid an-Nabawi, and Sheikh Ragheb Mustafa Ghalwash's, in Settings › Adhan."</item>
+    </string-array>
+    <string-array name="news_1_5_0">
+        <item>"Told of a new version"</item>
+        <item>"When a newer version is out, Home tells you with a code to scan with a phone, and a gold mark stays on the Settings button until you update."</item>
+    </string-array>
+    <string-array name="news_1_7_0">
+        <item>"Update with one press"</item>
+        <item>"When a newer version is out, press Update now in its window: the app downloads it and installs it on the TV itself, with no phone or computer."</item>
+    </string-array>
+    <string-array name="news_1_8_0">
+        <item>"Morocco's times as the ministry publishes them"</item>
+        <item>"The Moroccan Ministry of Habous' method, with the table of each of its 191 localities; pick the one near you in Settings › Prayer times › Ministry table."</item>
+    </string-array>
+    <string-array name="news_1_9_0">
+        <item>"Recitations and the station from the computer"</item>
+        <item>"From the settings editor on Windows: choose recitations for one or more TVs to download by themselves, and change the station, without going to each TV."</item>
+    </string-array>
+    <string-array name="occasion">
+        <item>"Ramadan"</item>
+        <item>"Idulfitri"</item>
+        <item>"Hari Arafah"</item>
+        <item>"Iduladha"</item>
+    </string-array>
+    <string-array name="occasionToday">
+        <item>"Marhaban ya Ramadan"</item>
+        <item>"Selamat Idulfitri"</item>
+        <item>"Hari Arafah"</item>
+        <item>"Selamat Iduladha"</item>
+    </string-array>
+    <string-array name="octant">
+        <item>"Utara"</item>
+        <item>"Timur laut"</item>
+        <item>"Timur"</item>
+        <item>"Tenggara"</item>
+        <item>"Selatan"</item>
+        <item>"Barat daya"</item>
+        <item>"Barat"</item>
+        <item>"Barat laut"</item>
+    </string-array>
+    <string-array name="photoEveryChoices">
+        <item>"Otomatis"</item>
+        <item>"Tiap 10 menit"</item>
+        <item>"Tiap setengah jam"</item>
+        <item>"Tiap jam"</item>
+        <item>"Tiap salat"</item>
+        <item>"Tiap hari"</item>
+    </string-array>
+    <string-array name="prayerNames">
+        <item>"Subuh"</item>
+        <item>"Terbit"</item>
+        <item>"Zuhur"</item>
+        <item>"Asar"</item>
+        <item>"Magrib"</item>
+        <item>"Isya"</item>
+    </string-array>
+    <string-array name="qiblaRelative">
+        <item>"di depan Anda"</item>
+        <item>"di depan, kanan Anda"</item>
+        <item>"di kanan Anda"</item>
+        <item>"di belakang, kanan Anda"</item>
+        <item>"di belakang Anda"</item>
+        <item>"di belakang, kiri Anda"</item>
+        <item>"di kiri Anda"</item>
+        <item>"di depan, kiri Anda"</item>
+    </string-array>
+    <string-array name="radioDarkChoices">
+        <item>"Ikut screensaver"</item>
+        <item>"15 mnt setelahnya"</item>
+        <item>"Tidak pernah"</item>
+    </string-array>
+    <string-array name="regions">
+        <item>"Dunia Arab"</item>
+        <item>"Asia"</item>
+        <item>"Eropa"</item>
+        <item>"Amerika"</item>
+        <item>"Afrika"</item>
+        <item>"Oseania"</item>
+    </string-array>
+    <string-array name="remindChoices">
+        <item>"5 mnt"</item>
+        <item>"10 mnt"</item>
+        <item>"15 mnt"</item>
+        <item>"20 mnt"</item>
+        <item>"30 mnt"</item>
+        <item>"Nonaktif"</item>
+    </string-array>
+    <string-array name="removeChoices">
+        <item>"Hapus sekarang"</item>
+        <item>"Batal"</item>
+    </string-array>
+    <string-array name="removeRecitationsChoices">
+        <item>"Pertahankan"</item>
+        <item>"Hapus"</item>
+    </string-array>
+    <string-array name="resetGoes">
+        <item>"Lokasi, metode, iqamah, dan Jumat"</item>
+        <item>"Pengingat, suara azan, dan volume Subuh"</item>
+        <item>"Warna, foto, bahasa, dan cuaca"</item>
+        <item>"Aplikasi favorit dan baris Lainnya"</item>
+        <item>"Tombol remote khusus"</item>
+    </string-array>
+    <string-array name="resetStays">
+        <item>"Bacaan tersimpan"</item>
+        <item>"Screensaver TV sebelumnya (untuk menghapus Awan TV nanti)"</item>
+        <item>"Layanan Awan TV dan izinnya"</item>
+    </string-array>
+    <string-array name="runModes">
+        <item>"Semua"</item>
+        <item>"Layar Utama"</item>
+        <item>"Screensaver"</item>
+        <item>"Nonaktif"</item>
+    </string-array>
+    <string-array name="saverIdleChoices">
+        <item>"5 mnt"</item>
+        <item>"10 mnt"</item>
+        <item>"15 mnt"</item>
+        <item>"30 mnt"</item>
+    </string-array>
+    <string-array name="saverStatusHelp">
+        <item>"Screensaver perangkat adalah Awan TV"</item>
+        <item>"Awan TV membukanya sendiri dari Layar Utama (tanpa izin untuk mengatur milik perangkat)"</item>
+        <item>"Nonaktif di “Awan TV”"</item>
+    </string-array>
+    <string-array name="sky">
+        <item>"Cerah"</item>
+        <item>"Berawan sebagian"</item>
+        <item>"Berawan"</item>
+        <item>"Berkabut"</item>
+        <item>"Gerimis"</item>
+        <item>"Hujan"</item>
+        <item>"Salju"</item>
+        <item>"Badai petir"</item>
+    </string-array>
+    <string-array name="stationGroups">
+        <item>"Stasiun radio Al-Qur'an"</item>
+        <item>"Qari"</item>
+        <item>"Tersimpan di TV"</item>
+    </string-array>
+    <string-array name="themes">
+        <item>"Lapis"</item>
+        <item>"Zamrud"</item>
+        <item>"Marun"</item>
+        <item>"Arang"</item>
+        <item>"Perkamen"</item>
+        <item>"Otomatis"</item>
+    </string-array>
+    <string-array name="weatherChoices">
+        <item>"Nonaktif"</item>
+        <item>"°C"</item>
+        <item>"°F"</item>
+    </string-array>
+    <string-array name="weekdaysShort">
+        <item>"Min"</item>
+        <item>"Sen"</item>
+        <item>"Sel"</item>
+        <item>"Rab"</item>
+        <item>"Kam"</item>
+        <item>"Jum"</item>
+        <item>"Sab"</item>
+    </string-array>
+</resources>

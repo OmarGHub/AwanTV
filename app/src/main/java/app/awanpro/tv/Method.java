@@ -58,15 +58,30 @@ final class Method {
      */
     static final Method MOROCCO_HABOUS = new Method("MOROCCO_HABOUS", null);
 
+    /**
+     * The Institute of Geophysics, University of Tehran (1.25.0a): Iran's official times (mosques and IRIB follow them):
+     * Fajr 17.7°, Maghrib when the sun is 4.5° below the horizon (the eastern redness gone, some 17-20 minutes after
+     * sunset), Isha 14°, Dhuhr at the transit; the night's middle from sunset to Fajr. As PrayTimes.org's "Tehran" and
+     * Persian Calendar's (persian-calendar/praytimes, its default for Iran). adhan-java has no Maghrib angle:
+     * {@link PrayerDay} works it out with adhan-java's own sun ({@link #maghribAngle}).
+     */
+    static final Method TEHRAN = new Method("TEHRAN", null);
+
     /** Fresh parameters on every call: callers set the Asr school and adjustments on them. */
     CalculationParameters parameters() {
         if (base != null) return base.getParameters();
+        if (this == TEHRAN) return new CalculationParameters(17.7, 14.0, CalculationMethod.OTHER);
         if (this == MOROCCO_HABOUS) {
             return new CalculationParameters(19.0, 17.0, CalculationMethod.OTHER)
                 .withMethodAdjustments(new PrayerAdjustments(0, 0, 5, 0, 0, 0));
         }
         return new CalculationParameters(18.0, 18.0, CalculationMethod.OTHER)
             .withMethodAdjustments(new PrayerAdjustments(0, 0, 5, 5, 5, 0));
+    }
+
+    /** Degrees below the horizon for Maghrib; 0 = at sunset (every method but Tehran's). */
+    double maghribAngle() {
+        return this == TEHRAN ? 4.5 : 0;
     }
 
     @Override

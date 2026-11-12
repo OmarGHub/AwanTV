@@ -30,6 +30,8 @@ final class PrayerDay {
     final Date nextTime;
     /** The Fajr that ends tonight's Suhoor: today's before dawn, otherwise tomorrow's. */
     final Date suhoorEnd;
+    /** The day's sunset: Maghrib itself, but for a method whose Maghrib comes later (Tehran's, 4.5° below). */
+    final Date sunset;
     final boolean friday;
     final boolean ramadan;
     /** Ramadan for the Fajr in the Fajr slot, which after Isha is tomorrow's (the first suhoor, Eid's dawn). */
@@ -140,6 +142,7 @@ final class PrayerDay {
             }
         }
         for (int i = 0; i < 6; i++) times[i] = minute(today[i]);
+        sunset = minute(today.length > 6 ? today[6] : today[MAGHRIB]);
 
         IslamicCalendar h = new IslamicCalendar();
         h.setCalculationType(IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);
@@ -211,7 +214,8 @@ final class PrayerDay {
     static Date[] night(Context c, PrayerDay day, Date now) {
         Date fajr = day.suhoorEnd;   // the coming Fajr: today's before dawn, otherwise tomorrow's
         boolean beforeDawn = now.before(day.times[FAJR]) && !now.after(fajr) && day.times[ISHA].after(now);
-        Date maghrib = beforeDawn ? ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).times[MAGHRIB] : day.times[MAGHRIB];
+        // From sunset (Maghrib itself for every method but Tehran's: Iran's "sharia midnight" is between sunset and Fajr).
+        Date maghrib = beforeDawn ? ofDate(c, new Date(now.getTime() - 24 * 3600_000L)).sunset : day.sunset;
         long span = fajr.getTime() - maghrib.getTime();
         return new Date[] {minute(new Date(maghrib.getTime() + span / 2 + 30_000)),
                            minute(new Date(maghrib.getTime() + span * 2 / 3 + 30_000))};
@@ -318,7 +322,8 @@ final class PrayerDay {
         if (p.fajr != null) {
             // The custom calculation's rule above 48° (HighLatitude).
             Date[] fi = HighLatitude.fajrIsha(high, where, date, params, p);
-            local = new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]};
+            local = withMaghrib(method, where, date, params,
+                new Date[] {fi[0], p.sunrise, p.dhuhr, p.asr, p.maghrib, fi[1]});
         }
         // Makkah's clock times where the fast would pass twenty hours, or on a day adhan-java can't work out there (no
         // sunrise, sunset or Asr: HighLatitude.makkah).
@@ -326,7 +331,41 @@ final class PrayerDay {
         if (makkah != null) return makkah;
         if (local != null) return local;
         p = at45(where, date, params);
-        return new Date[] {p.fajr, p.sunrise, p.dhuhr, p.asr, p.maghrib, p.isha};
+        Coordinates at = new Coordinates(Math.copySign(POLAR_FALLBACK_LATITUDE, where.latitude), where.longitude);
+        return withMaghrib(method, at, date, params, new Date[] {p.fajr, p.sunrise, p.dhuhr, p.asr, p.maghrib, p.isha});
+    }
+
+    /**
+     * A method whose Maghrib comes when the sun is some degrees below the horizon (Tehran's 4.5°, {@link
+     * Method#maghribAngle}): Maghrib by adhan-java's own sun for that angle, with the viewer's and the method's minutes,
+     * rounded as adhan-java rounds; Isha by minutes counts from it, and never comes before it. Where the sun doesn't
+     * go that low (far north in summer), the twilight-angle share of the night after sunset (angle / 60), as
+     * PrayTimes.org's AngleBased rule. The seventh slot keeps the sunset (the night's middle and last third count from
+     * it, as Iran's "sharia midnight" between sunset and Fajr). Other methods: the six times and their Maghrib again.
+     */
+    private static Date[] withMaghrib(Method method, Coordinates where, DateComponents date, CalculationParameters params,
+                                      Date[] t) {
+        double angle = method.maghribAngle();
+        if (angle <= 0 || t[MAGHRIB] == null) return new Date[] {t[0], t[1], t[2], t[3], t[4], t[5], t[MAGHRIB]};
+        long minute = 60_000L;
+        long adjust = (params.adjustments.maghrib + params.methodAdjustments.maghrib) * minute;
+        Date sunset = new Date(t[MAGHRIB].getTime() - adjust);
+        double hours = new SolarTime(date, where).hourAngle(-angle, true);
+        long raw;
+        if (!Double.isNaN(hours) && TimeComponents.fromDouble(hours) != null) {
+            raw = TimeComponents.fromDouble(hours).dateComponents(date).getTime();
+        } else {
+            long night = t[SUNRISE].getTime() + 24 * 3600_000L - sunset.getTime();
+            raw = sunset.getTime() + (long) (night * angle / 60);
+        }
+        Date maghrib = new Date((raw + adjust + 30_000L) / minute * minute);
+        Date isha = t[ISHA];
+        if (params.ishaInterval > 0) {
+            long more = (params.ishaInterval + params.adjustments.isha + params.methodAdjustments.isha) * minute;
+            isha = new Date((raw + more + 30_000L) / minute * minute);
+        }
+        if (isha != null && isha.before(maghrib)) isha = maghrib;
+        return new Date[] {t[FAJR], t[SUNRISE], t[DHUHR], t[ASR], maghrib, isha, sunset};
     }
 
     /** A day with no sunrise, sunset or Asr at the place (adhan-java gives none of its times): 45°'s, whatever the rule. */

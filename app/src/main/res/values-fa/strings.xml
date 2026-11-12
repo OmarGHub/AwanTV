@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">هر بار که صفحه اصلی تلویزیون ظاهر شود Awan TV را نشان می‌دهد، و در وقت نماز روی هر چیزی که پخش می‌شود اذان می‌گوید. چیزی در تلویزیون غیرفعال نمی‌شود: برای بازگشت به صفحه اصلی تلویزیون این سرویس را خاموش کنید.</string>
+</resources>

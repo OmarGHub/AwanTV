@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"زاوية الفجر "</string>
     <string name="methodAngles_2" formatted="false">"العشاء بعد المغرب بـ %1$s دقيقة"</string>
     <string name="methodAngles_3" formatted="false">"العشاء "</string>
+    <string name="methodAngles_4" formatted="false">"المغرب "</string>
     <string name="methodName" formatted="false">"أم القرى، مكة المكرمة"</string>
     <string name="methodName_10" formatted="false">"وزارة الأوقاف والشؤون الدينية، سلطنة عُمان"</string>
     <string name="methodName_11" formatted="false">"وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية"</string>
     <string name="methodName_12" formatted="false">"الهيئة المصرية العامة للمساحة"</string>
+    <string name="methodName_13" formatted="false">"معهد الجيوفيزياء، جامعة طهران"</string>
     <string name="methodName_2" formatted="false">"رابطة العالم الإسلامي"</string>
     <string name="methodName_3" formatted="false">"جامعة العلوم الإسلامية، كراتشي"</string>
     <string name="methodName_4" formatted="false">"دبي"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"الإسبانية"</item>
         <item>"الواجهة كلها بالإسبانية بمصطلحات المساجد في إسبانيا، وأسماء القرّاء والسور بها. اخترها من زر الكرة الأرضية في الرئيسية."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"الإندونيسية والفارسية"</item>
+        <item>"الواجهة كلها بالإندونيسية وبالفارسية، وأسماء القرّاء والسور بكلٍّ منهما. اخترها من زر الكرة الأرضية في الرئيسية."</item>
+        <item>"مواقيت إيران الرسمية"</item>
+        <item>"طريقة جديدة: معهد الجيوفيزياء في جامعة طهران، وعليها المساجد والإذاعة في إيران: الفجر 17.7°، والمغرب حين تنزل الشمس 4.5° تحت الأفق، والعشاء 14°. والموقع في إيران يبدأ بها."</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"حساب مخصّص للمواقيت"</item>

@@ -1,0 +1,978 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The screens' texts, from Text.java (languages plan, phase 1). Every value is quoted so its spaces stay;
+     %1$s... are filled by Text.fill itself, not String.format, hence formatted="false"; %% is a percent sign.
+     Arrays are read as written: no %1$s in them. Checked before every build (app/build.gradle checkTexts). -->
+<resources>
+    <string name="accessibilityHelp" formatted="false">"برای روشن کردن سرویس Awan TV: صفحه اصلی و اذان"</string>
+    <string name="accessibilityRow" formatted="false">"تنظیمات دسترس‌پذیری"</string>
+    <string name="addButtonHelp" formatted="false">"سپس هر دکمه‌ای را روی هر کنترلی که به تلویزیون وصل است بزنید"</string>
+    <string name="addButtonRow" formatted="false">"افزودن دکمه"</string>
+    <string name="adhanAt" formatted="false">"اذان"</string>
+    <string name="adhanCredit" formatted="false">"صداها: github.com/abodehq/Athan-MP3 و github.com/meypod/audio_files · هر کدام به درخواست صاحب حقش حذف می‌شود"</string>
+    <string name="adhanHelp" formatted="false">"با رسیدن وقت پخش می‌شود · برای هر نماز جدا قابل قطع است"</string>
+    <string name="adhanOn" formatted="false">"روشن"</string>
+    <string name="adhanOn_2" formatted="false">"خاموش"</string>
+    <string name="adhanRow" formatted="false">"اذان"</string>
+    <string name="adhanToday" formatted="false">"اذان امروز "</string>
+    <string name="adhkarHelp" formatted="false">"در محافظ صفحه: از صبح تا ظهر، از عصر تا عشا"</string>
+    <string name="adhkarHelp_2" formatted="false">"در محافظ صفحه: از صبح تا طلوع آفتاب، از عصر تا مغرب"</string>
+    <string name="adhkarHelp_3" formatted="false">"بدون اذکار در محافظ صفحه"</string>
+    <string name="adhkarRow" formatted="false">"اذکار صبح و شام"</string>
+    <string name="adjustFileHelp" formatted="false">"Minutes added to the calculated time; negative is earlier"</string>
+    <string name="adjustFileLabel" formatted="false">"%1$s adjustment (minutes)"</string>
+    <string name="adjustNote" formatted="false">"برای مسجدی که کمی با محاسبه فرق دارد. اذان، اقامه، یادآوری‌ها و محافظ صفحه همه از وقت اصلاح‌شده پیروی می‌کنند."</string>
+    <string name="adjustRow" formatted="false">"اصلاح اوقات و تاریخ"</string>
+    <string name="adjustRowHelp" formatted="false">"هر وقت تا 30 دقیقه زودتر یا دیرتر، و تاریخ قمری"</string>
+    <string name="adjustSection" formatted="false">"اوقات نماز › اصلاح اوقات و تاریخ"</string>
+    <string name="adjustSummary" formatted="false">"قمری "</string>
+    <string name="adjustSummary_2" formatted="false">"هیچ"</string>
+    <string name="adjustSummary_3" formatted="false">"، "</string>
+    <string name="adjustTimeHelpToday" formatted="false">"امروز %1$s · به دقیقه، تا 30 زودتر یا دیرتر"</string>
+    <string name="adjustTimeHelpTomorrow" formatted="false">"فردا %1$s · به دقیقه، تا 30 زودتر یا دیرتر"</string>
+    <string name="afterAdhanHelp" formatted="false">"رادیو برای اذان مکث می‌کند، سپس…"</string>
+    <string name="afterAdhanLabel" formatted="false">"دعای پس از اذان"</string>
+    <string name="afterAdhanRow" formatted="false">"پس از اذان"</string>
+    <string name="afterPrayerLabel" formatted="false">"اذکار پس از نماز"</string>
+    <string name="all" formatted="false">"همه برنامه‌ها"</string>
+    <string name="allSaved" formatted="false">"همه سوره‌ها ذخیره شده‌اند · از رادیو پخش کنید"</string>
+    <string name="allTitle" formatted="false">"همه برنامه‌ها"</string>
+    <string name="ampm" formatted="false">"ق.ظ"</string>
+    <string name="ampm_2" formatted="false">"ب.ظ"</string>
+    <string name="announceHelp" formatted="false">"وقتی اذان نمازی خاموش است، می‌گوید «حان الآن موعد صلاة …»"</string>
+    <string name="announceRow" formatted="false">"اعلام وقت"</string>
+    <string name="apLabel" formatted="false">"نماز نزدیک است"</string>
+    <string name="apOk" formatted="false">"متوجه شدم"</string>
+    <string name="apSub" formatted="false">"اذان "</string>
+    <string name="apSub_2" formatted="false">" · بازگشت برای بستن"</string>
+    <string name="apTitleOne" formatted="false">"%1$s تا %2$s دقیقه دیگر"</string>
+    <string name="apTitleOther" formatted="false">"%1$s تا %2$s دقیقه دیگر"</string>
+    <string name="asUsual" formatted="false">"مانند روزهای دیگر"</string>
+    <string name="asrSchool" formatted="false">"روش عصر"</string>
+    <string name="asrSchoolHelp" formatted="false">"فقط وقت عصر را تغییر می‌دهد"</string>
+    <string name="backgroundHelp" formatted="false">"عکس‌ها: حرمین، الاقصی، مساجد و طبیعت، زیر رنگ پوسته"</string>
+    <string name="backgroundRow" formatted="false">"پس‌زمینه صفحه اصلی"</string>
+    <string name="bannerSub" formatted="false">"اذان "</string>
+    <string name="bannerSub_2" formatted="false">" · تا %1$s ثانیه دیگر پنهان می‌شود"</string>
+    <string name="basedOn" formatted="false">"ساخته‌شده بر پایه Afnon و Masjid TV"</string>
+    <string name="bell" formatted="false">"اذان روشن"</string>
+    <string name="bellRow" formatted="false">"%1$s adhan on"</string>
+    <string name="bellToggle" formatted="false">"روشن/خاموش کردن اذان این نماز"</string>
+    <string name="bell_2" formatted="false">"اذان خاموش"</string>
+    <string name="bellsNoteFile" formatted="false">"On the TV: Today &amp; Qibla, the bell by each prayer"</string>
+    <string name="boolValues" formatted="false">"Values: true = on, false = off"</string>
+    <string name="buttonFrom" formatted="false">"از «%1$s»"</string>
+    <string name="buttonLongIs" formatted="false">"نگه داشتن: "</string>
+    <string name="buttonLongNone" formatted="false">"بدون کار در نگه داشتن"</string>
+    <string name="buttonLongNote" formatted="false">"نگه داشتن یعنی نیم ثانیه یا بیشتر"</string>
+    <string name="buttonLongShort" formatted="false">"نگه داشته: "</string>
+    <string name="buttonLongTitle" formatted="false">"%1$s، نگه داشته"</string>
+    <string name="buttonNone" formatted="false">"هیچ (دکمه را خاموش می‌کند)"</string>
+    <string name="buttonOff" formatted="false">"هیچ (خاموش)"</string>
+    <string name="buttonOpens" formatted="false">"%1$s باز می‌کند"</string>
+    <string name="buttonOriginal" formatted="false">"عملکرد اصلی‌اش (شخصی‌سازی‌نشده)"</string>
+    <string name="buttonPressIs" formatted="false">"فشار: "</string>
+    <string name="buttonRadio" formatted="false">"رادیو (پخش و توقف)"</string>
+    <string name="buttonsFileNote" formatted="false">"They come back to this TV only and are passed over when the file goes to another TV: each remote has its own codes."</string>
+    <string name="buttonsFileSection" formatted="false">"Remote buttons (this TV only)"</string>
+    <string name="buttonsHelp" formatted="false">"دکمه‌ای از هر کنترلی را برای باز کردن انتخاب خود تنظیم کنید"</string>
+    <string name="buttonsHelpOne" formatted="false">"%1$s دکمه شخصی‌سازی شده"</string>
+    <string name="buttonsHelpOther" formatted="false">"%1$s دکمه شخصی‌سازی شده"</string>
+    <string name="buttonsInfoHelp" formatted="false">"تا وقتی یک دکمه شخصی‌سازی شده باشد، هر فشار کنترل از Awan TV می‌گذرد، پس نگه داشتن صدا آن را فقط یک پله تغییر می‌دهد. این دکمه‌ها هرگز شخصی‌سازی نمی‌شوند: پیکان‌ها، OK، بازگشت، صفحه اصلی، صدا، روشن/خاموش."</string>
+    <string name="buttonsInfoHelpTcl" formatted="false">"در این تلویزیون دکمه‌ها با تنظیم کلید خود TCL شخصی‌سازی می‌شوند، پس فشارهای کنترل از Awan TV نمی‌گذرند و صدا مثل قبل است. این دکمه‌ها هرگز شخصی‌سازی نمی‌شوند: پیکان‌ها، OK، بازگشت، صفحه اصلی، صدا، روشن/خاموش."</string>
+    <string name="buttonsInfoRow" formatted="false">"درباره دکمه‌های شخصی"</string>
+    <string name="buttonsRow" formatted="false">"دکمه‌های کنترل"</string>
+    <string name="buttonsSection" formatted="false">"تنظیمات دستگاه › دکمه‌های کنترل"</string>
+    <string name="buttonsServiceOff" formatted="false">"سرویس Awan TV خاموش است: دکمه‌های شخصی پس از روشن شدن آن کار می‌کنند"</string>
+    <string name="byAwan" formatted="false">"توسعه‌دهنده: عمر احمد الحویرث"</string>
+    <string name="byCity" formatted="false">"by the location"</string>
+    <string name="byCountry" formatted="false">"the country's, if it has an official one, else 0 (off)"</string>
+    <string name="byCountryOr" formatted="false">"the country's, else %1$s"</string>
+    <string name="byTvCountry" formatted="false">"\"f\" in countries that use Fahrenheit, else \"c\""</string>
+    <string name="bytes" formatted="false">"%1$s MB"</string>
+    <string name="bytesGb" formatted="false">"%1$s GB"</string>
+    <string name="calcAngleHelp" formatted="false">"امروز %1$s · هر فشار نیم درجه"</string>
+    <string name="calcAngleHelpTomorrow" formatted="false">"فردا %1$s · هر فشار نیم درجه"</string>
+    <string name="calcBaseHelp" formatted="false">"زاویه‌های زیر را پر می‌کند؛ سپس هرچه لازم است تغییر دهید"</string>
+    <string name="calcBaseRow" formatted="false">"شروع از روش"</string>
+    <string name="calcFajrRow" formatted="false">"زاویه صبح"</string>
+    <string name="calcFileHelp" formatted="false">"Used instead of the calculation method while on"</string>
+    <string name="calcFromMethod" formatted="false">"As the calculation method"</string>
+    <string name="calcHighHere" formatted="false">"فقط بالای 48° · در مکان شما اثری ندارد"</string>
+    <string name="calcHighMsc" formatted="false">"روش Moonsighting Committee قاعده خود را دارد"</string>
+    <string name="calcHighRow" formatted="false">"عرض‌های بالا"</string>
+    <string name="calcIshaAngleRow" formatted="false">"زاویه عشا"</string>
+    <string name="calcIshaMinutesRow" formatted="false">"عشا پس از مغرب"</string>
+    <string name="calcIshaRow" formatted="false">"عشا"</string>
+    <string name="calcIshaRowHelp" formatted="false">"با زاویه خورشید، یا زمانی ثابت پس از مغرب"</string>
+    <string name="calcItem" formatted="false">"محاسبه دلخواه…"</string>
+    <string name="calcKeepHelp" formatted="false">"و نه اصلاح دقیقه‌ها را · خاموش: مکان تازه روش کشورش را می‌گیرد"</string>
+    <string name="calcKeepRow" formatted="false">"تغییر شهر این محاسبه را تغییر نمی‌دهد"</string>
+    <string name="calcKept" formatted="false">"با تغییر مکان می‌ماند"</string>
+    <string name="calcMinutesHelp" formatted="false">"امروز %1$s · هر فشار 5 دقیقه"</string>
+    <string name="calcName" formatted="false">"محاسبه دلخواه"</string>
+    <string name="calcOffNote" formatted="false">"با روشن شدن، از «%1$s» شروع می‌شود؛ سپس هرچه لازم است تغییر دهید تا با جدول اوقات مسجدتان یکی شود."</string>
+    <string name="calcRamadan" formatted="false">" · در رمضان 30 دقیقه بیشتر"</string>
+    <string name="calcReset" formatted="false">"مکان تازه: روش کشورش، و اصلاح دقیقه‌ها صفر شد"</string>
+    <string name="calcRow" formatted="false">"محاسبه دلخواه"</string>
+    <string name="calcRowHelp" formatted="false">"زاویه‌های صبح و عشا و قاعده بالای 48° به انتخاب شما"</string>
+    <string name="calcSection" formatted="false">"اوقات نماز › محاسبه دلخواه"</string>
+    <string name="calcTenthsHelp" formatted="false">"In tenths of a degree: 180 = 18°"</string>
+    <string name="calcTimesNote" formatted="false">"امروز با این تنظیمات: %1$s. اذان، اقامه، یادآوری‌ها و محافظ صفحه همه از آن پیروی می‌کنند."</string>
+    <string name="calendarSource" formatted="false">"ام‌القری"</string>
+    <string name="callCloseHelp" formatted="false">"سپس بازگشت به آنچه می‌دیدید"</string>
+    <string name="callCloseRow" formatted="false">"بستن صفحه اذان"</string>
+    <string name="cancel" formatted="false">"لغو"</string>
+    <string name="checkFailed" formatted="false">"دسترسی به GitHub ممکن نشد"</string>
+    <string name="checkNowHelp" formatted="false">"همین حالا از GitHub می‌پرسد، بی‌آنکه منتظر پرسش روزانه بماند"</string>
+    <string name="checkNowRow" formatted="false">"بررسی به‌روزرسانی اکنون"</string>
+    <string name="checking" formatted="false">"در حال بررسی…"</string>
+    <string name="chip" formatted="false">"تا %1$s"</string>
+    <string name="chooseFavSlot" formatted="false">"جایش را در برگزیده‌ها انتخاب کنید"</string>
+    <string name="chooseLocation" formatted="false">"مکان خود را انتخاب کنید"</string>
+    <string name="chooseMoreSlot" formatted="false">"جایش را در بیشتر انتخاب کنید"</string>
+    <string name="chosenPlace" formatted="false">"مکان انتخاب‌شده"</string>
+    <string name="citiesCredit" formatted="false">"شهرها: GeoNames.org"</string>
+    <string name="citiesCreditLong" formatted="false">"فهرست شهرها: GeoNames.org (CC BY 4.0)"</string>
+    <string name="cityFileHelp" formatted="false">"The city, or a place by its coordinates"</string>
+    <string name="cityValues" formatted="false">"Copied as it is between TVs; to change the location, pick it on the TV"</string>
+    <string name="clockHelp" formatted="false">"«تلویزیون» از تنظیم ساعت تلویزیون پیروی می‌کند"</string>
+    <string name="clockRow" formatted="false">"ساعت"</string>
+    <string name="close" formatted="false">"بستن"</string>
+    <string name="comingSoon" formatted="false">"این صفحه در به‌روزرسانی بعدی می‌آید"</string>
+    <string name="complete" formatted="false">"✓ کامل"</string>
+    <string name="coordinates" formatted="false">"شمالی"</string>
+    <string name="coordinates_2" formatted="false">"جنوبی"</string>
+    <string name="coordinates_3" formatted="false">"شرقی"</string>
+    <string name="coordinates_4" formatted="false">"غربی"</string>
+    <string name="country" formatted="false">"کشور"</string>
+    <string name="creditsHelp" formatted="false">"Afnon، آب‌وهوا، شهرها، تلاوت‌ها، اذان"</string>
+    <string name="creditsRow" formatted="false">"منابع و مجوزها"</string>
+    <string name="creditsSection" formatted="false">"درباره › منابع و مجوزها"</string>
+    <string name="dayTitle" formatted="false">"اوقات نماز امروز"</string>
+    <string name="days" formatted="false">"هیچ"</string>
+    <string name="daysOne" formatted="false">"%1$s روز"</string>
+    <string name="daysOther" formatted="false">"%1$s روز"</string>
+    <string name="defaultIs" formatted="false">"Default: "</string>
+    <string name="deleteAsk" formatted="false">"حذف شود؟"</string>
+    <string name="deleteSaved" formatted="false">"حذف ذخیره‌شده"</string>
+    <string name="deviceHelp" formatted="false">"تصویر، صدا، برنامه‌ها و سیستم"</string>
+    <string name="deviceRow" formatted="false">"تنظیمات تلویزیون"</string>
+    <string name="digits" formatted="false">"ارقام"</string>
+    <string name="dismiss" formatted="false">"بستن"</string>
+    <string name="downloadAll" formatted="false">"بارگیری همه (%1$s)"</string>
+    <string name="downloadRest" formatted="false">"بارگیری بقیه (%1$s)"</string>
+    <string name="downloadingNow" formatted="false">" · سپس %1$s در انتظار"</string>
+    <string name="downloadingNow_2" formatted="false">"در حال بارگیری: "</string>
+    <string name="downloadingPercent" formatted="false">"%1$s%%"</string>
+    <string name="eveningAdhkar" formatted="false">"اذکار شام"</string>
+    <string name="facingLine" formatted="false">"رو به: "</string>
+    <string name="facingNote" formatted="false">"degrees from north, -1 not set"</string>
+    <string name="fajrAt" formatted="false">"صبح "</string>
+    <string name="fajrLevelHelp" formatted="false">"بخشی از صدای تلویزیون · هنگام جابه‌جایی در فهرست شنیده می‌شود"</string>
+    <string name="fajrLevelHelpFile" formatted="false">"A share of the TV's sound"</string>
+    <string name="fajrLevelTitle" formatted="false">"شدت صدای اذان صبح"</string>
+    <string name="fajrVoiceFile" formatted="false">"Fajr adhan voice"</string>
+    <string name="fajrVoiceHelp" formatted="false">"صدا، سپس شدت آن · بهتر است اذانی با «الصلاة خير من النوم» باشد"</string>
+    <string name="fajrVoiceRow" formatted="false">"اذان صبح"</string>
+    <string name="fastHelp" formatted="false">"شب پیش از آن: دوشنبه‌ها، پنجشنبه‌ها، ایام البیض، تاسوعا و عاشورا"</string>
+    <string name="fastRow" formatted="false">"یادآوری روزه مستحب"</string>
+    <string name="fav" formatted="false">"برگزیده‌ها"</string>
+    <string name="favNote" formatted="false">"در برگزیده‌ها · جایگاه %1$s"</string>
+    <string name="favourite" formatted="false">"برگزیده"</string>
+    <string name="favouritesFile" formatted="false">"Home's favourite apps"</string>
+    <string name="freeSize" formatted="false">"آزاد "</string>
+    <string name="fridayEveLine" formatted="false">"شب جمعه · سوره کهف · صلوات ﷺ"</string>
+    <string name="fridayFixedNote" formatted="false">"Used when Friday prayer is Fixed time (2)"</string>
+    <string name="fridayHelp" formatted="false">"وقت خطبه در زیر"</string>
+    <string name="fridayHelp_2" formatted="false">"خطبه هنگام اذان ظهر"</string>
+    <string name="fridayHelp_3" formatted="false">"بر اساس کشور: خطبه هنگام اذان ظهر"</string>
+    <string name="fridayHelp_4" formatted="false">"بر اساس کشور: %1$s %2$s · نهاد امور اسلامی"</string>
+    <string name="fridayLine" formatted="false">"سوره کهف · صلوات ﷺ"</string>
+    <string name="fridayNote" formatted="false">"در جمعه‌ها به جای آن خطبه"</string>
+    <string name="fridayRow" formatted="false">"نماز جمعه"</string>
+    <string name="fridayTimeHelp" formatted="false">"هر جمعه · شمارش معکوس جمعه تا آن است"</string>
+    <string name="fridayTimeRow" formatted="false">"وقت خطبه"</string>
+    <string name="fromHome" formatted="false">"از صفحه اصلی"</string>
+    <string name="fullLevel" formatted="false">"کامل (مثل اذان‌های دیگر)"</string>
+    <string name="granted" formatted="false">"داده شده"</string>
+    <string name="granted_2" formatted="false">"داده نشده"</string>
+    <string name="habousAngles" formatted="false">"صبح 19° · عشا 17° · همان‌گونه که وزارت جدول‌هایش را حساب می‌کند"</string>
+    <string name="habousAngles_2" formatted="false">"بیرون از مراکش: صبح 19° · عشا 17° · با احتیاط وزارت"</string>
+    <string name="habousAuto" formatted="false">"Automatic: the nearest"</string>
+    <string name="habousChooser" formatted="false">"وزارت برای هر یک از 191 محل جدولی منتشر می‌کند. این‌ها نزدیک‌ترین به مکان شما هستند."</string>
+    <string name="habousCredit" formatted="false">"منطبق با جدول اوقات وزارت اوقاف و امور اسلامی مراکش (habous.gov.ma)"</string>
+    <string name="habousCreditRow" formatted="false">"اوقات مراکش"</string>
+    <string name="habousFileHelp" formatted="false">"Which of the Moroccan ministry's tables the TV follows in Morocco"</string>
+    <string name="habousHelp" formatted="false">"انتخاب شما، %1$s کیلومتر از مکان شما"</string>
+    <string name="habousHelp_2" formatted="false">"نزدیک‌ترین محل وزارت، به فاصله %1$s کیلومتر"</string>
+    <string name="habousItem" formatted="false">" کیلومتر"</string>
+    <string name="habousRow" formatted="false">"جدول وزارت"</string>
+    <string name="hadithRowFile" formatted="false">"A hadith in the screensaver's middle"</string>
+    <string name="hadithSource" formatted="false">"بخاری "</string>
+    <string name="hadithSource_2" formatted="false">"مسلم "</string>
+    <string name="hijriAdjust" formatted="false">"اصلاح تاریخ قمری"</string>
+    <string name="hijriSuffix" formatted="false">" ق"</string>
+    <string name="hijriToday" formatted="false">"امروز: "</string>
+    <string name="hintApps" formatted="false">"◀  برنامه‌ها"</string>
+    <string name="hintBackAbout" formatted="false">"بازگشت  درباره"</string>
+    <string name="hintBackCancel" formatted="false">"بازگشت  لغو"</string>
+    <string name="hintBackClose" formatted="false">"بازگشت  بستن"</string>
+    <string name="hintBackDevice" formatted="false">"بازگشت  تنظیمات دستگاه"</string>
+    <string name="hintBackHome" formatted="false">"بازگشت  صفحه اصلی"</string>
+    <string name="hintBackLater" formatted="false">"بازگشت  بعداً"</string>
+    <string name="hintBackLocate" formatted="false">"بازگشت  تعیین مکان"</string>
+    <string name="hintBackMenu" formatted="false">"بازگشت  فهرست"</string>
+    <string name="hintBackPrayer" formatted="false">"بازگشت  اوقات نماز"</string>
+    <string name="hintBackSettings" formatted="false">"بازگشت  تنظیمات"</string>
+    <string name="hintBackUndo" formatted="false">"بازگشت  زبان قبلی"</string>
+    <string name="hintCancel" formatted="false">"بازگشت  لغو"</string>
+    <string name="hintChange" formatted="false">"◀▶  تغییر مقدار"</string>
+    <string name="hintChoose" formatted="false">"OK  انتخاب"</string>
+    <string name="hintChooseWord" formatted="false">"انتخاب"</string>
+    <string name="hintClose" formatted="false">"بازگشت  بستن"</string>
+    <string name="hintEdit" formatted="false">"OK  ویرایش"</string>
+    <string name="hintFavs" formatted="false">"▲  برگزیده‌ها"</string>
+    <string name="hintHold" formatted="false">"نگه داشتن OK  چیدن صفحه اصلی"</string>
+    <string name="hintHoldOk" formatted="false">"OK  نگه داشتن"</string>
+    <string name="hintMore" formatted="false">"▼  بیشتر"</string>
+    <string name="hintMove" formatted="false">"▲▼  جابه‌جایی"</string>
+    <string name="hintOpen" formatted="false">"OK  باز کردن"</string>
+    <string name="hintPick" formatted="false">"OK  انتخاب شهر"</string>
+    <string name="hintQibla" formatted="false">"◀  قبله"</string>
+    <string name="hintSave" formatted="false">"OK  ذخیره"</string>
+    <string name="hintSwitch" formatted="false">"OK  روشن/خاموش"</string>
+    <string name="hintTimes" formatted="false">"▶  اوقات"</string>
+    <string name="hintToChosen" formatted="false">"◀  به مکان انتخاب‌شده"</string>
+    <string name="hintToSurahs" formatted="false">"◀  به سوره‌ها"</string>
+    <string name="home" formatted="false">"صفحه اصلی"</string>
+    <string name="homeAppsFile" formatted="false">"برنامه‌های صفحه اصلی و دستگاه"</string>
+    <string name="homeAppsNoteFile" formatted="false">"On the TV they are arranged on Home itself"</string>
+    <string name="homeButtonFileHelp" formatted="false">"Only on boxes connected to a TV (Google TV Streamer)"</string>
+    <string name="homeButtonHelp" formatted="false">"اگر ساندبار پس از دکمه صفحه اصلی بی‌صدا می‌شود روشن کنید · نگه داشتن: صفحه اصلی خود دستگاه"</string>
+    <string name="homeButtonRow" formatted="false">"دکمه صفحه اصلی مستقیماً Awan TV را باز می‌کند"</string>
+    <string name="homeSectionFile" formatted="false">"Home"</string>
+    <string name="identifyDevice" formatted="false">"نام دستگاه: "</string>
+    <string name="identifyFoot" formatted="false">"به درخواست ویرایشگر تنظیمات · تا %1$s ثانیه دیگر می‌رود"</string>
+    <string name="identifyLabel" formatted="false">"این تلویزیون"</string>
+    <string name="identifyNoName" formatted="false">"هنوز در رایانه نامی ندارد"</string>
+    <string name="iftar" formatted="false">"افطار"</string>
+    <string name="iftarIn" formatted="false">"تا افطار"</string>
+    <string name="iftarTag" formatted="false">"افطار"</string>
+    <string name="imsakAt" formatted="false">"امساک "</string>
+    <string name="imsakHelp" formatted="false">"روزه از اذان صبح آغاز می‌شود · امساک: احتیاط اختیاری"</string>
+    <string name="imsakRow" formatted="false">"امساک در رمضان"</string>
+    <string name="in" formatted="false">"%1$s دیگر"</string>
+    <string name="inMinutesOther" formatted="false">"تا %1$s دقیقه دیگر"</string>
+    <string name="inPlaceOf" formatted="false">"به جای %1$s"</string>
+    <string name="iqama" formatted="false">"اقامه"</string>
+    <string name="iqamaAt" formatted="false">"اقامه "</string>
+    <string name="iqamaCounterHelp" formatted="false">"پس از اذان، در گوشه صفحه تا اقامه"</string>
+    <string name="iqamaCounterOff" formatted="false">"در تنظیمات › اقامه خاموشش کنید"</string>
+    <string name="iqamaCounterRow" formatted="false">"شمارش معکوس اقامه روی برنامه‌ها"</string>
+    <string name="iqamaFixedHelp" formatted="false">"When Iqamah is Fixed (3)"</string>
+    <string name="iqamaFixedRow" formatted="false">"%1$s fixed iqamah"</string>
+    <string name="iqamaInMinutes" formatted="false">"اکنون اقامه"</string>
+    <string name="iqamaInMinutes_2" formatted="false">"اقامه تا %1$s دقیقه دیگر"</string>
+    <string name="iqamaMinutesHelp" formatted="false">"After the adhan, when Iqamah is Minutes (2)"</string>
+    <string name="iqamaMinutesRow" formatted="false">"%1$s iqamah minutes"</string>
+    <string name="iqamaModeHelp" formatted="false">"فاصله رسمی در %1$s"</string>
+    <string name="iqamaModeHelp_2" formatted="false">"دقیقه‌های پس از اذان، برای هر نماز"</string>
+    <string name="iqamaModeHelp_3" formatted="false">"زمانی ثابت برای هر نماز، مانند مسجد شما"</string>
+    <string name="iqamaModeHelp_4" formatted="false">"اقامه نشان داده نمی‌شود"</string>
+    <string name="iqamaModeHelp_5" formatted="false">"هنوز معیار رسمی برای این کشور نیست"</string>
+    <string name="iqamaPeriodHelp" formatted="false">"دقیقه‌های پس از اذان در رمضان · «مانند روزهای دیگر» از روزهای دیگر پیروی می‌کند"</string>
+    <string name="iqamaPeriodHelp_2" formatted="false">"رمضان تنظیم خودش را دارد"</string>
+    <string name="iqamaPeriodRow" formatted="false">"اقامه برای"</string>
+    <string name="iqamaRamadanHelp" formatted="false">"Minutes after the adhan, -1 as on other days"</string>
+    <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
+    <string name="iqamaRow" formatted="false">"وقت اقامه"</string>
+    <string name="iqamaToday" formatted="false">"اقامه امروز "</string>
+    <string name="jumuah" formatted="false">"جمعه"</string>
+    <string name="jumuahLabel" formatted="false">"جمعه"</string>
+    <string name="kahf" formatted="false">"سوره کهف امروز"</string>
+    <string name="kahfTonight" formatted="false">"شب جمعه · سوره کهف"</string>
+    <string name="keyApps" formatted="false">"دکمه برنامه‌ها"</string>
+    <string name="keyBlue" formatted="false">"دکمه آبی"</string>
+    <string name="keyBookmark" formatted="false">"دکمه نشانک"</string>
+    <string name="keyChannelDown" formatted="false">"کانال پایین"</string>
+    <string name="keyChannelUp" formatted="false">"کانال بالا"</string>
+    <string name="keyDigit" formatted="false">"عدد "</string>
+    <string name="keyGreen" formatted="false">"دکمه سبز"</string>
+    <string name="keyGuide" formatted="false">"دکمه راهنما"</string>
+    <string name="keyInfo" formatted="false">"دکمه اطلاعات"</string>
+    <string name="keyInput" formatted="false">"دکمه ورودی"</string>
+    <string name="keyNamed" formatted="false">"دکمه "</string>
+    <string name="keyNamed_2" formatted="false">""</string>
+    <string name="keyNumbered" formatted="false">"دکمه %1$s"</string>
+    <string name="keyPlayPause" formatted="false">"دکمه پخش/مکث"</string>
+    <string name="keyRed" formatted="false">"دکمه قرمز"</string>
+    <string name="keySettings" formatted="false">"دکمه تنظیمات"</string>
+    <string name="keyYellow" formatted="false">"دکمه زرد"</string>
+    <string name="khutbah" formatted="false">"خطبه"</string>
+    <string name="khutbahAt" formatted="false">"خطبه "</string>
+    <string name="khutbahIn" formatted="false">"تا خطبه"</string>
+    <string name="language" formatted="false">"زبان"</string>
+    <string name="languageGoesBack" formatted="false">"بازگشت به %2$s تا %1$s ثانیه دیگر"</string>
+    <string name="languageHelp" formatted="false">"«تلویزیون» از زبان تلویزیون پیروی می‌کند"</string>
+    <string name="languageKeep" formatted="false">"بماند"</string>
+    <string name="languageKeepTitle" formatted="false">"این زبان بماند؟"</string>
+    <string name="languageTv" formatted="false">"تلویزیون (اکنون %1$s)"</string>
+    <string name="languageUndo" formatted="false">"بازگشت"</string>
+    <string name="languages" formatted="false">"TV"</string>
+    <string name="lastAdhanRow" formatted="false">"آخرین اذان"</string>
+    <string name="lastCrashRow" formatted="false">"آخرین بار که برنامه متوقف شد"</string>
+    <string name="lastThird" formatted="false">"ثلث آخر"</string>
+    <string name="later" formatted="false">"بعداً"</string>
+    <string name="latitude" formatted="false">"عرض جغرافیایی"</string>
+    <string name="libraryHelp" formatted="false">"تلاوت‌ها را برای شنیدن بدون اینترنت ذخیره کنید"</string>
+    <string name="libraryHelpMany" formatted="false">"%1$s قاری · %2$s"</string>
+    <string name="libraryHelpOne" formatted="false">"%1$s قاری · %2$s"</string>
+    <string name="libraryIntro" formatted="false">"بارگیری‌شده از mp3quran.net برای پخش بدون اینترنت: رادیو › ایستگاه › ذخیره‌شده در تلویزیون"</string>
+    <string name="libraryLegend" formatted="false">"✓ ذخیره‌شده · ↓ در انتظار · OK روی سوره: بارگیری یا لغو، دو بار برای حذف"</string>
+    <string name="libraryRow" formatted="false">"تلاوت‌های ذخیره‌شده"</string>
+    <string name="listValues" formatted="false">"Values: a list of the apps' package names, in order"</string>
+    <string name="loadingCities" formatted="false">"در حال بارگذاری شهرها…"</string>
+    <string name="loadingReciters" formatted="false">"در حال بارگذاری قاریان…"</string>
+    <string name="locating" formatted="false">"در حال یافتن مکان شما…"</string>
+    <string name="location" formatted="false">"مکان"</string>
+    <string name="locationAskBody" formatted="false">"اوقات اکنون برای «%1$s» است، به منطقه زمانی تلویزیون، و ممکن است با مکان شما فرق کند. اذان بر اساس آن گفته می‌شود."</string>
+    <string name="locationAskTitle" formatted="false">"مکان شما هنوز تعیین نشده است"</string>
+    <string name="locationHelp" formatted="false">" · با مختصات"</string>
+    <string name="locationHelp_2" formatted="false">" · انتخاب از فهرست"</string>
+    <string name="longitude" formatted="false">"طول جغرافیایی"</string>
+    <string name="method" formatted="false">"روش محاسبه"</string>
+    <string name="methodAngles" formatted="false">"زاویه صبح "</string>
+    <string name="methodAngles_2" formatted="false">"عشا %1$s دقیقه پس از مغرب"</string>
+    <string name="methodAngles_3" formatted="false">"عشا "</string>
+    <string name="methodAngles_4" formatted="false">"مغرب "</string>
+    <string name="methodName" formatted="false">"ام‌القری، مکه"</string>
+    <string name="methodName_10" formatted="false">"وزارت اوقاف، عمان"</string>
+    <string name="methodName_11" formatted="false">"وزارت اوقاف، مراکش"</string>
+    <string name="methodName_12" formatted="false">"سازمان نقشه‌برداری مصر"</string>
+    <string name="methodName_13" formatted="false">"مؤسسه ژئوفیزیک دانشگاه تهران"</string>
+    <string name="methodName_2" formatted="false">"رابطه جهان اسلام"</string>
+    <string name="methodName_3" formatted="false">"دانشگاه علوم اسلامی، کراچی"</string>
+    <string name="methodName_4" formatted="false">"دبی"</string>
+    <string name="methodName_5" formatted="false">"کویت"</string>
+    <string name="methodName_6" formatted="false">"قطر"</string>
+    <string name="methodName_7" formatted="false">"ISNA، آمریکای شمالی"</string>
+    <string name="methodName_8" formatted="false">"کمیته رؤیت هلال"</string>
+    <string name="methodName_9" formatted="false">"سنگاپور"</string>
+    <string name="middleHelp" formatted="false">"هر 10 دقیقه یک حدیث · اذکار تا 10 دقیقه پس از هر نماز"</string>
+    <string name="middleRow" formatted="false">"میانه محافظ صفحه"</string>
+    <string name="midnight" formatted="false">"نیمه‌شب"</string>
+    <string name="minutesAfterOther" formatted="false">"%1$s دقیقه"</string>
+    <string name="mitLicence" formatted="false">"(مجوز MIT)"</string>
+    <string name="more" formatted="false">"بیشتر"</string>
+    <string name="moreFile" formatted="false">"The More row in your order (empty: automatic)"</string>
+    <string name="moreNote" formatted="false">"در بیشتر · جایگاه %1$s"</string>
+    <string name="morningAdhkar" formatted="false">"اذکار صبح"</string>
+    <string name="moveEarlier" formatted="false">"جلوتر در برگزیده‌ها"</string>
+    <string name="moveEarlierMore" formatted="false">"جلوتر در بیشتر"</string>
+    <string name="moveLater" formatted="false">"عقب‌تر در برگزیده‌ها"</string>
+    <string name="moveLaterMore" formatted="false">"عقب‌تر در بیشتر"</string>
+    <string name="moveToFav" formatted="false">"انتقال به برگزیده‌ها…"</string>
+    <string name="moveToMore" formatted="false">"انتقال به بیشتر…"</string>
+    <string name="near" formatted="false">"نزدیک %1$s"</string>
+    <string name="netNoInternet" formatted="false">"وصل، بدون اینترنت"</string>
+    <string name="netOff" formatted="false">"وصل نیست"</string>
+    <string name="netWired" formatted="false">"وصل با کابل"</string>
+    <string name="network" formatted="false">"تنظیمات شبکه"</string>
+    <string name="networkHelp" formatted="false">"Wi-Fi و اترنت"</string>
+    <string name="networkRow" formatted="false">"تنظیمات شبکه تلویزیون"</string>
+    <string name="newVersion" formatted="false">"نسخه تازه آمده: "</string>
+    <string name="newsAll" formatted="false">"تازه‌ها"</string>
+    <string name="newsAlso" formatted="false">"و از %1$s"</string>
+    <string name="newsLater" formatted="false">"بعداً در تنظیمات › درباره › تازه‌ها پیدایش کنید."</string>
+    <string name="newsOk" formatted="false">"تأیید"</string>
+    <string name="newsRow" formatted="false">"تازه‌ها"</string>
+    <string name="newsRowHelp" formatted="false">"آنچه هر نسخه افزود"</string>
+    <string name="newsTitle" formatted="false">"تازه‌های Awan TV %1$s"</string>
+    <string name="nextAdhanRow" formatted="false">"اذان بعدی"</string>
+    <string name="nextIn" formatted="false">"تا %1$s"</string>
+    <string name="nextPrayer" formatted="false">"نماز بعدی"</string>
+    <string name="nextTag" formatted="false">"بعدی"</string>
+    <string name="nightDimHelp" formatted="false">"محافظ صفحه، از دو ساعت پس از عشا تا صبح"</string>
+    <string name="nightDimRow" formatted="false">"کم‌نور در شب"</string>
+    <string name="noAdhanYet" formatted="false">"هنوز اذانی روی این دستگاه پخش نشده است"</string>
+    <string name="noCity" formatted="false">"نتیجه‌ای نیست · املای دیگری امتحان کنید، یا مختصات را بنویسید"</string>
+    <string name="noCrash" formatted="false">"توقفی ثبت نشده است"</string>
+    <string name="noDownloads" formatted="false">"بارگیری‌ها متوقف شد: مدیر بارگیری تلویزیون پاسخ نمی‌دهد (شاید در برنامه‌ها غیرفعال باشد)"</string>
+    <string name="noIqama" formatted="false">"بدون اقامه"</string>
+    <string name="noLocation" formatted="false">"مکان شما هنوز تعیین نشده است"</string>
+    <string name="noReciter" formatted="false">"قاری‌ای با این نام نیست"</string>
+    <string name="noStorage" formatted="false">"این تلویزیون فضای ذخیره‌سازی برای برنامه ندارد"</string>
+    <string name="none" formatted="false">"هیچ"</string>
+    <string name="noneBody" formatted="false">"10 ثانیه گذشت و چیزی به Awan TV نرسید."</string>
+    <string name="noneTitle" formatted="false">"هیچ دکمه‌ای نرسید"</string>
+    <string name="noneWhy" formatted="false">"تلویزیون برخی دکمه‌ها را پیش از هر برنامه‌ای برمی‌دارد، پس اینجا شخصی‌سازی نمی‌شوند. دکمه دیگری را امتحان کنید."</string>
+    <string name="north" formatted="false">"شمال ▲"</string>
+    <string name="notFav" formatted="false">"برای گذاشتن در صفحه اصلی OK را نگه دارید"</string>
+    <string name="notInstalledFile" formatted="false">"(not installed on this TV)"</string>
+    <string name="notOnHome" formatted="false">"در صفحه اصلی نیست"</string>
+    <string name="notSet" formatted="false">"تعیین نشده"</string>
+    <string name="nothingSaved" formatted="false">"هنوز چیزی ذخیره نشده · رادیو › تلاوت‌های ذخیره‌شده"</string>
+    <string name="nowHint" formatted="false">"بازگشت برای بستن · پس از اذان خودش بسته می‌شود"</string>
+    <string name="nowHintMany" formatted="false">"بازگشت برای بستن · پس از %1$s دقیقه خودش بسته می‌شود"</string>
+    <string name="nowHintOne" formatted="false">"بازگشت برای بستن · پس از 1 دقیقه خودش بسته می‌شود"</string>
+    <string name="nowLabel" formatted="false">"اکنون وقت"</string>
+    <string name="nowTag" formatted="false">"اکنون"</string>
+    <string name="occasionInDays" formatted="false">"%1$s تا %2$s روز دیگر"</string>
+    <string name="occasionTomorrow" formatted="false">"%1$s فردا"</string>
+    <string name="off" formatted="false">"خاموش"</string>
+    <string name="open" formatted="false">"باز کردن %1$s"</string>
+    <string name="otherLocation" formatted="false">"مکانی دیگر"</string>
+    <string name="otherPlace" formatted="false">"هر جای جهان (جستجو یا مختصات)"</string>
+    <string name="packagesHelp" formatted="false">"Ones not installed on this TV are skipped"</string>
+    <string name="palestine" formatted="false">"فلسطین"</string>
+    <string name="passed" formatted="false">"گذشت"</string>
+    <string name="passedSunrise" formatted="false">"گذشت"</string>
+    <string name="percent" formatted="false">"%1$s%%"</string>
+    <string name="permissionHelp" formatted="false">"برای تنظیم محافظ صفحه و اتصال دوباره سرویس (هنگام نصب داده شده)"</string>
+    <string name="permissionRow" formatted="false">"اجازه تنظیمات"</string>
+    <string name="photoEveryHelp" formatted="false">"صفحه اصلی و محافظ صفحه · خودکار: صفحه اصلی روزانه، محافظ صفحه هر 10 دقیقه"</string>
+    <string name="photoEveryRow" formatted="false">"تعویض عکس"</string>
+    <string name="pickReciter" formatted="false">"قاری‌ای از فهرست انتخاب کنید"</string>
+    <string name="place" formatted="false">"، "</string>
+    <string name="placeAfter" formatted="false">"سپس روش محاسبه مساجد آن مکان را انتخاب کنید"</string>
+    <string name="placeBad" formatted="false">"اعداد را بررسی کنید: عرض −90 تا 90، طول −180 تا 180"</string>
+    <string name="placeCancel" formatted="false">"لغو"</string>
+    <string name="placeIntro" formatted="false">"با نام به عربی یا انگلیسی جستجو و سپس ذخیره کنید · یا برای مکانی کوچک‌تر مختصات را بنویسید"</string>
+    <string name="placeIqama" formatted="false">"اقامه: فاصله رسمی در %1$s"</string>
+    <string name="placeMethod" formatted="false">"روش: %1$s · پس از ذخیره بررسی کنید"</string>
+    <string name="placeMethod_2" formatted="false">"روش: "</string>
+    <string name="placeMethod_3" formatted="false">"روش: %1$s · مانند %2$s"</string>
+    <string name="placeName" formatted="false">"نام مکان (قابل تغییر)"</string>
+    <string name="placeNoName" formatted="false">"برای مکان نامی بگذارید"</string>
+    <string name="placeSave" formatted="false">"ذخیره"</string>
+    <string name="placeTitle" formatted="false">"هر جای جهان"</string>
+    <string name="play" formatted="false">"پخش اذان"</string>
+    <string name="played" formatted="false">"پخش شد"</string>
+    <string name="played_2" formatted="false">"پخش نشد"</string>
+    <string name="population" formatted="false">"%1$s هزار"</string>
+    <string name="populationMillion" formatted="false">"%1$s میلیون"</string>
+    <string name="pressHelp" formatted="false">"روی کنترل خود تلویزیون یا هر کنترل بلوتوثی که به آن وصل است."</string>
+    <string name="pressTitle" formatted="false">"دکمه مورد نظر را بزنید"</string>
+    <string name="pressWaitingOne" formatted="false">"انتظار %1$s ثانیه"</string>
+    <string name="pressWaitingOther" formatted="false">"انتظار %1$s ثانیه"</string>
+    <string name="preview" formatted="false">"عصر امروز با این تنظیمات"</string>
+    <string name="putInFav" formatted="false">"گذاشتن در برگزیده‌ها…"</string>
+    <string name="putInMore" formatted="false">"گذاشتن در بیشتر…"</string>
+    <string name="qibla" formatted="false">"قبله"</string>
+    <string name="qiblaDirection" formatted="false">" · از "</string>
+    <string name="qiblaHint" formatted="false">"شمال قطب‌نما را با شمال واقعی هم‌راستا کنید"</string>
+    <string name="qiblaRelative_2" formatted="false">"قبله "</string>
+    <string name="qrHint" formatted="false">"با دوربین گوشی خود اسکن کنید"</string>
+    <string name="queuedOnly" formatted="false">"%1$s در انتظار پس از ضبطی دیگر"</string>
+    <string name="radio" formatted="false">"رادیو"</string>
+    <string name="radioDarkHelp" formatted="false">"صفحه تاریک، رادیو روشن · هر دکمه‌ای آن را برمی‌گرداند"</string>
+    <string name="radioDarkRow" formatted="false">"خاموشی صفحه هنگام گوش دادن"</string>
+    <string name="radioNote" formatted="false">"در صفحه اصلی و محافظ صفحه پخش می‌شود · وقتی برنامه دیگری صدا پخش کند می‌ایستد"</string>
+    <string name="radioPlay" formatted="false">"پخش"</string>
+    <string name="radioResumeRowFile" formatted="false">"The radio after the adhan"</string>
+    <string name="radioRowHelp" formatted="false">" · به اینترنت نیاز دارد"</string>
+    <string name="radioStatus" formatted="false">"در حال پخش"</string>
+    <string name="radioStatus_2" formatted="false">"در حال اتصال…"</string>
+    <string name="radioStatus_3" formatted="false">"سیگنال قطع شد · تلاش دوباره"</string>
+    <string name="radioStatus_4" formatted="false">"مکث برای اذان"</string>
+    <string name="radioStatus_5" formatted="false">"خاموش"</string>
+    <string name="radioStop" formatted="false">"توقف"</string>
+    <string name="ramadanDay" formatted="false">"روز %1$s رمضان"</string>
+    <string name="rangeValues" formatted="false">"Values: %1$s to %2$s"</string>
+    <string name="recitationsCredit" formatted="false">"تلاوت‌ها: mp3quran.net · از آنِ قاریانشان"</string>
+    <string name="recitationsCreditLong" formatted="false">"تلاوت‌ها: mp3quran.net (آزاد برای استفاده هر توسعه‌دهنده‌ای) · از آنِ قاریانشان"</string>
+    <string name="recitersOffline" formatted="false">"دسترسی به mp3quran.net ممکن نشد · اینترنت را بررسی کنید و این صفحه را دوباره باز کنید"</string>
+    <string name="ref" formatted="false">"نساء 4:103"</string>
+    <string name="region" formatted="false">"منطقه"</string>
+    <string name="remind" formatted="false">"یادآوری پیش از نماز"</string>
+    <string name="remindHelp" formatted="false">"در صفحه اصلی و روی ویدیو"</string>
+    <string name="remindVoiceHelp" formatted="false">"همراه یادآوری می‌گوید «اقترب موعد صلاة …»"</string>
+    <string name="remindVoiceRow" formatted="false">"یادآوری صوتی"</string>
+    <string name="removeHelp" formatted="false">"محافظ صفحه قبلی را برمی‌گرداند، سپس حذف می‌کند"</string>
+    <string name="removeRecitationsSub" formatted="false">"%1$s در Music/Awan TV · اگر نگهشان دارید برای نصب بعدی می‌مانند"</string>
+    <string name="removeRecitationsTitle" formatted="false">"تلاوت‌های ذخیره‌شده هم حذف شوند؟"</string>
+    <string name="removeRow" formatted="false">"حذف Awan TV"</string>
+    <string name="reserveNote" formatted="false">"همیشه 2 گیگابایت برای تلویزیون آزاد می‌ماند"</string>
+    <string name="resetBackupNote" formatted="false">"تنظیمات کنونی ابتدا روی تلویزیون نگه داشته می‌شود،\nو از رایانه با این فرمان برمی‌گردد:"</string>
+    <string name="resetContinue" formatted="false">"ادامه"</string>
+    <string name="resetGoesHead" formatted="false">"بازگشت به حالت نصب تازه:"</string>
+    <string name="resetHelp" formatted="false">"همه تنظیمات Awan TV مانند نصب تازه، سپس از مکان شروع می‌شود"</string>
+    <string name="resetHoldHelp" formatted="false">"سه ثانیه · رها کردن از نو شروع می‌کند، هر دکمه دیگری لغو می‌کند"</string>
+    <string name="resetHoldTitle" formatted="false">"برای تأیید OK را نگه دارید"</string>
+    <string name="resetRow" formatted="false">"بازنشانی تنظیمات"</string>
+    <string name="resetStaysHead" formatted="false">"همان‌گونه می‌ماند:"</string>
+    <string name="resetTitle" formatted="false">"تنظیمات بازنشانی شود؟"</string>
+    <string name="roomButton" formatted="false">"تغییر جهت اتاق"</string>
+    <string name="roomButton_2" formatted="false">"تعیین جهت اتاق"</string>
+    <string name="roomHelp" formatted="false">"تا قبله از جای نشستن شما نشان داده شود"</string>
+    <string name="roomKeys" formatted="false">"◀ ▶  5°     ▲ ▼  45°     OK  ذخیره     بازگشت  لغو"</string>
+    <string name="roomTip" formatted="false">"رو به تلویزیون بایستید، برنامه قطب‌نمای گوشی را باز کنید و آن را صاف جلوی خود بگیرید، سپس عدد اینجا را برابر عددی که نشان می‌دهد قرار دهید. تا وقتی تلویزیون جابه‌جا نشود یک بار کافی است."</string>
+    <string name="roomTitle" formatted="false">"جهت اتاق"</string>
+    <string name="rowNow" formatted="false">"اکنون"</string>
+    <string name="runHelp" formatted="false">"صفحه اصلی به روشن بودن سرویس Awan TV نیاز دارد (دسترس‌پذیری، در زیر)"</string>
+    <string name="runHelp_2" formatted="false">"صفحه اصلی و محافظ صفحه با اوقات و اذکار"</string>
+    <string name="runHelp_3" formatted="false">"فقط صفحه اصلی · بدون محافظ صفحه و اذکار"</string>
+    <string name="runHelp_4" formatted="false">"فقط محافظ صفحه · صفحه اصلی خود تلویزیون"</string>
+    <string name="runHelp_5" formatted="false">"خاموش · اذان و یادآوری‌ها تنظیمات خود را دارند"</string>
+    <string name="runRow" formatted="false">"حالت اجرا"</string>
+    <string name="running" formatted="false">"در حال اجرا"</string>
+    <string name="running_2" formatted="false">"متوقف"</string>
+    <string name="saved" formatted="false">"✓  ذخیره شد"</string>
+    <string name="savedSize" formatted="false">"ذخیره‌شده "</string>
+    <string name="saverIdleHelp" formatted="false">"تلویزیون آن را پس از زمان خودش آغاز می‌کند · این برای صفحه اصلی است"</string>
+    <string name="saverIdleHelp_2" formatted="false">"در صفحه اصلی بدون فشار دکمه · سپس طبق تنظیم تلویزیون خاموش"</string>
+    <string name="saverIdleRow" formatted="false">"محافظ صفحه پس از"</string>
+    <string name="saverNowHelp" formatted="false">"بی‌درنگ نمایش داده می‌شود · هر دکمه‌ای آن را می‌بندد"</string>
+    <string name="saverNowRow" formatted="false">"محافظ صفحه اکنون"</string>
+    <string name="saverPhotosHelp" formatted="false">"از عشا تا صبح فقط تیره‌ها"</string>
+    <string name="saverPhotosRow" formatted="false">"عکس‌های محافظ صفحه"</string>
+    <string name="saverStatusRow" formatted="false">"محافظ صفحه"</string>
+    <string name="school" formatted="false">"عصر: حنفی"</string>
+    <string name="school_2" formatted="false">"عصر: جمهور (شافعی)"</string>
+    <string name="screenOff" formatted="false">"خاموشی صفحه"</string>
+    <string name="screenOffNote" formatted="false">"صفحه خاموش، رادیو در حال پخش · برای بازگشت هر دکمه‌ای را بزنید"</string>
+    <string name="searchCity" formatted="false">"جستجوی شهر"</string>
+    <string name="searchReciter" formatted="false">"جستجوی قاری"</string>
+    <string name="sectionAbout" formatted="false">"درباره"</string>
+    <string name="sectionDevice" formatted="false">"تنظیمات دستگاه"</string>
+    <string name="sectionDisplay" formatted="false">"نمایش و زبان"</string>
+    <string name="sectionIqama" formatted="false">"اقامه"</string>
+    <string name="sectionNetwork" formatted="false">"شبکه"</string>
+    <string name="sectionNetwork_2" formatted="false">"شبکه · "</string>
+    <string name="sectionPrayer" formatted="false">"اوقات نماز"</string>
+    <string name="sectionRadio" formatted="false">"رادیو"</string>
+    <string name="sectionReminders" formatted="false">"یادآوری‌ها و اذان"</string>
+    <string name="sectionRun" formatted="false">"Awan TV"</string>
+    <string name="serviceHelp" formatted="false">"صفحه اصلی به جای صفحه دستگاه، و اذان روی هر برنامه‌ای"</string>
+    <string name="serviceOffHelp" formatted="false">"در تنظیمات دستگاه › دسترس‌پذیری › Awan TV روشنش کنید"</string>
+    <string name="serviceRow" formatted="false">"سرویس Awan TV"</string>
+    <string name="setLocation" formatted="false">"تعیین مکان"</string>
+    <string name="setYourLocation" formatted="false">"مکان خود را تعیین کنید"</string>
+    <string name="settings" formatted="false">"تنظیمات"</string>
+    <string name="someOf" formatted="false">"%1$s از %2$s"</string>
+    <string name="sourceRow" formatted="false">"منبع و به‌روزرسانی‌ها"</string>
+    <string name="stationAroundClock" formatted="false">"تلاوت، شبانه‌روزی"</string>
+    <string name="stationFileHelp" formatted="false">"Sent to the chosen TVs; a TV that doesn't have it keeps its own"</string>
+    <string name="stationRow" formatted="false">"ایستگاه"</string>
+    <string name="stationSaved" formatted="false">"ذخیره‌شده در تلویزیون"</string>
+    <string name="stationSavedFile" formatted="false">"a recitation saved on this TV, so not copied; pick it on the TV"</string>
+    <string name="statusHelp" formatted="false">"آیا سرویس، محافظ صفحه و اذان روی این دستگاه کار می‌کنند"</string>
+    <string name="statusRow" formatted="false">"وضعیت برنامه"</string>
+    <string name="statusSection" formatted="false">"درباره › وضعیت برنامه"</string>
+    <string name="stockHelp" formatted="false">"تا وقتی برنامه دیگری باز کنید می‌ماند"</string>
+    <string name="stockRow" formatted="false">"صفحه اصلی خود تلویزیون"</string>
+    <string name="stop" formatted="false">"قطع اذان"</string>
+    <string name="suhoorEnds" formatted="false">"سحر تا %1$s"</string>
+    <string name="suhoorEndsIn" formatted="false">"تا پایان سحر"</string>
+    <string name="suhoorTag" formatted="false">"آغاز روزه"</string>
+    <string name="surahMany" formatted="false">"%1$s سوره"</string>
+    <string name="surahOne" formatted="false">"%1$s سوره"</string>
+    <string name="textValue" formatted="false">"Values: text in quotes"</string>
+    <string name="themeHelp" formatted="false">"صفحه اصلی و تنظیمات · خودکار: لاجوردی در روز، زغالی پس از مغرب"</string>
+    <string name="themeRow" formatted="false">"رنگ‌ها"</string>
+    <string name="timeBetween" formatted="false">"Values: a time \"HH:MM\" from %1$s to %2$s"</string>
+    <string name="timeOrEmpty" formatted="false">"Values: a time \"HH:MM\" (24-hour), or \"\" for none"</string>
+    <string name="today" formatted="false">"امروز و قبله"</string>
+    <string name="todayWord" formatted="false">"امروز"</string>
+    <string name="tryAgain" formatted="false">"تلاش دوباره"</string>
+    <string name="tvMarker" formatted="false">"تلویزیون ▲"</string>
+    <string name="upToDate" formatted="false">"آخرین نسخه را دارید"</string>
+    <string name="updateAgain" formatted="false">"تا به‌روزرسانی هر هفته یادآوری می‌کنیم؛ در تنظیمات › درباره هم هست."</string>
+    <string name="updateConfirm" formatted="false">"اگر اندروید پرسید که این برنامه به‌روز شود، به به‌روزرسانی بروید و OK بزنید. سپس صفحه اصلی تازه برمی‌گردد."</string>
+    <string name="updateContinue" formatted="false">"ادامه نصب"</string>
+    <string name="updateDownloading" formatted="false">"در حال بارگیری نسخه "</string>
+    <string name="updateDownloading_2" formatted="false">"… "</string>
+    <string name="updateDownloading_3" formatted="false">"%%"</string>
+    <string name="updateFailed" formatted="false">"به‌روزرسانی انجام نشد. اینترنت تلویزیون را بررسی و دوباره تلاش کنید، یا کد را اسکن کنید و از صفحه بارگیری به‌روز کنید."</string>
+    <string name="updateHave" formatted="false">"این تلویزیون %1$s دارد."</string>
+    <string name="updateHow" formatted="false">"کد را با دوربین گوشی اسکن کنید تا صفحه بارگیری باز شود، سپس با نصب‌کننده گوشی یا از رایانه ویندوزی به‌روز کنید. تنظیمات و تلاوت‌های ذخیره‌شده می‌مانند."</string>
+    <string name="updateHowSelf" formatted="false">"«به‌روزرسانی اکنون» نسخه را بارگیری و روی این تلویزیون نصب می‌کند؛ تنظیمات و تلاوت‌های ذخیره‌شده می‌مانند. یا کد را با گوشی اسکن کنید تا صفحه بارگیری باز شود."</string>
+    <string name="updateInstalling" formatted="false">"در حال نصب…"</string>
+    <string name="updateLater" formatted="false">"بعداً"</string>
+    <string name="updateLeave" formatted="false">"می‌توانید از این پنجره بروید؛ بارگیری ادامه می‌یابد."</string>
+    <string name="updateManual" formatted="false">"برای داشتن همه امکانات برنامه، از جمله به‌روزرسانی با یک فشار روی تلویزیون، آن را با نصب‌کننده گوشی یا از رایانه ویندوزی نصب کنید، راه 1 و 2 در صفحه بارگیری."</string>
+    <string name="updateMute" formatted="false">"این نسخه را یادآوری نکن"</string>
+    <string name="updateNow" formatted="false">"به‌روزرسانی اکنون"</string>
+    <string name="updateOpen" formatted="false">"باز کردن صفحه انتشار"</string>
+    <string name="updateRetry" formatted="false">"تلاش دوباره"</string>
+    <string name="updateThen" formatted="false">"سپس اندروید می‌پرسد که این برنامه به‌روز شود: به به‌روزرسانی بروید و OK بزنید، و صفحه اصلی تازه در چند ثانیه برمی‌گردد."</string>
+    <string name="updateTitle" formatted="false">"نسخه تازه: Awan TV %1$s"</string>
+    <string name="updateWhy" formatted="false">"نسخه تازه‌تری از برنامه نسبت به آنچه استفاده می‌کنید هست. برای امکانات و رفع اشکال‌های تازه به‌روزش کنید؛ پیشنهاد ما همیشه به‌روزرسانی به آخرین نسخه موجود است."</string>
+    <string name="valuesWord" formatted="false">"Values: "</string>
+    <string name="version" formatted="false">"نسخه "</string>
+    <string name="versionRow" formatted="false">"نسخه"</string>
+    <string name="voiceHelp" formatted="false">"همه نمازها جز صبح · هنگام جابه‌جایی در فهرست پخش می‌شود"</string>
+    <string name="voiceHelpFile" formatted="false">"Every prayer but Fajr"</string>
+    <string name="voiceRow" formatted="false">"صدای اذان"</string>
+    <string name="waitingSpace" formatted="false">"در انتظار: کمتر از 2 گیگابایت آزاد · برای ادامه چیزی را حذف کنید"</string>
+    <string name="warnBody" formatted="false">"تا Awan TV بداند کدام دکمه را زدید، تا وقتی یک دکمه شخصی‌سازی شده هر فشار کنترل از آن می‌گذرد."</string>
+    <string name="warnTitle" formatted="false">"پیش از نخستین شخصی‌سازی"</string>
+    <string name="warnUndo" formatted="false">"همه دکمه‌های شخصی را حذف کنید و کنترل مثل قبل می‌شود."</string>
+    <string name="warnVolume" formatted="false">"در بیشتر تلویزیون‌ها فرقی حس نمی‌کنید. اما نگه داشتن صدا آن را فقط یک پله تغییر می‌دهد، پس چند بار فشار دهید."</string>
+    <string name="weatherCredit" formatted="false">"داده‌های آب‌وهوا: Open-Meteo.com (CC BY 4.0)"</string>
+    <string name="weatherHelp" formatted="false">"کنار ساعت · از Open-Meteo هر 30 دقیقه، بدون اینترنت پنهان"</string>
+    <string name="weatherHelp_2" formatted="false">"اتصالی برای آب‌وهوا نیست"</string>
+    <string name="weatherNone" formatted="false">"بی به‌روزرسانی در 3 ساعت (شبکه یا مکان)"</string>
+    <string name="weatherRow" formatted="false">"آب‌وهوا"</string>
+    <string name="weatherStatusHelp" formatted="false">"آخرین به‌روزرسانی %1$s · Open-Meteo"</string>
+    <string name="works" formatted="false">"کار می‌کند"</string>
+    <string name="works_2" formatted="false">"نمی‌رسد"</string>
+    <string-array name="adhkarModes">
+        <item>"خاموش"</item>
+        <item>"گسترده"</item>
+        <item>"برتر"</item>
+    </string-array>
+    <string-array name="afterAdhanChoices">
+        <item>"ادامه می‌یابد"</item>
+        <item>"خاموش می‌ماند"</item>
+    </string-array>
+    <string-array name="asrSchools">
+        <item>"جمهور"</item>
+        <item>"حنفی"</item>
+    </string-array>
+    <string-array name="backgrounds">
+        <item>"نقش‌ونگار"</item>
+        <item>"عکس‌ها"</item>
+    </string-array>
+    <string-array name="calcHighAbout">
+        <item>"یک‌هفتم شب پس از مغرب و پیش از طلوع آفتاب · قاعده برنامه تاکنون"</item>
+        <item>"حداکثر نیمی از شب پس از مغرب و پیش از طلوع آفتاب · پیش‌فرض کتابخانه‌های اذان"</item>
+        <item>"زاویه به عنوان سهمی از شب (18° = 18/60) · پیش‌فرض AlAdhan، توصیه PrayTimes"</item>
+        <item>"سهمشان از شب در عرض 45° · مجمع فقه اسلامی، 1406 ق"</item>
+        <item>"یک‌سوم شب شرعی از آخرین روزی که فجر دیده شد · دیانت و شورای اروپایی فتوا، 2021"</item>
+        <item>"به وقت مکه اگر روزه از 20 ساعت بگذرد یا خورشید طلوع نکند · مساجد شمال نروژ، 2012"</item>
+    </string-array>
+    <string-array name="calcHighNames">
+        <item>"یک‌هفتم شب"</item>
+        <item>"نیمه‌شب"</item>
+        <item>"زاویه شفق"</item>
+        <item>"سهم شب در 45°"</item>
+        <item>"همایش استانبول 2021"</item>
+        <item>"اوقات مکه"</item>
+    </string-array>
+    <string-array name="calcIshaModes">
+        <item>"با زاویه"</item>
+        <item>"پس از مغرب"</item>
+    </string-array>
+    <string-array name="callCloseChoices">
+        <item>"پس از اذان"</item>
+        <item>"1 دقیقه"</item>
+        <item>"5 دقیقه"</item>
+        <item>"10 دقیقه"</item>
+    </string-array>
+    <string-array name="clocks">
+        <item>"تلویزیون"</item>
+        <item>"12 ساعته"</item>
+        <item>"24 ساعته"</item>
+    </string-array>
+    <string-array name="digitChoicesFile">
+        <item>"By language"</item>
+        <item>"0123"</item>
+        <item>"٠١٢٣"</item>
+    </string-array>
+    <string-array name="fastTomorrow">
+        <item>"فردا: روزه دوشنبه"</item>
+        <item>"فردا: روزه پنجشنبه"</item>
+        <item>"فردا: یکی از ایام البیض"</item>
+        <item>"فردا: روزه تاسوعا"</item>
+        <item>"فردا: روزه عاشورا"</item>
+    </string-array>
+    <string-array name="fileHeader">
+        <item>"Awan TV settings: change the values, then send them to the TV:"</item>
+        <item>"  powershell -ExecutionPolicy Bypass -File tools\\AwanTV-settings.ps1 -Import -File &lt;this file&gt; -Device &lt;the TV&gt;"</item>
+        <item>"Above each setting: what it is, its values and its default. Lines starting with // are notes, not read."</item>
+        <item>"A setting left out of the file stays as it is on the TV. The whole file is checked: one mistake stops the import and nothing changes."</item>
+        <item>"Before importing, the TV's settings are kept as a backup in state\\settings on the computer."</item>
+    </string-array>
+    <string-array name="fridayChoices">
+        <item>"بر اساس کشور"</item>
+        <item>"هنگام ظهر"</item>
+        <item>"زمان ثابت"</item>
+    </string-array>
+    <string-array name="hijriMonths">
+        <item>"محرم"</item>
+        <item>"صفر"</item>
+        <item>"ربیع‌الاول"</item>
+        <item>"ربیع‌الثانی"</item>
+        <item>"جمادی‌الاول"</item>
+        <item>"جمادی‌الثانی"</item>
+        <item>"رجب"</item>
+        <item>"شعبان"</item>
+        <item>"رمضان"</item>
+        <item>"شوال"</item>
+        <item>"ذی‌القعده"</item>
+        <item>"ذی‌الحجه"</item>
+    </string-array>
+    <string-array name="imsakChoices">
+        <item>"هیچ"</item>
+        <item>"5 دقیقه"</item>
+        <item>"10 دقیقه"</item>
+        <item>"15 دقیقه"</item>
+        <item>"20 دقیقه"</item>
+    </string-array>
+    <string-array name="iqamaModes">
+        <item>"خاموش"</item>
+        <item>"کشور"</item>
+        <item>"دقیقه"</item>
+        <item>"ثابت"</item>
+    </string-array>
+    <string-array name="iqamaPeriods">
+        <item>"روزهای دیگر"</item>
+        <item>"رمضان"</item>
+    </string-array>
+    <string-array name="middleChoices">
+        <item>"هر دو"</item>
+        <item>"حدیث"</item>
+        <item>"اذکار"</item>
+        <item>"هیچ"</item>
+    </string-array>
+    <string-array name="news_1_10_0">
+        <item>"The radio on your TVs from the computer"</item>
+        <item>"From the settings editor: see what each TV is playing now, and start or stop the radio on one TV or on all of them. A TV playing something else is not cut off unless you choose to."</item>
+    </string-array>
+    <string-array name="news_1_13_0">
+        <item>"A safety screen if it stops"</item>
+        <item>"If Awan TV stops unexpectedly, a screen restarts it or opens the TV's own home. If it stops again, the TV runs on its own home for half an hour, so it stays usable."</item>
+        <item>"Put a TV right from the phone or the computer"</item>
+        <item>"Tick an up-to-date TV in the installer's My TVs or the editor's Update TVs, and it is set up again without sending the app anew."</item>
+    </string-array>
+    <string-array name="news_1_14_0">
+        <item>"The iqamah countdown over apps"</item>
+        <item>"From the adhan until the iqamah, a small card in a corner over any app shows how long is left. Turn it off in Settings › Iqamah."</item>
+        <item>"Photos in the screensaver"</item>
+        <item>"A photo every ten minutes behind the times, only dark ones from Isha until Fajr. Turn them off in Settings › Display &amp; language."</item>
+    </string-array>
+    <string-array name="news_1_14_1">
+        <item>"Colours that follow the time"</item>
+        <item>"Lapis by day and Charcoal after Maghrib, easier on the eyes at night. One colour all day in Settings › Display &amp; language › Colours."</item>
+    </string-array>
+    <string-array name="news_1_14_2">
+        <item>"Saved recitations keep their names"</item>
+        <item>"After the app is removed and installed again, saved recitations come back with their reciters' and riwayahs' names, even without internet."</item>
+    </string-array>
+    <string-array name="news_1_17_0">
+        <item>"زبان از صفحه اصلی"</item>
+        <item>"دکمه کره زمین کنار تنظیمات فهرست زبان‌ها را باز می‌کند، هر کدام با نام خودش. پس از انتخاب، صفحه می‌پرسد بماند یا بازگردد، و اگر پاسخی نیاید پس از ده ثانیه خودش بازمی‌گردد."</item>
+    </string-array>
+    <string-array name="news_1_18_0">
+        <item>"اردو"</item>
+        <item>"همه صفحه‌ها به اردو، با نام قاریان و سوره‌ها به اردو. از دکمه کره زمین در صفحه اصلی انتخابش کنید."</item>
+        <item>"آغاز روزه"</item>
+        <item>"در رمضان خانه صبح آغاز روزه را می‌گوید. امساک، احتیاطی اختیاری پیش از آن، در تنظیمات است."</item>
+    </string-array>
+    <string-array name="news_1_19_0">
+        <item>"ترکی"</item>
+        <item>"همه صفحه‌ها به ترکی، با اصطلاحات دیانت، و نام قاریان و سوره‌ها به ترکی. از دکمه کره زمین در صفحه اصلی انتخابش کنید."</item>
+    </string-array>
+    <string-array name="news_1_20_0">
+        <item>"فرانسوی"</item>
+        <item>"همه صفحه‌ها به فرانسوی، با اصطلاحات مساجد فرانسوی‌زبان، و نام قاریان و سوره‌ها به فرانسوی. از دکمه کره زمین در صفحه اصلی انتخابش کنید."</item>
+    </string-array>
+    <string-array name="news_1_21_0">
+        <item>"مالایی"</item>
+        <item>"همه صفحه‌ها به مالایی، با اصطلاحات JAKIM مالزی. از دکمه کره زمین در صفحه اصلی انتخابش کنید."</item>
+    </string-array>
+    <string-array name="news_1_22_0">
+        <item>"اسپانیایی"</item>
+        <item>"همه صفحه‌ها به اسپانیایی، با اصطلاحات مساجد اسپانیا، و نام قاریان و سوره‌ها به اسپانیایی. از دکمه کره زمین در صفحه اصلی انتخابش کنید."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"اندونزیایی و فارسی"</item>
+        <item>"همه صفحه‌ها به اندونزیایی و فارسی، و نام قاریان و سوره‌ها به هر دو زبان. یکی را از دکمه کره زمین در صفحه اصلی انتخاب کنید."</item>
+        <item>"اوقات شرعی رسمی ایران"</item>
+        <item>"روشی تازه: مؤسسه ژئوفیزیک دانشگاه تهران، که مساجد و صداوسیمای ایران از آن پیروی می‌کنند: صبح 17.7°، مغرب وقتی خورشید 4.5° زیر افق است، عشا 14°. هر مکانی در ایران با این روش آغاز می‌شود."</item>
+    </string-array>
+    <string-array name="news_1_24_0">
+        <item>"محاسبه دلخواه"</item>
+        <item>"تنظیمات › اوقات نماز › روش محاسبه › محاسبه دلخواه: از هر روشی شروع کنید، سپس زاویه صبح را تعیین کنید، و عشا را با زاویه یا با دقیقه‌هایی پس از مغرب. با تغییر شهر هم می‌تواند بماند."</item>
+        <item>"عرض‌های بالا"</item>
+        <item>"بالای 48°، محاسبه دلخواه قاعده صبح و عشا را وقتی نشانه‌هایشان محو می‌شود انتخاب می‌کند: یک‌هفتم شب، نیمه‌شب، زاویه شفق، سهم شب در 45°، همایش استانبول 2021، یا اوقات مکه مانند شمال نروژ."</item>
+    </string-array>
+    <string-array name="news_1_1_0">
+        <item>"Remote buttons"</item>
+        <item>"Settings › Device settings › Remote buttons: make a button on any remote open what you choose."</item>
+    </string-array>
+    <string-array name="news_1_2_0">
+        <item>"Adjust the times by minutes"</item>
+        <item>"Settings › Prayer times › Adjust the times and the date: each time up to 30 minutes earlier or later, to match your masjid."</item>
+        <item>"A new version's QR code"</item>
+        <item>"When a newer version is out, About opens a window with a code to scan with a phone to reach its page."</item>
+        <item>"What's new"</item>
+        <item>"This window, once after each update, and in About."</item>
+    </string-array>
+    <string-array name="news_1_3_0">
+        <item>"Oman's Ministry of Awqaf method"</item>
+        <item>"Oman's prayer times by its Ministry of Awqaf, chosen for its cities by themselves."</item>
+        <item>"Three radio stations"</item>
+        <item>"Oman's Holy Quran Radio, and Saudi Arabia's Quran Radio and Nida Al-Islam, in Settings › Radio."</item>
+        <item>"The phone installer"</item>
+        <item>"It tells you of a newer installer, and says why it couldn't reach the TV and what to do."</item>
+    </string-array>
+    <string-array name="news_1_4_0">
+        <item>"The station from Home"</item>
+        <item>"The radio card has a Station button: change the station or recitation without opening Settings."</item>
+        <item>"Hold a button"</item>
+        <item>"Each button you customised in Remote buttons can open something else when held."</item>
+        <item>"Two adhan voices"</item>
+        <item>"The adhan of Al-Masjid an-Nabawi, and Sheikh Ragheb Mustafa Ghalwash's, in Settings › Adhan."</item>
+    </string-array>
+    <string-array name="news_1_5_0">
+        <item>"Told of a new version"</item>
+        <item>"When a newer version is out, Home tells you with a code to scan with a phone, and a gold mark stays on the Settings button until you update."</item>
+    </string-array>
+    <string-array name="news_1_7_0">
+        <item>"Update with one press"</item>
+        <item>"When a newer version is out, press Update now in its window: the app downloads it and installs it on the TV itself, with no phone or computer."</item>
+    </string-array>
+    <string-array name="news_1_8_0">
+        <item>"Morocco's times as the ministry publishes them"</item>
+        <item>"The Moroccan Ministry of Habous' method, with the table of each of its 191 localities; pick the one near you in Settings › Prayer times › Ministry table."</item>
+    </string-array>
+    <string-array name="news_1_9_0">
+        <item>"Recitations and the station from the computer"</item>
+        <item>"From the settings editor on Windows: choose recitations for one or more TVs to download by themselves, and change the station, without going to each TV."</item>
+    </string-array>
+    <string-array name="occasion">
+        <item>"رمضان"</item>
+        <item>"عید فطر"</item>
+        <item>"روز عرفه"</item>
+        <item>"عید قربان"</item>
+    </string-array>
+    <string-array name="occasionToday">
+        <item>"رمضان مبارک"</item>
+        <item>"عید مبارک"</item>
+        <item>"روز عرفه"</item>
+        <item>"عید مبارک"</item>
+    </string-array>
+    <string-array name="octant">
+        <item>"شمال"</item>
+        <item>"شمال شرقی"</item>
+        <item>"شرق"</item>
+        <item>"جنوب شرقی"</item>
+        <item>"جنوب"</item>
+        <item>"جنوب غربی"</item>
+        <item>"غرب"</item>
+        <item>"شمال غربی"</item>
+    </string-array>
+    <string-array name="photoEveryChoices">
+        <item>"خودکار"</item>
+        <item>"هر 10 دقیقه"</item>
+        <item>"هر نیم ساعت"</item>
+        <item>"هر ساعت"</item>
+        <item>"با هر نماز"</item>
+        <item>"هر روز"</item>
+    </string-array>
+    <string-array name="prayerNames">
+        <item>"صبح"</item>
+        <item>"طلوع آفتاب"</item>
+        <item>"ظهر"</item>
+        <item>"عصر"</item>
+        <item>"مغرب"</item>
+        <item>"عشا"</item>
+    </string-array>
+    <string-array name="qiblaRelative">
+        <item>"روبه‌روی شما"</item>
+        <item>"روبه‌رو، سمت راست"</item>
+        <item>"سمت راست شما"</item>
+        <item>"پشت سر، سمت راست"</item>
+        <item>"پشت سر شما"</item>
+        <item>"پشت سر، سمت چپ"</item>
+        <item>"سمت چپ شما"</item>
+        <item>"روبه‌رو، سمت چپ"</item>
+    </string-array>
+    <string-array name="radioDarkChoices">
+        <item>"با محافظ صفحه"</item>
+        <item>"15 دقیقه بعد"</item>
+        <item>"هرگز"</item>
+    </string-array>
+    <string-array name="regions">
+        <item>"جهان عرب"</item>
+        <item>"آسیا"</item>
+        <item>"اروپا"</item>
+        <item>"آمریکا"</item>
+        <item>"آفریقا"</item>
+        <item>"اقیانوسیه"</item>
+    </string-array>
+    <string-array name="remindChoices">
+        <item>"5 دقیقه"</item>
+        <item>"10 دقیقه"</item>
+        <item>"15 دقیقه"</item>
+        <item>"20 دقیقه"</item>
+        <item>"30 دقیقه"</item>
+        <item>"خاموش"</item>
+    </string-array>
+    <string-array name="removeChoices">
+        <item>"اکنون حذف شود"</item>
+        <item>"لغو"</item>
+    </string-array>
+    <string-array name="removeRecitationsChoices">
+        <item>"نگه داشتن"</item>
+        <item>"حذف"</item>
+    </string-array>
+    <string-array name="resetGoes">
+        <item>"مکان، روش، اقامه و جمعه"</item>
+        <item>"یادآوری‌ها، صداهای اذان و شدت صبح"</item>
+        <item>"رنگ‌ها، عکس‌ها، زبان و آب‌وهوا"</item>
+        <item>"برنامه‌های برگزیده و ردیف بیشتر"</item>
+        <item>"دکمه‌های شخصی کنترل"</item>
+    </string-array>
+    <string-array name="resetStays">
+        <item>"تلاوت‌های ذخیره‌شده"</item>
+        <item>"محافظ صفحه پیشین تلویزیون (برای حذف بعدی Awan TV)"</item>
+        <item>"سرویس Awan TV و مجوزهایش"</item>
+    </string-array>
+    <string-array name="runModes">
+        <item>"همه"</item>
+        <item>"صفحه اصلی"</item>
+        <item>"محافظ صفحه"</item>
+        <item>"خاموش"</item>
+    </string-array>
+    <string-array name="saverIdleChoices">
+        <item>"5 دقیقه"</item>
+        <item>"10 دقیقه"</item>
+        <item>"15 دقیقه"</item>
+        <item>"30 دقیقه"</item>
+    </string-array>
+    <string-array name="saverStatusHelp">
+        <item>"محافظ صفحه دستگاه Awan TV است"</item>
+        <item>"Awan TV خودش از صفحه اصلی بازش می‌کند (بی اجازه تنظیم محافظ دستگاه)"</item>
+        <item>"خاموش در «Awan TV»"</item>
+    </string-array>
+    <string-array name="sky">
+        <item>"صاف"</item>
+        <item>"نیمه‌ابری"</item>
+        <item>"ابری"</item>
+        <item>"مه"</item>
+        <item>"نم‌نم باران"</item>
+        <item>"باران"</item>
+        <item>"برف"</item>
+        <item>"رعدوبرق"</item>
+    </string-array>
+    <string-array name="stationGroups">
+        <item>"ایستگاه‌های رادیویی قرآن"</item>
+        <item>"قاریان"</item>
+        <item>"ذخیره‌شده در تلویزیون"</item>
+    </string-array>
+    <string-array name="themes">
+        <item>"لاجوردی"</item>
+        <item>"زمردی"</item>
+        <item>"شرابی"</item>
+        <item>"زغالی"</item>
+        <item>"کاغذی"</item>
+        <item>"خودکار"</item>
+    </string-array>
+    <string-array name="weatherChoices">
+        <item>"خاموش"</item>
+        <item>"°C"</item>
+        <item>"°F"</item>
+    </string-array>
+    <string-array name="weekdaysShort">
+        <item>"ی"</item>
+        <item>"د"</item>
+        <item>"س"</item>
+        <item>"چ"</item>
+        <item>"پ"</item>
+        <item>"ج"</item>
+        <item>"ش"</item>
+    </string-array>
+</resources>

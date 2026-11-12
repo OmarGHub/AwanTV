@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in Indonesian (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Indonesian. AwanTV-apply-labels.py writes them as countId / refId.
+# "HR." (hadis riwayat), as Indonesian hadith books and the Ministry of Religious Affairs write it.
+Once	Sekali
+Three times	Tiga kali
+Four times	Empat kali
+Seven times	Tujuh kali
+Ten times or once when lazy	Sepuluh kali, atau sekali saat malas
+Ten times	Sepuluh kali
+One hundred times	Seratus kali
+One hundred times a day	Seratus kali sehari
+3 times	3 kali
+33 times	33 kali
+To make it 100	Untuk menggenapkan 100
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	HR. Al-Hakim, An-Nasa'i dan Ath-Thabrani
+Reported by Al-Bukhari and Muslim	HR. Al-Bukhari dan Muslim
+Reported by Abu Dawud and At-Tirmidhi	HR. Abu Dawud dan At-Tirmidzi
+Reported by Muslim	HR. Muslim
+Reported by At-Tirmidhi	HR. At-Tirmidzi
+Reported by Al-Bukhari	HR. Al-Bukhari
+Reported by Abu Dawud and An-Nasa'i	HR. Abu Dawud dan An-Nasa'i
+Reported by Abu Dawud and Ahmad	HR. Abu Dawud dan Ahmad
+Reported by Ibn as-Sunni and Abu Dawud	HR. Ibnu as-Sunni dan Abu Dawud
+Reported by Abu Dawud and Ibn Majah	HR. Abu Dawud dan Ibnu Majah
+Reported by At-Tirmidhi and Abu Dawud	HR. At-Tirmidzi dan Abu Dawud
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	HR. Abu Dawud, At-Tirmidzi dan Ibnu Majah
+Reported by Ahmad and An-Nasa'i	HR. Ahmad dan An-Nasa'i
+Reported by Al-Hakim	HR. Al-Hakim
+Reported by Abu Dawud	HR. Abu Dawud
+Reported by Ahmad and Ibn as-Sunni	HR. Ahmad dan Ibnu as-Sunni
+Reported by Ibn as-Sunni and Ibn Majah	HR. Ibnu as-Sunni dan Ibnu Majah
+Reported by At-Tabarani	HR. Ath-Thabrani
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	HR. An-Nasa'i, 'Amal al-Yaum wal-Lailah
+Abu Dawud and an-Nasa'i	HR. Abu Dawud dan An-Nasa'i

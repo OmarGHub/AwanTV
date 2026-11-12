@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"Angle du Fajr "</string>
     <string name="methodAngles_2" formatted="false">"Isha %1$s min après le Maghrib"</string>
     <string name="methodAngles_3" formatted="false">"Isha "</string>
+    <string name="methodAngles_4" formatted="false">"Maghrib "</string>
     <string name="methodName" formatted="false">"Umm al-Qura, La Mecque"</string>
     <string name="methodName_10" formatted="false">"Ministère des Awqaf, Oman"</string>
     <string name="methodName_11" formatted="false">"Ministère des Habous, Maroc"</string>
     <string name="methodName_12" formatted="false">"Autorité générale égyptienne de topographie"</string>
+    <string name="methodName_13" formatted="false">"Institut de géophysique, Université de Téhéran"</string>
     <string name="methodName_2" formatted="false">"Ligue islamique mondiale"</string>
     <string name="methodName_3" formatted="false">"Université des sciences islamiques, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubaï"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"Espagnol"</item>
         <item>"Tous les écrans en espagnol, dans les termes des mosquées d'Espagne, avec les récitateurs et les sourates nommés en espagnol. Choisissez cette langue avec le bouton globe de l'accueil."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"Indonésien et persan"</item>
+        <item>"Tous les écrans en indonésien et en persan, avec les récitateurs et les sourates nommés dans chaque langue. Choisissez avec le bouton globe de l'accueil."</item>
+        <item>"Les horaires officiels de l'Iran"</item>
+        <item>"Une nouvelle méthode : l'Institut de géophysique de l'Université de Téhéran, que suivent les mosquées et les médias d'Iran : Fajr 17,7°, Maghrib quand le soleil est à 4,5° sous l'horizon, Isha 14°. Un lieu en Iran part de cette méthode."</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"Calcul personnalisé"</item>

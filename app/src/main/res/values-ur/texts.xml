@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"فجر کا زاویہ "</string>
     <string name="methodAngles_2" formatted="false">"عشاء مغرب کے %1$s منٹ بعد"</string>
     <string name="methodAngles_3" formatted="false">"عشاء "</string>
+    <string name="methodAngles_4" formatted="false">"مغرب "</string>
     <string name="methodName" formatted="false">"ام القریٰ، مکہ مکرمہ"</string>
     <string name="methodName_10" formatted="false">"وزارتِ اوقاف، عمان"</string>
     <string name="methodName_11" formatted="false">"وزارتِ اوقاف، مراکش"</string>
     <string name="methodName_12" formatted="false">"مصری جنرل سروے اتھارٹی"</string>
+    <string name="methodName_13" formatted="false">"انسٹی ٹیوٹ آف جیو فزکس، تہران یونیورسٹی"</string>
     <string name="methodName_2" formatted="false">"رابطہ عالمِ اسلامی"</string>
     <string name="methodName_3" formatted="false">"جامعہ علومِ اسلامیہ، کراچی"</string>
     <string name="methodName_4" formatted="false">"دبئی"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"ہسپانوی"</item>
         <item>"ہر اسکرین ہسپانوی میں، اسپین کی مساجد کی اصطلاحات کے ساتھ، قاریوں اور سورتوں کے نام بھی۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"انڈونیشیائی اور فارسی"</item>
+        <item>"ہر اسکرین انڈونیشیائی اور فارسی میں، قاریوں اور سورتوں کے نام بھی انہی زبانوں میں۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+        <item>"ایران کے سرکاری اوقات"</item>
+        <item>"نیا طریقہ: تہران یونیورسٹی کا انسٹی ٹیوٹ آف جیو فزکس، جس پر ایران کی مساجد اور نشریات چلتی ہیں: فجر 17.7°، مغرب جب سورج افق سے 4.5° نیچے ہو، عشاء 14°۔ ایران کا مقام اسی سے شروع ہوتا ہے۔"</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"مخصوص حساب"</item>

@@ -19,7 +19,9 @@
    "countTr": "Bir kez",
    "countFr": "Une fois",
    "countMs": "Sekali",
-   "countEs": "Una vez"
+   "countEs": "Una vez",
+   "countFa": "یک بار",
+   "countId": "Sekali"
   },
   {
    "order": 2,
@@ -40,7 +42,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Al-Hakim, An-Nasa'i dan At-Tabarani",
    "countEs": "Una vez",
-   "refEs": "Narrado por Al-Hakim, An-Nasa'i y At-Tabarani"
+   "refEs": "Narrado por Al-Hakim, An-Nasa'i y At-Tabarani",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت حاکم، نسائی و طبرانی",
+   "refId": "HR. Al-Hakim, An-Nasa'i dan Ath-Thabrani"
   },
   {
    "order": 3,
@@ -61,7 +67,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Al-Bukhari dan Muslim",
    "countEs": "Una vez",
-   "refEs": "Narrado por Al-Bujari y Muslim"
+   "refEs": "Narrado por Al-Bujari y Muslim",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت بخاری و مسلم",
+   "refId": "HR. Al-Bukhari dan Muslim"
   },
   {
    "order": 4,
@@ -82,7 +92,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Abu Dawud dan At-Tirmidhi",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Abu Dawud y At-Tirmidi"
+   "refEs": "Narrado por Abu Dawud y At-Tirmidi",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت ابوداود و ترمذی",
+   "refId": "HR. Abu Dawud dan At-Tirmidzi"
   },
   {
    "order": 5,
@@ -103,7 +117,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Abu Dawud dan At-Tirmidhi",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Abu Dawud y At-Tirmidi"
+   "refEs": "Narrado por Abu Dawud y At-Tirmidi",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت ابوداود و ترمذی",
+   "refId": "HR. Abu Dawud dan At-Tirmidzi"
   },
   {
    "order": 6,
@@ -124,7 +142,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Abu Dawud dan At-Tirmidhi",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Abu Dawud y At-Tirmidi"
+   "refEs": "Narrado por Abu Dawud y At-Tirmidi",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت ابوداود و ترمذی",
+   "refId": "HR. Abu Dawud dan At-Tirmidzi"
   },
   {
    "order": 7,
@@ -145,7 +167,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Muslim",
    "countEs": "Una vez",
-   "refEs": "Narrado por Muslim"
+   "refEs": "Narrado por Muslim",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت مسلم",
+   "refId": "HR. Muslim"
   },
   {
    "order": 8,
@@ -166,7 +192,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Muslim",
    "countEs": "Una vez",
-   "refEs": "Narrado por Muslim"
+   "refEs": "Narrado por Muslim",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت مسلم",
+   "refId": "HR. Muslim"
   },
   {
    "order": 9,
@@ -187,7 +217,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat At-Tirmidhi",
    "countEs": "Una vez",
-   "refEs": "Narrado por At-Tirmidi"
+   "refEs": "Narrado por At-Tirmidi",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ترمذی",
+   "refId": "HR. At-Tirmidzi"
   },
   {
    "order": 10,
@@ -208,7 +242,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat At-Tirmidhi",
    "countEs": "Una vez",
-   "refEs": "Narrado por At-Tirmidi"
+   "refEs": "Narrado por At-Tirmidi",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ترمذی",
+   "refId": "HR. At-Tirmidzi"
   },
   {
    "order": 11,
@@ -229,7 +267,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Al-Bukhari",
    "countEs": "Una vez",
-   "refEs": "Narrado por Al-Bujari"
+   "refEs": "Narrado por Al-Bujari",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت بخاری",
+   "refId": "HR. Al-Bukhari"
   },
   {
    "order": 12,
@@ -250,7 +292,11 @@
    "countMs": "Empat kali",
    "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
    "countEs": "Cuatro veces",
-   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i",
+   "countFa": "چهار بار",
+   "countId": "Empat kali",
+   "refFa": "به روایت ابوداود و نسائی",
+   "refId": "HR. Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 13,
@@ -271,7 +317,11 @@
    "countMs": "Empat kali",
    "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
    "countEs": "Cuatro veces",
-   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i",
+   "countFa": "چهار بار",
+   "countId": "Empat kali",
+   "refFa": "به روایت ابوداود و نسائی",
+   "refId": "HR. Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 14,
@@ -292,7 +342,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
    "countEs": "Una vez",
-   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابوداود و نسائی",
+   "refId": "HR. Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 15,
@@ -313,7 +367,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Abu Dawud dan An-Nasa'i",
    "countEs": "Una vez",
-   "refEs": "Narrado por Abu Dawud y An-Nasa'i"
+   "refEs": "Narrado por Abu Dawud y An-Nasa'i",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابوداود و نسائی",
+   "refId": "HR. Abu Dawud dan An-Nasa'i"
   },
   {
    "order": 16,
@@ -334,7 +392,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Abu Dawud dan Ahmad",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Abu Dawud y Ahmad"
+   "refEs": "Narrado por Abu Dawud y Ahmad",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت ابوداود و احمد",
+   "refId": "HR. Abu Dawud dan Ahmad"
   },
   {
    "order": 17,
@@ -355,7 +417,11 @@
    "countMs": "Tujuh kali",
    "refMs": "Riwayat Ibn as-Sunni dan Abu Dawud",
    "countEs": "Siete veces",
-   "refEs": "Narrado por Ibn as-Sunni y Abu Dawud"
+   "refEs": "Narrado por Ibn as-Sunni y Abu Dawud",
+   "countFa": "هفت بار",
+   "countId": "Tujuh kali",
+   "refFa": "به روایت ابن سنی و ابوداود",
+   "refId": "HR. Ibnu as-Sunni dan Abu Dawud"
   },
   {
    "order": 18,
@@ -376,7 +442,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Abu Dawud dan Ibn Majah",
    "countEs": "Una vez",
-   "refEs": "Narrado por Abu Dawud e Ibn Mayah"
+   "refEs": "Narrado por Abu Dawud e Ibn Mayah",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابوداود و ابن ماجه",
+   "refId": "HR. Abu Dawud dan Ibnu Majah"
   },
   {
    "order": 19,
@@ -397,7 +467,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat At-Tirmidhi dan Abu Dawud",
    "countEs": "Una vez",
-   "refEs": "Narrado por At-Tirmidi y Abu Dawud"
+   "refEs": "Narrado por At-Tirmidi y Abu Dawud",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ترمذی و ابوداود",
+   "refId": "HR. At-Tirmidzi dan Abu Dawud"
   },
   {
    "order": 20,
@@ -418,7 +492,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Abu Dawud, At-Tirmidhi dan Ibn Majah",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Abu Dawud, At-Tirmidi e Ibn Mayah"
+   "refEs": "Narrado por Abu Dawud, At-Tirmidi e Ibn Mayah",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت ابوداود، ترمذی و ابن ماجه",
+   "refId": "HR. Abu Dawud, At-Tirmidzi dan Ibnu Majah"
   },
   {
    "order": 21,
@@ -439,7 +517,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Ahmad dan An-Nasa'i",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Ahmad y An-Nasa'i"
+   "refEs": "Narrado por Ahmad y An-Nasa'i",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت احمد و نسائی",
+   "refId": "HR. Ahmad dan An-Nasa'i"
   },
   {
    "order": 22,
@@ -460,7 +542,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Al-Hakim",
    "countEs": "Una vez",
-   "refEs": "Narrado por Al-Hakim"
+   "refEs": "Narrado por Al-Hakim",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت حاکم",
+   "refId": "HR. Al-Hakim"
   },
   {
    "order": 23,
@@ -481,7 +567,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Abu Dawud",
    "countEs": "Una vez",
-   "refEs": "Narrado por Abu Dawud"
+   "refEs": "Narrado por Abu Dawud",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابوداود",
+   "refId": "HR. Abu Dawud"
   },
   {
    "order": 24,
@@ -502,7 +592,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Abu Dawud",
    "countEs": "Una vez",
-   "refEs": "Narrado por Abu Dawud"
+   "refEs": "Narrado por Abu Dawud",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابوداود",
+   "refId": "HR. Abu Dawud"
   },
   {
    "order": 25,
@@ -523,7 +617,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Ahmad dan Ibn as-Sunni",
    "countEs": "Una vez",
-   "refEs": "Narrado por Ahmad e Ibn as-Sunni"
+   "refEs": "Narrado por Ahmad e Ibn as-Sunni",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت احمد و ابن سنی",
+   "refId": "HR. Ahmad dan Ibnu as-Sunni"
   },
   {
    "order": 26,
@@ -544,7 +642,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Ahmad dan Ibn as-Sunni",
    "countEs": "Una vez",
-   "refEs": "Narrado por Ahmad e Ibn as-Sunni"
+   "refEs": "Narrado por Ahmad e Ibn as-Sunni",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت احمد و ابن سنی",
+   "refId": "HR. Ahmad dan Ibnu as-Sunni"
   },
   {
    "order": 27,
@@ -565,7 +667,11 @@
    "countMs": "Sekali",
    "refMs": "Riwayat Ibn as-Sunni dan Ibn Majah",
    "countEs": "Una vez",
-   "refEs": "Narrado por Ibn as-Sunni e Ibn Mayah"
+   "refEs": "Narrado por Ibn as-Sunni e Ibn Mayah",
+   "countFa": "یک بار",
+   "countId": "Sekali",
+   "refFa": "به روایت ابن سنی و ابن ماجه",
+   "refId": "HR. Ibnu as-Sunni dan Ibnu Majah"
   },
   {
    "order": 28,
@@ -586,7 +692,11 @@
    "countMs": "Sepuluh kali, atau sekali ketika malas",
    "refMs": "Riwayat Al-Bukhari dan Muslim",
    "countEs": "Diez veces, o una vez si hay pereza",
-   "refEs": "Narrado por Al-Bujari y Muslim"
+   "refEs": "Narrado por Al-Bujari y Muslim",
+   "countFa": "ده بار، یا در هنگام سستی یک بار",
+   "countId": "Sepuluh kali, atau sekali saat malas",
+   "refFa": "به روایت بخاری و مسلم",
+   "refId": "HR. Al-Bukhari dan Muslim"
   },
   {
    "order": 29,
@@ -607,7 +717,11 @@
    "countMs": "Sepuluh kali",
    "refMs": "Riwayat At-Tabarani",
    "countEs": "Diez veces",
-   "refEs": "Narrado por At-Tabarani"
+   "refEs": "Narrado por At-Tabarani",
+   "countFa": "ده بار",
+   "countId": "Sepuluh kali",
+   "refFa": "به روایت طبرانی",
+   "refId": "HR. Ath-Thabrani"
   },
   {
    "order": 30,
@@ -628,7 +742,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Ahmad dan An-Nasa'i",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Ahmad y An-Nasa'i"
+   "refEs": "Narrado por Ahmad y An-Nasa'i",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت احمد و نسائی",
+   "refId": "HR. Ahmad dan An-Nasa'i"
   },
   {
    "order": 31,
@@ -649,7 +767,11 @@
    "countMs": "Tiga kali",
    "refMs": "Riwayat Muslim",
    "countEs": "Tres veces",
-   "refEs": "Narrado por Muslim"
+   "refEs": "Narrado por Muslim",
+   "countFa": "سه بار",
+   "countId": "Tiga kali",
+   "refFa": "به روایت مسلم",
+   "refId": "HR. Muslim"
   },
   {
    "order": 32,
@@ -670,7 +792,11 @@
    "countMs": "Seratus kali",
    "refMs": "Riwayat Al-Bukhari dan Muslim",
    "countEs": "Cien veces",
-   "refEs": "Narrado por Al-Bujari y Muslim"
+   "refEs": "Narrado por Al-Bujari y Muslim",
+   "countFa": "صد بار",
+   "countId": "Seratus kali",
+   "refFa": "به روایت بخاری و مسلم",
+   "refId": "HR. Al-Bukhari dan Muslim"
   },
   {
    "order": 33,
@@ -691,7 +817,11 @@
    "countMs": "Seratus kali sehari",
    "refMs": "Riwayat Al-Bukhari dan Muslim",
    "countEs": "Cien veces al día",
-   "refEs": "Narrado por Al-Bujari y Muslim"
+   "refEs": "Narrado por Al-Bujari y Muslim",
+   "countFa": "روزی صد بار",
+   "countId": "Seratus kali sehari",
+   "refFa": "به روایت بخاری و مسلم",
+   "refId": "HR. Al-Bukhari dan Muslim"
   },
   {
    "order": 34,
@@ -712,7 +842,11 @@
    "countMs": "Seratus kali",
    "refMs": "Riwayat Muslim",
    "countEs": "Cien veces",
-   "refEs": "Narrado por Muslim"
+   "refEs": "Narrado por Muslim",
+   "countFa": "صد بار",
+   "countId": "Seratus kali",
+   "refFa": "به روایت مسلم",
+   "refId": "HR. Muslim"
   }
  ]
 }

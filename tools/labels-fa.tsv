@@ -1,0 +1,34 @@
+# The counts and references around the adhkar and hadiths in Persian (languages plan): English as in adhkar.json and
+# hadith.json (countEn, refEn), a tab, then Persian. AwanTV-apply-labels.py writes them as countFa / refFa.
+# "به روایت", as Persian hadith books write it.
+Once	یک بار
+Three times	سه بار
+Four times	چهار بار
+Seven times	هفت بار
+Ten times or once when lazy	ده بار، یا در هنگام سستی یک بار
+Ten times	ده بار
+One hundred times	صد بار
+One hundred times a day	روزی صد بار
+3 times	3 بار
+33 times	33 بار
+To make it 100	برای کامل کردن صد
+Reported by Al-Hakim, An-Nasa'i and At-Tabarani	به روایت حاکم، نسائی و طبرانی
+Reported by Al-Bukhari and Muslim	به روایت بخاری و مسلم
+Reported by Abu Dawud and At-Tirmidhi	به روایت ابوداود و ترمذی
+Reported by Muslim	به روایت مسلم
+Reported by At-Tirmidhi	به روایت ترمذی
+Reported by Al-Bukhari	به روایت بخاری
+Reported by Abu Dawud and An-Nasa'i	به روایت ابوداود و نسائی
+Reported by Abu Dawud and Ahmad	به روایت ابوداود و احمد
+Reported by Ibn as-Sunni and Abu Dawud	به روایت ابن سنی و ابوداود
+Reported by Abu Dawud and Ibn Majah	به روایت ابوداود و ابن ماجه
+Reported by At-Tirmidhi and Abu Dawud	به روایت ترمذی و ابوداود
+Reported by Abu Dawud, At-Tirmidhi and Ibn Majah	به روایت ابوداود، ترمذی و ابن ماجه
+Reported by Ahmad and An-Nasa'i	به روایت احمد و نسائی
+Reported by Al-Hakim	به روایت حاکم
+Reported by Abu Dawud	به روایت ابوداود
+Reported by Ahmad and Ibn as-Sunni	به روایت احمد و ابن سنی
+Reported by Ibn as-Sunni and Ibn Majah	به روایت ابن سنی و ابن ماجه
+Reported by At-Tabarani	به روایت طبرانی
+An-Nasa'i, 'Amal al-Yawm wal-Laylah	به روایت نسائی، عمل الیوم و اللیلة
+Abu Dawud and an-Nasa'i	به روایت ابوداود و نسائی

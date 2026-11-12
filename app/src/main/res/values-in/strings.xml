@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Awan TV</string>
+    <string name="remote_keys">Awan TV</string>
+    <string name="remote_keys_description">Menampilkan Awan TV setiap kali layar utama TV muncul, dan mengumandangkan azan pada waktu salat di atas apa pun yang sedang diputar. Tidak ada yang dinonaktifkan di TV: nonaktifkan layanan ini untuk kembali ke layar utama TV.</string>
+</resources>

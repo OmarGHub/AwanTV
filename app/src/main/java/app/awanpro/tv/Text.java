@@ -448,6 +448,7 @@ final class Text {
         if (m == Method.SINGAPORE) return s(R.string.methodName_9);
         if (m == Method.OMAN_AWQAF) return s(R.string.methodName_10);
         if (m == Method.MOROCCO_HABOUS) return s(R.string.methodName_11);
+        if (m == Method.TEHRAN) return s(R.string.methodName_13);
         return s(R.string.methodName_12);
     }
 
@@ -457,6 +458,7 @@ final class Text {
         String isha = p.ishaInterval > 0
             ? (s(R.string.methodAngles_2, p.ishaInterval))
             : (s(R.string.methodAngles_3)) + trim(p.ishaAngle) + "°";
+        if (m.maghribAngle() > 0) return d(fajr + " · " + s(R.string.methodAngles_4) + trim(m.maghribAngle()) + "° · " + isha);
         return d(fajr + " · " + isha);
     }
 
@@ -544,6 +546,12 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.25.0": {
+                // Its degrees in the viewer's digits.
+                String[] lines = a(R.array.news_1_25_0);
+                for (int i = 0; i < lines.length; i++) lines[i] = d(lines[i]);
+                return pairs(lines, 2);
+            }
             case "1.24.0": {
                 // Its degrees and years in the viewer's digits.
                 String[] lines = a(R.array.news_1_24_0);

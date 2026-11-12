@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"Sabah açısı "</string>
     <string name="methodAngles_2" formatted="false">"Yatsı akşamdan %1$s dk sonra"</string>
     <string name="methodAngles_3" formatted="false">"Yatsı "</string>
+    <string name="methodAngles_4" formatted="false">"Akşam "</string>
     <string name="methodName" formatted="false">"Ümmü'l-Kurâ, Mekke"</string>
     <string name="methodName_10" formatted="false">"Vakıflar Bakanlığı, Umman"</string>
     <string name="methodName_11" formatted="false">"Vakıflar Bakanlığı, Fas"</string>
     <string name="methodName_12" formatted="false">"Mısır Genel Harita Kurumu"</string>
+    <string name="methodName_13" formatted="false">"Tahran Üniversitesi Jeofizik Enstitüsü"</string>
     <string name="methodName_2" formatted="false">"Dünya İslâm Birliği"</string>
     <string name="methodName_3" formatted="false">"İslami İlimler Üniversitesi, Karaçi"</string>
     <string name="methodName_4" formatted="false">"Dubai"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"İspanyolca"</item>
         <item>"Her ekran İspanyolca, İspanya'daki camilerin terimleriyle; kâriler ve sureler de İspanyolca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"Endonezce ve Farsça"</item>
+        <item>"Her ekran Endonezce ve Farsça; kâriler ve sureler de bu dillerdeki adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+        <item>"İran'ın resmî vakitleri"</item>
+        <item>"Yeni yöntem: İran'daki camilerin ve yayın kuruluşlarının uyduğu Tahran Üniversitesi Jeofizik Enstitüsü. Sabah 17,7°, akşam güneş ufkun 4,5° altına inince, yatsı 14°. İran'daki bir konum bu yöntemle başlar."</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"Özel hesaplama"</item>

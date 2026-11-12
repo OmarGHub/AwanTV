@@ -413,11 +413,11 @@ final class Prefs {
 
     // ---------------------------------------------------------------- calculation
 
-    /** Settings' list: adhan-java's methods, with Oman's and Morocco's ministries after Qatar. */
+    /** Settings' list: adhan-java's methods, with Oman's and Morocco's ministries and Tehran's institute after Qatar. */
     static final Method[] METHODS = {
         Method.EGYPTIAN, Method.UMM_AL_QURA, Method.MUSLIM_WORLD_LEAGUE,
         Method.KARACHI, Method.DUBAI, Method.KUWAIT, Method.QATAR,
-        Method.OMAN_AWQAF, Method.MOROCCO_HABOUS,
+        Method.OMAN_AWQAF, Method.MOROCCO_HABOUS, Method.TEHRAN,
         Method.NORTH_AMERICA, Method.MOON_SIGHTING_COMMITTEE, Method.SINGAPORE};
 
     /** What Settings saves for a method (the settings file and the editor show it). */

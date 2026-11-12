@@ -199,6 +199,8 @@ final class Places {
             case "OM": return Method.OMAN_AWQAF;
             // Morocco's Ministry of Habous: its own timetables, which Laayoune and Dakhla (GeoNames' EH) follow too.
             case "MA": case "EH": return Method.MOROCCO_HABOUS;
+            // Iran's official times: the Institute of Geophysics, University of Tehran (Method.TEHRAN).
+            case "IR": return Method.TEHRAN;
             case "US": case "CA": return Method.NORTH_AMERICA;
             case "IN": case "PK": case "BD": case "LK": return Method.KARACHI;
             case "ID": case "SG": case "BN": case "TH": return Method.SINGAPORE;

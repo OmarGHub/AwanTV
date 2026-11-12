@@ -6,6 +6,22 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Indonesian and Persian (test builds from 1.25.0a): every screen in each (res/values-in, res/values-fa), with
+  reciters and surahs by mp3quran.net in each, and the adhkar's counts and hadiths' references from
+  tools/labels-id.tsv and tools/labels-fa.tsv. Gemini's reviews applied before the build.
+- Iran's official times: a new method, the Institute of Geophysics, University of Tehran (`Method.TEHRAN`), which
+  Iran's mosques and IRIB follow: Fajr 17.7°, Maghrib when the sun is 4.5° below the horizon (worked out on
+  adhan-java's sun, which has no Maghrib angle), Isha 14°, Dhuhr at the transit; the night's middle and last third
+  from sunset (Iran's sharia midnight, between sunset and Fajr). A location in Iran starts from it, and a custom
+  calculation started from it keeps its Maghrib. As PrayTimes.org's Tehran and Persian Calendar's (its default for
+  Iran): bahesab.ir's Tehran times for 12 November 2026 to the minute (its midnight one minute off); within 2
+  minutes of PrayTimes.org's (ported and matched to its npm original) in 34,006 cities on every fifth
+  day of 2027, Fajr, Isha and the midnight up to 45°, Maghrib up to 55°; other differences only above 55° (Asr as
+  before, adhan-java's own) and on clock-change nights.
+- The note under the method row after a new location is shorter in English and Spanish (it fits beside Tehran's
+  longer name).
+
 ## [1.24.2]
 
 ### The app

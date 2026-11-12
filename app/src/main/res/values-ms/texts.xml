@@ -344,10 +344,12 @@
     <string name="methodAngles" formatted="false">"Sudut Subuh "</string>
     <string name="methodAngles_2" formatted="false">"Isyak %1$s min selepas Maghrib"</string>
     <string name="methodAngles_3" formatted="false">"Isyak "</string>
+    <string name="methodAngles_4" formatted="false">"Maghrib "</string>
     <string name="methodName" formatted="false">"Umm al-Qura, Makkah"</string>
     <string name="methodName_10" formatted="false">"Kementerian Awqaf, Oman"</string>
     <string name="methodName_11" formatted="false">"Kementerian Habous, Maghribi"</string>
     <string name="methodName_12" formatted="false">"Pihak Berkuasa Ukur Am Mesir"</string>
+    <string name="methodName_13" formatted="false">"Institut Geofizik, Universiti Tehran"</string>
     <string name="methodName_2" formatted="false">"Liga Dunia Islam"</string>
     <string name="methodName_3" formatted="false">"Universiti Sains Islam, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubai"</string>
@@ -773,6 +775,12 @@
     <string-array name="news_1_22_0">
         <item>"Bahasa Sepanyol"</item>
         <item>"Setiap skrin dalam bahasa Sepanyol, mengikut istilah masjid di Sepanyol, dengan nama qari dan surah dalam bahasa Sepanyol. Pilih dari butang glob pada Skrin Utama."</item>
+    </string-array>
+    <string-array name="news_1_25_0">
+        <item>"Bahasa Indonesia dan Parsi"</item>
+        <item>"Setiap skrin dalam bahasa Indonesia dan bahasa Parsi, dengan nama qari dan surah dalam setiap bahasa. Pilih dari butang glob pada Skrin Utama."</item>
+        <item>"Waktu rasmi Iran"</item>
+        <item>"Kaedah baharu: Institut Geofizik, Universiti Tehran, yang diikuti masjid dan penyiaran di Iran: Subuh 17.7°, Maghrib apabila matahari 4.5° di bawah ufuk, Isyak 14°. Lokasi di Iran bermula dengannya."</item>
     </string-array>
     <string-array name="news_1_24_0">
         <item>"Pengiraan tersuai"</item>
