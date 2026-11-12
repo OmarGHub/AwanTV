@@ -28,8 +28,8 @@ history is in its repository.
   longer name).
 
 ### The repository
-- README: nine languages, Indonesian's and Persian's own sections with their pictures (the Wi-Fi name covered), and
-  Tehran's method among the countries' own.
+- README: nine languages, Indonesian's and Persian's own sections with their pictures, and Tehran's method among the
+  countries' own. The network's Wi-Fi name is covered in every language's Settings picture.
 
 ## [1.24.2]
 
