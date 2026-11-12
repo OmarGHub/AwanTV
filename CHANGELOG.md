@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.24.2]
+
 ### The app
 - Near the date line every day has its own times (test builds from 1.24.2a). adhan-java keeps a day's Dhuhr inside
   that date in UTC, so where local noon comes before 00:00 UTC (Tonga, Samoa, Wallis and Futuna and Kiribati's Line
