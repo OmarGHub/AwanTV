@@ -11,6 +11,8 @@ import com.batoulapps.adhan.PrayerAdjustments;
 import com.batoulapps.adhan.PrayerTimes;
 import com.batoulapps.adhan.Qibla;
 import com.batoulapps.adhan.data.DateComponents;
+import com.batoulapps.adhan.data.TimeComponents;
+import com.batoulapps.adhan.internal.SolarTime;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -253,6 +255,54 @@ final class PrayerDay {
      */
     private static Date[] times(Method method, Habous.Locality table, Coordinates where, DateComponents date,
                                 CalculationParameters params, String high) {
+        // adhan-java keeps the day's Dhuhr inside that date in UTC. Where local noon comes before 00:00 UTC (east of
+        // about 172°E on UTC+12 to +14: Tonga, Samoa, Wallis and Kiribati's Line Islands all year, Fiji, Tuvalu, New
+        // Zealand's east coast in summer time and Chukotka for part of it) a date gave the next day's times, and on
+        // the day local noon crosses 00:00 UTC no date gave that day at all (Suva, 20 September) or Fajr and Isha
+        // came out at noon (Suva, the night of 12 December).
+        // PrayTimes.org (2007) anchors the sun on the local day itself (Julian date - longitude / 360, then the time
+        // zone); here: the date whose Dhuhr falls on the local day, else the neighbour's times a day on (a minute
+        // apart at most). Elsewhere the first date stands, unchanged (1.24.2a; checked against PrayTimes).
+        int off = noonOffset(where, date, date);
+        if (off == 0) return onDate(method, table, where, date, params, high);
+        DateComponents other = plusDays(date, -off);
+        int left = noonOffset(where, other, date);
+        Date[] t = onDate(method, table, where, other, params, high);
+        if (left != 0) for (int i = 0; i < t.length; i++) t[i] = plusDays(t[i], -left);
+        return t;
+    }
+
+    /** Days from the local date day to the local date of adhan-java's Dhuhr for date (its transit, as it works it out). */
+    private static int noonOffset(Coordinates where, DateComponents date, DateComponents day) {
+        Date noon = TimeComponents.fromDouble(new SolarTime(date, where).transit).dateComponents(date);
+        Calendar a = Calendar.getInstance();
+        a.setTime(noon);
+        Calendar b = Calendar.getInstance();
+        b.clear();
+        b.set(day.year, day.month - 1, day.day, a.get(Calendar.HOUR_OF_DAY), a.get(Calendar.MINUTE));
+        return (int) Math.round((a.getTimeInMillis() - b.getTimeInMillis()) / (24 * 3600_000.0));
+    }
+
+    private static DateComponents plusDays(DateComponents date, int days) {
+        Calendar c = Calendar.getInstance();
+        c.clear();
+        c.set(date.year, date.month - 1, date.day, 12, 0);
+        c.add(Calendar.DAY_OF_MONTH, days);
+        return new DateComponents(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
+    }
+
+    /** The same clock time days later (the time zone's own days: a daylight saving change keeps the clock). */
+    private static Date plusDays(Date at, int days) {
+        if (at == null) return null;
+        Calendar c = Calendar.getInstance();
+        c.setTime(at);
+        c.add(Calendar.DAY_OF_MONTH, days);
+        return c.getTime();
+    }
+
+    /** The six times adhan-java (or Habous, or the rules above 48°) gives for date. */
+    private static Date[] onDate(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+                                 CalculationParameters params, String high) {
         if (method == Method.MOROCCO_HABOUS) {
             Coordinates at = table != null ? new Coordinates(table.lat, table.lng) : where;
             Date[] t = Habous.times(at, date, params.madhab, table != null ? table.horizon : Habous.COAST);

@@ -6,6 +6,24 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Near the date line every day has its own times (test builds from 1.24.2a). adhan-java keeps a day's Dhuhr inside
+  that date in UTC, so where local noon comes before 00:00 UTC (Tonga, Samoa, Wallis and Futuna and Kiribati's Line
+  Islands all year; Fiji, Tuvalu, New Zealand's east coast in summer time and Chukotka for part of it) a date gave
+  the next day's times. The screen came out right by chance since 1.23.0, but tonight's Ramadan (Umm al-Qura's half
+  hour, the fast's tag on Fajr) came a day late, and the night's middle and last third, read from "yesterday", were
+  off. On the day local noon crosses 00:00 UTC, no date gave that day: Suva's 20 September showed the 21st's times
+  from midnight (no adhan all day), and the night of 12 December had Fajr and Isha at noon. Now the date whose Dhuhr
+  falls on the local day is asked for, as PrayTimes.org anchors its sun on the local day; on the crossing day the day
+  before's times move one day on (a minute apart at most there). Checked against PrayTimes.org (2.5, ported and
+  matched to its npm original on 6,000 city-days) in 34,006 GeoNames cities on every day of 2027: it touches 19
+  cities on 2,158 days, each a day 1.24.1 had wrong; 18 of them now agree within 2 minutes, Anadyr (64.7°N) but for
+  its Asr (adhan-java takes Asr's shadow from the sun at 0h UT, nearly a day stale there: up to 11 minutes early in
+  December). Every other city has 1.24.1's times exactly, with Muslim World League and with the country's own
+  method. The screen's current and next prayer and tonight's Ramadan were checked every 10 minutes of the year in 18
+  of them: no miss (1.24.1: 4 to 8 days in each Fijian city, Ramadan's evening wrong 55 to 68 times a year in Tonga,
+  Samoa and Wallis).
+
 ## [1.24.1]
 
 ### The app
