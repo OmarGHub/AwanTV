@@ -1787,6 +1787,8 @@ public class SettingsActivity extends Screen {
                 TextView v = text(ui400, 24, ink);
                 v.setText(r.value());
                 v.setSingleLine(true);
+                // "Jeddah، عربستان سعودی" (a city's English name in Persian or Urdu) still reads from the start side.
+                v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
                 r.control.addView(v);
                 Chevron ch = new Chevron(this, ink);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(Ui.ipx(22), Ui.ipx(22));
@@ -2202,6 +2204,8 @@ public class SettingsActivity extends Screen {
             item.setRest(chosen ? Tokens.LAPIS_700 : 0, 0, 0);
             TextView v = text(chosen ? ui500 : ui400, 26, Tokens.PLASTER_100);
             v.setText(items[i]);
+            // A choice that starts with Latin letters ("ISNA، آمریکای شمالی") keeps the screen's side and order.
+            v.setTextDirection(t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
             v.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             v.setPadding(Ui.ipx(24), 0, Ui.ipx(24), 0);
             item.addView(v, new FrameLayout.LayoutParams(-1, -1));

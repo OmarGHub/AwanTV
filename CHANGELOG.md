@@ -19,6 +19,9 @@ history is in its repository.
   minutes of PrayTimes.org's (ported and matched to its npm original) in 34,006 cities on every fifth
   day of 2027, Fajr, Isha and the midnight up to 45°, Maghrib up to 55°; other differences only above 55° (Asr as
   before, adhan-java's own) and on clock-change nights.
+- In Arabic, Urdu and Persian, a choice or a value that starts with Latin letters ("ISNA، آمریکای شمالی", "Jeddah،
+  عربستان سعودی") and the Latin names of stations and reciters keep the screen's side and order (1.25.0b: Persian's
+  chooser showed ISNA's row on the left, reversed).
 - The note under the method row after a new location is shorter in English and Spanish (it fits beside Tehran's
   longer name).
 

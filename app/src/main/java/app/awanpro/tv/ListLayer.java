@@ -79,6 +79,8 @@ final class ListLayer {
             // Smaller where a name is wider than the row, to 75%, then "…" (1.19.0b: mp3quran.net's reciter
             // channels in Turkish ran past it by up to 185 px; 1.20.0b: French ones by a few px at 80%).
             Screen.fitWidth(v, 0.75f);
+            // Latin names (stations, reciters) in a right-to-left language sit on its side, as its own words do.
+            v.setTextDirection(s.t.rtl() ? View.TEXT_DIRECTION_RTL : View.TEXT_DIRECTION_LTR);
             v.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
             v.setPadding(Ui.ipx(24), 0, Ui.ipx(24), 0);
             TextView tick = null;
