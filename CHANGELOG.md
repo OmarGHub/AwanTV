@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.25.1]
+
 ### The app
 - Asr above 48° (test builds from 1.25.1a). adhan-java takes the noon shadow from the sun's declination at 0h UT of
   the date but Asr's moment from the declination at noon; near the polar night that mismatch is hours. In 34,006
