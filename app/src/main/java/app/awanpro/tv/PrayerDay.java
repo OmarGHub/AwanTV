@@ -122,7 +122,10 @@ final class PrayerDay {
             Date[] yesterday = times(method, table, where, DateComponents.from(y.getTime()), params, high);
             Date yIsha = minute(yesterday[ISHA]);
             boolean yRamadan = ramadanNight(y, hijriOffset);
-            if (ummAlQuraRamadan(method, params) && yRamadan) yIsha = new Date(yIsha.getTime() + 30 * 60_000L);
+            if (ummAlQuraRamadan(method, params) && yRamadan) {
+                yIsha = ishaInNight(new Date(yIsha.getTime() + 30 * 60_000L),
+                    minute(yesterday.length > 6 ? yesterday[6] : yesterday[MAGHRIB]), minute(today[FAJR]));
+            }
             // Yesterday's Isha came after midnight: its night runs to today's Fajr. Up to Isha its Maghrib and Isha
             // are still to come; from Isha on, that Isha is the one whose adhan, iqamah and "now" are due (1.23.0b:
             // switching to today's times at that Isha left it out of the day, and its adhan never came).
@@ -161,7 +164,10 @@ final class PrayerDay {
         // Umm al-Qura's Isha is 90 minutes after Maghrib, and 120 on Ramadan's nights (the Ministry of Islamic
         // Affairs, after Umm al-Qura). adhan-java leaves the Ramadan half hour to the caller
         // (CalculationMethod.UMM_AL_QURA: "add a +30 minute custom adjustment").
-        if (ishaRamadan && ummAlQuraRamadan(method, params)) times[ISHA] = new Date(times[ISHA].getTime() + 30 * 60_000L);
+        Date tomorrowFajr = minute(times(method, table, where, DateComponents.from(c.getTime()), params, high)[FAJR]);
+        if (ishaRamadan && ummAlQuraRamadan(method, params)) {
+            times[ISHA] = ishaInNight(new Date(times[ISHA].getTime() + 30 * 60_000L), sunset, tomorrowFajr);
+        }
 
         int latest = -1;
         for (int i = 0; i < 6; i++) if (!times[i].after(now)) latest = i;
@@ -171,7 +177,6 @@ final class PrayerDay {
         for (int i = 0; i < 6; i++) {
             if (i != SUNRISE && times[i].after(now)) { next = i; break; }
         }
-        Date tomorrowFajr = minute(times(method, table, where, DateComponents.from(c.getTime()), params, high)[FAJR]);
         boolean tomorrowsFajr = next == -1;
         if (next == -1) {
             next = FAJR;
@@ -259,6 +264,35 @@ final class PrayerDay {
      */
     private static Date[] times(Method method, Habous.Locality table, Coordinates where, DateComponents date,
                                 CalculationParameters params, String high) {
+        Date[] t = localDay(method, table, where, date, params, high);
+        // Isha by minutes after Maghrib no later than the middle of the night (Maghrib to the next Fajr): "the time of
+        // Isha is until the middle of the night" (Abdullah ibn Amr, Sahih Muslim; Ibn Baz: its chosen time ends there).
+        // Only where nights are short (near midsummer: from about 63° with 90 minutes, lower with a longer delay): a
+        // fixed delay put Isha after the next Fajr there, even after sunrise (Kemi, the night of 18 June: Maghrib 01:08, Fajr 01:34, Isha 02:38). An Isha by
+        // the angle is already kept within the night by the rule above 48°.
+        if (params.ishaInterval > 0 && t[ISHA] != null) {
+            Date[] next = localDay(method, table, where, plusDays(date, 1), params, high);
+            Date isha = ishaInNight(t[ISHA], t.length > 6 ? t[6] : t[MAGHRIB], next[FAJR]);
+            if (t[MAGHRIB] != null && isha.before(t[MAGHRIB])) isha = t[MAGHRIB];
+            t[ISHA] = isha;
+        }
+        return t;
+    }
+
+    /**
+     * Isha no later than the middle of the night from start (Maghrib, or the sunset for Tehran's method: the night that
+     * Today & Qibla's "middle of the night" shows) to the next Fajr, on its minute as {@link #night} rounds it.
+     */
+    private static Date ishaInNight(Date isha, Date start, Date fajr) {
+        if (isha == null || start == null || fajr == null || !fajr.after(start)) return isha;
+        long span = fajr.getTime() - start.getTime();
+        Date middle = minute(new Date(start.getTime() + span / 2 + 30_000));
+        return isha.after(middle) ? middle : isha;
+    }
+
+    /** The local day's times, on the date line too (below). */
+    private static Date[] localDay(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+                                   CalculationParameters params, String high) {
         // adhan-java keeps the day's Dhuhr inside that date in UTC. Where local noon comes before 00:00 UTC (east of
         // about 172°E on UTC+12 to +14: Tonga, Samoa, Wallis and Kiribati's Line Islands all year, Fiji, Tuvalu, New
         // Zealand's east coast in summer time and Chukotka for part of it) a date gave the next day's times, and on
@@ -267,12 +301,41 @@ final class PrayerDay {
         // PrayTimes.org (2007) anchors the sun on the local day itself (Julian date - longitude / 360, then the time
         // zone); here: the date whose Dhuhr falls on the local day, else the neighbour's times a day on (a minute
         // apart at most). Elsewhere the first date stands, unchanged (1.24.2a; checked against PrayTimes).
+        if (Math.abs(where.latitude) > HighLatitude.FROM) return nearSoundDay(method, table, where, date, params, high);
         int off = noonOffset(where, date, date);
         if (off == 0) return onDate(method, table, where, date, params, high);
         DateComponents other = plusDays(date, -off);
         int left = noonOffset(where, other, date);
         Date[] t = onDate(method, table, where, other, params, high);
         if (left != 0) for (int i = 0; i < t.length; i++) t[i] = plusDays(t[i], -left);
+        return t;
+    }
+
+    /**
+     * Above 48°, where the rules count the night: adhan-java's night runs from a date's sunset to the sunrise of the next
+     * date, and next to the day local noon crosses 00:00 UTC that next date is two local days on (Anadyr, 30 September
+     * 2027: a night of 36 hours, so the seventh of the night never applied, Fajr 03:23 for about 04:28) or the same one.
+     * So a date counts only when the next date is the next local day too; of those near it, the one whose Dhuhr is on
+     * the local day, else the nearest, its times moved the days between (a few minutes at most there). Anywhere else
+     * this is the date itself (1.25.2a).
+     */
+    private static Date[] nearSoundDay(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+                                       CalculationParameters params, String high) {
+        DateComponents best = null;
+        int bestShift = 0;
+        for (int k : new int[] {0, -1, 1, -2, 2}) {
+            DateComponents d = plusDays(date, k);
+            if (noonOffset(where, plusDays(d, 1), plusDays(d, 1)) != noonOffset(where, d, d)) continue;
+            int shift = -noonOffset(where, d, date);
+            if (best == null || Math.abs(shift) < Math.abs(bestShift)) {
+                best = d;
+                bestShift = shift;
+            }
+            if (shift == 0) break;
+        }
+        if (best == null) return onDate(method, table, where, date, params, high);
+        Date[] t = onDate(method, table, where, best, params, high);
+        if (bestShift != 0) for (int i = 0; i < t.length; i++) t[i] = plusDays(t[i], bestShift);
         return t;
     }
 

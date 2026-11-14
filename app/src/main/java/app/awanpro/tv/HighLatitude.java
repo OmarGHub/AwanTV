@@ -79,7 +79,7 @@ final class HighLatitude {
         }
         PrayerAdjustments a = params.adjustments, m = params.methodAdjustments;
         Date f = CalendarUtil.roundedMinute(new Date(fajr.getTime() + (a.fajr + m.fajr) * 60_000L));
-        // Isha by minutes after Maghrib: adhan-java's, untouched.
+        // Isha by minutes after Maghrib: adhan-java's here (PrayerDay.times keeps it before the middle of the night).
         Date i = params.ishaInterval > 0 ? p.isha
             : CalendarUtil.roundedMinute(new Date(isha.getTime() + (a.isha + m.isha) * 60_000L));
         return new Date[] {f, i};
@@ -102,6 +102,13 @@ final class HighLatitude {
             n.isha = at(date, today.hourAngle(-params.ishaAngle, true));
             return n;
         }
+    }
+
+    /** at moved by whole days to within twelve hours of near. */
+    private static Date sameNight(Date at, Date near) {
+        long day = 24 * 3600_000L, gap = at.getTime() - near.getTime();
+        long days = Math.round((double) gap / day);
+        return days == 0 ? at : new Date(at.getTime() - days * day);
     }
 
     private static Date at(DateComponents date, double hours) {
@@ -169,6 +176,10 @@ final class HighLatitude {
             if (f == null || i == null) return own;
             f = CalendarUtil.roundedMinute(f);
             if (season.ishaByAngle) i = CalendarUtil.roundedMinute(i);
+            // On the date line (Anadyr) Diyanet's sun can count the date from a noon a day before adhan-java's: the
+            // times belong to adhan-java's day, Fajr by its sunrise and Isha by its Maghrib (1.25.2a).
+            f = sameNight(f, p.sunrise);
+            if (season.ishaByAngle) i = sameNight(i, p.maghrib);
             // Near the days the sun stops setting, Diyanet's sun and adhan-java's part by minutes: Fajr no later than
             // sunrise, Isha no earlier than Maghrib.
             if (f.after(p.sunrise)) f = p.sunrise;

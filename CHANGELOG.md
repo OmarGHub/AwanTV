@@ -6,6 +6,23 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Isha by minutes after Maghrib (Umm al-Qura, Qatar, or the custom calculation's "after Maghrib") no later than the
+  middle of the night, Maghrib to the next Fajr: "the time of Isha is until the middle of the night" (Abdullah ibn
+  Amr, Sahih Muslim; Ibn Baz: its chosen time ends there). It is the middle Today & Qibla shows. Near midsummer, from
+  about 64°, a fixed delay put Isha after the next Fajr, even after sunrise (Kemi, the night of 18 June: Maghrib
+  01:08, Fajr 01:34, Isha 02:38; now 01:21). In 2027, above 48°: with Umm al-Qura and the seventh of the night, 312
+  nights in 44 cities had Isha after the next Fajr (1,405 with the middle of the night, 1,302 with 150 minutes);
+  none now. The rule of Makkah's times never had it. Only short nights change: with Umm al-Qura's 90 minutes from
+  63° (2,156 nights in 2027), a longer delay from lower (150 minutes: from 47°, near midsummer). Umm al-Qura's Ramadan
+  half hour stays within the same middle. Isha by the angle was already kept in the night by the rule above 48°.
+- The date line above 48° (Anadyr). adhan-java's night runs from a date's sunset to the next date's sunrise, and next
+  to the day local noon crosses 00:00 UTC that next date was two local days on: on 30 September and 1 October 2027
+  the seventh of the night never applied (Fajr 03:23 for 04:24). Above 48° a date now counts only when its next date
+  is the next local day, else the nearest that is, its times moved a day. With the Istanbul congress's rule, 2
+  October's Fajr was written on 1 October (Diyanet's sun counts that date from the day before): it now keeps
+  adhan-java's day. Below 48° nothing changes.
+
 ## [1.25.1]
 
 ### The app
