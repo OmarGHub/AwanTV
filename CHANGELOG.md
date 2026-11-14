@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.25.2]
+
 ### The app
 - Isha by minutes after Maghrib (Umm al-Qura, Qatar, or the custom calculation's "after Maghrib") no later than the
   middle of the night, Maghrib to the next Fajr: "the time of Isha is until the middle of the night" (Abdullah ibn
