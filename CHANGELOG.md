@@ -6,6 +6,11 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The repository
+- `tools/AwanTV-fetch-jakim.ps1` 1.0.0: JAKIM's e-Solat timetables for every Malaysian zone, a year each (2024 to
+  2026 by default), into state\jakim for building and checking a JAKIM method; resumes where it stopped and packs
+  them into one zip. The app never carries them.
+
 ## [1.25.2]
 
 ### The app
