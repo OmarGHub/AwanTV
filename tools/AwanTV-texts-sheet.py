@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# AwanTV-texts-sheet.py - Version 1.1.2
+# AwanTV-texts-sheet.py - Version 1.1.3
 # The side-by-side sheet given with every release that adds a language (languages plan, phase 4): one row per
 # text, numbered, with its key, where it shows, the Arabic, the English, the new language and a notes column, read
 # from the very files the release carries: app/src/main/res/values*/texts.xml (strings, then each array item as
@@ -12,10 +12,11 @@
 # 1.1.0: several languages, a column each after English (for a review of all of them at once).
 # 1.1.1: Malay's column named.
 # 1.1.2: Spanish's column named.
+# 1.1.3: Persian's column named.
 import json, os, re, sys
 import xml.etree.ElementTree as ET
 
-VERSION = "1.1.2"
+VERSION = "1.1.3"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RES = os.path.join(ROOT, "app", "src", "main", "res")
 TEXT = os.path.join(ROOT, "app", "src", "main", "java", "app", "awanpro", "tv", "Text.java")
@@ -172,7 +173,7 @@ wb = Workbook()
 ws = wb.active
 ws.title = "Texts"
 ws.sheet_view.rightToLeft = True
-NAMES = {"ur": "اردو / Urdu", "tr": "Türkçe / Turkish", "id": "Bahasa Indonesia / Indonesian", "fr": "Français / French", "ms": "Bahasa Melayu / Malay", "es": "Español / Spanish"}
+NAMES = {"ur": "اردو / Urdu", "tr": "Türkçe / Turkish", "id": "Bahasa Indonesia / Indonesian", "fr": "Français / French", "ms": "Bahasa Melayu / Malay", "es": "Español / Spanish", "fa": "فارسی / Persian"}
 head = ["#", "المفتاح / Key", "أين يظهر / Where", "العربية / Arabic", "English"] + [NAMES.get(l, l) for l in langs] + ["ملاحظات / Notes"]
 ws.append(head)
 for c in ws[1]:

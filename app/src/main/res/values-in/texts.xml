@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
     <string name="iqamaRow" formatted="false">"Waktu iqamah"</string>
     <string name="iqamaToday" formatted="false">"Iqamah hari ini "</string>
+    <string name="jakimAngles" formatted="false">"Subuh 18° · Isya 18° · menurut jadwal zona JAKIM"</string>
+    <string name="jakimAngles_2" formatted="false">"Di luar Malaysia: Subuh 18° · Isya 18° · dengan margin JAKIM"</string>
+    <string name="jakimChooser" formatted="false">"JAKIM menerbitkan satu jadwal untuk tiap zona. Inilah yang terdekat dengan lokasi Anda."</string>
+    <string name="jakimCredit" formatted="false">"Disesuaikan dengan jadwal JAKIM, Departemen Pembangunan Islam Malaysia (e-solat.gov.my)"</string>
+    <string name="jakimCreditRow" formatted="false">"Waktu Malaysia"</string>
+    <string name="jakimFileHelp" formatted="false">"Which of JAKIM's zones the TV follows in Malaysia"</string>
+    <string name="jakimHelp_2" formatted="false">"Zona kota JAKIM terdekat, %1$s km jauhnya"</string>
+    <string name="jakimRow" formatted="false">"Zona JAKIM"</string>
     <string name="jumuah" formatted="false">"Jumat"</string>
     <string name="jumuahLabel" formatted="false">"JUMAT"</string>
     <string name="kahf" formatted="false">"Surah Al-Kahfi hari ini"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"Kementerian Habous, Maroko"</string>
     <string name="methodName_12" formatted="false">"Otoritas Survei Umum Mesir"</string>
     <string name="methodName_13" formatted="false">"Institut Geofisika, Universitas Teheran"</string>
+    <string name="methodName_14" formatted="false">"JAKIM, Malaysia"</string>
     <string name="methodName_2" formatted="false">"Liga Muslim Dunia"</string>
     <string name="methodName_3" formatted="false">"Universitas Ilmu Islam, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubai"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"Bahasa Spanyol"</item>
         <item>"Semua layar dalam bahasa Spanyol, dengan istilah masjid di Spanyol, dengan nama qari dan surah dalam bahasa Spanyol. Pilih dari tombol globe di Layar Utama."</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"Waktu resmi Malaysia"</item>
+        <item>"Metode baru: JAKIM, dengan tiap zona di Malaysia memakai jadwalnya sendiri, seperti yang diterbitkan e-Solat. Lokasi di Malaysia dimulai dengannya dan mengambil zonanya sendiri: ubah di Setelan › Waktu salat › Zona JAKIM. Imsak saat Ramadan: 10 menit, seperti dalam jadwal JAKIM."</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"Bahasa Indonesia dan Persia"</item>

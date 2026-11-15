@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
     <string name="iqamaRow" formatted="false">"اقامت کا وقت"</string>
     <string name="iqamaToday" formatted="false">"آج کی اقامت "</string>
+    <string name="jakimAngles" formatted="false">"فجر 18° · عشاء 18° · جاکیم کے زون جدولوں کے مطابق"</string>
+    <string name="jakimAngles_2" formatted="false">"ملائیشیا سے باہر: فجر 18° · عشاء 18° · جاکیم کی احتیاط کے ساتھ"</string>
+    <string name="jakimChooser" formatted="false">"جاکیم ہر زون کا ایک جدول شائع کرتا ہے۔ یہ آپ کے مقام سے قریب ترین ہیں۔"</string>
+    <string name="jakimCredit" formatted="false">"جاکیم، ملائیشیا کے جدولوں سے اخذ (e-solat.gov.my)"</string>
+    <string name="jakimCreditRow" formatted="false">"ملائیشیا کے اوقات"</string>
+    <string name="jakimFileHelp" formatted="false">"Which of JAKIM's zones the TV follows in Malaysia"</string>
+    <string name="jakimHelp_2" formatted="false">"جاکیم کے قریب ترین شہر کا زون، %1$s کلومیٹر دور"</string>
+    <string name="jakimRow" formatted="false">"جاکیم زون"</string>
     <string name="jumuah" formatted="false">"جمعہ"</string>
     <string name="jumuahLabel" formatted="false">"نمازِ جمعہ"</string>
     <string name="kahf" formatted="false">"آج سورۃ الکہف"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"وزارتِ اوقاف، مراکش"</string>
     <string name="methodName_12" formatted="false">"مصری جنرل سروے اتھارٹی"</string>
     <string name="methodName_13" formatted="false">"انسٹی ٹیوٹ آف جیو فزکس، تہران یونیورسٹی"</string>
+    <string name="methodName_14" formatted="false">"جاکیم، ملائیشیا"</string>
     <string name="methodName_2" formatted="false">"رابطہ عالمِ اسلامی"</string>
     <string name="methodName_3" formatted="false">"جامعہ علومِ اسلامیہ، کراچی"</string>
     <string name="methodName_4" formatted="false">"دبئی"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"ہسپانوی"</item>
         <item>"ہر اسکرین ہسپانوی میں، اسپین کی مساجد کی اصطلاحات کے ساتھ، قاریوں اور سورتوں کے نام بھی۔ ہوم پر گلوب کے بٹن سے منتخب کریں۔"</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"ملائیشیا کے سرکاری اوقات"</item>
+        <item>"نیا طریقہ: جاکیم، ملائیشیا کے ہر زون کے اپنے جدول کے ساتھ، جیسے e-Solat اسے شائع کرتا ہے۔ ملائیشیا میں مقام اسی سے شروع ہوتا ہے اور اپنا زون خود لیتا ہے: ترتیبات › اوقاتِ نماز › جاکیم زون سے بدلیں۔ رمضان میں امساک: 10 منٹ، جیسے جاکیم کے جدولوں میں۔"</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"انڈونیشیائی اور فارسی"</item>

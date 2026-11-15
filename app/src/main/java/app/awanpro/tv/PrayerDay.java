@@ -48,7 +48,7 @@ final class PrayerDay {
 
     /**
      * The calendar day's own times, never the night still going on from the day before ({@link #PrayerDay(Date,
-     * Coordinates, Method, Madhab, int[], int, Habous.Locality, boolean)}): for "yesterday's" Maghrib or Isha.
+     * Coordinates, Method, Madhab, int[], int, Object, boolean)}): for "yesterday's" Maghrib or Isha.
      */
     static PrayerDay ofDate(Context c, Date at) {
         return new PrayerDay(c, at, false);
@@ -61,8 +61,15 @@ final class PrayerDay {
     /** calc: the custom calculation (its base method in place of the chosen one), or null. */
     private PrayerDay(Context c, Date now, boolean night, Prefs.Calc calc) {
         this(now, Prefs.where(c), calc != null ? calc.base : Prefs.method(c), Prefs.madhab(c), Prefs.adjustments(c),
-            Prefs.hijriOffset(c), calc == null && Prefs.method(c) == Method.MOROCCO_HABOUS ? Habous.table(c) : null, night, calc,
+            Prefs.hijriOffset(c), calc == null ? officialTable(c, Prefs.method(c)) : null, night, calc,
             (adhan, ramadan) -> Iqama.at(c, ISHA, adhan, ramadan));
+    }
+
+    /** The official timetable the saved place takes with its method: Morocco's locality, Malaysia's zone, or null. */
+    static Object officialTable(Context c, Method method) {
+        if (method == Method.MOROCCO_HABOUS) return Habous.table(c);
+        if (method == Method.JAKIM) return Jakim.zone(c);
+        return null;
     }
 
     /** Tonight's Isha iqamah for an Isha adhan (Iqama.at), or null when none is shown. */
@@ -71,15 +78,16 @@ final class PrayerDay {
     }
 
     /**
-     * {@code table}: with Morocco's method, the ministry's locality whose timetable the place takes (its point and
-     * horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon).
+     * {@code table}: with Morocco's method, the ministry's locality whose timetable the place takes (a Habous.Locality:
+     * its point and horizons), or null outside Morocco (the place's own point at the ministry's coastal horizon); with
+     * JAKIM's, the Malaysian zone (a Jakim.Zone), or null outside Malaysia (the method's angles at the place).
      */
-    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table) {
+    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Object table) {
         this(now, where, method, madhab, adjust, hijriOffset, table, true, null, null);
     }
 
     /** With an Isha iqamah (the checks' own, in place of Settings > Iqamah). */
-    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Habous.Locality table,
+    PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset, Object table,
               IshaIqamah iqamah) {
         this(now, where, method, madhab, adjust, hijriOffset, table, true, null, iqamah);
     }
@@ -99,7 +107,7 @@ final class PrayerDay {
      * The same holds when only that Isha's iqamah comes after midnight (1.24.1a: its countdown went at 00:00).
      */
     private PrayerDay(Date now, Coordinates where, Method method, Madhab madhab, int[] adjust, int hijriOffset,
-                      Habous.Locality table, boolean night, Prefs.Calc calc, IshaIqamah iqamah) {
+                      Object table, boolean night, Prefs.Calc calc, IshaIqamah iqamah) {
         CalculationParameters params = calc != null ? calc.parameters() : Prefs.parameters(method);
         // Above 48°: the seventh of the night below, or the custom calculation's rule (HighLatitude).
         String high = calc != null ? calc.high : Prefs.HIGH_SEVENTH;
@@ -259,10 +267,11 @@ final class PrayerDay {
 
     /**
      * The six times (FAJR..ISHA). Morocco's method by {@link Habous} at its locality's point and horizons (or the
-     * place's own at the coast's) with the viewer's minutes added after the ministry's rounding, as adhan adds them;
-     * where the sun doesn't reach 19°/17° (far north, chosen by hand), adhan-java's way below.
+     * place's own at the coast's) and JAKIM's by its Malaysian zone ({@link Jakim}), with the viewer's minutes added
+     * after the official rounding, as adhan adds them; where the sun doesn't reach 19°/17° (far north, chosen by hand),
+     * or JAKIM's outside Malaysia, adhan-java's way below.
      */
-    private static Date[] times(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+    private static Date[] times(Method method, Object table, Coordinates where, DateComponents date,
                                 CalculationParameters params, String high) {
         Date[] t = localDay(method, table, where, date, params, high);
         // Isha by minutes after Maghrib no later than the middle of the night (Maghrib to the next Fajr): "the time of
@@ -291,7 +300,7 @@ final class PrayerDay {
     }
 
     /** The local day's times, on the date line too (below). */
-    private static Date[] localDay(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+    private static Date[] localDay(Method method, Object table, Coordinates where, DateComponents date,
                                    CalculationParameters params, String high) {
         // adhan-java keeps the day's Dhuhr inside that date in UTC. Where local noon comes before 00:00 UTC (east of
         // about 172°E on UTC+12 to +14: Tonga, Samoa, Wallis and Kiribati's Line Islands all year, Fiji, Tuvalu, New
@@ -319,7 +328,7 @@ final class PrayerDay {
      * the local day, else the nearest, its times moved the days between (a few minutes at most there). Anywhere else
      * this is the date itself (1.25.2a).
      */
-    private static Date[] nearSoundDay(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+    private static Date[] nearSoundDay(Method method, Object table, Coordinates where, DateComponents date,
                                        CalculationParameters params, String high) {
         DateComponents best = null;
         int bestShift = 0;
@@ -368,17 +377,22 @@ final class PrayerDay {
     }
 
     /** The six times adhan-java (or Habous, or the rules above 48°) gives for date. */
-    private static Date[] onDate(Method method, Habous.Locality table, Coordinates where, DateComponents date,
+    private static Date[] onDate(Method method, Object table, Coordinates where, DateComponents date,
                                  CalculationParameters params, String high) {
+        Date[] official = null;
         if (method == Method.MOROCCO_HABOUS) {
-            Coordinates at = table != null ? new Coordinates(table.lat, table.lng) : where;
-            Date[] t = Habous.times(at, date, params.madhab, table != null ? table.horizon : Habous.COAST);
-            if (t != null) {
-                PrayerAdjustments a = params.adjustments;
-                int[] minutes = {a.fajr, a.sunrise, a.dhuhr, a.asr, a.maghrib, a.isha};
-                for (int i = 0; i < 6; i++) t[i] = new Date(t[i].getTime() + minutes[i] * 60_000L);
-                return t;
-            }
+            Habous.Locality l = table instanceof Habous.Locality ? (Habous.Locality) table : null;
+            Coordinates at = l != null ? new Coordinates(l.lat, l.lng) : where;
+            official = Habous.times(at, date, params.madhab, l != null ? l.horizon : Habous.COAST);
+        } else if (method == Method.JAKIM && table instanceof Jakim.Zone) {
+            // Malaysia: the zone's own times, as JAKIM's timetable gives them (Jakim).
+            official = ((Jakim.Zone) table).times(date, params.madhab);
+        }
+        if (official != null) {
+            PrayerAdjustments a = params.adjustments;
+            int[] minutes = {a.fajr, a.sunrise, a.dhuhr, a.asr, a.maghrib, a.isha};
+            for (int i = 0; i < 6; i++) official[i] = new Date(official[i].getTime() + minutes[i] * 60_000L);
+            return official;
         }
         PrayerTimes p = new PrayerTimes(where, date, params);
         Date[] local = null;

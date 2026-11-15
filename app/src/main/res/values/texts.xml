@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
     <string name="iqamaRow" formatted="false">"Iqamah time"</string>
     <string name="iqamaToday" formatted="false">"Iqamah today "</string>
+    <string name="jakimAngles" formatted="false">"Fajr 18° · Isha 18° · by JAKIM's zone timetables"</string>
+    <string name="jakimAngles_2" formatted="false">"Outside Malaysia: Fajr 18° · Isha 18° · with JAKIM's margins"</string>
+    <string name="jakimChooser" formatted="false">"JAKIM publishes one timetable for each zone. These are the nearest to your location."</string>
+    <string name="jakimCredit" formatted="false">"Fitted to the timetables of JAKIM, Malaysia's Department of Islamic Development (e-solat.gov.my)"</string>
+    <string name="jakimCreditRow" formatted="false">"Malaysia's times"</string>
+    <string name="jakimFileHelp" formatted="false">"Which of JAKIM's zones the TV follows in Malaysia"</string>
+    <string name="jakimHelp_2" formatted="false">"The zone of JAKIM's nearest town, %1$s km away"</string>
+    <string name="jakimRow" formatted="false">"JAKIM zone"</string>
     <string name="jumuah" formatted="false">"Jumu'ah"</string>
     <string name="jumuahLabel" formatted="false">"JUMU'AH"</string>
     <string name="kahf" formatted="false">"Surat Al-Kahf today"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"Ministry of Habous, Morocco"</string>
     <string name="methodName_12" formatted="false">"Egyptian General Authority of Survey"</string>
     <string name="methodName_13" formatted="false">"Institute of Geophysics, University of Tehran"</string>
+    <string name="methodName_14" formatted="false">"JAKIM, Malaysia"</string>
     <string name="methodName_2" formatted="false">"Muslim World League"</string>
     <string name="methodName_3" formatted="false">"University of Islamic Sciences, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubai"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"Spanish"</item>
         <item>"Every screen in Spanish, in the terms of Spain's mosques, with reciters and surahs named in Spanish. Pick it from the globe button on Home."</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"Malaysia's official times"</item>
+        <item>"A new method: JAKIM, with each of Malaysia's zones on its own timetable, as e-Solat publishes it. A location in Malaysia starts from it and takes its zone by itself: Settings › Prayer times › JAKIM zone changes it. Imsak in Ramadan: 10 minutes, as in JAKIM's tables."</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"Indonesian and Persian"</item>

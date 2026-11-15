@@ -118,6 +118,18 @@ final class SettingsFile {
         }
         out.add(new Item(Habous.PREF, INT_CHOICE, t.habousRow()).help(t.habousFileHelp()).choices(tables, tableNames).def(0)
             .when("method", Method.MOROCCO_HABOUS.id));
+        // JAKIM's method: which of Malaysia's zones ("automatic", none saved: the zone of the place's nearest e-Solat town).
+        List<Jakim.Zone> zones = Jakim.all(c);
+        String[] zoneCodes = new String[zones.size() + 1];
+        String[] zoneNames = new String[zoneCodes.length];
+        zoneCodes[0] = Jakim.AUTOMATIC;
+        zoneNames[0] = t.habousAuto();
+        for (int i = 0; i < zones.size(); i++) {
+            zoneCodes[i + 1] = zones.get(i).code;
+            zoneNames[i + 1] = zones.get(i).name();
+        }
+        out.add(new Item(Jakim.PREF, STR_CHOICE, t.jakimRow()).help(t.jakimFileHelp()).choices(zoneCodes, zoneNames)
+            .def(Jakim.AUTOMATIC).when("method", Method.JAKIM.id));
         // The custom calculation (1.24.0): on, it stands in for the method; its values start as the method's.
         out.add(new Item("calc_custom", BOOL, t.calcRow()).help(t.calcFileHelp()).def(false));
         Method[] bases = Prefs.calcBases();
@@ -157,7 +169,7 @@ final class SettingsFile {
         out.add(new Item("friday_fixed", TIME, t.fridayTimeRow()).help(t.fridayTimeHelp() + t.sepPlain() + t.fridayFixedNote())
             .range(11 * 60, 14 * 60).def(12 * 60 + 30).when("friday_mode", Prefs.FRIDAY_FIXED));
         out.add(new Item("imsak", INT_CHOICE, t.imsakRow()).help(t.imsakHelp())
-            .choices(new Integer[] {0, 5, 10, 15, 20}, t.imsakChoices()).def(0));
+            .choices(new Integer[] {0, 5, 10, 15, 20}, t.imsakChoices()).depends(t.byCountry(), Prefs::imsak));
 
         // Iqamah
         Item mode = new Item("iqama_mode", INT_CHOICE, t.iqamaRow())

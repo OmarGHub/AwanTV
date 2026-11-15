@@ -66,11 +66,22 @@ final class Method {
      * {@link PrayerDay} works it out with adhan-java's own sun ({@link #maghribAngle}).
      */
     static final Method TEHRAN = new Method("TEHRAN", null);
+    /**
+     * Malaysia's JAKIM (Department of Islamic Development, 1.26.0a): its e-Solat zone times, see {@link Jakim}, which
+     * computes them in Malaysia. These parameters stand in elsewhere: Fajr and Isha at 18° and the minutes its tables
+     * add to the bare sun at a zone's towns (the median over 59 zones, 2024-2026: Fajr +1, sunrise -1, Dhuhr +2, Asr,
+     * Maghrib and Isha +1).
+     */
+    static final Method JAKIM = new Method("JAKIM", null);
 
     /** Fresh parameters on every call: callers set the Asr school and adjustments on them. */
     CalculationParameters parameters() {
         if (base != null) return base.getParameters();
         if (this == TEHRAN) return new CalculationParameters(17.7, 14.0, CalculationMethod.OTHER);
+        if (this == JAKIM) {
+            return new CalculationParameters(18.0, 18.0, CalculationMethod.OTHER)
+                .withMethodAdjustments(new PrayerAdjustments(1, -1, 2, 1, 1, 1));
+        }
         if (this == MOROCCO_HABOUS) {
             return new CalculationParameters(19.0, 17.0, CalculationMethod.OTHER)
                 .withMethodAdjustments(new PrayerAdjustments(0, 0, 5, 0, 0, 0));

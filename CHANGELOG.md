@@ -6,7 +6,25 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Malaysia's official times: a new method, JAKIM (the Department of Islamic Development Malaysia), with each of its
+  zones on its own timetable as e-Solat publishes it. JAKIM gives a zone one time, taken at its far side with a
+  precaution and the minute rounded up; `assets/jakim/zones.tsv` holds, for each of 59 zones and each prayer, the
+  points and margin read off JAKIM's 2025 and 2026 tables, and the app computes the times with the same sun code
+  (`JakimSun`). Against the tables: 94.0% of the times exact and 99.9% within a minute on the years fitted, 91.7% and
+  98.7% on 2024, which was kept out to check them (the Moon Sighting Committee's method, used for Malaysia before: 8%
+  exact, 45% within a minute). A location in Malaysia starts from it and takes the zone of its nearest e-Solat town
+  (a place within 30 km of one over the border too, with JAKIM's method chosen); Settings > Prayer times > JAKIM zone
+  offers the ten nearest. Outside Malaysia the method is Fajr and Isha at
+  18° with JAKIM's margins. Kuala Lumpur and Penang in the city list take it too.
+- Imsak in Ramadan is 10 minutes by default with JAKIM's method in Malaysia: JAKIM's tables give Imsak ten minutes
+  before Subuh in every zone. Elsewhere it stays off by default.
+- About > Sources and licences: Malaysia's times.
+
 ### The repository
+- `tools/AwanTV-build-jakim.ps1` 1.0.0 (with `tools/jakim/BuildJakim.java` and `tools/jakim/zones.tsv`): fits the
+  zones from the timetables AwanTV-fetch-jakim saved and writes `assets/jakim/zones.tsv`, printing each zone's match.
+- `tools/AwanTV-texts-sheet.py` 1.1.3: Persian's column named.
 - `tools/AwanTV-fetch-jakim.ps1` 1.0.0: JAKIM's e-Solat timetables for every Malaysian zone, a year each (2024 to
   2026 by default), into state\jakim for building and checking a JAKIM method; resumes where it stopped and packs
   them into one zip. The app never carries them.

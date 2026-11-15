@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
     <string name="iqamaRow" formatted="false">"Heure de l'iqama"</string>
     <string name="iqamaToday" formatted="false">"Iqama aujourd'hui "</string>
+    <string name="jakimAngles" formatted="false">"Fajr 18° · Isha 18° · selon les tableaux par zone de JAKIM"</string>
+    <string name="jakimAngles_2" formatted="false">"Hors de Malaisie : Fajr 18° · Isha 18° · avec les marges de JAKIM"</string>
+    <string name="jakimChooser" formatted="false">"JAKIM publie un tableau pour chaque zone. Voici les plus proches de votre lieu."</string>
+    <string name="jakimCredit" formatted="false">"Ajusté aux horaires de JAKIM, le département du développement islamique de Malaisie (e-solat.gov.my)"</string>
+    <string name="jakimCreditRow" formatted="false">"Horaires de la Malaisie"</string>
+    <string name="jakimFileHelp" formatted="false">"Which of JAKIM's zones the TV follows in Malaysia"</string>
+    <string name="jakimHelp_2" formatted="false">"La zone de la ville de JAKIM la plus proche, à %1$s km"</string>
+    <string name="jakimRow" formatted="false">"Zone JAKIM"</string>
     <string name="jumuah" formatted="false">"Jumua"</string>
     <string name="jumuahLabel" formatted="false">"JUMUA"</string>
     <string name="kahf" formatted="false">"Sourate Al-Kahf aujourd'hui"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"Ministère des Habous, Maroc"</string>
     <string name="methodName_12" formatted="false">"Autorité générale égyptienne de topographie"</string>
     <string name="methodName_13" formatted="false">"Institut de géophysique, Université de Téhéran"</string>
+    <string name="methodName_14" formatted="false">"JAKIM, Malaisie"</string>
     <string name="methodName_2" formatted="false">"Ligue islamique mondiale"</string>
     <string name="methodName_3" formatted="false">"Université des sciences islamiques, Karachi"</string>
     <string name="methodName_4" formatted="false">"Dubaï"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"Espagnol"</item>
         <item>"Tous les écrans en espagnol, dans les termes des mosquées d'Espagne, avec les récitateurs et les sourates nommés en espagnol. Choisissez cette langue avec le bouton globe de l'accueil."</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"Les horaires officiels de la Malaisie"</item>
+        <item>"Une nouvelle méthode : JAKIM, chaque zone de la Malaisie avec son propre tableau, tel que e-Solat le publie. Un lieu en Malaisie part de celle-ci et prend sa zone de lui-même : Paramètres › Horaires de prière › Zone JAKIM pour la changer. Imsak pendant le Ramadan : 10 minutes, comme dans les tableaux de JAKIM."</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"Indonésien et persan"</item>

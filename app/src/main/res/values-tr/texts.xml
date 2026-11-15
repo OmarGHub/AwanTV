@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"%1$s iqamah in Ramadan"</string>
     <string name="iqamaRow" formatted="false">"Kamet vakti"</string>
     <string name="iqamaToday" formatted="false">"Bugün kamet "</string>
+    <string name="jakimAngles" formatted="false">"Sabah 18° · Yatsı 18° · JAKIM'in bölge tablolarıyla"</string>
+    <string name="jakimAngles_2" formatted="false">"Malezya dışında: Sabah 18° · Yatsı 18° · JAKIM'in paylarıyla"</string>
+    <string name="jakimChooser" formatted="false">"JAKIM her bölge için bir tablo yayımlar. Bunlar konumunuza en yakın olanlar."</string>
+    <string name="jakimCredit" formatted="false">"Malezya İslami Kalkınma Dairesi JAKIM'in (e-solat.gov.my) vakit tablolarına göre ayarlandı"</string>
+    <string name="jakimCreditRow" formatted="false">"Malezya vakitleri"</string>
+    <string name="jakimFileHelp" formatted="false">"Which of JAKIM's zones the TV follows in Malaysia"</string>
+    <string name="jakimHelp_2" formatted="false">"JAKIM'in en yakın şehrinin bölgesi, %1$s km uzakta"</string>
+    <string name="jakimRow" formatted="false">"JAKIM bölgesi"</string>
     <string name="jumuah" formatted="false">"Cuma"</string>
     <string name="jumuahLabel" formatted="false">"CUMA"</string>
     <string name="kahf" formatted="false">"Bugün Kehf Suresi"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"Vakıflar Bakanlığı, Fas"</string>
     <string name="methodName_12" formatted="false">"Mısır Genel Harita Kurumu"</string>
     <string name="methodName_13" formatted="false">"Tahran Üniversitesi Jeofizik Enstitüsü"</string>
+    <string name="methodName_14" formatted="false">"JAKIM, Malezya"</string>
     <string name="methodName_2" formatted="false">"Dünya İslâm Birliği"</string>
     <string name="methodName_3" formatted="false">"İslami İlimler Üniversitesi, Karaçi"</string>
     <string name="methodName_4" formatted="false">"Dubai"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"İspanyolca"</item>
         <item>"Her ekran İspanyolca, İspanya'daki camilerin terimleriyle; kâriler ve sureler de İspanyolca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"Malezya'nın resmî vakitleri"</item>
+        <item>"Yeni bir yöntem: JAKIM; Malezya'nın her bölgesi, e-Solat'ın yayımladığı gibi kendi tablosuyla. Malezya'daki bir konum bununla başlar ve bölgesini kendisi alır: Ayarlar › Namaz vakitleri › JAKIM bölgesi ile değiştirilir. Ramazan'da ihtiyat payı: JAKIM'in tablolarındaki gibi 10 dakika."</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"Endonezce ve Farsça"</item>

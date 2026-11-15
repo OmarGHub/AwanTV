@@ -246,10 +246,10 @@ public class SettingsTransfer extends BroadcastReceiver {
         }
     }
 
-    /** What the city list sets with a place: the place itself, its method and Asr school, Morocco's table. */
+    /** What the city list sets with a place: the place itself, its method and Asr school, Morocco's table, Malaysia's zone. */
     private static boolean place(String key) {
         return key.equals("city") || key.startsWith("custom_") || key.equals("method") || key.equals("madhab")
-            || key.equals(Habous.PREF);
+            || key.equals(Habous.PREF) || key.equals(Jakim.PREF);
     }
 
     static boolean local(String key) {

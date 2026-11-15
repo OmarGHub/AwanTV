@@ -478,6 +478,7 @@ final class Text {
         if (m == Method.OMAN_AWQAF) return s(R.string.methodName_10);
         if (m == Method.MOROCCO_HABOUS) return s(R.string.methodName_11);
         if (m == Method.TEHRAN) return s(R.string.methodName_13);
+        if (m == Method.JAKIM) return s(R.string.methodName_14);
         return s(R.string.methodName_12);
     }
 
@@ -507,6 +508,21 @@ final class Text {
     String habousItem(String name, int km) { return d(name + "  ·  " + km + (s(R.string.habousItem))); }
     String habousAuto() { return s(R.string.habousAuto); }
     String habousFileHelp() { return s(R.string.habousFileHelp); }
+
+    /** JAKIM's method under its name: in Malaysia by its zones' timetables, elsewhere its angles with its margins. */
+    String jakimAngles(boolean zone) {
+        return d(zone ? s(R.string.jakimAngles) : s(R.string.jakimAngles_2));
+    }
+
+    /** Settings > Prayer times > JAKIM zone (Malaysia): chosen (Morocco's words serve), or the nearest town's zone. */
+    String jakimRow() { return s(R.string.jakimRow); }
+    String jakimHelp(int km, boolean chosen) {
+        return d(chosen ? s(R.string.habousHelp, km) : s(R.string.jakimHelp_2, km));
+    }
+    String jakimChooser() { return s(R.string.jakimChooser); }
+    /** A zone in the list: its code and towns as JAKIM writes them ("WLY01", Latin digits whatever the screen's), then the distance. */
+    String jakimItem(String zone, int km) { return zone + d("  ·  " + km + s(R.string.habousItem)); }
+    String jakimFileHelp() { return s(R.string.jakimFileHelp); }
 
     private static String trim(double v) {
         return v == Math.rint(v) ? String.valueOf((int) v) : String.valueOf(v);
@@ -575,6 +591,12 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.26.0": {
+                // Its minutes in the viewer's digits.
+                String[] lines = a(R.array.news_1_26_0);
+                for (int i = 0; i < lines.length; i++) lines[i] = d(lines[i]);
+                return pairs(lines, 2);
+            }
             case "1.25.0": {
                 // Its degrees in the viewer's digits.
                 String[] lines = a(R.array.news_1_25_0);
@@ -1173,6 +1195,8 @@ final class Text {
     String citiesCredit() { return s(R.string.citiesCredit); }
     String habousCreditRow() { return s(R.string.habousCreditRow); }
     String habousCredit() { return s(R.string.habousCredit); }
+    String jakimCreditRow() { return s(R.string.jakimCreditRow); }
+    String jakimCredit() { return s(R.string.jakimCredit); }
     String citiesCreditLong() { return s(R.string.citiesCreditLong); }
     String placeSave() { return s(R.string.placeSave); }
     String placeCancel() { return s(R.string.placeCancel); }

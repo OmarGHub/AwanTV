@@ -203,15 +203,15 @@ final class Prefs {
         new City("colombo", "كولمبو", "Colombo", "سريلانكا", "Sri Lanka", 6.9271, 79.8612, IN),
         new City("male", "ماليه", "Malé", "المالديف", "Maldives", 4.1755, 73.5093, MWL),
 
-        // Southeast Asia. Indonesia (Kemenag), Singapore (MUIS) and Brunei use 20°/18°. Malaysia (JAKIM) moved Subuh to
-        // 18° in 2020; adhan-java has no JAKIM method, and Moon Sighting Committee came within 2 minutes of every
-        // e-solat time for Kuala Lumpur (2026-10-22), where Singapore's 20° put Fajr 10 minutes early.
+        // Southeast Asia. Indonesia (Kemenag), Singapore (MUIS) and Brunei use 20°/18°. Malaysia takes JAKIM's own zone
+        // times (Method.JAKIM, 1.26.0a; Subuh at 18° since 2020): the Moon Sighting Committee's, used before, put 8% of
+        // e-Solat's minutes exactly (2024-2026, 59 zones).
         new City("jakarta", "جاكرتا", "Jakarta", "إندونيسيا", "Indonesia", -6.2088, 106.8456, SG),
         new City("surabaya", "سورابايا", "Surabaya", "إندونيسيا", "Indonesia", -7.2575, 112.7521, SG),
         new City("bandung", "باندونغ", "Bandung", "إندونيسيا", "Indonesia", -6.9175, 107.6191, SG),
         new City("medan", "ميدان", "Medan", "إندونيسيا", "Indonesia", 3.5952, 98.6722, SG),
-        new City("kualalumpur", "كوالالمبور", "Kuala Lumpur", "ماليزيا", "Malaysia", 3.1390, 101.6869, Method.MOON_SIGHTING_COMMITTEE),
-        new City("penang", "بينانغ", "Penang", "ماليزيا", "Malaysia", 5.4164, 100.3327, Method.MOON_SIGHTING_COMMITTEE),
+        new City("kualalumpur", "كوالالمبور", "Kuala Lumpur", "ماليزيا", "Malaysia", 3.1390, 101.6869, Method.JAKIM),
+        new City("penang", "بينانغ", "Penang", "ماليزيا", "Malaysia", 5.4164, 100.3327, Method.JAKIM),
         new City("singapore", "سنغافورة", "Singapore", "سنغافورة", "Singapore", 1.3521, 103.8198, SG),
         new City("brunei", "بندر سري بكاوان", "Bandar Seri Begawan", "بروناي", "Brunei", 4.9031, 114.9398, SG),
         new City("bangkok", "بانكوك", "Bangkok", "تايلاند", "Thailand", 13.7563, 100.5018, SG),
@@ -368,7 +368,7 @@ final class Prefs {
         e.putString("city", CUSTOM).putString("custom_name", name).putString("custom_cc", cc == null ? "" : cc)
             .putLong("custom_lat", Double.doubleToLongBits(lat)).putLong("custom_lng", Double.doubleToLongBits(lng))
             .putString("method", methodId(m)).putString("madhab", h == Madhab.HANAFI ? "hanafi" : "shafi")
-            .remove(Habous.PREF).apply();   // a new place: Morocco's table found again for it
+            .remove(Habous.PREF).remove(Jakim.PREF).apply();   // a new place: Morocco's table, Malaysia's zone found again for it
     }
 
     /** The region of the other places, after the six of {@link #REGIONS} in the first list. */
@@ -380,7 +380,8 @@ final class Prefs {
         SharedPreferences.Editor e = of(c).edit();
         placeReset = leavePlace(c, e);
         e.putString("city", city.id).putString("method", methodId(city.method))
-            .putString("madhab", city.madhab == Madhab.HANAFI ? "hanafi" : "shafi").remove(Habous.PREF).apply();
+            .putString("madhab", city.madhab == Madhab.HANAFI ? "hanafi" : "shafi").remove(Habous.PREF)
+            .remove(Jakim.PREF).apply();
     }
 
     /**
@@ -413,11 +414,11 @@ final class Prefs {
 
     // ---------------------------------------------------------------- calculation
 
-    /** Settings' list: adhan-java's methods, with Oman's and Morocco's ministries and Tehran's institute after Qatar. */
+    /** Settings' list: adhan-java's methods, with Oman's and Morocco's ministries, Tehran's institute and JAKIM after Qatar. */
     static final Method[] METHODS = {
         Method.EGYPTIAN, Method.UMM_AL_QURA, Method.MUSLIM_WORLD_LEAGUE,
         Method.KARACHI, Method.DUBAI, Method.KUWAIT, Method.QATAR,
-        Method.OMAN_AWQAF, Method.MOROCCO_HABOUS, Method.TEHRAN,
+        Method.OMAN_AWQAF, Method.MOROCCO_HABOUS, Method.TEHRAN, Method.JAKIM,
         Method.NORTH_AMERICA, Method.MOON_SIGHTING_COMMITTEE, Method.SINGAPORE};
 
     /** What Settings saves for a method (the settings file and the editor show it). */
@@ -896,10 +897,14 @@ final class Prefs {
     /**
      * Ramadan's imsak, minutes before Fajr (0, 5, 10, 15, 20). Off by default: suhoor ends at Fajr,
      * and no official body found publishes a fixed number (Egypt's Dar al-Ifta: stop just before the Fajr adhan;
-     * Dubai's fatwa department: about ten minutes before is a recommended precaution, not an obligation).
+     * Dubai's fatwa department: about ten minutes before is a recommended precaution, not an obligation). Malaysia's
+     * is the exception (1.26.0a): JAKIM's timetables give Imsak ten minutes before Subuh in every zone, so with its
+     * method and a zone (in Malaysia) the default is 10.
      */
     static int imsak(Context c) {
-        return of(c).getInt("imsak", 0);
+        SharedPreferences p = of(c);
+        if (p.contains("imsak")) return p.getInt("imsak", 0);
+        return method(c) == Method.JAKIM && !calcOn(c) && Jakim.zone(c) != null ? 10 : 0;
     }
 
     static void setImsak(Context c, int minutes) {
@@ -972,7 +977,7 @@ final class Prefs {
         SharedPreferences p = of(c);
         return p.getString("locale", "") + "|" + p.getString("digits", "") + "|" + clock24(c) + "|" + city(c).id + "|" + city(c).lat + "," + city(c).lng
             + "|" + city(c).ar
-            + "|" + method(c) + "|" + p.getInt(Habous.PREF, 0) + "|" + madhab(c) + "|" + hijriOffset(c) + "|" + java.util.Arrays.toString(adjustments(c))
+            + "|" + method(c) + "|" + p.getInt(Habous.PREF, 0) + "|" + p.getString(Jakim.PREF, "") + "|" + madhab(c) + "|" + hijriOffset(c) + "|" + java.util.Arrays.toString(adjustments(c))
             + "|" + calcKey(c)
             + "|" + p.getInt("facing", -1) + "|" + theme(c)
             + "|" + background(c) + "|" + photoEvery(c)

@@ -204,7 +204,8 @@ final class Places {
             case "US": case "CA": return Method.NORTH_AMERICA;
             case "IN": case "PK": case "BD": case "LK": return Method.KARACHI;
             case "ID": case "SG": case "BN": case "TH": return Method.SINGAPORE;
-            case "MY": return Method.MOON_SIGHTING_COMMITTEE;
+            // Malaysia's JAKIM: its zone timetables (Method.JAKIM, Jakim).
+            case "MY": return Method.JAKIM;
             case "JO": case "PS": case "LB": case "SY": case "IQ": case "BH": case "YE": case "MV":
             case "JP": case "KR": case "TR": case "GB": case "FR": case "DE": case "NL": case "BE": case "AT":
             case "CH": case "IT": case "ES": case "BA": case "KE": case "NG": case "ZA": case "AU": case "NZ":

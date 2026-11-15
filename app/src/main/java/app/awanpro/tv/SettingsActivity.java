@@ -738,7 +738,7 @@ public class SettingsActivity extends Screen {
         switch (s) {
             case PRAYER: if (adjustOpen) return adjustRows();
                 if (calcOpen) return calcRows();
-                return withHabous(Arrays.asList(
+                return withTable(Arrays.asList(
                 new Row(VALUE) {
                     String label() { return t.location(); }
                     String help() {
@@ -771,7 +771,9 @@ public class SettingsActivity extends Screen {
                         Prefs.Calc k = Prefs.calc(c);
                         if (k != null) return t.calcSummary(k);
                         Method m = Prefs.method(c);
-                        return m == Method.MOROCCO_HABOUS ? t.habousAngles(Habous.table(c) != null) : t.methodAngles(m);
+                        if (m == Method.MOROCCO_HABOUS) return t.habousAngles(Habous.table(c) != null);
+                        if (m == Method.JAKIM) return t.jakimAngles(Jakim.zone(c) != null);
+                        return t.methodAngles(m);
                     }
                     boolean warn() { return Prefs.placeReset; }
                     String value() { return Prefs.calcOn(c) ? t.calcName() : t.methodName(Prefs.method(c)); }
@@ -796,8 +798,8 @@ public class SettingsActivity extends Screen {
                             }
                             Prefs.setMethod(c, Prefs.METHODS[i]);
                             showSaved();
-                            // Morocco's method brings its Ministry table row, another takes it away.
-                            if (habousShown != (habousTable() != null)) root.post(() -> { showSection(); focusRow(1); });
+                            // Morocco's method brings its Ministry table row, JAKIM's its zone row, another takes it away.
+                            if (tableShown != tableKind()) root.post(() -> { showSection(); focusRow(1); });
                         });
                     }
                 },
@@ -1261,8 +1263,8 @@ public class SettingsActivity extends Screen {
             if (statusOpen && !onNav) {
                 showSection();
                 focusRow(Math.min(rowIndex, rows.size() - 1));
-            } else if (section == PRAYER && !adjustOpen && !calcOpen && habousShown != (habousTable() != null)) {
-                // Back from Another place with a place in Morocco (or out of it): the Ministry table row comes or goes.
+            } else if (section == PRAYER && !adjustOpen && !calcOpen && tableShown != tableKind()) {
+                // Back from Another place with a place in Morocco or Malaysia (or out of it): the table's row comes or goes.
                 showSection();
                 focusRow(Math.min(rowIndex, rows.size() - 1));
             } else {
@@ -1382,20 +1384,43 @@ public class SettingsActivity extends Screen {
      * Prayer times' own rows, then Friday's khutbah (by country, at Dhuhr or
      * a fixed time, whose time row shows only then) and Ramadan's imsak (none by default). Eight rows at most.
      */
-    /** Whether Prayer times shows the Ministry table row (built with it), for a rebuild when that changes. */
-    private boolean habousShown;
+    /** Which official table's row Prayer times shows after the method (built with it), for a rebuild when that changes. */
+    private int tableShown;
+    private static final int NO_TABLE = 0, HABOUS_TABLE = 1, JAKIM_TABLE = 2;
+
+    /** The official table the place takes with the chosen method (not with a custom calculation), as tableShown counts it. */
+    private int tableKind() {
+        if (Prefs.calcOn(this)) return NO_TABLE;
+        Object table = PrayerDay.officialTable(this, Prefs.method(this));
+        return table instanceof Habous.Locality ? HABOUS_TABLE : table instanceof Jakim.Zone ? JAKIM_TABLE : NO_TABLE;
+    }
 
     /** The ministry's table the place takes when Morocco's method is chosen; null otherwise. */
     private Habous.Locality habousTable() {
         return Prefs.method(this) == Method.MOROCCO_HABOUS && !Prefs.calcOn(this) ? Habous.table(this) : null;
     }
 
-    /** Prayer times' rows, with Morocco's Ministry table after the method when it applies, then Friday and imsak. */
-    private List<Row> withHabous(List<Row> prayer) {
-        Context c = this;
+    /** The JAKIM zone the place takes when JAKIM's method is chosen (in Malaysia); null otherwise. */
+    private Jakim.Zone jakimZone() {
+        return Prefs.method(this) == Method.JAKIM && !Prefs.calcOn(this) ? Jakim.zone(this) : null;
+    }
+
+    /**
+     * Prayer times' rows, with the official table after the method when it applies (Morocco's Ministry table, Malaysia's
+     * JAKIM zone), then Friday and imsak.
+     */
+    private List<Row> withTable(List<Row> prayer) {
         List<Row> out = new ArrayList<>(prayer);
-        habousShown = habousTable() != null;
-        if (habousShown) out.add(2, new Row(VALUE) {
+        tableShown = tableKind();
+        if (tableShown == HABOUS_TABLE) out.add(2, habousRow());
+        if (tableShown == JAKIM_TABLE) out.add(2, jakimRow());
+        return withFridayAndImsak(out);
+    }
+
+    /** Settings > Prayer times > Ministry table (Morocco): the ten nearest of the ministry's localities. */
+    private Row habousRow() {
+        Context c = this;
+        return new Row(VALUE) {
             String label() { return t.habousRow(); }
             String help() {
                 Habous.Locality l = habousTable();
@@ -1408,7 +1433,7 @@ public class SettingsActivity extends Screen {
             void open() {
                 Prefs.City city = Prefs.city(c);
                 List<Habous.Locality> near = Habous.nearest(c, city.lat, city.lng);
-                near = new ArrayList<>(near.subList(0, Math.min(HABOUS_CHOICES, near.size())));
+                near = new ArrayList<>(near.subList(0, Math.min(TABLE_CHOICES, near.size())));
                 Habous.Locality now = habousTable();
                 // The one in use first when it is not among the nearest (chosen before, far off).
                 if (now != null && !near.contains(now)) near.add(0, now);
@@ -1427,12 +1452,53 @@ public class SettingsActivity extends Screen {
                     showSaved();
                 }, null);
             }
-        });
-        return withFridayAndImsak(out);
+        };
     }
 
-    /** How many of the ministry's localities the Ministry table list offers, nearest first. */
-    private static final int HABOUS_CHOICES = 10;
+    /**
+     * Settings > Prayer times > JAKIM zone (Malaysia): the ten zones whose e-Solat towns are nearest. Each zone by its
+     * code and towns as e-Solat names them (Malay names, the same in every language).
+     */
+    private Row jakimRow() {
+        Context c = this;
+        return new Row(VALUE) {
+            String label() { return t.jakimRow(); }
+            String help() {
+                Jakim.Zone z = jakimZone();
+                Prefs.City city = Prefs.city(c);
+                if (z == null) return "";
+                return t.jakimHelp((int) Math.round(z.km(city.lat, city.lng)), Prefs.of(c).contains(Jakim.PREF));
+            }
+            String value() { Jakim.Zone z = jakimZone(); return z == null ? "" : z.shortName(); }
+            void open() {
+                Prefs.City city = Prefs.city(c);
+                List<Jakim.Zone> near = Jakim.nearest(c, city.lat, city.lng);
+                near = new ArrayList<>(near.subList(0, Math.min(TABLE_CHOICES, near.size())));
+                Jakim.Zone now = jakimZone();
+                if (now != null && !near.contains(now)) near.add(0, now);
+                String[] names = new String[near.size()];
+                int sel = 0;
+                for (int i = 0; i < names.length; i++) {
+                    Jakim.Zone z = near.get(i);
+                    names[i] = t.jakimItem(z.name(ZONE_CHARS), (int) Math.round(z.km(city.lat, city.lng)));
+                    if (z == now) sel = i;
+                }
+                List<Jakim.Zone> list = near;
+                openChooser(t.jakimRow(), t.jakimChooser(), names, sel, i -> {
+                    // The automatic one picked again stays automatic (it follows a new place by itself).
+                    Jakim.Zone pick = list.get(i);
+                    Jakim.choose(c, pick == Jakim.automatic(c) ? null : pick.code);
+                    showSaved();
+                }, null);
+            }
+        };
+    }
+
+    /** A JAKIM zone's code and towns in its list, letters at most before "…" (the list is 900 px wide). */
+    private static final int ZONE_CHARS = 36;
+
+    /** How many localities (Morocco) or zones (Malaysia) the official table's list offers, nearest first. */
+    private static final int TABLE_CHOICES = 10;
 
     private List<Row> withFridayAndImsak(List<Row> prayer) {
         Context c = this;
@@ -1984,7 +2050,7 @@ public class SettingsActivity extends Screen {
                     // The adjustments back to Prayer times, on their row.
                     adjustOpen = false;
                     showSection();
-                    focusRow(ADJUST_ROW + (habousShown ? 1 : 0));
+                    focusRow(ADJUST_ROW + (tableShown != NO_TABLE ? 1 : 0));
                 }
                 else if (calcOpen) {
                     // The custom calculation back to Prayer times, on the method's row.
@@ -2265,7 +2331,7 @@ public class SettingsActivity extends Screen {
     /** About's row of the sources (its place in the list), for Back from their page. */
     private static final int CREDITS_ROW = 6;
 
-    /** Where Awan TV comes from and what it carries: Afnon, the weather, the cities, Morocco's tables, the recitations, the adhan. */
+    /** Where Awan TV comes from and what it carries: Afnon, the weather, the cities, Morocco's and Malaysia's tables, the recitations, the adhan. */
     private List<Row> creditRows() {
         Context c = this;
         List<Row> out = new ArrayList<>(Arrays.asList(
@@ -2284,6 +2350,10 @@ public class SettingsActivity extends Screen {
             new Row(INFO) {
                 String label() { return t.habousCreditRow(); }
                 String help() { return t.habousCredit(); }
+            },
+            new Row(INFO) {
+                String label() { return t.jakimCreditRow(); }
+                String help() { return t.jakimCredit(); }
             },
             new Row(INFO) {
                 String label() { return t.libraryRow(); }

@@ -287,6 +287,14 @@
     <string name="iqamaRamadanRow" formatted="false">"إقامة %1$s في رمضان"</string>
     <string name="iqamaRow" formatted="false">"وقت الإقامة"</string>
     <string name="iqamaToday" formatted="false">"الإقامة اليوم "</string>
+    <string name="jakimAngles" formatted="false">"الفجر 18° · العشاء 18° · بجداول مناطق جاكيم"</string>
+    <string name="jakimAngles_2" formatted="false">"خارج ماليزيا: الفجر 18° · العشاء 18° · باحتياط جاكيم"</string>
+    <string name="jakimChooser" formatted="false">"تنشر جاكيم جدولًا واحدًا لكل منطقة. هذه أقربها إلى موقعك."</string>
+    <string name="jakimCredit" formatted="false">"مستخرجة من جداول دائرة التنمية الإسلامية الماليزية، جاكيم (e-solat.gov.my)"</string>
+    <string name="jakimCreditRow" formatted="false">"مواقيت ماليزيا"</string>
+    <string name="jakimFileHelp" formatted="false">"أي مناطق جاكيم تتبعها الشاشة في ماليزيا"</string>
+    <string name="jakimHelp_2" formatted="false">"منطقة أقرب مدن جاكيم إلى موقعك، على بعد %1$s كم"</string>
+    <string name="jakimRow" formatted="false">"منطقة جاكيم"</string>
     <string name="jumuah" formatted="false">"الجمعة"</string>
     <string name="jumuahLabel" formatted="false">"صلاة الجمعة"</string>
     <string name="kahf" formatted="false">"سورة الكهف اليوم"</string>
@@ -350,6 +358,7 @@
     <string name="methodName_11" formatted="false">"وزارة الأوقاف والشؤون الإسلامية، المملكة المغربية"</string>
     <string name="methodName_12" formatted="false">"الهيئة المصرية العامة للمساحة"</string>
     <string name="methodName_13" formatted="false">"معهد الجيوفيزياء، جامعة طهران"</string>
+    <string name="methodName_14" formatted="false">"دائرة التنمية الإسلامية (جاكيم)، ماليزيا"</string>
     <string name="methodName_2" formatted="false">"رابطة العالم الإسلامي"</string>
     <string name="methodName_3" formatted="false">"جامعة العلوم الإسلامية، كراتشي"</string>
     <string name="methodName_4" formatted="false">"دبي"</string>
@@ -775,6 +784,10 @@
     <string-array name="news_1_22_0">
         <item>"الإسبانية"</item>
         <item>"الواجهة كلها بالإسبانية بمصطلحات المساجد في إسبانيا، وأسماء القرّاء والسور بها. اخترها من زر الكرة الأرضية في الرئيسية."</item>
+    </string-array>
+    <string-array name="news_1_26_0">
+        <item>"مواقيت ماليزيا الرسمية"</item>
+        <item>"طريقة جديدة: دائرة التنمية الإسلامية الماليزية (جاكيم)، بجدول كل منطقة من مناطق ماليزيا كما ينشره موقعها e-Solat. والموقع في ماليزيا يبدأ بها ويأخذ منطقته وحده، وتغييرها من: الإعدادات ← مواقيت الصلاة ← منطقة جاكيم. والإمساك في رمضان 10 دقائق كما في جداولها."</item>
     </string-array>
     <string-array name="news_1_25_0">
         <item>"الإندونيسية والفارسية"</item>
