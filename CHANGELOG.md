@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.26.0]
+
 ### The app
 - Malaysia's official times: a new method, JAKIM (the Department of Islamic Development Malaysia), with each of its
   zones on its own timetable as e-Solat publishes it. JAKIM gives a zone one time, taken at its far side with a
