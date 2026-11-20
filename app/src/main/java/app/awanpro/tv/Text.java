@@ -520,8 +520,12 @@ final class Text {
         return d(chosen ? s(R.string.habousHelp, km) : s(R.string.jakimHelp_2, km));
     }
     String jakimChooser() { return s(R.string.jakimChooser); }
-    /** A zone in the list: its code and towns as JAKIM writes them ("WLY01", Latin digits whatever the screen's), then the distance. */
-    String jakimItem(String zone, int km) { return zone + d("  ·  " + km + s(R.string.habousItem)); }
+    /**
+     * A zone in the list: its code and towns as JAKIM writes them ("WLY01", Latin digits whatever the screen's), then the
+     * distance. The zone is isolated (LRI..PDI): left open, its Latin letters took the distance's digits into their run,
+     * so in Arabic the number sat at the far end of the line from its "كم" (1.26.0a on the TV).
+     */
+    String jakimItem(String zone, int km) { return "\u2066" + zone + "\u2069" + d("  ·  " + km + s(R.string.habousItem)); }
     String jakimFileHelp() { return s(R.string.jakimFileHelp); }
 
     private static String trim(double v) {
