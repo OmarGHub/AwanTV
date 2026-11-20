@@ -5,7 +5,7 @@ These parts belong to others.
 
 | What | Where | Licence |
 |---|---|---|
-| [adhan-java](https://github.com/batoulapps/adhan-java) by Batoul Apps | Gradle dependency | MIT, Copyright (c) 2016 Batoul Apps: `app/src/main/assets/licenses/adhan-java.txt` |
+| [adhan-java](https://github.com/batoulapps/adhan-java) 1.2.1 by Batoul Apps, with two fixes from [adhan-js](https://github.com/batoulapps/adhan-js) (pull request #243: the hour angle's bracketed iteration, Asr's noon shadow at the transit) | Source, `app/src/main/java/com/batoulapps/adhan` (since 1.26.1a; a Gradle dependency before) | MIT, Copyright (c) 2016 Batoul Apps: `app/src/main/assets/licenses/adhan-java.txt` (adhan-js: MIT, Batoul Apps) |
 | [Amiri](https://github.com/aliftype/amiri) by Khaled Hosny | `app/src/main/res/font/amiri_*.ttf` | SIL Open Font Licence 1.1: `app/src/main/assets/licenses/OFL.txt` |
 | [Alexandria](https://fonts.google.com/specimen/Alexandria) by Mohamed Gaber and Julieta Ulanovsky | `app/src/main/res/font/alexandria_*.ttf` | SIL Open Font Licence 1.1: `app/src/main/assets/licenses/OFL.txt` |
 | Adhan recordings from [abodehq/Athan-MP3](https://github.com/abodehq/Athan-MP3), which gathered them from [islamweb.net](https://www.islamweb.net) and [TvQuran.com](https://www.tvquran.com) (named in the files' own tags) | Not in the source. `tools/AwanTV-fetch-adhans.ps1` (or `.sh`) downloads them before building; the release APK carries them | None stated. Credited here and in Settings > About; any recording is removed on request from its rights holder. |

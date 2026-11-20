@@ -206,7 +206,5 @@ tasks.register('checkFonts') {
 }
 tasks.named('preBuild') { dependsOn 'checkFonts' }
 
-dependencies {
-    // Offline prayer-time calculation (no network, no transitive dependencies).
-    implementation 'com.batoulapps.adhan:adhan:1.2.1'
-}
+// No dependencies. adhan-java 1.2.1 (offline prayer-time calculation, MIT) is in the source since 1.26.1a,
+// app/src/main/java/com/batoulapps/adhan, with two fixes from adhan-js (see its README.md and THIRD_PARTY.md).

@@ -6,6 +6,22 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Prayer times closer to the sun, by two fixes from adhan-js (Batoul Apps' library for JavaScript, pull request #243,
+  after Awan TV's report, batoulapps/Adhan issue #117): adhan-java corrected each time once, so near the night's
+  lowest point it could overshoot, and it took Asr's noon shadow from the sun at 0h UT instead of at noon. Awan TV now
+  carries adhan-java 1.2.1 as source with both fixes (adhan-java itself won't get them).
+  - Isha before Maghrib is gone: on 12 days of 2027, in 12 cities of Britain, Germany, Belgium and Russia, Isha came
+    hours early (Goslar, 18 July: 16:18, Maghrib at 21:28; now 22:36).
+  - Against a precise ephemeris (4,000 random city-days below 48°), the right minute: Asr 68.3% to 98.4%, Isha 97.1%
+    to 98.5%, Fajr 99.0% to 99.4%; sunrise and Maghrib as before. Against the official tables in adhan's own test data
+    (Makkah, Doha, Dubai, Kuwait, Ankara, London, Singapore's whole year): Asr on the minute 255 to 301 of 450, every
+    other time as before.
+  - In 34,006 cities, every day of 2027: Asr changes on about a quarter of days (Hanafi a tenth), almost all by one
+    minute, at 48° and below (above it Asr was already the sun's own since 1.25.1); Isha on 2.3%, Fajr 0.6%, mostly
+    by a minute. At the edge of the polar night and day, the first sunrise and the last sunset now fall on the day the
+    sun gives (Talnakh: the first sunrise on 14 January 2027, not the 15th).
+
 ## [1.26.0]
 
 ### The app

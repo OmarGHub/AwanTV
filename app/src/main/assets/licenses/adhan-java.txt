@@ -1,4 +1,6 @@
-adhan-java 1.2.1 (https://github.com/batoulapps/adhan-java), the prayer time calculation library used by Awan TV.
+adhan-java 1.2.1 (https://github.com/batoulapps/adhan-java), the prayer time calculation library used by Awan TV,
+in its source since 1.26.1, with two fixes from adhan-js (https://github.com/batoulapps/adhan-js, pull request
+#243, MIT, Copyright (c) Batoul Apps): the hour angle's bracketed iteration and Asr's noon shadow at the transit.
 
 The MIT License (MIT)
 
