@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.26.1]
+
 ### The app
 - Prayer times closer to the sun, by two fixes from adhan-js (Batoul Apps' library for JavaScript, pull request #243,
   after Awan TV's report, batoulapps/Adhan issue #117): adhan-java corrected each time once, so near the night's
