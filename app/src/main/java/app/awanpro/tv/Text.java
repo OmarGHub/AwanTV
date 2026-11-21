@@ -944,7 +944,7 @@ final class Text {
     String crashDetails() { return ar ? "تفاصيل للإبلاغ" : "Details to report"; }
     String crashDetailsTitle() { return ar ? "تفاصيل التوقف" : "What stopped it"; }
     String crashDetailsLead() {
-        return ar ? "امسح الرمز بالجوال لتفتح بلاغًا على صفحة المشروع، ثم الصق فيه هذه الأسطر أو صوّرها. لا تحمل شيئًا عنك ولا عن شبكتك."
+        return ar ? "امسح الرمز بالهاتف لتفتح بلاغًا على صفحة المشروع، ثم الصق فيه هذه الأسطر أو صوّرها. لا تحمل شيئًا عنك ولا عن شبكتك."
             : "Scan the code with a phone to open a report on the project's page, then paste these lines or a photo of them. They carry nothing about you or your network.";
     }
     String lastCrashRow() { return s(R.string.lastCrashRow); }

@@ -6,6 +6,10 @@ history is in its repository.
 
 ## [Unreleased]
 
+### The app
+- Arabic says «الهاتف» for the phone everywhere, as the phone installer has since 1.13.0 (the update window, the
+  crash screen and older What's new lines said «الجوال»). README too.
+
 ## [1.26.1]
 
 ### The app
