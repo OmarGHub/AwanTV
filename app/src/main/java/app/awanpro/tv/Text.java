@@ -595,6 +595,12 @@ final class Text {
     /** Each version's lines: {name, where it is or what it does}; NewsActivity.VERSIONS lists the versions. */
     String[][] news(String version) {
         switch (version) {
+            case "1.27.0": {
+                // Its date in the viewer's digits.
+                String[] lines = a(R.array.news_1_27_0);
+                for (int i = 0; i < lines.length; i++) lines[i] = d(lines[i]);
+                return pairs(lines, 2);
+            }
             case "1.26.0": {
                 // Its minutes in the viewer's digits.
                 String[] lines = a(R.array.news_1_26_0);

@@ -797,6 +797,12 @@
         <item>"Bahasa Spanyol"</item>
         <item>"Semua layar dalam bahasa Spanyol, dengan istilah masjid di Spanyol, dengan nama qari dan surah dalam bahasa Spanyol. Pilih dari tombol globe di Layar Utama."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"Jam TV di Maroko"</item>
+        <item>"Maroko memakai GMT sejak 20 September 2026, dan TV yang belum menerima data zona waktu baru lebih cepat satu jam. Awan TV memberi tahu Anda, menjelaskan cara memperbaikinya, lalu berhenti mengingatkan dengan sendirinya setelah waktunya benar."</item>
+        <item>"Jendela yang lebih seragam"</item>
+        <item>"Jendela “Yang baru”, “Versi baru”, dan jam TV kini sama lebarnya, dan teks “Yang baru” tidak lagi tampil di bawah tombolnya atau di atas judulnya."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Waktu resmi Malaysia"</item>
         <item>"Metode baru: JAKIM, dengan tiap zona di Malaysia memakai jadwalnya sendiri, seperti yang diterbitkan e-Solat. Lokasi di Malaysia dimulai dengannya dan mengambil zonanya sendiri: ubah di Setelan › Waktu salat › Zona JAKIM. Imsak saat Ramadan: 10 menit, seperti dalam jadwal JAKIM."</item>

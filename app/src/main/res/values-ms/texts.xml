@@ -797,6 +797,12 @@
         <item>"Bahasa Sepanyol"</item>
         <item>"Setiap skrin dalam bahasa Sepanyol, mengikut istilah masjid di Sepanyol, dengan nama qari dan surah dalam bahasa Sepanyol. Pilih dari butang glob pada Skrin Utama."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"Jam TV di Maghribi"</item>
+        <item>"Maghribi menggunakan GMT sejak 20 September 2026, dan jam TV yang belum menerima data zon waktu baharu cepat sejam. Awan TV memberitahu anda, menerangkan cara membetulkannya dan berhenti mengingatkan dengan sendirinya apabila waktu sudah betul."</item>
+        <item>"Tetingkap yang lebih seragam"</item>
+        <item>"Tetingkap “Apa yang baharu”, “Versi baharu” dan jam TV kini sama lebar, dan teks “Apa yang baharu” tidak lagi muncul di bawah butangnya atau di atas tajuknya."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Waktu rasmi Malaysia"</item>
         <item>"Kaedah baharu: JAKIM, dengan setiap zon di Malaysia mengikut jadualnya sendiri, seperti yang diterbitkan e-Solat. Lokasi di Malaysia bermula dengannya dan mengambil zonnya sendiri: tukar di Tetapan › Waktu solat › Zon JAKIM. Imsak dalam Ramadan: 10 minit, seperti dalam jadual JAKIM."</item>

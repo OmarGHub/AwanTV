@@ -797,6 +797,12 @@
         <item>"İspanyolca"</item>
         <item>"Her ekran İspanyolca, İspanya'daki camilerin terimleriyle; kâriler ve sureler de İspanyolca adlarıyla. Ana ekrandaki dünya düğmesinden seçin."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"Fas'ta TV'nin saati"</item>
+        <item>"Fas 20 Eylül 2026'dan beri GMT'de; yeni saat dilimi verilerini almamış bir TV bir saat ileri gider. Awan TV bunu size bildirir, çözümü anlatır ve saat düzelince kendiliğinden susar."</item>
+        <item>"Daha uyumlu pencereler"</item>
+        <item>"“Yenilikler”, “Yeni sürüm” ve TV saati pencereleri aynı genişlikte; “Yenilikler” penceresinin metni de artık düğmesinin altında ya da başlığının üstünde görünmüyor."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Malezya'nın resmî vakitleri"</item>
         <item>"Yeni bir yöntem: JAKIM; Malezya'nın her bölgesi, e-Solat'ın yayımladığı gibi kendi tablosuyla. Malezya'daki bir konum bununla başlar ve bölgesini kendisi alır: Ayarlar › Namaz vakitleri › JAKIM bölgesi ile değiştirilir. Ramazan'da ihtiyat payı: JAKIM'in tablolarındaki gibi 10 dakika."</item>

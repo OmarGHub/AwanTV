@@ -797,6 +797,12 @@
         <item>"Espagnol"</item>
         <item>"Tous les écrans en espagnol, dans les termes des mosquées d'Espagne, avec les récitateurs et les sourates nommés en espagnol. Choisissez cette langue avec le bouton globe de l'accueil."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"L'horloge du téléviseur au Maroc"</item>
+        <item>"Le Maroc est à l'heure GMT depuis le 20 septembre 2026, et un téléviseur qui n'a pas reçu les nouvelles données de fuseau horaire avance d'une heure. Awan TV vous le signale, explique comment le corriger et se tait de lui-même une fois l'heure rétablie."</item>
+        <item>"Des fenêtres plus harmonieuses"</item>
+        <item>"Les fenêtres « Nouveautés », « Nouvelle version » et « Horloge du téléviseur » ont la même largeur, et le texte de la fenêtre « Nouveautés » n'apparaît plus sous son bouton ni au-dessus de son titre."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Les horaires officiels de la Malaisie"</item>
         <item>"Une nouvelle méthode : JAKIM, chaque zone de la Malaisie avec son propre tableau, tel que e-Solat le publie. Un lieu en Malaisie part de celle-ci et prend sa zone de lui-même : Paramètres › Horaires de prière › Zone JAKIM pour la changer. Imsak pendant le Ramadan : 10 minutes, comme dans les tableaux de JAKIM."</item>

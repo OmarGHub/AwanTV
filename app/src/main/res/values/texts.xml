@@ -797,6 +797,12 @@
         <item>"Spanish"</item>
         <item>"Every screen in Spanish, in the terms of Spain's mosques, with reciters and surahs named in Spanish. Pick it from the globe button on Home."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"The TV's clock in Morocco"</item>
+        <item>"Morocco has been on GMT since 20 September 2026, and a TV that hasn't received the new time zone data runs an hour ahead. Awan TV tells you, explains the fix, and goes quiet by itself once the time is right."</item>
+        <item>"More consistent windows"</item>
+        <item>"The “What's new”, “New version” and TV clock windows share one width, and “What's new” no longer shows its text under its button or over its title."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Malaysia's official times"</item>
         <item>"A new method: JAKIM, with each of Malaysia's zones on its own timetable, as e-Solat publishes it. A location in Malaysia starts from it and takes its zone by itself: Settings › Prayer times › JAKIM zone changes it. Imsak in Ramadan: 10 minutes, as in JAKIM's tables."</item>

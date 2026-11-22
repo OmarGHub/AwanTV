@@ -7,6 +7,7 @@ history is in its repository.
 ## [Unreleased]
 
 ### The app
+- What's new for 1.27.0 in the nine languages: the TV's clock in Morocco, and the windows of one width.
 - A TV whose time zone data predates Morocco's move to GMT (20 September 2026) still counts Morocco and Western Sahara
   as GMT+1, so its clock and every time on screen read an hour ahead (the adhan itself stays on time). Awan TV now
   says so over Home once a day (OK, or Don't remind me) and as the first row of Settings › About › App status, with

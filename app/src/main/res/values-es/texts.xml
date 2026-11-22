@@ -797,6 +797,12 @@
         <item>"Español"</item>
         <item>"Todas las pantallas en español, con los términos de las mezquitas de España, y los recitadores y las suras con sus nombres en español. Elígelo con el botón del globo en inicio."</item>
     </string-array>
+    <string-array name="news_1_27_0">
+        <item>"El reloj del televisor en Marruecos"</item>
+        <item>"Marruecos usa la hora GMT desde el 20 de septiembre de 2026, y un televisor que no ha recibido los nuevos datos de zona horaria va una hora adelantado. Awan TV te avisa, te explica cómo corregirlo y deja de hacerlo por sí solo cuando la hora es correcta."</item>
+        <item>"Ventanas más uniformes"</item>
+        <item>"Las ventanas «Novedades», «Nueva versión» y la del reloj del televisor tienen el mismo ancho, y el texto de «Novedades» ya no aparece bajo su botón ni sobre su título."</item>
+    </string-array>
     <string-array name="news_1_26_0">
         <item>"Los horarios oficiales de Malasia"</item>
         <item>"Un método nuevo: JAKIM, con cada zona de Malasia en su propia tabla, tal como la publica e-Solat. Una ubicación en Malasia parte de él y toma su zona por sí sola: Ajustes › Horarios de oración › Zona JAKIM la cambia. Imsak en Ramadán: 10 minutos, como en las tablas de JAKIM."</item>
