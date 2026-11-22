@@ -590,7 +590,7 @@
     <string name="tzOldBody_2" formatted="false">"Le Maroc est à l'heure GMT depuis le 20 septembre 2026, mais ce téléviseur le considère encore à GMT+1 : son horloge et les horaires de prière avancent d'une heure. L'adhan, lui, retentit au bon moment."</string>
     <string name="tzOldFix" formatted="false">"Pour le corriger :"</string>
     <string name="tzOldStep1" formatted="false">"Mettez à jour le système du téléviseur si une mise à jour est proposée : Paramètres › Système › À propos › Mise à jour du système."</string>
-    <string name="tzOldStep2" formatted="false">"Ou gardez l'heure automatique et désactivez seulement le fuseau horaire automatique : Paramètres › Système (ou Préférences relatives à l'appareil) › Date et heure, puis choisissez un fuseau GMT comme Dakar ou Abidjan."</string>
+    <string name="tzOldStep2" formatted="false">"Ou gardez l'heure automatique et changez seulement le fuseau horaire : Paramètres › Système (ou Préférences relatives à l'appareil) › Date et heure › Définir le fuseau horaire, puis choisissez Temps universel coordonné (UTC+00:00), Dakar ou Abidjan, et non Londres. S'il y a un fuseau horaire automatique, désactivez-le d'abord."</string>
     <string name="tzOldWarn" formatted="false">"Ne réglez pas l'heure manuellement : l'adhan retentirait avec une heure de retard. D'ici la correction, une iqama ou une khutba du vendredi à heure fixe arrive une heure trop tôt."</string>
     <string name="tzOldNote" formatted="false">"Nous vous le rappellerons chaque jour jusqu'à la correction ; vous le trouverez aussi dans Paramètres › À propos › État de l'appli."</string>
     <string name="tzOldLater" formatted="false">"Ne plus me le rappeler"</string>

@@ -590,7 +590,7 @@
     <string name="tzOldBody_2" formatted="false">"Morocco has been on GMT since 20 September 2026, but this TV still counts it as GMT+1, so its clock and the prayer times show an hour ahead. The adhan itself plays at the right time."</string>
     <string name="tzOldFix" formatted="false">"To fix it:"</string>
     <string name="tzOldStep1" formatted="false">"Update the TV's system if an update is offered: Settings › System › About › System update."</string>
-    <string name="tzOldStep2" formatted="false">"Or keep the automatic time as it is and turn off only the automatic time zone: Settings › System (or Device Preferences) › Date &amp; time, then pick a GMT zone such as Dakar or Abidjan."</string>
+    <string name="tzOldStep2" formatted="false">"Or keep the automatic time as it is and change only the time zone: Settings › System (or Device Preferences) › Date &amp; time › Set time zone, then pick Coordinated Universal Time (GMT+00:00), Dakar or Abidjan, not London. If there is an automatic time zone option, turn it off first."</string>
     <string name="tzOldWarn" formatted="false">"Don't set the clock by hand: the adhan would come an hour late. Until it's fixed, an iqamah or Friday khutbah at a fixed time comes an hour early."</string>
     <string name="tzOldNote" formatted="false">"We'll remind you daily until it's fixed; it's also in Settings › About › App status."</string>
     <string name="tzOldLater" formatted="false">"Don't remind me"</string>
