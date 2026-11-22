@@ -6,6 +6,8 @@ history is in its repository.
 
 ## [Unreleased]
 
+## [1.27.0]
+
 ### The app
 - What's new for 1.27.0 in the nine languages: the TV's clock in Morocco, and the windows of one width.
 - A TV whose time zone data predates Morocco's move to GMT (20 September 2026) still counts Morocco and Western Sahara
