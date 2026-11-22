@@ -633,7 +633,7 @@ public class SettingsActivity extends Screen {
      * serves every version) and how to update; Open the release page where the TV has a browser, and Close.
      */
     private void openUpdate(String newer) {
-        LinearLayout card = resetCard(1180);
+        LinearLayout card = resetCard(Tokens.LAYOUT_NOTICE_WIDTH);
         LinearLayout across = new LinearLayout(this);
         across.setGravity(Gravity.TOP);
         LinearLayout words = new LinearLayout(this);
@@ -695,7 +695,7 @@ public class SettingsActivity extends Screen {
         across.setClipChildren(false);
         card.setClipToPadding(false);
         card.addView(across, new LinearLayout.LayoutParams(-1, -2));
-        showReset(card, 1180, ASK);
+        showReset(card, Tokens.LAYOUT_NOTICE_WIDTH, ASK);
         root.post(askFirst::requestFocus);
         List<String> h = new ArrayList<>();
         h.add(t.hintChoose());
@@ -1642,7 +1642,7 @@ public class SettingsActivity extends Screen {
 
     /** App status > TV clock: the same words as Home's window (ClockNotice.lines), with Close only. */
     private void openClock(ClockNotice.Change ch) {
-        LinearLayout card = resetCard(1100);
+        LinearLayout card = resetCard(Tokens.LAYOUT_NOTICE_WIDTH);
         card.addView(resetTitle(t.tzOldTitle(), Gravity.START));
         String[] l = ClockNotice.lines(this, t, ch);
         int[] colour = {Tokens.PLASTER_100, Tokens.MIST_400, Tokens.MIST_400, Tokens.MIST_400, Tokens.GOLD_400, Tokens.MIST_400};
@@ -1670,7 +1670,7 @@ public class SettingsActivity extends Screen {
         buttons.setClipToPadding(false);
         card.setClipToPadding(false);
         card.addView(buttons, blp);
-        showReset(card, 1100, ASK);
+        showReset(card, Tokens.LAYOUT_NOTICE_WIDTH, ASK);
         root.post(askFirst::requestFocus);
         List<String> h = new ArrayList<>();
         h.add(t.hintChoose());

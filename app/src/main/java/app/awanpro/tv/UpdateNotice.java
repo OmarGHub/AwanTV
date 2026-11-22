@@ -202,7 +202,7 @@ final class UpdateNotice {
         across.addView(qrTile(s, R.drawable.qr_release, archLogo(s), Updates.shown(Updates.RELEASE)), qlp);
         card.addView(across, new LinearLayout.LayoutParams(-1, -2));
 
-        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(1240), -2, Gravity.CENTER));
+        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(Tokens.LAYOUT_NOTICE_WIDTH), -2, Gravity.CENTER));
         return out;
     }
 

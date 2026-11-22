@@ -164,7 +164,7 @@ final class ClockNotice {
         card.addView(buttons, blp);
         out.ok = out.buttons.get(0);
 
-        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(1100), -2, Gravity.CENTER));
+        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(Tokens.LAYOUT_NOTICE_WIDTH), -2, Gravity.CENTER));
         return out;
     }
 

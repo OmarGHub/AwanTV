@@ -174,6 +174,8 @@ final class Tokens {
     static final float LAYOUT_SIDE_PANEL_WIDTH = 600f;
     /** layout.settings.sidebar-width */
     static final float LAYOUT_SETTINGS_SIDEBAR_WIDTH = 560f;
+    /** The notice windows' width (1.27.0c): a newer version and the TV's clock, over Home and in Settings alike. */
+    static final int LAYOUT_NOTICE_WIDTH = 1240;
     /** layout.settings.row-width */
     static final float LAYOUT_SETTINGS_ROW_WIDTH = 1184f;
     /** radius.badge */

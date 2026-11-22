@@ -14,6 +14,8 @@ history is in its repository.
   (Coordinated Universal Time, the one Android TV lists; Dakar or Abidjan; not London) with the automatic time kept,
   never the clock set by hand (the adhan would come an hour late). Silent once fixed,
   and in Ramadan, when the old rules happen to agree.
+- The notice windows share one width (1240): a newer version and the TV's clock, over Home and in Settings (Settings'
+  newer-version window was 1180).
 - Arabic says «الهاتف» for the phone everywhere, as the phone installer has since 1.13.0 (the update window, the
   crash screen and older What's new lines said «الجوال»). README too.
 
