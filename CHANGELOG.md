@@ -7,6 +7,12 @@ history is in its repository.
 ## [Unreleased]
 
 ### The app
+- A TV whose time zone data predates Morocco's move to GMT (20 September 2026) still counts Morocco and Western Sahara
+  as GMT+1, so its clock and every time on screen read an hour ahead (the adhan itself stays on time). Awan TV now
+  says so over Home once a day (OK, or Don't remind me) and as the first row of Settings › About › App status, with
+  today's Maghrib as shown and as it should be, and the fix: a system update, or a GMT zone such as Dakar or Abidjan
+  with the automatic time kept, never the clock set by hand (the adhan would come an hour late). Silent once fixed,
+  and in Ramadan, when the old rules happen to agree.
 - Arabic says «الهاتف» for the phone everywhere, as the phone installer has since 1.13.0 (the update window, the
   crash screen and older What's new lines said «الجوال»). README too.
 

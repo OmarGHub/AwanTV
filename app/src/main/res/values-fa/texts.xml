@@ -585,6 +585,18 @@
     <string name="todayWord" formatted="false">"امروز"</string>
     <string name="tryAgain" formatted="false">"تلاش دوباره"</string>
     <string name="tvMarker" formatted="false">"تلویزیون ▲"</string>
+    <string name="tzOldTitle" formatted="false">"The TV's clock is an hour ahead"</string>
+    <string name="tzOldBody" formatted="false">"Morocco has been on GMT since 20 September 2026, but this TV still counts it as GMT+1, so its clock and the prayer times show an hour ahead: Maghrib today %1$s, actually %2$s. The adhan itself plays at the right time."</string>
+    <string name="tzOldBody_2" formatted="false">"Morocco has been on GMT since 20 September 2026, but this TV still counts it as GMT+1, so its clock and the prayer times show an hour ahead. The adhan itself plays at the right time."</string>
+    <string name="tzOldFix" formatted="false">"To fix it:"</string>
+    <string name="tzOldStep1" formatted="false">"Update the TV's system if an update is offered: Settings › System › About › System update."</string>
+    <string name="tzOldStep2" formatted="false">"Or keep the automatic time as it is and turn off only the automatic time zone: Settings › System (or Device Preferences) › Date &amp; time, then pick a GMT zone such as Dakar or Abidjan."</string>
+    <string name="tzOldWarn" formatted="false">"Don't set the clock by hand: the adhan would come an hour late. Until it's fixed, an iqamah or Friday khutbah at a fixed time comes an hour early."</string>
+    <string name="tzOldNote" formatted="false">"We'll remind you daily until it's fixed; it's also in Settings › About › App status."</string>
+    <string name="tzOldLater" formatted="false">"Don't remind me"</string>
+    <string name="tzStatusRow" formatted="false">"TV clock"</string>
+    <string name="tzStatusHelp" formatted="false">"An hour ahead: the TV counts Morocco as GMT+1; it is GMT · OK for the fix"</string>
+    <string name="tzStatusValue" formatted="false">"Needs fixing"</string>
     <string name="upToDate" formatted="false">"آخرین نسخه را دارید"</string>
     <string name="updateAgain" formatted="false">"تا به‌روزرسانی هر هفته یادآوری می‌کنیم؛ در تنظیمات › درباره هم هست."</string>
     <string name="updateConfirm" formatted="false">"اگر اندروید پرسید که این برنامه به‌روز شود، به به‌روزرسانی بروید و OK بزنید. سپس صفحه اصلی تازه برمی‌گردد."</string>

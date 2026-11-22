@@ -1004,6 +1004,20 @@ final class Text {
 
     String facingLine(int facing) { return (s(R.string.facingLine)) + bearingLabel(facing); }
     String tvMarker() { return s(R.string.tvMarker); }
+
+    // The TV's clock an hour off by old time zone data (ClockNotice). The times come in the screen's digits.
+    String tzOldTitle() { return s(R.string.tzOldTitle); }
+    String tzOldBody(CharSequence shown, CharSequence right) { return d(s(R.string.tzOldBody, shown, right)); }
+    String tzOldBody2() { return d(s(R.string.tzOldBody_2)); }
+    String tzOldFix() { return s(R.string.tzOldFix); }
+    String tzOldStep1() { return s(R.string.tzOldStep1); }
+    String tzOldStep2() { return s(R.string.tzOldStep2); }
+    String tzOldWarn() { return s(R.string.tzOldWarn); }
+    String tzOldNote() { return s(R.string.tzOldNote); }
+    String tzOldLater() { return s(R.string.tzOldLater); }
+    String tzStatusRow() { return s(R.string.tzStatusRow); }
+    String tzStatusHelp() { return d(s(R.string.tzStatusHelp)); }
+    String tzStatusValue() { return s(R.string.tzStatusValue); }
     String roomButton(boolean set) { return (set ? s(R.string.roomButton) : s(R.string.roomButton_2)); }
     String roomTitle() { return s(R.string.roomTitle); }
     String roomTip() {

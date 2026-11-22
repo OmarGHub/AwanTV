@@ -239,9 +239,11 @@ public class MainActivity extends Screen {
             askedCity = true;
             startSafely(new Intent(this, SettingsActivity.class).putExtra(SettingsActivity.FIRST_RUN, true));
         } else {
-            // After an update: what is new, once, over Home; else a newer version out, if it is due.
+            // After an update: what is new, once, over Home; else a newer version out, if it is due; else the TV's
+            // clock an hour off, once a day.
             showNews();
             if (news == null) showUpdate();
+            if (news == null && update == null) showClock();
         }
     }
 
@@ -271,7 +273,7 @@ public class MainActivity extends Screen {
      * Seen only when closed, so a rebuild of Home (a new photo, the theme at Maghrib) shows it again until then.
      */
     private void showNews() {
-        if (news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
+        if (news != null || tzCard != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
         java.util.List<String> versions = NewsActivity.pending(this);
         if (versions.isEmpty()) return;
         news = NewsActivity.card(this, versions, false, this::closeNews);
@@ -298,7 +300,8 @@ public class MainActivity extends Screen {
      * with What's new, a reminder or the radio card.
      */
     private void showUpdate() {
-        if (update != null || news != null || card != null || radioCard != null || !Prefs.citySet(this)) return;
+        if (update != null || news != null || tzCard != null || card != null || radioCard != null
+            || !Prefs.citySet(this)) return;
         // Closed while downloading: the minute tick must not bring it back; Home's next resume does.
         if (updateLeft && SelfUpdate.busy()) return;
         String v = SelfUpdate.busy() || SelfUpdate.state() == SelfUpdate.FAILED ? SelfUpdate.version() : UpdateNotice.due(this);
@@ -361,6 +364,38 @@ public class MainActivity extends Screen {
         for (View n : nodes) if (n != null) n.setFocusable(true);
     }
 
+    /** The TV's clock an hour off by old time zone data, as a layer over Home (ClockNotice); null when not shown. */
+    private ClockNotice.Card tzCard;
+
+    /** Once a day while the TV's clock is off (ClockNotice.due): after What's new and a newer version, never with them. */
+    private void showClock() {
+        if (tzCard != null || news != null || update != null || card != null || radioCard != null
+            || !Prefs.citySet(this) || !ClockNotice.due(this)) return;
+        ClockNotice.Change ch = ClockNotice.stale(System.currentTimeMillis());
+        if (ch == null) return;
+        tzCard = ClockNotice.card(this, ch, () -> closeClock(false), () -> closeClock(true));
+        root.addView(tzCard.layer, new FrameLayout.LayoutParams(-1, -1));
+        for (View n : nodes) if (n != null) n.setFocusable(false);
+        root.post(tzCard.ok::requestFocus);
+        layerHints();
+    }
+
+    /** OK or Back: again tomorrow; mute: not over Home again (Settings > About > App status still tells it). */
+    private void closeClock(boolean mute) {
+        if (tzCard == null) return;
+        ClockNotice.closed(this, mute);
+        dropClock();
+        focusStart();
+    }
+
+    /** Taken away unread (a reminder came, or Home was rebuilt): still due. */
+    private void dropClock() {
+        if (tzCard == null) return;
+        root.removeView(tzCard.layer);
+        tzCard = null;
+        for (View n : nodes) if (n != null) n.setFocusable(true);
+    }
+
     /** The gold mark on Settings' button while a newer version is out (UpdateNotice.mark). */
     private View settingsMark;
 
@@ -401,7 +436,10 @@ public class MainActivity extends Screen {
         Updates.refresh(this);
         refreshMark();
         // The daily answer may come while Home is open: told when someone is at the remote (a key this minute).
-        if (shown && System.currentTimeMillis() - lastKey < 60_000) showUpdate();
+        if (shown && System.currentTimeMillis() - lastKey < 60_000) {
+            showUpdate();
+            showClock();
+        }
     }
 
     /**
@@ -632,6 +670,10 @@ public class MainActivity extends Screen {
         if (update != null) {
             update = null;
             showUpdate();
+        }
+        if (tzCard != null) {
+            tzCard = null;
+            showClock();
         }
     }
 
@@ -1512,6 +1554,7 @@ public class MainActivity extends Screen {
         // too, still due.
         closeNews();
         dropUpdate();
+        dropClock();
         if (card != null) dismissReminder();
         closeRadioCard(false);
         Date now = new Date();
@@ -1603,6 +1646,7 @@ public class MainActivity extends Screen {
         if (keepKey(e)) return true;
         if (news != null && NewsActivity.key(news, e, this::closeNews)) return true;
         if (update != null && UpdateNotice.key(update, e, () -> closeUpdate(false), t.rtl())) return true;
+        if (tzCard != null && ClockNotice.key(tzCard, e, () -> closeClock(false), t.rtl())) return true;
         // Source, where the firmware leaves it to the app in front (CVTE) and nothing else opens the source menu.
         if (k == KeyEvent.KEYCODE_TV_INPUT) {
             Intent source = FirmwareKeys.sourceMenu(this);

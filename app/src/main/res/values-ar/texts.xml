@@ -585,6 +585,18 @@
     <string name="todayWord" formatted="false">"اليوم"</string>
     <string name="tryAgain" formatted="false">"حاول مرة أخرى"</string>
     <string name="tvMarker" formatted="false">"التلفاز ▲"</string>
+    <string name="tzOldTitle" formatted="false">"ساعة التلفاز متقدمة ساعة"</string>
+    <string name="tzOldBody" formatted="false">"المغرب على توقيت غرينتش منذ 20 سبتمبر 2026، وهذا التلفاز ما زال يحسبه غرينتش+1، فساعته ومواقيت الصلاة تظهر متقدمة ساعة: المغرب اليوم %1$s، والصحيح %2$s. الأذان نفسه في وقته الصحيح."</string>
+    <string name="tzOldBody_2" formatted="false">"المغرب على توقيت غرينتش منذ 20 سبتمبر 2026، وهذا التلفاز ما زال يحسبه غرينتش+1، فساعته ومواقيت الصلاة تظهر متقدمة ساعة. الأذان نفسه في وقته الصحيح."</string>
+    <string name="tzOldFix" formatted="false">"للإصلاح:"</string>
+    <string name="tzOldStep1" formatted="false">"حدّث نظام التلفاز إن وُجد تحديث: الإعدادات ← النظام ← لمحة (أو حول) ← تحديث النظام."</string>
+    <string name="tzOldStep2" formatted="false">"أو أبقِ الوقت التلقائي كما هو، وأطفئ المنطقة الزمنية التلقائية فقط: الإعدادات ← النظام (أو إعدادات الجهاز) ← التاريخ والوقت، ثم اختر منطقة على غرينتش مثل داكار أو أبيدجان."</string>
+    <string name="tzOldWarn" formatted="false">"لا تغيّر الساعة يدويًا: يتأخر الأذان ساعة. والإقامة وخطبة الجمعة بوقت ثابت تأتي قبل وقتها بساعة حتى يُصلَح التوقيت."</string>
+    <string name="tzOldNote" formatted="false">"نذكّرك كل يوم حتى يُصلَح التوقيت، وتجده في الإعدادات ← حول التطبيق ← حالة التطبيق."</string>
+    <string name="tzOldLater" formatted="false">"لا تذكّرني"</string>
+    <string name="tzStatusRow" formatted="false">"ساعة التلفاز"</string>
+    <string name="tzStatusHelp" formatted="false">"متقدمة ساعة: التلفاز يحسب المغرب غرينتش+1، والصحيح غرينتش · OK للحل"</string>
+    <string name="tzStatusValue" formatted="false">"تحتاج إصلاحًا"</string>
     <string name="upToDate" formatted="false">"لديك أحدث إصدار"</string>
     <string name="updateAgain" formatted="false">"نذكّرك كل أسبوع حتى تحدّث، وتجده في الإعدادات ← حول التطبيق."</string>
     <string name="updateConfirm" formatted="false">"إن سألك Android «هل تريد تحديث هذا التطبيق؟»، فانتقل إلى «تحديث» واضغط OK. ثم تعود الشاشة الرئيسية الجديدة."</string>

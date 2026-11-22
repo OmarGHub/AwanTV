@@ -107,6 +107,9 @@ public class SettingsActivity extends Screen {
 
         /** INFO rows of App status: a dot of this colour before value(); 0 for none. */
         int dot() { return 0; }
+
+        /** INFO rows whose OK opens something (TV clock): Choose among the hints. */
+        boolean opens() { return false; }
     }
 
     /** About > Check for updates now: what the last check said ("" before one), and whether one is running. */
@@ -1556,6 +1559,18 @@ public class SettingsActivity extends Screen {
         Context c = this;
         if (day == null) day = new PrayerDay(this, new Date());
         List<Row> out = new ArrayList<>();
+        // The TV's clock an hour off by old time zone data (ClockNotice): first, and only while it lasts.
+        ClockNotice.Change stale = ClockNotice.stale(System.currentTimeMillis());
+        if (stale != null) {
+            out.add(new Row(INFO) {
+                String label() { return t.tzStatusRow(); }
+                String help() { return t.tzStatusHelp(); }
+                String value() { return t.tzStatusValue(); }
+                int dot() { return Tokens.STATUS_WARN; }
+                boolean opens() { return true; }
+                void open() { openClock(stale); }
+            });
+        }
         boolean service = RemoteKeys.guard != null;
         out.add(status(t.serviceRow(), service ? t.serviceHelp() : t.serviceOffHelp(), t.running(service),
             service ? Tokens.STATUS_OK : Tokens.STATUS_BAD));
@@ -1623,6 +1638,44 @@ public class SettingsActivity extends Screen {
         String version = versionName() + t.sep() + "Android " + android.os.Build.VERSION.RELEASE + t.sep() + device;
         out.add(status(t.versionRow(), t.d(version), "", 0));
         return out;
+    }
+
+    /** App status > TV clock: the same words as Home's window (ClockNotice.lines), with Close only. */
+    private void openClock(ClockNotice.Change ch) {
+        LinearLayout card = resetCard(1100);
+        card.addView(resetTitle(t.tzOldTitle(), Gravity.START));
+        String[] l = ClockNotice.lines(this, t, ch);
+        int[] colour = {Tokens.PLASTER_100, Tokens.MIST_400, Tokens.MIST_400, Tokens.MIST_400, Tokens.GOLD_400, Tokens.MIST_400};
+        float[] size = {24, 24, 22, 22, 22, 20};
+        float[] top = {8, 10, 4, 4, 10, 10};
+        for (int i = 0; i < l.length; i++) {
+            TextView v = resetLine(l[i], colour[i], size[i], null);
+            v.setLineSpacing(0, 1.3f);
+            ((LinearLayout.LayoutParams) v.getLayoutParams()).topMargin = Ui.ipx(top[i]);
+            card.addView(v);
+        }
+        LinearLayout buttons = new LinearLayout(this);
+        float r = FocusTile.REACH;
+        askFirst = resetButton(t.close());
+        askSecond = null;
+        askOnFirst = null;
+        buttons.addView(askFirst, new LinearLayout.LayoutParams(0, Ui.ipx(68 + 2 * r), 1));
+        // Half the row, as the window's two buttons over Home.
+        buttons.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1));
+        LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(-1, -2);
+        blp.topMargin = Ui.ipx(24 - r);
+        blp.setMarginStart(-Ui.ipx(r));
+        blp.setMarginEnd(-Ui.ipx(r));
+        buttons.setClipChildren(false);
+        buttons.setClipToPadding(false);
+        card.setClipToPadding(false);
+        card.addView(buttons, blp);
+        showReset(card, 1100, ASK);
+        root.post(askFirst::requestFocus);
+        List<String> h = new ArrayList<>();
+        h.add(t.hintChoose());
+        h.add(t.hintBackClose());
+        setHints(hints, h);
     }
 
     /** One App status row: read-only, with its state and dot at the end. */
@@ -1959,7 +2012,9 @@ public class SettingsActivity extends Screen {
         r.tile.requestFocus();
         List<String> h = new ArrayList<>();
         h.add(t.hintMove());
-        if (r.kind != INFO) h.add(r.kind == VALUE ? t.hintChoose() : r.kind == TOGGLE ? t.hintSwitch() : t.hintEdit());
+        if (r.kind != INFO || r.opens()) {
+            h.add(r.kind == VALUE || r.kind == INFO ? t.hintChoose() : r.kind == TOGGLE ? t.hintSwitch() : t.hintEdit());
+        }
         h.add(statusOpen || creditsOpen ? t.hintBackAbout() : buttonsOpen ? t.hintBackDevice()
             : adjustOpen || calcOpen ? t.hintBackPrayer() : t.hintBackMenu());
         setHints(hints, h);

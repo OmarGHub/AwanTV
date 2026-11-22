@@ -585,6 +585,18 @@
     <string name="todayWord" formatted="false">"aujourd'hui"</string>
     <string name="tryAgain" formatted="false">"Réessayer"</string>
     <string name="tvMarker" formatted="false">"▲ TV"</string>
+    <string name="tzOldTitle" formatted="false">"L'horloge du téléviseur avance d'une heure"</string>
+    <string name="tzOldBody" formatted="false">"Le Maroc est à l'heure GMT depuis le 20 septembre 2026, mais ce téléviseur le considère encore à GMT+1 : son horloge et les horaires de prière avancent d'une heure. Maghrib aujourd'hui %1$s, en réalité %2$s. L'adhan, lui, retentit au bon moment."</string>
+    <string name="tzOldBody_2" formatted="false">"Le Maroc est à l'heure GMT depuis le 20 septembre 2026, mais ce téléviseur le considère encore à GMT+1 : son horloge et les horaires de prière avancent d'une heure. L'adhan, lui, retentit au bon moment."</string>
+    <string name="tzOldFix" formatted="false">"Pour le corriger :"</string>
+    <string name="tzOldStep1" formatted="false">"Mettez à jour le système du téléviseur si une mise à jour est proposée : Paramètres › Système › À propos › Mise à jour du système."</string>
+    <string name="tzOldStep2" formatted="false">"Ou gardez l'heure automatique et désactivez seulement le fuseau horaire automatique : Paramètres › Système (ou Préférences relatives à l'appareil) › Date et heure, puis choisissez un fuseau GMT comme Dakar ou Abidjan."</string>
+    <string name="tzOldWarn" formatted="false">"Ne réglez pas l'heure manuellement : l'adhan retentirait avec une heure de retard. D'ici la correction, une iqama ou une khutba du vendredi à heure fixe arrive une heure trop tôt."</string>
+    <string name="tzOldNote" formatted="false">"Nous vous le rappellerons chaque jour jusqu'à la correction ; vous le trouverez aussi dans Paramètres › À propos › État de l'appli."</string>
+    <string name="tzOldLater" formatted="false">"Ne plus me le rappeler"</string>
+    <string name="tzStatusRow" formatted="false">"Horloge du téléviseur"</string>
+    <string name="tzStatusHelp" formatted="false">"En avance d'une heure : le téléviseur considère le Maroc à GMT+1, au lieu de GMT · OK pour corriger"</string>
+    <string name="tzStatusValue" formatted="false">"À corriger"</string>
     <string name="upToDate" formatted="false">"Vous avez la dernière version"</string>
     <string name="updateAgain" formatted="false">"Nous vous le rappellerons chaque semaine jusqu'à la mise à jour ; c'est aussi dans Paramètres › À propos."</string>
     <string name="updateConfirm" formatted="false">"Si Android demande s'il faut mettre à jour cette appli, allez sur Mettre à jour et appuyez sur OK. Le nouvel accueil revient ensuite."</string>
