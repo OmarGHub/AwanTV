@@ -127,6 +127,10 @@ public class NewsActivity extends Screen {
         ScrollView scroll = new ScrollView(s);
         scroll.setVerticalScrollBarEnabled(false);
         scroll.setFocusable(false);
+        // The list cut at the scroll's own edges: the card draws past its children for OK's focus ring, which let
+        // scrolled lines show under OK and over the title (seen since 1.2.0a; 1.27.0d).
+        scroll.setOutlineProvider(android.view.ViewOutlineProvider.BOUNDS);
+        scroll.setClipToOutline(true);
         scroll.addView(list);
         LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(-1, -2);
         slp.topMargin = Ui.ipx(6);
@@ -166,7 +170,7 @@ public class NewsActivity extends Screen {
         card.addView(ok, olp);
         out.ok = ok;
 
-        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(1000), -2, Gravity.CENTER));
+        out.layer.addView(card, new FrameLayout.LayoutParams(Ui.ipx(Tokens.LAYOUT_NOTICE_WIDTH), -2, Gravity.CENTER));
         return out;
     }
 
